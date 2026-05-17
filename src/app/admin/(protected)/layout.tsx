@@ -1,5 +1,6 @@
 import Link from "next/link";
-
+import { requireAdmin } from "@/services/admin";
+import { LogoutButton } from "@/components/admin/logout-button";
 const adminLinks = [
   { name: "Dashboard", href: "/admin" },
   { name: "Məhsullar", href: "/admin/products" },
@@ -8,11 +9,13 @@ const adminLinks = [
   { name: "Sorğular", href: "/admin/inquiries" },
 ];
 
-export default function AdminLayout({
+export default async function ProtectedAdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await requireAdmin();
+
   return (
     <main className="min-h-screen bg-neutral-100 pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
       <div className="container-custom py-8">
@@ -36,6 +39,7 @@ export default function AdminLayout({
                 </Link>
               ))}
             </nav>
+            <LogoutButton />
           </aside>
 
           <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">

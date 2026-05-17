@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default function AdminLoginPage() {
             Admin panelə daxil olmaq üçün hesab məlumatlarını daxil et.
           </p>
 
-          <AdminLoginForm />
+          <Suspense fallback={null}>
+            <AdminLoginForm />
+          </Suspense>
         </div>
       </div>
     </main>
