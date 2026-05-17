@@ -1,12 +1,109 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-export type FeaturedProduct = {
+export type ProductCardItem = {
   id: string;
   name: string;
   category: string;
   price: string;
   badge: string;
   href: string;
+};
+
+export type FeaturedProduct = ProductCardItem;
+export type CatalogProduct = ProductCardItem;
+
+type ProductRow = {
+  id: string;
+  name_az: string;
+  slug: string;
+  price: number | string | null;
+  price_visible: boolean;
+  stock_status: "in_stock" | "out_of_stock" | "pre_order";
+  category: {
+    name_az: string;
+    slug: string;
+  } | null;
+};
+
+export type ProductDetail = {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  brand: string | null;
+  price: string;
+  badge: string;
+  shortDescription: string | null;
+  description: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  specifications: {
+    id: string;
+    key: string;
+    value: string;
+  }[];
+  downloads: {
+    id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }[];
+};
+
+type ProductDetailRow = {
+  id: string;
+  name_az: string;
+  slug: string;
+  short_description_az: string | null;
+  description_az: string | null;
+  price: number | string | null;
+  price_visible: boolean;
+  stock_status: "in_stock" | "out_of_stock" | "pre_order";
+  seo_title_az: string | null;
+  seo_description_az: string | null;
+  category: {
+    name_az: string;
+    slug: string;
+  } | null;
+  brand: {
+    name: string;
+  } | null;
+  specifications: {
+    id: string;
+    spec_key_az: string;
+    spec_value_az: string;
+  }[];
+  downloads: {
+    id: string;
+    title_az: string;
+    file_url: string;
+    file_type: string;
+  }[];
+};
+
+function formatPrice(priceVisible: boolean, price: number | string | null) {
+  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Qiymət sorğu ilə";
+}
+
+function formatBadge(stockStatus: ProductRow["stock_status"]) {
+  if (stockStatus === "in_stock") return "Stokda var";
+  if (stockStatus === "pre_order") return "Öncədən sifariş";
+  return "Sorğu ilə";
+}
+
+function formatProduct(product: ProductRow): ProductCardItem {
+  return {
+    id: product.id,
+    name: product.name_az,
+    category: product.category?.name_az ?? "Məhsul",
+    price: formatPrice(product.price_visible, product.price),
+    badge: formatBadge(product.stock_status),
+    href: `/products/${product.slug}`,
+  };
+}
+
+type GetCatalogProductsParams = {
+  category?: string;
 };
 
 export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
@@ -21,36 +118,135 @@ export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
       slug,
       price,
       price_visible,
-      is_featured,
       stock_status,
-      categories (
-        name_az
+      category:categories (
+        name_az,
+        slug
       )
     `
     )
     .eq("status", "active")
     .eq("is_featured", true)
     .order("created_at", { ascending: false })
-    .limit(8);
+    .limit(8)
+    .returns<ProductRow[]>();
 
   if (error) {
     console.error("Failed to fetch featured products:", error.message);
     return [];
   }
 
-  return data.map((product) => {
-    const price =
-      product.price_visible && product.price
-        ? `${Number(product.price).toFixed(2)} AZN`
-        : "Qiymət sorğu ilə";
+  return data.map(formatProduct);
+}
 
-    return {
-      id: product.id,
-      name: product.name_az,
-      category: product.categories?.name_az ?? "Məhsul",
+export async function getCatalogProducts({
+  category,
+}: GetCatalogProductsParams = {}): Promise<CatalogProduct[]> {
+  const supabase = createServerSupabaseClient();
+
+  let query = supabase
+    .from("products")
+    .select(
+      `
+      id,
+      name_az,
+      slug,
       price,
-      badge: product.stock_status === "in_stock" ? "Stokda var" : "Sorğu ilə",
-      href: `/products/${product.slug}`,
-    };
-  });
+      price_visible,
+      stock_status,
+      category:categories!inner (
+        name_az,
+        slug
+      )
+    `
+    )
+    .eq("status", "active")
+    .order("created_at", { ascending: false })
+    .limit(48);
+
+  if (category) {
+    query = query.eq("categories.slug", category);
+  }
+
+  const { data, error } = await query.returns<ProductRow[]>();
+
+  if (error) {
+    console.error("Failed to fetch catalog products:", error.message);
+    return [];
+  }
+
+  return data.map(formatProduct);
+}
+
+export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
+  const supabase = createServerSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      `
+      id,
+      name_az,
+      slug,
+      short_description_az,
+      description_az,
+      price,
+      price_visible,
+      stock_status,
+      seo_title_az,
+      seo_description_az,
+      category:categories (
+        name_az,
+        slug
+      ),
+      brand:brands (
+        name
+      ),
+      specifications:product_specifications (
+        id,
+        spec_key_az,
+        spec_value_az
+      ),
+      downloads:product_downloads (
+        id,
+        title_az,
+        file_url,
+        file_type
+      )
+    `
+    )
+    .eq("status", "active")
+    .eq("slug", slug)
+    .single()
+    .returns<ProductDetailRow>();
+
+  if (error) {
+    console.error("Failed to fetch product:", error.message);
+    return null;
+  }
+
+  return {
+    id: data.id,
+    name: data.name_az,
+    slug: data.slug,
+    category: data.category?.name_az ?? "Məhsul",
+    brand: data.brand?.name ?? null,
+    price: formatPrice(data.price_visible, data.price),
+    badge: formatBadge(data.stock_status),
+    shortDescription: data.short_description_az,
+    description: data.description_az,
+    seoTitle: data.seo_title_az,
+    seoDescription: data.seo_description_az,
+    specifications: data.specifications.map((spec) => ({
+      id: spec.id,
+      key: spec.spec_key_az,
+      value: spec.spec_value_az,
+    })),
+    downloads: data.downloads.map((download) => ({
+      id: download.id,
+      title: download.title_az,
+      fileUrl: download.file_url,
+      fileType: download.file_type,
+    })),
+  };
 }
