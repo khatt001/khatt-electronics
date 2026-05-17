@@ -1,21 +1,35 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import Navbar from "@/components/layout/navbar";
 import "./globals.css";
-import Navbar from "../components/layout/navbar";
 
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
 });
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
-  title: "KHATT ELECTRONICS",
-  description: "Premium Security & Smart Technology Solutions",
+  title: {
+    default: "KHATT Electronics",
+    template: "%s | KHATT Electronics",
+  },
+  description:
+    "KHATT Electronics — təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri.",
+  applicationName: "KHATT Electronics",
+  metadataBase: new URL("https://khatt.electronics"),
+  alternates: {
+    canonical: "/",
+    languages: {
+      az: "/",
+      en: "/en",
+      ru: "/ru",
+    },
+  },
 };
 
 export default function RootLayout({
@@ -24,11 +38,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${playfair.variable} antialiased`}
-      >
-        <Navbar/>
+    <html lang="az" suppressHydrationWarning>
+      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+        <Navbar />
         {children}
       </body>
     </html>
