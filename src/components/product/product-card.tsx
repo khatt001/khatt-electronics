@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
+import type { FeaturedProduct } from "@/services/products";
 
 type ProductCardProps = {
-  product: {
-    name: string;
-    category: string;
-    price: string;
-    badge: string;
-    href: string;
-  };
+  product: FeaturedProduct;
 };
 
 export function ProductCard({ product }: ProductCardProps) {

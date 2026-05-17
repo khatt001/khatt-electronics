@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
-import { featuredProducts } from "@/data/home";
+import { getFeaturedProducts } from "@/services/products";
 
-export function FeaturedProducts() {
+export async function FeaturedProducts() {
+  const products = await getFeaturedProducts();
+
   return (
     <section className="section-spacing">
       <Container>
@@ -25,11 +27,20 @@ export function FeaturedProducts() {
           </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.href} product={product} />
-          ))}
-        </div>
+        {products.length > 0 ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-10 text-center">
+            <h3 className="text-xl font-semibold">Seçilmiş məhsul yoxdur</h3>
+            <p className="mt-3 text-neutral-600">
+              Admin paneldən məhsul əlavə edildikdən sonra burada görünəcək.
+            </p>
+          </div>
+        )}
       </Container>
     </section>
   );
