@@ -6,3 +6,9 @@ export const navLinks = [
   { name: "Haqqımızda", href: "/about" },
   { name: "Əlaqə", href: "/contact" },
 ] as const;
+
+export const languages = [
+  { label: "AZ", href: "/" },
+  { label: "EN", href: "/en" },
+  { label: "RU", href: "/ru" },
+] as const;

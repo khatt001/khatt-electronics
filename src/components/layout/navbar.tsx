@@ -2,9 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, Search, X } from "lucide-react";
+import {
+  BarChart3,
+  Clock,
+  Heart,
+  Mail,
+  Menu,
+  PackageSearch,
+  Phone,
+  Search,
+  ShoppingCart,
+  X,
+} from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { navLinks } from "@/data/navigation";
+import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
@@ -33,22 +44,90 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/80 backdrop-blur-xl">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/90 backdrop-blur-xl">
+      <div className="hidden border-b border-black/10 bg-neutral-950 text-white lg:block">
+        <Container>
+          <div className="flex h-10 items-center justify-between text-xs">
+            <div className="flex items-center gap-6 text-white/70">
+              <a
+                href="tel:+994000000000"
+                className="inline-flex items-center gap-2 transition hover:text-white"
+              >
+                <Phone className="size-3.5" aria-hidden="true" />
+                +994 00 000 00 00
+              </a>
+
+              <a
+                href="mailto:info@khatt.electronics"
+                className="inline-flex items-center gap-2 transition hover:text-white"
+              >
+                <Mail className="size-3.5" aria-hidden="true" />
+                info@khatt.electronics
+              </a>
+
+              <span className="inline-flex items-center gap-2">
+                <Clock className="size-3.5" aria-hidden="true" />
+                B.e - Şənbə: 09:00 - 18:00
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="text-white/45">Dil:</span>
+
+              <div className="flex items-center gap-2">
+                {languages.map((language) => (
+                  <Link
+                    key={language.label}
+                    href={language.href}
+                    className={cn(
+                      "transition hover:text-white",
+                      language.label === "AZ" ? "text-white" : "text-white/50"
+                    )}
+                  >
+                    {language.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
+
       <Container>
-        <div className="flex h-16 items-center justify-between lg:h-20">
+        <div className="flex h-16 items-center gap-4 lg:h-20">
           <Link
             href="/"
             aria-label="KHATT Electronics ana səhifə"
-            className="font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 lg:text-2xl"
+            className="shrink-0 font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 lg:text-2xl"
           >
             KHATT
           </Link>
 
+          <button
+            type="button"
+            className="hidden items-center gap-2 rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 lg:inline-flex"
+          >
+            <PackageSearch className="size-4" aria-hidden="true" />
+            Kataloq
+          </button>
+
+          <div className="hidden flex-1 lg:block">
+            <label className="relative block">
+              <span className="sr-only">Məhsul axtarışı</span>
+              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+              <input
+                type="search"
+                placeholder="Məhsul, model və ya kateqoriya axtar..."
+                className="h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
+              />
+            </label>
+          </div>
+
           <nav
             aria-label="Əsas naviqasiya"
-            className="hidden items-center gap-8 lg:flex"
+            className="hidden items-center gap-5 xl:flex"
           >
-            {navLinks.map((link) => (
+            {navLinks.slice(2).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -59,18 +138,35 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-1.5">
             <button
               type="button"
-              aria-label="Məhsul axtarışı"
-              className="inline-flex size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950"
+              aria-label="Müqayisə"
+              className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
             >
-              <Search size={18} aria-hidden="true" />
+              <BarChart3 size={18} aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              aria-label="Sevimlilər"
+              className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
+            >
+              <Heart size={18} aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              aria-label="Səbət"
+              className="relative hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
+            >
+              <ShoppingCart size={18} aria-hidden="true" />
+              <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-emerald-500" />
             </button>
 
             <Link
               href="/contact"
-              className="hidden rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 lg:inline-flex"
+              className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
             >
               Smeta al
             </Link>
@@ -81,18 +177,30 @@ export default function Navbar() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               onClick={() => setOpen(true)}
-              className="inline-flex size-10 items-center justify-center rounded-full text-neutral-800 transition hover:bg-neutral-100 lg:hidden"
+              className="inline-flex size-10 items-center justify-center rounded-full text-neutral-800 transition hover:bg-neutral-100 xl:hidden"
             >
               <Menu size={22} aria-hidden="true" />
             </button>
           </div>
+        </div>
+
+        <div className="hidden h-12 items-center gap-8 border-t border-black/10 lg:flex xl:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
       </Container>
 
       <div
         id="mobile-menu"
         className={cn(
-          "fixed inset-0 z-50 bg-white transition-transform duration-300 lg:hidden",
+          "fixed inset-0 z-50 bg-white transition-transform duration-300 xl:hidden",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -116,22 +224,73 @@ export default function Navbar() {
           </button>
         </div>
 
-        <nav aria-label="Mobil menyu" className="flex flex-col px-6 py-8">
+        <div className="border-b border-black/10 px-5 py-4">
+          <label className="relative block">
+            <span className="sr-only">Məhsul axtarışı</span>
+            <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+            <input
+              type="search"
+              placeholder="Məhsul axtar..."
+              className="h-12 w-full rounded-full border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none focus:border-neutral-950"
+            />
+          </label>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 border-b border-black/10 px-5 py-4">
+          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
+            Müqayisə
+          </button>
+          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
+            Sevimli
+          </button>
+          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
+            Səbət
+          </button>
+        </div>
+
+        <nav aria-label="Mobil menyu" className="flex flex-col px-6 py-6">
+          <Link
+            href="/products"
+            onClick={() => setOpen(false)}
+            className="mb-4 inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+          >
+            <PackageSearch className="size-4" />
+            Məhsul kataloqu
+          </Link>
+
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="border-b border-neutral-100 py-5 text-xl font-medium text-neutral-900"
+              className="border-b border-neutral-100 py-4 text-lg font-medium text-neutral-900"
             >
               {link.name}
             </Link>
           ))}
 
+          <div className="mt-6 flex items-center gap-3">
+            {languages.map((language) => (
+              <Link
+                key={language.label}
+                href={language.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-medium",
+                  language.label === "AZ"
+                    ? "border-neutral-950 bg-neutral-950 text-white"
+                    : "border-neutral-200 text-neutral-700"
+                )}
+              >
+                {language.label}
+              </Link>
+            ))}
+          </div>
+
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="mt-8 inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+            className="mt-8 inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
           >
             Smeta al
           </Link>
