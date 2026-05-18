@@ -11,6 +11,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { createInquiry } from "@/app/contact/actions";
 import { ContactSubmitButton } from "@/app/contact/submit-button";
+import { siteConfig } from "@/data/site";
 export const metadata: Metadata = {
     title: "Əlaqə | KHATT Electronics",
     description:
@@ -21,11 +22,24 @@ type ContactPageProps = {
     searchParams: Promise<{
         success?: string;
         error?: string;
+        product?: string;
+        source?: string;
     }>;
 };
 
+function getSourceLabel(source?: string) {
+    if (source === "estimate") return "Smeta sorğusu";
+    if (source === "consultation") return "Konsultasiya sorğusu";
+    return "Ümumi sorğu";
+}
+
 export default async function ContactPage({ searchParams }: ContactPageProps) {
     const query = await searchParams;
+
+    const sourceLabel = getSourceLabel(query.source);
+    const defaultMessage = query.product
+        ? `${sourceLabel}: ${query.product}`
+        : "";
 
     return (
         <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
@@ -71,7 +85,20 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                                 </div>
                             ) : null}
 
+                            {query.product ? (
+                                <div className="mb-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700">
+                                    Sorğu məhsulu:{" "}
+                                    <span className="font-semibold">{query.product}</span>
+                                </div>
+                            ) : null}
+
                             <form action={createInquiry} className="space-y-5">
+                                <input
+                                    type="hidden"
+                                    name="source"
+                                    value={query.source ?? "contact_page"}
+                                />
+
                                 <div className="grid gap-5 md:grid-cols-2">
                                     <div>
                                         <label className="mb-2 block text-sm font-medium">
@@ -131,6 +158,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                                     <textarea
                                         name="message"
                                         rows={6}
+                                        defaultValue={defaultMessage}
                                         placeholder="Layihə və ya məhsul sorğunuzu yazın..."
                                         className="w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none transition focus:border-neutral-950"
                                     />
@@ -146,24 +174,24 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
 
                                 <div className="mt-5 space-y-4">
                                     <a
-                                        href="tel:+994000000000"
+                                        href={siteConfig.phoneHref}
                                         className="flex items-center gap-3 rounded-2xl border border-neutral-200 p-4 text-sm transition hover:border-neutral-950"
                                     >
                                         <Phone className="size-5 text-neutral-700" />
-                                        <span>+994 00 000 00 00</span>
+                                        <span>{siteConfig.phone}</span>
                                     </a>
 
                                     <a
-                                        href="mailto:info@khatt.az"
+                                        href={siteConfig.emailHref}
                                         className="flex items-center gap-3 rounded-2xl border border-neutral-200 p-4 text-sm transition hover:border-neutral-950"
                                     >
                                         <Mail className="size-5 text-neutral-700" />
-                                        <span>info@khatt.az</span>
+                                        <span>{siteConfig.email}</span>
                                     </a>
 
                                     <div className="flex items-center gap-3 rounded-2xl border border-neutral-200 p-4 text-sm">
                                         <MapPin className="size-5 text-neutral-700" />
-                                        <span>Bakı, Azərbaycan</span>
+                                        <span>{siteConfig.address}</span>
                                     </div>
                                 </div>
                             </div>

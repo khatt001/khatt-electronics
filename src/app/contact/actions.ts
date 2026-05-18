@@ -10,16 +10,18 @@ const inquirySchema = z.object({
   email: z.string().email("Email düzgün deyil.").optional().or(z.literal("")),
   company_name: z.string().optional(),
   message: z.string().optional(),
+  source: z.string().optional(),
 });
 
 export async function createInquiry(formData: FormData) {
-  const rawData = {
-    full_name: String(formData.get("full_name") ?? "").trim(),
-    phone: String(formData.get("phone") ?? "").trim(),
-    email: String(formData.get("email") ?? "").trim(),
-    company_name: String(formData.get("company_name") ?? "").trim(),
-    message: String(formData.get("message") ?? "").trim(),
-  };
+ const rawData = {
+  full_name: String(formData.get("full_name") ?? "").trim(),
+  phone: String(formData.get("phone") ?? "").trim(),
+  email: String(formData.get("email") ?? "").trim(),
+  company_name: String(formData.get("company_name") ?? "").trim(),
+  message: String(formData.get("message") ?? "").trim(),
+  source: String(formData.get("source") ?? "contact_page").trim(),
+};
 
   const parsed = inquirySchema.safeParse(rawData);
 
@@ -55,7 +57,7 @@ export async function createInquiry(formData: FormData) {
     email: inquiry.email || null,
     company_name: inquiry.company_name || null,
     message: inquiry.message || "Mesaj yazılmayıb",
-    source: "contact_page",
+    source: inquiry.source || "contact_page",
     status: "new",
   });
 

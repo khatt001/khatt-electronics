@@ -11,7 +11,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { getProductBySlug } from "@/services/products";
-
+import { siteConfig } from "@/data/site";
 type ProductDetailPageProps = {
   params: Promise<{
     slug: string;
@@ -104,18 +104,28 @@ export default async function ProductDetailPage({
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <Link
-                  href="/contact"
+                  href={`/contact?product=${encodeURIComponent(product.name)}&source=estimate`}
                   className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-neutral-800"
                 >
                   Smeta istə
                 </Link>
 
                 <Link
-                  href="/contact"
+                  href={`/contact?product=${encodeURIComponent(product.name)}&source=consultation`}
                   className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
                 >
                   Konsultasiya al
                 </Link>
+                <a
+                  href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(
+                    `Salam. Bu məhsul haqqında məlumat almaq istəyirəm: ${product.name}`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-600 sm:col-span-2"
+                >
+                  WhatsApp ilə yaz
+                </a>
               </div>
 
               <div className="mt-8 grid gap-3 border-t border-neutral-200 pt-6 sm:grid-cols-3">
