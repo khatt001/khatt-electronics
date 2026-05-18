@@ -8,15 +8,16 @@ import {
   Heart,
   Mail,
   Menu,
-  PackageSearch,
   Phone,
   ShoppingCart,
   X,
 } from "lucide-react";
+import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
 import { Container } from "@/components/layout/container";
+import { NavbarSearch } from "@/components/layout/navbar-search";
 import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
-import { NavbarSearch } from "@/components/layout/navbar-search";
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -102,13 +103,9 @@ export default function Navbar() {
             KHATT
           </Link>
 
-          <button
-            type="button"
-            className="hidden items-center gap-2 rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 lg:inline-flex"
-          >
-            <PackageSearch className="size-4" aria-hidden="true" />
-            Kataloq
-          </button>
+          <div className="hidden lg:block">
+            <CatalogDropdown />
+          </div>
 
           <div className="hidden flex-1 lg:block">
             <NavbarSearch />
@@ -175,12 +172,12 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="hidden h-12 items-center gap-8 border-t border-black/10 lg:flex xl:hidden">
+        <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-black/10 lg:flex xl:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
+              className="shrink-0 text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
             >
               {link.name}
             </Link>
@@ -191,11 +188,11 @@ export default function Navbar() {
       <div
         id="mobile-menu"
         className={cn(
-          "fixed inset-0 z-[999] flex h-dvh flex-col overflow-hidden bg-white transition-transform duration-300 xl:hidden",
+          "fixed inset-0 z-[999] flex h-dvh w-screen max-w-full flex-col overflow-hidden bg-white transition-transform duration-300 xl:hidden",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="flex h-16 items-center justify-between border-b border-black/10 px-5">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-black/10 px-5">
           <Link
             href="/"
             onClick={() => setOpen(false)}
@@ -215,22 +212,20 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="relative z-20 border-b border-black/10 px-5 py-4">
+        <div className="relative z-20 shrink-0 border-b border-black/10 px-5 py-4">
           <NavbarSearch
             placeholder="Məhsul axtar..."
             onNavigate={() => setOpen(false)}
           />
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-5">
-          <Link
-            href="/products"
-            onClick={() => setOpen(false)}
-            className="mb-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
-          >
-            <PackageSearch className="size-4" />
-            Məhsul kataloqu
-          </Link>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-5">
+          <div className="mb-5 w-full max-w-full overflow-visible">
+            <CatalogDropdown
+              variant="mobile"
+              onNavigate={() => setOpen(false)}
+            />
+          </div>
 
           <div className="grid grid-cols-3 gap-2">
             <button
