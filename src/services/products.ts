@@ -4,12 +4,47 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 export type ProductCardItem = {
   id: string;
   name: string;
-  href: string;
   category: string;
   brand: string | null;
-  badge: string;
   price: string;
+  badge: string;
+  href: string;
   imageUrl: string | null;
+};
+
+export type FeaturedProduct = ProductCardItem;
+export type CatalogProduct = ProductCardItem;
+
+export type CatalogProductFilters = {
+  search?: string;
+  category?: string;
+  brand?: string;
+  stock?: string;
+  sort?: string;
+};
+
+type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
+
+type ProductRow = {
+  id: string;
+  name_az: string;
+  slug: string;
+  price: number | string | null;
+  price_visible: boolean;
+  stock_status: StockStatus;
+  is_featured: boolean;
+  category: {
+    name_az: string;
+    slug: string;
+  } | null;
+  brand: {
+    name: string;
+    slug: string;
+  } | null;
+  images: {
+    url: string;
+    is_primary: boolean;
+  }[];
 };
 
 export type ProductDetail = {
@@ -18,10 +53,10 @@ export type ProductDetail = {
   slug: string;
   category: string;
   brand: string | null;
-  shortDescription: string | null;
-  description: string | null;
   price: string;
   badge: string;
+  shortDescription: string | null;
+  description: string | null;
   seoTitle: string | null;
   seoDescription: string | null;
   images: {
@@ -39,36 +74,8 @@ export type ProductDetail = {
     id: string;
     title: string;
     fileUrl: string;
+    fileType: string;
   }[];
-};
-
-export type CatalogProductFilters = {
-  search?: string;
-  category?: string;
-  brand?: string;
-  stock?: string;
-};
-
-type ProductImageRow = {
-  url: string;
-  is_primary: boolean;
-};
-
-type ProductRow = {
-  id: string;
-  name_az: string;
-  slug: string;
-  price: number | string | null;
-  price_visible: boolean;
-  stock_status: string;
-  is_featured: boolean;
-  category: {
-    name_az: string;
-  } | null;
-  brand: {
-    name: string;
-  } | null;
-  images: ProductImageRow[];
 };
 
 type ProductDetailRow = {
@@ -79,11 +86,12 @@ type ProductDetailRow = {
   description_az: string | null;
   price: number | string | null;
   price_visible: boolean;
-  stock_status: string;
+  stock_status: StockStatus;
   seo_title_az: string | null;
   seo_description_az: string | null;
   category: {
     name_az: string;
+    slug: string;
   } | null;
   brand: {
     name: string;
@@ -104,21 +112,19 @@ type ProductDetailRow = {
     id: string;
     title_az: string;
     file_url: string;
+    file_type: string;
     sort_order: number;
   }[];
 };
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
-  if (!priceVisible || price === null || price === "") {
-    return "Sorğu ilə";
-  }
-
-  return `${Number(price).toFixed(2)} AZN`;
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : "Qiymət sorğu ilə";
 }
 
-function getStockBadge(stockStatus: string) {
+function formatBadge(stockStatus: StockStatus) {
   if (stockStatus === "in_stock") return "Stokda var";
-  if (stockStatus === "out_of_stock") return "Stokda yoxdur";
   if (stockStatus === "pre_order") return "Öncədən sifariş";
   return "Sorğu ilə";
 }
@@ -132,20 +138,20 @@ function sortImages<T extends { is_primary: boolean }>(images: T[]) {
 }
 
 function getPrimaryImage(images: ProductRow["images"]) {
-  const sortedImages = sortImages(images);
+  const sortedImages = sortImages(images ?? []);
   return sortedImages[0]?.url ?? null;
 }
 
-function mapProductCard(product: ProductRow): ProductCardItem {
+function formatProduct(product: ProductRow): ProductCardItem {
   return {
     id: product.id,
     name: product.name_az,
-    href: `/products/${product.slug}`,
-    category: product.category?.name_az ?? "Kateqoriya yoxdur",
+    category: product.category?.name_az ?? "Məhsul",
     brand: product.brand?.name ?? null,
-    badge: getStockBadge(product.stock_status),
     price: formatPrice(product.price_visible, product.price),
-    imageUrl: getPrimaryImage(product.images),
+    badge: formatBadge(product.stock_status),
+    href: `/products/${product.slug}`,
+    imageUrl: getPrimaryImage(product.images ?? []),
   };
 }
 
@@ -157,9 +163,11 @@ async function getCategoryIdBySlug(slug: string) {
     .select("id")
     .eq("slug", slug)
     .eq("is_active", true)
-    .maybeSingle<{ id: string }>();
+    .maybeSingle()
+    .returns<{ id: string } | null>();
 
   if (error || !data) return null;
+
   return data.id;
 }
 
@@ -171,13 +179,15 @@ async function getBrandIdBySlug(slug: string) {
     .select("id")
     .eq("slug", slug)
     .eq("is_active", true)
-    .maybeSingle<{ id: string }>();
+    .maybeSingle()
+    .returns<{ id: string } | null>();
 
   if (error || !data) return null;
+
   return data.id;
 }
 
-export async function getFeaturedProducts(): Promise<ProductCardItem[]> {
+export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
@@ -192,10 +202,12 @@ export async function getFeaturedProducts(): Promise<ProductCardItem[]> {
       stock_status,
       is_featured,
       category:categories (
-        name_az
+        name_az,
+        slug
       ),
       brand:brands (
-        name
+        name,
+        slug
       ),
       images:product_images (
         url,
@@ -214,12 +226,12 @@ export async function getFeaturedProducts(): Promise<ProductCardItem[]> {
     return [];
   }
 
-  return data.map(mapProductCard);
+  return data.map(formatProduct);
 }
 
 export async function getCatalogProducts(
   filters: CatalogProductFilters = {}
-): Promise<ProductCardItem[]> {
+): Promise<CatalogProduct[]> {
   const supabase = createServerSupabaseClient();
 
   const categoryId = filters.category
@@ -240,10 +252,12 @@ export async function getCatalogProducts(
       stock_status,
       is_featured,
       category:categories (
-        name_az
+        name_az,
+        slug
       ),
       brand:brands (
-        name
+        name,
+        slug
       ),
       images:product_images (
         url,
@@ -251,9 +265,7 @@ export async function getCatalogProducts(
       )
     `
     )
-    .eq("status", "active")
-    .order("is_featured", { ascending: false })
-    .order("created_at", { ascending: false });
+    .eq("status", "active");
 
   if (filters.search) {
     query = query.ilike("name_az", `%${filters.search}%`);
@@ -273,14 +285,32 @@ export async function getCatalogProducts(
     query = query.eq("brand_id", brandId);
   }
 
-  const { data, error } = await query.returns<ProductRow[]>();
+  if (filters.sort === "oldest") {
+    query = query.order("created_at", { ascending: true });
+  } else if (filters.sort === "price_asc") {
+    query = query
+      .order("price_visible", { ascending: false })
+      .order("price", { ascending: true, nullsFirst: false });
+  } else if (filters.sort === "price_desc") {
+    query = query
+      .order("price_visible", { ascending: false })
+      .order("price", { ascending: false, nullsFirst: false });
+  } else if (filters.sort === "featured") {
+    query = query
+      .order("is_featured", { ascending: false })
+      .order("created_at", { ascending: false });
+  } else {
+    query = query.order("created_at", { ascending: false });
+  }
+
+  const { data, error } = await query.limit(48).returns<ProductRow[]>();
 
   if (error) {
     console.error("Failed to fetch catalog products:", error.message);
     return [];
   }
 
-  return data.map(mapProductCard);
+  return data.map(formatProduct);
 }
 
 export async function getProductBySlug(
@@ -303,7 +333,8 @@ export async function getProductBySlug(
       seo_title_az,
       seo_description_az,
       category:categories (
-        name_az
+        name_az,
+        slug
       ),
       brand:brands (
         name
@@ -324,17 +355,18 @@ export async function getProductBySlug(
         id,
         title_az,
         file_url,
+        file_type,
         sort_order
       )
     `
     )
-    .eq("slug", slug)
     .eq("status", "active")
+    .eq("slug", slug)
     .maybeSingle()
     .returns<ProductDetailRow | null>();
 
   if (error) {
-    console.error("Failed to fetch product by slug:", error.message);
+    console.error("Failed to fetch product:", error.message);
     return null;
   }
 
@@ -347,33 +379,34 @@ export async function getProductBySlug(
     id: data.id,
     name: data.name_az,
     slug: data.slug,
-    category: data.category?.name_az ?? "Kateqoriya yoxdur",
+    category: data.category?.name_az ?? "Məhsul",
     brand: data.brand?.name ?? null,
+    price: formatPrice(data.price_visible, data.price),
+    badge: formatBadge(data.stock_status),
     shortDescription: data.short_description_az,
     description: data.description_az,
-    price: formatPrice(data.price_visible, data.price),
-    badge: getStockBadge(data.stock_status),
     seoTitle: data.seo_title_az,
     seoDescription: data.seo_description_az,
-    images: sortImages(data.images).map((image) => ({
+    images: sortImages(data.images ?? []).map((image) => ({
       id: image.id,
       url: image.url,
       alt: image.alt_az,
       isPrimary: image.is_primary,
     })),
-    specifications: [...data.specifications]
+    specifications: [...(data.specifications ?? [])]
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((spec) => ({
         id: spec.id,
         key: spec.spec_key_az,
         value: spec.spec_value_az,
       })),
-    downloads: [...data.downloads]
+    downloads: [...(data.downloads ?? [])]
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((download) => ({
         id: download.id,
         title: download.title_az,
         fileUrl: download.file_url,
+        fileType: download.file_type,
       })),
   };
 }

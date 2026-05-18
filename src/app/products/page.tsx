@@ -10,6 +10,7 @@ type ProductsPageProps = {
     category?: string;
     brand?: string;
     stock?: string;
+    sort?: string;
   }>;
 };
 
@@ -22,10 +23,14 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       category: query.category,
       brand: query.brand,
       stock: query.stock,
+      sort: query.sort,
     }),
     getCatalogCategories(),
     getCatalogBrands(),
   ]);
+
+  const hasActiveFilters =
+    query.search || query.category || query.brand || query.stock || query.sort;
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
@@ -47,7 +52,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <section className="py-10 lg:py-14">
         <Container>
           <form className="mb-8 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm">
-            <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1fr_1fr_auto]">
+            <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
               <input
                 name="search"
                 defaultValue={query.search ?? ""}
@@ -92,6 +97,18 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 <option value="pre_order">Öncədən sifariş</option>
               </select>
 
+              <select
+                name="sort"
+                defaultValue={query.sort ?? ""}
+                className="h-12 rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
+              >
+                <option value="">Ən yeni</option>
+                <option value="oldest">Ən köhnə</option>
+                <option value="featured">Seçilmişlər əvvəl</option>
+                <option value="price_asc">Qiymət: ucuzdan bahaya</option>
+                <option value="price_desc">Qiymət: bahadan ucuza</option>
+              </select>
+
               <button
                 type="submit"
                 className="h-12 rounded-full bg-neutral-950 px-6 text-sm font-semibold text-white transition hover:bg-neutral-800"
@@ -101,12 +118,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </div>
           </form>
 
-          <div className="mb-5 flex items-center justify-between gap-4">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
             <p className="text-sm text-neutral-500">
               {products.length} məhsul tapıldı
             </p>
 
-            {(query.search || query.category || query.brand || query.stock) ? (
+            {hasActiveFilters ? (
               <a
                 href="/products"
                 className="text-sm font-medium text-neutral-700 underline underline-offset-4 transition hover:text-neutral-950"
