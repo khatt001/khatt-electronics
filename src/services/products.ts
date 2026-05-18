@@ -99,6 +99,7 @@ function formatProduct(product: ProductRow): ProductCardItem {
     price: formatPrice(product.price_visible, product.price),
     badge: formatBadge(product.stock_status),
     href: `/products/${product.slug}`,
+    
   };
 }
 
