@@ -13,7 +13,10 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://khatt.electronics";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "KHATT Electronics",
     template: "%s | KHATT Electronics",
@@ -21,7 +24,22 @@ export const metadata: Metadata = {
   description:
     "KHATT Electronics — təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri.",
   applicationName: "KHATT Electronics",
-  metadataBase: new URL("https://khatt.electronics"),
+  keywords: [
+    "KHATT Electronics",
+    "təhlükəsizlik sistemləri",
+    "videomüşahidə",
+    "kamera sistemləri",
+    "CCTV",
+    "IP kamera",
+    "NVR",
+    "DVR",
+    "keçidə nəzarət",
+    "domofon",
+    "siqnalizasiya",
+    "ağıllı texnologiya",
+    "Bakı",
+    "Azərbaycan",
+  ],
   alternates: {
     canonical: "/",
     languages: {
@@ -29,6 +47,19 @@ export const metadata: Metadata = {
       en: "/en",
       ru: "/ru",
     },
+  },
+  openGraph: {
+    title: "KHATT Electronics",
+    description:
+      "Təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri.",
+    url: siteUrl,
+    siteName: "KHATT Electronics",
+    locale: "az_AZ",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
