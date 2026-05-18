@@ -110,12 +110,18 @@ function formatBadge(stockStatus: ProductRow["stock_status"]) {
   return "Sorğu ilə";
 }
 
+function sortImages<T extends { is_primary: boolean }>(images: T[]) {
+  return [...images].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return 0;
+  });
+}
+
 function getPrimaryImage(images: ProductRow["images"]) {
-  return (
-    images.find((image) => image.is_primary)?.url ??
-    images[0]?.url ??
-    null
-  );
+  const sortedImages = sortImages(images);
+
+  return sortedImages[0]?.url ?? null;
 }
 
 function formatProduct(product: ProductRow): ProductCardItem {
@@ -286,14 +292,12 @@ export async function getProductBySlug(
     description: data.description_az,
     seoTitle: data.seo_title_az,
     seoDescription: data.seo_description_az,
-  images: data.images
-  .sort((a, b) => Number(b.is_primary) - Number(a.is_primary))
-  .map((image) => ({
-    id: image.id,
-    url: image.url,
-    alt: image.alt_az,
-    isPrimary: image.is_primary,
-  })),
+ images: sortImages(data.images).map((image) => ({
+  id: image.id,
+  url: image.url,
+  alt: image.alt_az,
+  isPrimary: image.is_primary,
+})),
     specifications: data.specifications.map((spec) => ({
       id: spec.id,
       key: spec.spec_key_az,

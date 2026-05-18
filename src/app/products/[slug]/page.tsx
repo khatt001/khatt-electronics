@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import {
   ArrowLeft,
   CheckCircle2,
   Download,
   FileText,
   ShieldCheck,
-  ShoppingBag,
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { ProductGallery } from "@/components/product/product-gallery";
 import { getProductBySlug } from "@/services/products";
 
 type ProductDetailPageProps = {
@@ -67,46 +66,8 @@ export default async function ProductDetailPage({
       <section className="py-10 lg:py-14">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-         <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-  <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-neutral-100 to-white">
-    {product.images[0]?.url ? (
-      <Image
-        src={product.images[0].url}
-        alt={product.images[0].alt ?? product.name}
-        fill
-        priority
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-contain p-8"
-      />
-    ) : (
-      <div className="flex size-40 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-sm">
-        <ShoppingBag
-          className="size-16 text-neutral-800"
-          aria-hidden="true"
-        />
-      </div>
-    )}
-  </div>
+            <ProductGallery images={product.images} productName={product.name} />
 
-  {product.images.length > 1 ? (
-    <div className="mt-4 grid grid-cols-4 gap-3">
-      {product.images.map((image) => (
-        <div
-          key={image.id}
-          className="relative aspect-square overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50"
-        >
-          <Image
-            src={image.url}
-            alt={image.alt ?? product.name}
-            fill
-            sizes="120px"
-            className="object-contain p-3"
-          />
-        </div>
-      ))}
-    </div>
-  ) : null}
-</div>
             <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-8">
               <div className="mb-5 flex flex-wrap gap-2">
                 <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">
@@ -178,7 +139,10 @@ export default async function ProductDetailPage({
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
             <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-8">
               <div className="mb-6 flex items-center gap-3">
-                <FileText className="size-5 text-neutral-700" aria-hidden="true" />
+                <FileText
+                  className="size-5 text-neutral-700"
+                  aria-hidden="true"
+                />
                 <h2 className="text-2xl font-semibold">Məhsul haqqında</h2>
               </div>
 

@@ -95,6 +95,13 @@ export type AdminProductDetail = {
   is_featured: boolean;
   seo_title_az: string | null;
   seo_description_az: string | null;
+  images: {
+    id: string;
+    url: string;
+    alt_az: string | null;
+    is_primary: boolean;
+    sort_order: number;
+  }[];
 };
 
 type AdminProductDetailRow = AdminProductDetail;
@@ -104,24 +111,31 @@ export async function getAdminProductById(
 ): Promise<AdminProductDetail | null> {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select(
-      `
-      id,
-      name_az,
-      slug,
-      category_id,
-      brand_id,
-      short_description_az,
-      description_az,
-      price,
-      price_visible,
-      stock_status,
-      status,
-      is_featured,
-      seo_title_az,
-      seo_description_az
-    `
-    )
+  .select(
+  `
+  id,
+  name_az,
+  slug,
+  category_id,
+  brand_id,
+  short_description_az,
+  description_az,
+  price,
+  price_visible,
+  stock_status,
+  status,
+  is_featured,
+  seo_title_az,
+  seo_description_az,
+  images:product_images (
+    id,
+    url,
+    alt_az,
+    is_primary,
+    sort_order
+  )
+`
+)
     .eq("id", id)
     .maybeSingle()
     .returns<AdminProductDetailRow | null>();

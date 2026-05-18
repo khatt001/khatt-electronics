@@ -271,7 +271,49 @@ export async function updateProduct(productId: string, formData: FormData) {
     const message = encodeURIComponent(error.message);
     redirect(`/admin/products/${productId}/edit?error=${message}`);
   }
+const images = formData
+  .getAll("images")
+  .filter((image): image is File => image instanceof File && image.size > 0);
 
+if (images.length > 8) {
+  redirect(
+    `/admin/products/${productId}/edit?error=${encodeURIComponent(
+      "Bir dəfəyə maksimum 8 şəkil əlavə etmək olar."
+    )}`
+  );
+}
+
+if (images.length > 0) {
+  const { count } = await supabaseAdmin
+    .from("product_images")
+    .select("id", { count: "exact", head: true })
+    .eq("product_id", productId);
+
+  const currentImageCount = count ?? 0;
+
+  if (currentImageCount + images.length > 8) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Bir məhsul üçün maksimum 8 şəkil ola bilər."
+      )}`
+    );
+  }
+
+  try {
+    await Promise.all(
+      images.map((image, index) =>
+        uploadProductImage(productId, slug, image, currentImageCount + index)
+      )
+    );
+  } catch (uploadError) {
+    const message =
+      uploadError instanceof Error
+        ? uploadError.message
+        : "Şəkillər yüklənmədi.";
+
+    redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent(message)}`);
+  }
+}
   revalidatePath("/");
   revalidatePath("/products");
   revalidatePath(`/products/${slug}`);
@@ -315,4 +357,139 @@ export async function archiveProduct(productId: string) {
   revalidatePath("/admin/products");
 
   redirect("/admin/products");
+}
+function getStoragePathFromPublicUrl(url: string) {
+  const marker = "/storage/v1/object/public/product-images/";
+  const index = url.indexOf(marker);
+
+  if (index === -1) {
+    return null;
+  }
+
+  return url.slice(index + marker.length);
+}
+
+export async function deleteProductImage(productId: string, imageId: string) {
+  await requireAdmin();
+
+  const { data: image, error: fetchError } = await supabaseAdmin
+    .from("product_images")
+    .select("id, url, is_primary")
+    .eq("id", imageId)
+    .eq("product_id", productId)
+    .maybeSingle<{
+      id: string;
+      url: string;
+      is_primary: boolean;
+    }>();
+
+  if (fetchError || !image) {
+    redirect(`/admin/products/${productId}/edit?error=${encodeURIComponent("Şəkil tapılmadı.")}`);
+  }
+
+  const storagePath = getStoragePathFromPublicUrl(image.url);
+
+  if (storagePath) {
+    await supabaseAdmin.storage.from("product-images").remove([storagePath]);
+  }
+
+  const { error: deleteError } = await supabaseAdmin
+    .from("product_images")
+    .delete()
+    .eq("id", imageId)
+    .eq("product_id", productId);
+
+  if (deleteError) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Şəkil silinə bilmədi."
+      )}`
+    );
+  }
+
+  if (image.is_primary) {
+    const { data: nextImage } = await supabaseAdmin
+      .from("product_images")
+      .select("id")
+      .eq("product_id", productId)
+      .order("sort_order", { ascending: true })
+      .limit(1)
+      .maybeSingle<{ id: string }>();
+
+    if (nextImage) {
+      await supabaseAdmin
+        .from("product_images")
+        .update({ is_primary: true })
+        .eq("id", nextImage.id);
+    }
+  }
+
+  const { data: product } = await supabaseAdmin
+    .from("products")
+    .select("slug")
+    .eq("id", productId)
+    .maybeSingle<{ slug: string }>();
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  if (product?.slug) {
+    revalidatePath(`/products/${product.slug}`);
+  }
+  revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${productId}/edit`);
+
+  redirect(`/admin/products/${productId}/edit`);
+}
+export async function setPrimaryProductImage(productId: string, imageId: string) {
+  await requireAdmin();
+
+  const { data: selectedImage, error: selectedImageError } = await supabaseAdmin
+    .from("product_images")
+    .select("id")
+    .eq("id", imageId)
+    .eq("product_id", productId)
+    .maybeSingle<{ id: string }>();
+
+  if (selectedImageError || !selectedImage) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Şəkil tapılmadı."
+      )}`
+    );
+  }
+
+  const { data: product } = await supabaseAdmin
+    .from("products")
+    .select("slug")
+    .eq("id", productId)
+    .maybeSingle<{ slug: string }>();
+
+  await supabaseAdmin
+    .from("product_images")
+    .update({ is_primary: false })
+    .eq("product_id", productId);
+
+  const { error } = await supabaseAdmin
+    .from("product_images")
+    .update({ is_primary: true, sort_order: 0 })
+    .eq("id", imageId)
+    .eq("product_id", productId);
+
+  if (error) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Əsas şəkil dəyişdirilə bilmədi."
+      )}`
+    );
+  }
+
+  revalidatePath("/", "layout");
+  revalidatePath("/products", "page");
+  if (product?.slug) {
+    revalidatePath(`/products/${product.slug}`, "page");
+  }
+  revalidatePath("/admin/products", "page");
+  revalidatePath(`/admin/products/${productId}/edit`, "page");
+
+  redirect(`/admin/products/${productId}/edit`);
 }
