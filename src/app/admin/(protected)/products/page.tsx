@@ -106,6 +106,12 @@ export default async function AdminProductsPage() {
                   Bax
                   <ExternalLink className="ml-2 size-3.5" aria-hidden="true" />
                 </Link>
+                <Link
+  href={`/admin/products/${product.id}/edit`}
+  className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium transition hover:border-neutral-950"
+>
+  Edit
+</Link>
               </div>
             ))}
           </div>

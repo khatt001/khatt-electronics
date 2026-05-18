@@ -80,3 +80,56 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
     createdAt: product.created_at,
   }));
 }
+export type AdminProductDetail = {
+  id: string;
+  name_az: string;
+  slug: string;
+  category_id: string;
+  brand_id: string | null;
+  short_description_az: string | null;
+  description_az: string | null;
+  price: number | string | null;
+  price_visible: boolean;
+  stock_status: string;
+  status: string;
+  is_featured: boolean;
+  seo_title_az: string | null;
+  seo_description_az: string | null;
+};
+
+type AdminProductDetailRow = AdminProductDetail;
+
+export async function getAdminProductById(
+  id: string
+): Promise<AdminProductDetail | null> {
+  const { data, error } = await supabaseAdmin
+    .from("products")
+    .select(
+      `
+      id,
+      name_az,
+      slug,
+      category_id,
+      brand_id,
+      short_description_az,
+      description_az,
+      price,
+      price_visible,
+      stock_status,
+      status,
+      is_featured,
+      seo_title_az,
+      seo_description_az
+    `
+    )
+    .eq("id", id)
+    .maybeSingle()
+    .returns<AdminProductDetailRow | null>();
+
+  if (error) {
+    console.error("Failed to fetch admin product:", error.message);
+    return null;
+  }
+
+  return data;
+}

@@ -185,3 +185,79 @@ export async function createProduct(formData: FormData) {
 
   redirect("/admin/products");
 }
+export async function updateProduct(productId: string, formData: FormData) {
+  await requireAdmin();
+
+  const rawData = {
+    name_az: String(formData.get("name_az") ?? ""),
+    slug: String(formData.get("slug") ?? ""),
+    category_id: String(formData.get("category_id") ?? ""),
+    brand_id: String(formData.get("brand_id") ?? ""),
+    short_description_az: String(formData.get("short_description_az") ?? ""),
+    description_az: String(formData.get("description_az") ?? ""),
+    price: String(formData.get("price") ?? ""),
+    price_visible: String(formData.get("price_visible") ?? ""),
+    stock_status: String(formData.get("stock_status") ?? "in_stock"),
+    status: String(formData.get("status") ?? "draft"),
+    is_featured: String(formData.get("is_featured") ?? ""),
+    seo_title_az: String(formData.get("seo_title_az") ?? ""),
+    seo_description_az: String(formData.get("seo_description_az") ?? ""),
+  };
+
+  const parsed = createProductSchema.safeParse(rawData);
+
+  if (!parsed.success) {
+    const message = encodeURIComponent(
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
+    );
+
+    redirect(`/admin/products/${productId}/edit?error=${message}`);
+  }
+
+  const product = parsed.data;
+  const slug = normalizeSlug(product.slug || product.name_az);
+
+  const price =
+    product.price && product.price.trim() !== "" ? Number(product.price) : null;
+
+  if (price !== null && Number.isNaN(price)) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Qiymət düzgün formatda deyil."
+      )}`
+    );
+  }
+
+  const { error } = await supabaseAdmin
+    .from("products")
+    .update({
+      name_az: product.name_az.trim(),
+      slug,
+      category_id: product.category_id,
+      brand_id: product.brand_id || null,
+      short_description_az: product.short_description_az || null,
+      description_az: product.description_az || null,
+      price,
+      price_visible: product.price_visible === "on",
+      stock_status: product.stock_status,
+      status: product.status,
+      is_featured: product.is_featured === "on",
+      seo_title_az: product.seo_title_az || product.name_az,
+      seo_description_az:
+        product.seo_description_az || product.short_description_az || null,
+    })
+    .eq("id", productId);
+
+  if (error) {
+    const message = encodeURIComponent(error.message);
+    redirect(`/admin/products/${productId}/edit?error=${message}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath(`/products/${slug}`);
+  revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${productId}/edit`);
+
+  redirect("/admin/products");
+}
