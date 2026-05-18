@@ -61,10 +61,9 @@ export default async function NewProductPage({
                         <label className="mb-2 block text-sm font-medium">Slug</label>
                         <input
                             name="slug"
-                            required
-                            minLength={2}
+                           
                             className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                            placeholder="4mp-ip-dome-kamera"
+                           placeholder="Boş saxlasanız avtomatik yaranacaq"
                         />
                         <p className="mt-2 text-xs text-neutral-500">
                             URL üçün istifadə olunur. Məsələn: /products/4mp-ip-dome-kamera

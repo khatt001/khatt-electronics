@@ -12,7 +12,7 @@ const allowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
 
 const createProductSchema = z.object({
   name_az: z.string().min(2, "Məhsul adı minimum 2 simvol olmalıdır."),
-  slug: z.string().min(2, "Slug minimum 2 simvol olmalıdır."),
+  slug: z.string().optional(),
   category_id: z.string().uuid("Kateqoriya seçilməlidir."),
   brand_id: z.string().uuid("Brend seçilməlidir.").optional().or(z.literal("")),
   short_description_az: z.string().optional(),
@@ -40,7 +40,102 @@ function normalizeSlug(value: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+function createSeoTitle(name: string, brand?: string | null) {
+  const cleanName = name.trim();
+  const cleanBrand = brand?.trim();
 
+  if (cleanBrand && !cleanName.toLowerCase().includes(cleanBrand.toLowerCase())) {
+    return `${cleanName} | ${cleanBrand} | KHATT Electronics`;
+  }
+
+  return `${cleanName} | KHATT Electronics`;
+}
+
+function createSeoDescription({
+  name,
+  category,
+  brand,
+  shortDescription,
+}: {
+  name: string;
+  category?: string | null;
+  brand?: string | null;
+  shortDescription?: string | null;
+}) {
+  if (shortDescription && shortDescription.trim().length > 20) {
+    return shortDescription.trim().slice(0, 155);
+  }
+
+  const parts = [
+    brand?.trim(),
+    name.trim(),
+    category?.trim(),
+  ].filter(Boolean);
+
+  return `${parts.join(" ")} üçün KHATT Electronics-də peşəkar seçim, texniki məsləhət və smeta imkanı.`;
+}
+
+function createShortDescription({
+  name,
+  category,
+  brand,
+}: {
+  name: string;
+  category?: string | null;
+  brand?: string | null;
+}) {
+  const parts = [brand?.trim(), name.trim()].filter(Boolean).join(" ");
+
+  if (category) {
+    return `${parts} — ${category} üçün peşəkar məhsul. Texniki seçim və smeta üçün sorğu göndərə bilərsiniz.`;
+  }
+
+  return `${parts} — peşəkar elektronika və təhlükəsizlik həlli. Texniki seçim və smeta üçün sorğu göndərə bilərsiniz.`;
+}
+
+function createDescription({
+  name,
+  category,
+  brand,
+  shortDescription,
+}: {
+  name: string;
+  category?: string | null;
+  brand?: string | null;
+  shortDescription?: string | null;
+}) {
+  if (shortDescription && shortDescription.trim().length > 0) {
+    return shortDescription.trim();
+  }
+
+  const productName = [brand?.trim(), name.trim()].filter(Boolean).join(" ");
+
+  return `${productName} KHATT Electronics tərəfindən təqdim olunan peşəkar məhsullardan biridir. Bu məhsul ${category ?? "elektronika və təhlükəsizlik"} layihələrində istifadə üçün uyğundur. Məhsul haqqında əlavə məlumat, uyğun avadanlıq seçimi və smeta üçün sorğu göndərə bilərsiniz.`;
+}
+
+async function getCategoryName(categoryId: string) {
+  const { data } = await supabaseAdmin
+    .from("categories")
+    .select("name_az")
+    .eq("id", categoryId)
+    .maybeSingle()
+    .returns<{ name_az: string } | null>();
+
+  return data?.name_az ?? null;
+}
+
+async function getBrandName(brandId?: string | null) {
+  if (!brandId) return null;
+
+  const { data } = await supabaseAdmin
+    .from("brands")
+    .select("name")
+    .eq("id", brandId)
+    .maybeSingle()
+    .returns<{ name: string } | null>();
+
+  return data?.name ?? null;
+}
 function getImageExtension(type: string) {
   if (type === "image/png") return "png";
   if (type === "image/webp") return "webp";
@@ -128,11 +223,45 @@ export async function createProduct(formData: FormData) {
     redirect(`/admin/products/new?error=${message}`);
   }
 
-  const product = parsed.data;
-  const slug = normalizeSlug(product.slug || product.name_az);
+const product = parsed.data;
 
-  const price =
-    product.price && product.price.trim() !== "" ? Number(product.price) : null;
+const categoryName = await getCategoryName(product.category_id);
+const brandName = await getBrandName(product.brand_id || null);
+
+const slug = normalizeSlug(product.slug?.trim() || product.name_az);
+
+const autoShortDescription =
+  product.short_description_az?.trim() ||
+  createShortDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+  });
+
+const autoDescription =
+  product.description_az?.trim() ||
+  createDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+    shortDescription: autoShortDescription,
+  });
+
+const autoSeoTitle =
+  product.seo_title_az?.trim() ||
+  createSeoTitle(product.name_az, brandName);
+
+const autoSeoDescription =
+  product.seo_description_az?.trim() ||
+  createSeoDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+    shortDescription: autoShortDescription,
+  });
+
+const price =
+  product.price && product.price.trim() !== "" ? Number(product.price) : null;
 
   if (price !== null && Number.isNaN(price)) {
     redirect(
@@ -149,16 +278,16 @@ export async function createProduct(formData: FormData) {
       slug,
       category_id: product.category_id,
       brand_id: product.brand_id || null,
-      short_description_az: product.short_description_az || null,
-      description_az: product.description_az || null,
+    
       price,
       price_visible: product.price_visible === "on",
       stock_status: product.stock_status,
       status: product.status,
       is_featured: product.is_featured === "on",
-      seo_title_az: product.seo_title_az || product.name_az,
-      seo_description_az:
-        product.seo_description_az || product.short_description_az || null,
+     short_description_az: autoShortDescription,
+description_az: autoDescription,
+seo_title_az: autoSeoTitle,
+seo_description_az: autoSeoDescription,
     })
     .select("id")
     .single();
@@ -232,13 +361,45 @@ export async function updateProduct(productId: string, formData: FormData) {
 
     redirect(`/admin/products/${productId}/edit?error=${message}`);
   }
+const product = parsed.data;
 
-  const product = parsed.data;
-  const slug = normalizeSlug(product.slug || product.name_az);
+const categoryName = await getCategoryName(product.category_id);
+const brandName = await getBrandName(product.brand_id || null);
 
-  const price =
-    product.price && product.price.trim() !== "" ? Number(product.price) : null;
+const slug = normalizeSlug(product.slug?.trim() || product.name_az);
 
+const autoShortDescription =
+  product.short_description_az?.trim() ||
+  createShortDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+  });
+
+const autoDescription =
+  product.description_az?.trim() ||
+  createDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+    shortDescription: autoShortDescription,
+  });
+
+const autoSeoTitle =
+  product.seo_title_az?.trim() ||
+  createSeoTitle(product.name_az, brandName);
+
+const autoSeoDescription =
+  product.seo_description_az?.trim() ||
+  createSeoDescription({
+    name: product.name_az,
+    category: categoryName,
+    brand: brandName,
+    shortDescription: autoShortDescription,
+  });
+
+const price =
+  product.price && product.price.trim() !== "" ? Number(product.price) : null;
   if (price !== null && Number.isNaN(price)) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
@@ -254,16 +415,16 @@ export async function updateProduct(productId: string, formData: FormData) {
       slug,
       category_id: product.category_id,
       brand_id: product.brand_id || null,
-      short_description_az: product.short_description_az || null,
-      description_az: product.description_az || null,
+     short_description_az: autoShortDescription,
+description_az: autoDescription,
+seo_title_az: autoSeoTitle,
+seo_description_az: autoSeoDescription,
       price,
       price_visible: product.price_visible === "on",
       stock_status: product.stock_status,
       status: product.status,
       is_featured: product.is_featured === "on",
-      seo_title_az: product.seo_title_az || product.name_az,
-      seo_description_az:
-        product.seo_description_az || product.short_description_az || null,
+   
     })
     .eq("id", productId);
 

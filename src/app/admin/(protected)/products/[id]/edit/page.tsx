@@ -92,8 +92,7 @@ export default async function EditProductPage({
               <label className="mb-2 block text-sm font-medium">Slug</label>
               <input
                 name="slug"
-                required
-                minLength={2}
+               placeholder="Boş saxlasanız məhsul adından avtomatik yaranacaq"
                 defaultValue={product.slug}
                 className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
               />
