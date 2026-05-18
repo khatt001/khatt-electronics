@@ -110,9 +110,9 @@ export default function Navbar() {
             Kataloq
           </button>
 
-        <div className="hidden flex-1 lg:block">
-  <NavbarSearch />
-</div>
+          <div className="hidden flex-1 lg:block">
+            <NavbarSearch />
+          </div>
 
           <nav
             aria-label="Əsas naviqasiya"
@@ -191,7 +191,7 @@ export default function Navbar() {
       <div
         id="mobile-menu"
         className={cn(
-          "fixed inset-0 z-50 bg-white transition-transform duration-300 xl:hidden",
+          "fixed inset-0 z-[999] flex h-dvh flex-col overflow-hidden bg-white transition-transform duration-300 xl:hidden",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -215,45 +215,56 @@ export default function Navbar() {
           </button>
         </div>
 
-       <div className="border-b border-black/10 px-5 py-4">
-  <NavbarSearch
-    placeholder="Məhsul axtar..."
-    onNavigate={() => setOpen(false)}
-  />
-</div>
-
-        <div className="grid grid-cols-3 gap-2 border-b border-black/10 px-5 py-4">
-          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
-            Müqayisə
-          </button>
-          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
-            Sevimli
-          </button>
-          <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">
-            Səbət
-          </button>
+        <div className="relative z-20 border-b border-black/10 px-5 py-4">
+          <NavbarSearch
+            placeholder="Məhsul axtar..."
+            onNavigate={() => setOpen(false)}
+          />
         </div>
 
-        <nav aria-label="Mobil menyu" className="flex flex-col px-6 py-6">
+        <div className="flex-1 overflow-y-auto px-5 py-5">
           <Link
             href="/products"
             onClick={() => setOpen(false)}
-            className="mb-4 inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+            className="mb-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
           >
             <PackageSearch className="size-4" />
             Məhsul kataloqu
           </Link>
 
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="border-b border-neutral-100 py-4 text-lg font-medium text-neutral-900"
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
             >
-              {link.name}
-            </Link>
-          ))}
+              Müqayisə
+            </button>
+            <button
+              type="button"
+              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
+            >
+              Sevimli
+            </button>
+            <button
+              type="button"
+              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
+            >
+              Səbət
+            </button>
+          </div>
+
+          <nav aria-label="Mobil menyu" className="mt-6 flex flex-col">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="border-b border-neutral-100 py-4 text-lg font-medium text-neutral-900"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
           <div className="mt-6 flex items-center gap-3">
             {languages.map((language) => (
@@ -276,11 +287,11 @@ export default function Navbar() {
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="mt-8 inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
+            className="mt-8 inline-flex w-full justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
           >
             Smeta al
           </Link>
-        </nav>
+        </div>
       </div>
     </header>
   );
