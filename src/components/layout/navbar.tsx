@@ -10,14 +10,13 @@ import {
   Menu,
   PackageSearch,
   Phone,
-  Search,
   ShoppingCart,
   X,
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
-
+import { NavbarSearch } from "@/components/layout/navbar-search";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -111,17 +110,9 @@ export default function Navbar() {
             Kataloq
           </button>
 
-          <div className="hidden flex-1 lg:block">
-            <label className="relative block">
-              <span className="sr-only">Məhsul axtarışı</span>
-              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-              <input
-                type="search"
-                placeholder="Məhsul, model və ya kateqoriya axtar..."
-                className="h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
-              />
-            </label>
-          </div>
+        <div className="hidden flex-1 lg:block">
+  <NavbarSearch />
+</div>
 
           <nav
             aria-label="Əsas naviqasiya"
@@ -224,17 +215,12 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="border-b border-black/10 px-5 py-4">
-          <label className="relative block">
-            <span className="sr-only">Məhsul axtarışı</span>
-            <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-            <input
-              type="search"
-              placeholder="Məhsul axtar..."
-              className="h-12 w-full rounded-full border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none focus:border-neutral-950"
-            />
-          </label>
-        </div>
+       <div className="border-b border-black/10 px-5 py-4">
+  <NavbarSearch
+    placeholder="Məhsul axtar..."
+    onNavigate={() => setOpen(false)}
+  />
+</div>
 
         <div className="grid grid-cols-3 gap-2 border-b border-black/10 px-5 py-4">
           <button className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium">

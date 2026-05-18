@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/layout/navbar";
 import "./globals.css";
-
+import { Footer } from "@/components/layout/footer";
+import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
@@ -73,6 +74,8 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         <Navbar />
         {children}
+          <Footer />
+          <FloatingWhatsApp />
       </body>
     </html>
   );
