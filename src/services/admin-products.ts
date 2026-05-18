@@ -33,7 +33,9 @@ type AdminProductRow = {
 };
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
-  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Sorğu ilə";
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : "Sorğu ilə";
 }
 
 export async function getAdminProducts(): Promise<AdminProductListItem[]> {
@@ -80,6 +82,7 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
     createdAt: product.created_at,
   }));
 }
+
 export type AdminProductDetail = {
   id: string;
   name_az: string;
@@ -102,6 +105,12 @@ export type AdminProductDetail = {
     is_primary: boolean;
     sort_order: number;
   }[];
+  specifications: {
+    id: string;
+    spec_key_az: string;
+    spec_value_az: string;
+    sort_order: number;
+  }[];
 };
 
 type AdminProductDetailRow = AdminProductDetail;
@@ -111,31 +120,37 @@ export async function getAdminProductById(
 ): Promise<AdminProductDetail | null> {
   const { data, error } = await supabaseAdmin
     .from("products")
-  .select(
-  `
-  id,
-  name_az,
-  slug,
-  category_id,
-  brand_id,
-  short_description_az,
-  description_az,
-  price,
-  price_visible,
-  stock_status,
-  status,
-  is_featured,
-  seo_title_az,
-  seo_description_az,
-  images:product_images (
-    id,
-    url,
-    alt_az,
-    is_primary,
-    sort_order
-  )
-`
-)
+    .select(
+      `
+      id,
+      name_az,
+      slug,
+      category_id,
+      brand_id,
+      short_description_az,
+      description_az,
+      price,
+      price_visible,
+      stock_status,
+      status,
+      is_featured,
+      seo_title_az,
+      seo_description_az,
+      images:product_images (
+        id,
+        url,
+        alt_az,
+        is_primary,
+        sort_order
+      ),
+      specifications:product_specifications (
+        id,
+        spec_key_az,
+        spec_value_az,
+        sort_order
+      )
+    `
+    )
     .eq("id", id)
     .maybeSingle()
     .returns<AdminProductDetailRow | null>();

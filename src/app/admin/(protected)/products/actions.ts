@@ -493,3 +493,95 @@ export async function setPrimaryProductImage(productId: string, imageId: string)
 
   redirect(`/admin/products/${productId}/edit`);
 }
+export async function addProductSpecification(
+  productId: string,
+  formData: FormData
+) {
+  await requireAdmin();
+
+  const specKey = String(formData.get("spec_key_az") ?? "").trim();
+  const specValue = String(formData.get("spec_value_az") ?? "").trim();
+
+  if (!specKey || !specValue) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Texniki göstərici üçün həm açar, həm də dəyər yazılmalıdır."
+      )}`
+    );
+  }
+
+  const { data: product } = await supabaseAdmin
+    .from("products")
+    .select("slug")
+    .eq("id", productId)
+    .maybeSingle<{ slug: string }>();
+
+  const { count } = await supabaseAdmin
+    .from("product_specifications")
+    .select("id", { count: "exact", head: true })
+    .eq("product_id", productId);
+
+  const sortOrder = count ?? 0;
+
+  const { error } = await supabaseAdmin.from("product_specifications").insert({
+    product_id: productId,
+    spec_key_az: specKey,
+    spec_value_az: specValue,
+    sort_order: sortOrder,
+  });
+
+  if (error) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Texniki göstərici əlavə edilmədi."
+      )}`
+    );
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  if (product?.slug) {
+    revalidatePath(`/products/${product.slug}`);
+  }
+  revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${productId}/edit`);
+
+  redirect(`/admin/products/${productId}/edit`);
+}
+
+export async function deleteProductSpecification(
+  productId: string,
+  specificationId: string
+) {
+  await requireAdmin();
+
+  const { data: product } = await supabaseAdmin
+    .from("products")
+    .select("slug")
+    .eq("id", productId)
+    .maybeSingle<{ slug: string }>();
+
+  const { error } = await supabaseAdmin
+    .from("product_specifications")
+    .delete()
+    .eq("id", specificationId)
+    .eq("product_id", productId);
+
+  if (error) {
+    redirect(
+      `/admin/products/${productId}/edit?error=${encodeURIComponent(
+        "Texniki göstərici silinə bilmədi."
+      )}`
+    );
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  if (product?.slug) {
+    revalidatePath(`/products/${product.slug}`);
+  }
+  revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${productId}/edit`);
+
+  redirect(`/admin/products/${productId}/edit`);
+}
