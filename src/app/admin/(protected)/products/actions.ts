@@ -47,7 +47,12 @@ function getImageExtension(type: string) {
   return "jpg";
 }
 
-async function uploadProductImage(productId: string, slug: string, image: File) {
+async function uploadProductImage(
+  productId: string,
+  slug: string,
+  image: File,
+  sortOrder: number
+) {
   if (image.size === 0) return null;
 
   if (!allowedImageTypes.includes(image.type)) {
@@ -55,11 +60,11 @@ async function uploadProductImage(productId: string, slug: string, image: File) 
   }
 
   if (image.size > MAX_IMAGE_SIZE) {
-    throw new Error("Şəkil maksimum 3MB ola bilər.");
+    throw new Error("Hər şəkil maksimum 3MB ola bilər.");
   }
 
   const extension = getImageExtension(image.type);
-  const filePath = `${productId}/${slug}-${Date.now()}.${extension}`;
+  const filePath = `${productId}/${slug}-${Date.now()}-${sortOrder}.${extension}`;
   const arrayBuffer = await image.arrayBuffer();
 
   const { error: uploadError } = await supabaseAdmin.storage
@@ -83,8 +88,8 @@ async function uploadProductImage(productId: string, slug: string, image: File) 
       product_id: productId,
       url: publicUrl,
       alt_az: slug,
-      sort_order: 0,
-      is_primary: true,
+      sort_order: sortOrder,
+      is_primary: sortOrder === 0,
     });
 
   if (imageInsertError) {
@@ -163,20 +168,34 @@ export async function createProduct(formData: FormData) {
     redirect(`/admin/products/new?error=${message}`);
   }
 
-  const image = formData.get("image");
+const images = formData
+  .getAll("images")
+  .filter((image): image is File => image instanceof File && image.size > 0);
 
-  if (image instanceof File && image.size > 0) {
-    try {
-      await uploadProductImage(createdProduct.id, slug, image);
-    } catch (uploadError) {
-      const message =
-        uploadError instanceof Error
-          ? uploadError.message
-          : "Şəkil yüklənmədi.";
+if (images.length > 8) {
+  redirect(
+    `/admin/products/new?error=${encodeURIComponent(
+      "Maksimum 8 şəkil əlavə etmək olar."
+    )}`
+  );
+}
 
-      redirect(`/admin/products/new?error=${encodeURIComponent(message)}`);
-    }
+if (images.length > 0) {
+  try {
+    await Promise.all(
+      images.map((image, index) =>
+        uploadProductImage(createdProduct.id, slug, image, index)
+      )
+    );
+  } catch (uploadError) {
+    const message =
+      uploadError instanceof Error
+        ? uploadError.message
+        : "Şəkillər yüklənmədi.";
+
+    redirect(`/admin/products/new?error=${encodeURIComponent(message)}`);
   }
+}
 
   revalidatePath("/");
   revalidatePath("/products");
@@ -258,6 +277,42 @@ export async function updateProduct(productId: string, formData: FormData) {
   revalidatePath(`/products/${slug}`);
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${productId}/edit`);
+
+  redirect("/admin/products");
+}
+export async function archiveProduct(productId: string) {
+  await requireAdmin();
+
+  const { data: product, error: fetchError } = await supabaseAdmin
+    .from("products")
+    .select("slug")
+    .eq("id", productId)
+    .maybeSingle<{ slug: string }>();
+
+  if (fetchError || !product) {
+    redirect("/admin/products");
+  }
+
+  const { error } = await supabaseAdmin
+    .from("products")
+    .update({
+      status: "archived",
+      is_featured: false,
+    })
+    .eq("id", productId);
+
+  if (error) {
+    redirect(
+      `/admin/products?error=${encodeURIComponent(
+        "Məhsul arxiv edilə bilmədi."
+      )}`
+    );
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath(`/products/${product.slug}`);
+  revalidatePath("/admin/products");
 
   redirect("/admin/products");
 }

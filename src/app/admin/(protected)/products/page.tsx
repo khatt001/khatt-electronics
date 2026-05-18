@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ExternalLink, Plus } from "lucide-react";
 import { getAdminProducts } from "@/services/admin-products";
-
+import { archiveProduct } from "@/app/admin/(protected)/products/actions";
 function statusLabel(status: string) {
   if (status === "active") return "Aktiv";
   if (status === "draft") return "Qaralama";
@@ -97,21 +97,31 @@ export default async function AdminProductsPage() {
                     {stockLabel(product.stockStatus)}
                   </p>
                 </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    href={`/admin/products/${product.id}/edit`}
+                    className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium transition hover:border-neutral-950"
+                  >
+                    Edit
+                  </Link>
 
-                <Link
-                  href={`/products/${product.slug}`}
-                  target="_blank"
-                  className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium transition hover:border-neutral-950"
-                >
-                  Bax
-                  <ExternalLink className="ml-2 size-3.5" aria-hidden="true" />
-                </Link>
-                <Link
-  href={`/admin/products/${product.id}/edit`}
-  className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium transition hover:border-neutral-950"
->
-  Edit
-</Link>
+                  <Link
+                    href={`/products/${product.slug}`}
+                    target="_blank"
+                    className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-3 py-2 text-xs font-medium transition hover:border-neutral-950"
+                  >
+                    Bax
+                    <ExternalLink className="ml-2 size-3.5" aria-hidden="true" />
+                  </Link>
+                  <form action={archiveProduct.bind(null, product.id)}>
+                    <button
+                      type="submit"
+                      className="inline-flex w-fit items-center rounded-full border border-red-200 px-3 py-2 text-xs font-medium text-red-600 transition hover:border-red-600"
+                    >
+                      Arxiv
+                    </button>
+                  </form>
+                </div>
               </div>
             ))}
           </div>

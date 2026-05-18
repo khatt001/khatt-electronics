@@ -286,12 +286,14 @@ export async function getProductBySlug(
     description: data.description_az,
     seoTitle: data.seo_title_az,
     seoDescription: data.seo_description_az,
-    images: data.images.map((image) => ({
-      id: image.id,
-      url: image.url,
-      alt: image.alt_az,
-      isPrimary: image.is_primary,
-    })),
+  images: data.images
+  .sort((a, b) => Number(b.is_primary) - Number(a.is_primary))
+  .map((image) => ({
+    id: image.id,
+    url: image.url,
+    alt: image.alt_az,
+    isPrimary: image.is_primary,
+  })),
     specifications: data.specifications.map((spec) => ({
       id: spec.id,
       key: spec.spec_key_az,
