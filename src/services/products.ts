@@ -7,6 +7,7 @@ export type ProductCardItem = {
   price: string;
   badge: string;
   href: string;
+  imageUrl: string | null;
 };
 
 export type FeaturedProduct = ProductCardItem;
@@ -23,6 +24,10 @@ type ProductRow = {
     name_az: string;
     slug: string;
   } | null;
+  images: {
+    url: string;
+    is_primary: boolean;
+  }[];
 };
 
 export type ProductDetail = {
@@ -37,6 +42,12 @@ export type ProductDetail = {
   description: string | null;
   seoTitle: string | null;
   seoDescription: string | null;
+  images: {
+    id: string;
+    url: string;
+    alt: string | null;
+    isPrimary: boolean;
+  }[];
   specifications: {
     id: string;
     key: string;
@@ -68,6 +79,12 @@ type ProductDetailRow = {
   brand: {
     name: string;
   } | null;
+  images: {
+    id: string;
+    url: string;
+    alt_az: string | null;
+    is_primary: boolean;
+  }[];
   specifications: {
     id: string;
     spec_key_az: string;
@@ -82,13 +99,23 @@ type ProductDetailRow = {
 };
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
-  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Qiymət sorğu ilə";
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : "Qiymət sorğu ilə";
 }
 
 function formatBadge(stockStatus: ProductRow["stock_status"]) {
   if (stockStatus === "in_stock") return "Stokda var";
   if (stockStatus === "pre_order") return "Öncədən sifariş";
   return "Sorğu ilə";
+}
+
+function getPrimaryImage(images: ProductRow["images"]) {
+  return (
+    images.find((image) => image.is_primary)?.url ??
+    images[0]?.url ??
+    null
+  );
 }
 
 function formatProduct(product: ProductRow): ProductCardItem {
@@ -99,7 +126,7 @@ function formatProduct(product: ProductRow): ProductCardItem {
     price: formatPrice(product.price_visible, product.price),
     badge: formatBadge(product.stock_status),
     href: `/products/${product.slug}`,
-    
+    imageUrl: getPrimaryImage(product.images ?? []),
   };
 }
 
@@ -123,6 +150,10 @@ export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
       category:categories (
         name_az,
         slug
+      ),
+      images:product_images (
+        url,
+        is_primary
       )
     `
     )
@@ -158,6 +189,10 @@ export async function getCatalogProducts({
       category:categories!inner (
         name_az,
         slug
+      ),
+      images:product_images (
+        url,
+        is_primary
       )
     `
     )
@@ -179,7 +214,9 @@ export async function getCatalogProducts({
   return data.map(formatProduct);
 }
 
-export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
+export async function getProductBySlug(
+  slug: string
+): Promise<ProductDetail | null> {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
@@ -203,6 +240,12 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
       brand:brands (
         name
       ),
+      images:product_images (
+        id,
+        url,
+        alt_az,
+        is_primary
+      ),
       specifications:product_specifications (
         id,
         spec_key_az,
@@ -218,11 +261,16 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
     )
     .eq("status", "active")
     .eq("slug", slug)
-    .single()
-    .returns<ProductDetailRow>();
+    .maybeSingle()
+    .returns<ProductDetailRow | null>();
 
   if (error) {
     console.error("Failed to fetch product:", error.message);
+    return null;
+  }
+
+  if (!data) {
+    console.error("Product not found by slug:", slug);
     return null;
   }
 
@@ -238,6 +286,12 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
     description: data.description_az,
     seoTitle: data.seo_title_az,
     seoDescription: data.seo_description_az,
+    images: data.images.map((image) => ({
+      id: image.id,
+      url: image.url,
+      alt: image.alt_az,
+      isPrimary: image.is_primary,
+    })),
     specifications: data.specifications.map((spec) => ({
       id: spec.id,
       key: spec.spec_key_az,
