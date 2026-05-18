@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="az" suppressHydrationWarning>
+    <html lang="az" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         <Navbar />
         {children}

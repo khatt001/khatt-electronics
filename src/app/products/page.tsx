@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ProductCard } from "@/components/product/product-card";
 import { Container } from "@/components/layout/container";
 import { getCatalogBrands } from "@/services/brands";
@@ -14,6 +15,43 @@ type ProductsPageProps = {
   }>;
 };
 
+type QueryParams = {
+  search?: string;
+  category?: string;
+  brand?: string;
+  stock?: string;
+  sort?: string;
+};
+
+function buildFilterUrl(query: QueryParams, removeKey: keyof QueryParams) {
+  const params = new URLSearchParams();
+
+  Object.entries(query).forEach(([key, value]) => {
+    if (!value) return;
+    if (key === removeKey) return;
+    params.set(key, value);
+  });
+
+  const queryString = params.toString();
+
+  return queryString ? `/products?${queryString}` : "/products";
+}
+
+function getStockLabel(stock?: string) {
+  if (stock === "in_stock") return "Stokda var";
+  if (stock === "out_of_stock") return "Stokda yoxdur";
+  if (stock === "pre_order") return "Öncədən sifariş";
+  return null;
+}
+
+function getSortLabel(sort?: string) {
+  if (sort === "oldest") return "Ən köhnə";
+  if (sort === "featured") return "Seçilmişlər əvvəl";
+  if (sort === "price_asc") return "Qiymət: ucuzdan bahaya";
+  if (sort === "price_desc") return "Qiymət: bahadan ucuza";
+  return null;
+}
+
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const query = await searchParams;
 
@@ -28,6 +66,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     getCatalogCategories(),
     getCatalogBrands(),
   ]);
+
+  const selectedCategory = categories.find(
+    (category) => category.slug === query.category
+  );
+
+  const selectedBrand = brands.find((brand) => brand.slug === query.brand);
+
+  const stockLabel = getStockLabel(query.stock);
+  const sortLabel = getSortLabel(query.sort);
 
   const hasActiveFilters =
     query.search || query.category || query.brand || query.stock || query.sort;
@@ -51,7 +98,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       <section className="py-10 lg:py-14">
         <Container>
-          <form className="mb-8 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <form className="mb-6 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm">
             <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
               <input
                 name="search"
@@ -118,19 +165,66 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </div>
           </form>
 
+          {hasActiveFilters ? (
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              {query.search ? (
+                <Link
+                  href={buildFilterUrl(query, "search")}
+                  className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                >
+                  Axtarış: {query.search} ×
+                </Link>
+              ) : null}
+
+              {selectedCategory ? (
+                <Link
+                  href={buildFilterUrl(query, "category")}
+                  className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                >
+                  Kateqoriya: {selectedCategory.name} ×
+                </Link>
+              ) : null}
+
+              {selectedBrand ? (
+                <Link
+                  href={buildFilterUrl(query, "brand")}
+                  className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                >
+                  Brend: {selectedBrand.name} ×
+                </Link>
+              ) : null}
+
+              {stockLabel ? (
+                <Link
+                  href={buildFilterUrl(query, "stock")}
+                  className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                >
+                  {stockLabel} ×
+                </Link>
+              ) : null}
+
+              {sortLabel ? (
+                <Link
+                  href={buildFilterUrl(query, "sort")}
+                  className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                >
+                  {sortLabel} ×
+                </Link>
+              ) : null}
+
+              <Link
+                href="/products"
+                className="rounded-full bg-neutral-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-800"
+              >
+                Hamısını təmizlə
+              </Link>
+            </div>
+          ) : null}
+
           <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
             <p className="text-sm text-neutral-500">
               {products.length} məhsul tapıldı
             </p>
-
-            {hasActiveFilters ? (
-              <a
-                href="/products"
-                className="text-sm font-medium text-neutral-700 underline underline-offset-4 transition hover:text-neutral-950"
-              >
-                Filterləri təmizlə
-              </a>
-            ) : null}
           </div>
 
           {products.length > 0 ? (
