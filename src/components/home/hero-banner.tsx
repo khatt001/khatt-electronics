@@ -32,10 +32,10 @@ export function HeroBanner() {
             </Link>
 
             <Link
-              href="/contact"
+              href="/track-order"
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition hover:bg-white/10"
             >
-             Qiymət təklifi al
+              Sifariş izləmə
             </Link>
           </div>
         </div>
