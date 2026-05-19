@@ -15,7 +15,7 @@ import { siteConfig } from "@/data/site";
 export const metadata: Metadata = {
     title: "Əlaqə | KHATT Electronics",
     description:
-        "KHATT Electronics ilə əlaqə saxlayın. Kamera sistemləri, şəbəkə avadanlıqları və təhlükəsizlik həlləri üçün smeta və konsultasiya alın.",
+        "KHATT Electronics ilə əlaqə saxlayın. Kamera sistemləri, şəbəkə avadanlıqları və təhlükəsizlik həlləri üçün qiymət təklifi və konsultasiya alın.",
 };
 
 type ContactPageProps = {
@@ -28,7 +28,7 @@ type ContactPageProps = {
 };
 
 function getSourceLabel(source?: string) {
-    if (source === "estimate") return "Smeta sorğusu";
+    if (source === "estimate") return "Qiymət təklifi";
     if (source === "consultation") return "Konsultasiya sorğusu";
     return "Ümumi sorğu";
 }
@@ -54,7 +54,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                         </h1>
                         <p className="mt-5 leading-8 text-neutral-600">
                             Kamera sistemi, şəbəkə infrastrukturu və elektronika məhsulları
-                            üzrə smeta, məsləhət və texniki seçim üçün sorğu göndərin.
+                            üzrə qiymət təklifi, məsləhət və texniki seçim üçün sorğu göndərin.
                         </p>
                     </div>
                 </Container>
@@ -209,7 +209,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                                 <div className="mt-5 space-y-3 text-sm text-white/80">
                                     {[
                                         "Obyektə uyğun məhsul seçimi",
-                                        "Smeta və avadanlıq siyahısı",
+                                        "Qiymət təklifi və avadanlıq siyahısı",
                                         "Quraşdırma üçün texniki məsləhət",
                                     ].map((item) => (
                                         <div key={item} className="flex items-center gap-2">

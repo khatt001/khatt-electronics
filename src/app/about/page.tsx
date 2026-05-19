@@ -32,7 +32,7 @@ const values = [
   {
     title: "Peşəkar yanaşma",
     description:
-      "Layihə, smeta, avadanlıq siyahısı və quraşdırma mərhələlərində səliqəli yanaşma tətbiq edirik.",
+      "Layihə, qiymət təklifi, avadanlıq siyahısı və quraşdırma mərhələlərində səliqəli yanaşma tətbiq edirik.",
     icon: BadgeCheck,
   },
   {
@@ -55,7 +55,7 @@ const capabilities = [
   "Domofon və siqnalizasiya həlləri",
   "PoE switch, router və şəbəkə avadanlıqları",
   "Kabel infrastrukturu və montaj",
-  "Texniki məsləhət və smeta hazırlığı",
+  "Texniki məsləhət və qiymət təklifi hazırlığı",
 ];
 
 export default function AboutPage() {
@@ -206,7 +206,7 @@ export default function AboutPage() {
                 href="/contact"
                 className="inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
               >
-                Smeta al
+                Qiymət təklifi al
               </Link>
             </div>
           </div>

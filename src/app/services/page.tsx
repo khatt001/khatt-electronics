@@ -68,7 +68,7 @@ const services = [
 
 const processSteps = [
   "Ehtiyac və obyekt məlumatları toplanır",
-  "Avadanlıq siyahısı və ilkin smeta hazırlanır",
+  "Avadanlıq siyahısı və ilkin qiymət təklifi hazırlanır",
   "Uyğun məhsullar və texniki həll seçilir",
   "Quraşdırma və təhvil prosesi planlanır",
 ];
@@ -96,7 +96,7 @@ export default function ServicesPage() {
                 href="/contact"
                 className="inline-flex items-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
-                Smeta al
+                Qiymət təklifi al
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Link>
               <Link

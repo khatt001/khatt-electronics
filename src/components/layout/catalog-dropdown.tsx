@@ -191,7 +191,7 @@ export function CatalogDropdown({
                 </h4>
                 <p className="mt-2 text-sm leading-6 text-white/65">
                   Kamera, PoE switch, access control və digər məhsullar üzrə
-                  smeta hazırlaya bilərik.
+                  qiymət təklifi hazırlaya bilərik.
                 </p>
 
                 <Link
@@ -199,7 +199,7 @@ export function CatalogDropdown({
                   onClick={closeDropdown}
                   className="mt-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
                 >
-                  Smeta al
+                  Qiymət təklifi al
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>

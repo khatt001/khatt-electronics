@@ -156,7 +156,7 @@ export default function Navbar() {
               href="/contact"
               className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
             >
-              Smeta al
+              Qiymət təklifi al
             </Link>
 
             <button
@@ -284,7 +284,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-8 inline-flex w-full justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
           >
-            Smeta al
+            Qiymət təklifi al
           </Link>
         </div>
       </div>

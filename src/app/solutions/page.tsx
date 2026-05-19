@@ -86,7 +86,7 @@ const solutions = [
 const steps = [
   "Obyekt tipi və risk zonaları analiz edilir",
   "Kamera, keçid və şəbəkə nöqtələri planlanır",
-  "Uyğun avadanlıq siyahısı və smeta hazırlanır",
+  "Uyğun avadanlıq siyahısı və qiymət təklifi hazırlanır",
   "Quraşdırma və texniki təhvil mərhələsi icra olunur",
 ];
 
@@ -113,7 +113,7 @@ export default function SolutionsPage() {
                 href="/contact"
                 className="inline-flex items-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
-                Layihə üçün smeta al
+                Layihə üçün Qiymət təklifi al
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Link>
 

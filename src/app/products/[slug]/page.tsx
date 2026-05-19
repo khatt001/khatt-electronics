@@ -204,7 +204,7 @@ export default async function ProductDetailPage({
                   )}&source=estimate`}
                   className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-neutral-800"
                 >
-                  Smeta istə
+                  Qiymət təklifi al
                 </Link>
 
                 <Link

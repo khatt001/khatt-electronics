@@ -72,7 +72,7 @@ function createSeoDescription({
         category?.trim(),
     ].filter(Boolean);
 
-    return `${parts.join(" ")} üçün KHATT Electronics-də peşəkar seçim, texniki məsləhət və smeta imkanı.`;
+    return `${parts.join(" ")} üçün KHATT Electronics-də peşəkar seçim, texniki məsləhət və qiymət təklifi imkanı.`;
 }
 
 function createShortDescription({
@@ -87,10 +87,10 @@ function createShortDescription({
     const parts = [brand?.trim(), name.trim()].filter(Boolean).join(" ");
 
     if (category) {
-        return `${parts} — ${category} üçün peşəkar məhsul. Texniki seçim və smeta üçün sorğu göndərə bilərsiniz.`;
+        return `${parts} — ${category} üçün peşəkar məhsul. Texniki seçim və qiymət təklifi üçün sorğu göndərə bilərsiniz.`;
     }
 
-    return `${parts} — peşəkar elektronika və təhlükəsizlik həlli. Texniki seçim və smeta üçün sorğu göndərə bilərsiniz.`;
+    return `${parts} — peşəkar elektronika və təhlükəsizlik həlli. Texniki seçim və qiymət təklifi üçün sorğu göndərə bilərsiniz.`;
 }
 
 function createDescription({
@@ -110,7 +110,7 @@ function createDescription({
 
     const productName = [brand?.trim(), name.trim()].filter(Boolean).join(" ");
 
-    return `${productName} KHATT Electronics tərəfindən təqdim olunan peşəkar məhsullardan biridir. Bu məhsul ${category ?? "elektronika və təhlükəsizlik"} layihələrində istifadə üçün uyğundur. Məhsul haqqında əlavə məlumat, uyğun avadanlıq seçimi və smeta üçün sorğu göndərə bilərsiniz.`;
+    return `${productName} KHATT Electronics tərəfindən təqdim olunan peşəkar məhsullardan biridir. Bu məhsul ${category ?? "elektronika və təhlükəsizlik"} layihələrində istifadə üçün uyğundur. Məhsul haqqında əlavə məlumat, uyğun avadanlıq seçimi və qiymət təklifi üçün sorğu göndərə bilərsiniz.`;
 }
 
 async function getCategoryName(categoryId: string) {
