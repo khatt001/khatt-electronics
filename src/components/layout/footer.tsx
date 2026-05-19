@@ -6,6 +6,7 @@ import { siteConfig } from "@/data/site";
 const footerLinks = [
   { name: "Ana səhifə", href: "/" },
   { name: "Məhsullar", href: "/products" },
+  { name: "Sifariş izləmə", href: "/track-order" },
   { name: "Əlaqə", href: "/contact" },
 ];
 

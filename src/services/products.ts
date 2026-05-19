@@ -4,9 +4,13 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 export type ProductCardItem = {
   id: string;
   name: string;
+  slug: string;
   category: string;
   brand: string | null;
   price: string;
+  priceAmount: number | null;
+  stockStatus: StockStatus;
+  stockQuantity: number;
   badge: string;
   href: string;
   imageUrl: string | null;
@@ -31,8 +35,9 @@ type ProductRow = {
   slug: string;
   price: number | string | null;
   price_visible: boolean;
-  stock_status: StockStatus;
-  is_featured: boolean;
+ stock_status: StockStatus;
+stock_quantity: number | null;
+is_featured: boolean;
   category: {
     name_az: string;
     slug: string;
@@ -146,12 +151,19 @@ function getPrimaryImage(images: ProductRow["images"]) {
 }
 
 function formatProduct(product: ProductRow): ProductCardItem {
+  const priceAmount =
+    product.price_visible && product.price !== null ? Number(product.price) : null;
+
   return {
     id: product.id,
     name: product.name_az,
+    slug: product.slug,
     category: product.category?.name_az ?? "Məhsul",
     brand: product.brand?.name ?? null,
     price: formatPrice(product.price_visible, product.price),
+    priceAmount: Number.isFinite(priceAmount) ? priceAmount : null,
+    stockStatus: product.stock_status,
+    stockQuantity: product.stock_quantity ?? 0,
     badge: formatBadge(product.stock_status),
     href: `/products/${product.slug}`,
     imageUrl: getPrimaryImage(product.images ?? []),
@@ -202,8 +214,9 @@ export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
       slug,
       price,
       price_visible,
-      stock_status,
-      is_featured,
+     stock_status,
+stock_quantity,
+is_featured,
       category:categories (
         name_az,
         slug
@@ -252,8 +265,9 @@ export async function getCatalogProducts(
       slug,
       price,
       price_visible,
-      stock_status,
-      is_featured,
+     stock_status,
+stock_quantity,
+is_featured,
       category:categories (
         name_az,
         slug

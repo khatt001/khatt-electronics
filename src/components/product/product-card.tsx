@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ShoppingBag } from "lucide-react";
+import { QuickAddToCartButton } from "@/components/cart/quick-add-to-cart-button";
 import type { ProductCardItem } from "@/services/products";
 
 type ProductCardProps = {
@@ -8,12 +9,18 @@ type ProductCardProps = {
 };
 
 export function ProductCard({ product }: ProductCardProps) {
+  const canAddToCart =
+    product.priceAmount !== null &&
+    product.stockStatus === "in_stock" &&
+    product.stockQuantity > 0;
+
   return (
-    <Link
-      href={product.href}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl"
-    >
-      <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-neutral-100 via-white to-neutral-50 p-8">
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl">
+      <Link
+        href={product.href}
+        className="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-neutral-100 via-white to-neutral-50 p-8"
+        aria-label={`${product.name} məhsuluna bax`}
+      >
         <span className="absolute left-4 top-4 z-10 rounded-full border border-white/70 bg-white/90 px-3 py-1 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">
           {product.badge}
         </span>
@@ -34,7 +41,7 @@ export function ProductCard({ product }: ProductCardProps) {
             />
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
@@ -49,9 +56,11 @@ export function ProductCard({ product }: ProductCardProps) {
           ) : null}
         </div>
 
-        <h3 className="mt-4 line-clamp-2 text-lg font-semibold leading-snug text-neutral-950">
-          {product.name}
-        </h3>
+        <Link href={product.href} className="mt-4 block">
+          <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-neutral-950 transition hover:text-neutral-600">
+            {product.name}
+          </h3>
+        </Link>
 
         <div className="mt-auto pt-5">
           <div className="flex items-end justify-between gap-4">
@@ -62,12 +71,43 @@ export function ProductCard({ product }: ProductCardProps) {
               </p>
             </div>
 
-            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-950 transition group-hover:border-neutral-950 group-hover:bg-neutral-950 group-hover:text-white">
+            <Link
+              href={product.href}
+              aria-label={`${product.name} məhsuluna bax`}
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-950 transition hover:border-neutral-950 hover:bg-neutral-950 hover:text-white"
+            >
               <ArrowUpRight className="size-4" aria-hidden="true" />
-            </span>
+            </Link>
+          </div>
+
+          <div className="mt-4">
+            {product.priceAmount !== null ? (
+              <QuickAddToCartButton
+                item={{
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  price: product.priceAmount,
+                  priceLabel: product.price,
+                  imageUrl: product.imageUrl,
+                  category: product.category,
+                  brand: product.brand,
+                  maxQuantity: product.stockQuantity,
+                }}
+                disabled={!canAddToCart}
+              />
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="inline-flex h-10 w-full items-center justify-center rounded-full bg-neutral-200 px-4 text-xs font-semibold text-neutral-500"
+              >
+                Qiymət aktiv deyil
+              </button>
+            )}
           </div>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
