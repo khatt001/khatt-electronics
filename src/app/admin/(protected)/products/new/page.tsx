@@ -61,9 +61,9 @@ export default async function NewProductPage({
                         <label className="mb-2 block text-sm font-medium">Slug</label>
                         <input
                             name="slug"
-                           
+
                             className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                           placeholder="Boş saxlasanız avtomatik yaranacaq"
+                            placeholder="Boş saxlasanız avtomatik yaranacaq"
                         />
                         <p className="mt-2 text-xs text-neutral-500">
                             URL üçün istifadə olunur. Məsələn: /products/4mp-ip-dome-kamera
@@ -173,9 +173,9 @@ export default async function NewProductPage({
                             multiple
                             className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-neutral-950 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-neutral-800"
                         />
-                       <p className="mt-2 text-xs text-neutral-500">
-  JPG, PNG və ya WEBP. Hər şəkil maksimum 3MB. Maksimum 8 şəkil.
-</p>
+                        <p className="mt-2 text-xs text-neutral-500">
+                            JPG, PNG və ya WEBP. Hər şəkil maksimum 3MB. Maksimum 8 şəkil.
+                        </p>
                     </div>
                     <label className="flex items-center gap-3 rounded-2xl border border-neutral-200 p-4 text-sm font-medium">
                         <input name="price_visible" type="checkbox" />
@@ -199,7 +199,20 @@ export default async function NewProductPage({
                             <option value="pre_order">Öncədən sifariş</option>
                         </select>
                     </div>
-
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">Stok sayı</label>
+                        <input
+                            name="stock_quantity"
+                            type="number"
+                            min="0"
+                            defaultValue="0"
+                            className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+                            placeholder="Məsələn: 10"
+                        />
+                        <p className="mt-2 text-xs text-neutral-500">
+                            Stok statusu “Stokda var” olduqda real məhsul sayını yazın.
+                        </p>
+                    </div>
                     <div>
                         <label className="mb-2 block text-sm font-medium">Status</label>
                         <select

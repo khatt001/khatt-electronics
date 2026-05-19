@@ -9,6 +9,7 @@ export type AdminProductListItem = {
   brand: string | null;
   status: string;
   stockStatus: string;
+  stockQuantity: number;
   isFeatured: boolean;
   price: string;
   createdAt: string;
@@ -22,6 +23,7 @@ type AdminProductRow = {
   price_visible: boolean;
   status: string;
   stock_status: string;
+  stock_quantity: number | null;
   is_featured: boolean;
   created_at: string;
   category: {
@@ -33,9 +35,7 @@ type AdminProductRow = {
 };
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
-  return priceVisible && price
-    ? `${Number(price).toFixed(2)} AZN`
-    : "Sorğu ilə";
+  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Sorğu ilə";
 }
 
 export async function getAdminProducts(): Promise<AdminProductListItem[]> {
@@ -50,6 +50,7 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
       price_visible,
       status,
       stock_status,
+      stock_quantity,
       is_featured,
       created_at,
       category:categories (
@@ -77,6 +78,7 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
     brand: product.brand?.name ?? null,
     status: product.status,
     stockStatus: product.stock_status,
+    stockQuantity: product.stock_quantity ?? 0,
     isFeatured: product.is_featured,
     price: formatPrice(product.price_visible, product.price),
     createdAt: product.created_at,
@@ -94,6 +96,7 @@ export type AdminProductDetail = {
   price: number | string | null;
   price_visible: boolean;
   stock_status: string;
+  stock_quantity: number | null;
   status: string;
   is_featured: boolean;
   seo_title_az: string | null;
@@ -132,6 +135,7 @@ export async function getAdminProductById(
       price,
       price_visible,
       stock_status,
+      stock_quantity,
       status,
       is_featured,
       seo_title_az,

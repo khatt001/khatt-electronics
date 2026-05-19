@@ -9,7 +9,6 @@ import {
   Mail,
   Menu,
   Phone,
-  ShoppingCart,
   X,
 } from "lucide-react";
 import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
@@ -17,7 +16,7 @@ import { Container } from "@/components/layout/container";
 import { NavbarSearch } from "@/components/layout/navbar-search";
 import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
-
+import { CartNavLink } from "@/components/cart/cart-nav-link";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -127,30 +126,23 @@ export default function Navbar() {
           </nav>
 
           <div className="ml-auto flex items-center gap-1.5">
-            <button
-              type="button"
+            <Link
+              href="/compare"
               aria-label="Müqayisə"
               className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
             >
               <BarChart3 size={18} aria-hidden="true" />
-            </button>
+            </Link>
 
-            <button
-              type="button"
+            <Link
+              href="/favorites"
               aria-label="Sevimlilər"
               className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
             >
               <Heart size={18} aria-hidden="true" />
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              aria-label="Səbət"
-              className="relative hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
-            >
-              <ShoppingCart size={18} aria-hidden="true" />
-              <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-emerald-500" />
-            </button>
+           <CartNavLink />
 
             <Link
               href="/contact"
@@ -228,24 +220,29 @@ export default function Navbar() {
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
+            <Link
+              href="/compare"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
               Müqayisə
-            </button>
-            <button
-              type="button"
-              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
+            </Link>
+
+            <Link
+              href="/favorites"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
               Sevimli
-            </button>
-            <button
-              type="button"
-              className="rounded-2xl border border-neutral-200 p-3 text-xs font-medium"
+            </Link>
+
+            <Link
+              href="/cart"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
               Səbət
-            </button>
+            </Link>
           </div>
 
           <nav aria-label="Mobil menyu" className="mt-6 flex flex-col">

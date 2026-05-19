@@ -12,7 +12,7 @@ import { Container } from "@/components/layout/container";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { getProductBySlug } from "@/services/products";
 import { siteConfig } from "@/data/site";
-
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 type ProductDetailPageProps = {
   params: Promise<{
     slug: string;
@@ -58,11 +58,11 @@ export async function generateMetadata({
       type: "website",
       images: imageUrl
         ? [
-            {
-              url: imageUrl,
-              alt: product.name,
-            },
-          ]
+          {
+            url: imageUrl,
+            alt: product.name,
+          },
+        ]
         : undefined,
     },
     twitter: {
@@ -99,26 +99,26 @@ function getProductJsonLd(product: ProductDetailData) {
     image: product.images.map((image) => image.url),
     brand: product.brand
       ? {
-          "@type": "Brand",
-          name: product.brand,
-        }
+        "@type": "Brand",
+        name: product.brand,
+      }
       : undefined,
     category: product.category,
     url: productUrl,
     offers:
       priceNumber && !Number.isNaN(priceNumber)
         ? {
-            "@type": "Offer",
-            price: priceNumber,
-            priceCurrency: "AZN",
-            availability:
-              product.badge === "Stokda var"
-                ? "https://schema.org/InStock"
-                : product.badge === "Öncədən sifariş"
-                  ? "https://schema.org/PreOrder"
-                  : "https://schema.org/OutOfStock",
-            url: productUrl,
-          }
+          "@type": "Offer",
+          price: priceNumber,
+          priceCurrency: "AZN",
+          availability:
+            product.badge === "Stokda var"
+              ? "https://schema.org/InStock"
+              : product.badge === "Öncədən sifariş"
+                ? "https://schema.org/PreOrder"
+                : "https://schema.org/OutOfStock",
+          url: productUrl,
+        }
         : undefined,
   };
 }
@@ -196,24 +196,48 @@ export default async function ProductDetailPage({
                   {product.price}
                 </strong>
               </div>
+              <div className="mt-4 rounded-3xl border border-neutral-200 bg-white p-5">
+                <p className="text-sm text-neutral-500">Stok vəziyyəti</p>
 
+                {product.stockStatus === "in_stock" && product.stockQuantity > 0 ? (
+                  <strong className="mt-2 block text-lg text-emerald-700">
+                    Stokda {product.stockQuantity} ədəd var
+                  </strong>
+                ) : product.stockStatus === "pre_order" ? (
+                  <strong className="mt-2 block text-lg text-amber-700">
+                    Öncədən sifariş mümkündür
+                  </strong>
+                ) : (
+                  <strong className="mt-2 block text-lg text-red-700">
+                    Stokda yoxdur
+                  </strong>
+                )}
+              </div>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                <Link
-                  href={`/contact?product=${encodeURIComponent(
-                    product.name
-                  )}&source=estimate`}
-                  className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-neutral-800"
-                >
-                  Qiymət təklifi al
-                </Link>
+                <AddToCartButton
+                  item={{
+                    id: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    price:
+                      product.price === "Qiymət sorğu ilə"
+                        ? 0
+                        : Number(String(product.price).replace("AZN", "").trim()),
+                    priceLabel: product.price,
+                    imageUrl: product.images[0]?.url ?? null,
+                    category: product.category,
+                    brand: product.brand,
+                    maxQuantity: product.stockQuantity,
+                  }}
+                  maxQuantity={product.stockQuantity}
+                  disabled={product.stockStatus !== "in_stock" || product.stockQuantity <= 0}
+                />
 
                 <Link
-                  href={`/contact?product=${encodeURIComponent(
-                    product.name
-                  )}&source=consultation`}
+                  href="/cart"
                   className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
                 >
-                  Konsultasiya al
+                  Səbətə bax
                 </Link>
 
                 <a

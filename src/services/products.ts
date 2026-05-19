@@ -51,6 +51,8 @@ export type ProductDetail = {
   id: string;
   name: string;
   slug: string;
+  stockQuantity: number;
+  stockStatus: StockStatus;
   category: string;
   brand: string | null;
   price: string;
@@ -87,6 +89,7 @@ type ProductDetailRow = {
   price: number | string | null;
   price_visible: boolean;
   stock_status: StockStatus;
+  stock_quantity: number | null;
   seo_title_az: string | null;
   seo_description_az: string | null;
   category: {
@@ -330,6 +333,8 @@ export async function getProductBySlug(
       price,
       price_visible,
       stock_status,
+            stock_quantity,
+
       seo_title_az,
       seo_description_az,
       category:categories (
@@ -379,6 +384,8 @@ export async function getProductBySlug(
     id: data.id,
     name: data.name_az,
     slug: data.slug,
+      stockQuantity: data.stock_quantity ?? 0,
+    stockStatus: data.stock_status,
     category: data.category?.name_az ?? "Məhsul",
     brand: data.brand?.name ?? null,
     price: formatPrice(data.price_visible, data.price),

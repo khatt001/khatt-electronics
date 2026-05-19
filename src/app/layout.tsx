@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/navbar";
 import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
+import { CartProvider } from "@/components/cart/cart-provider";
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
@@ -72,10 +73,12 @@ export default function RootLayout({
   return (
     <html lang="az" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-        <Navbar />
-        {children}
-          <Footer />
-          <FloatingWhatsApp />
+        <CartProvider>
+    <Navbar />
+    {children}
+    <Footer />
+    <FloatingWhatsApp />
+  </CartProvider>
       </body>
     </html>
   );

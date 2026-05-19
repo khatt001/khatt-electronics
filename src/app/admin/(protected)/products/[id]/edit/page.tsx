@@ -92,7 +92,7 @@ export default async function EditProductPage({
               <label className="mb-2 block text-sm font-medium">Slug</label>
               <input
                 name="slug"
-               placeholder="Boş saxlasanız məhsul adından avtomatik yaranacaq"
+                placeholder="Boş saxlasanız məhsul adından avtomatik yaranacaq"
                 defaultValue={product.slug}
                 className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
               />
@@ -183,7 +183,7 @@ export default async function EditProductPage({
               </div>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-4">
               <div>
                 <label className="mb-2 block text-sm font-medium">Qiymət</label>
                 <input
@@ -207,6 +207,18 @@ export default async function EditProductPage({
                   <option value="out_of_stock">Stokda yoxdur</option>
                   <option value="pre_order">Öncədən sifariş</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-medium">Stok sayı</label>
+                <input
+                  name="stock_quantity"
+                  type="number"
+                  min="0"
+                  defaultValue={product.stock_quantity ?? 0}
+                  className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+                  placeholder="Məsələn: 10"
+                />
               </div>
 
               <div>
