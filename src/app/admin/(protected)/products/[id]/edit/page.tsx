@@ -12,6 +12,8 @@ import {
 import { getAdminProductById } from "@/services/admin-products";
 import { getCatalogBrands } from "@/services/brands";
 import { getCatalogCategories } from "@/services/categories";
+import { STANDARD_SPEC_KEYS } from "@/lib/product-specs";
+
 
 type EditProductPageProps = {
   params: Promise<{ id: string }>;
@@ -210,7 +212,9 @@ export default async function EditProductPage({
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">Stok sayı</label>
+                <label className="mb-2 block text-sm font-medium">
+                  Stok sayı
+                </label>
                 <input
                   name="stock_quantity"
                   type="number"
@@ -284,35 +288,58 @@ export default async function EditProductPage({
             <div className="mb-5">
               <h3 className="text-xl font-semibold">Texniki göstəricilər</h3>
               <p className="mt-1 text-sm text-neutral-500">
-                Məhsul səhifəsində görünəcək texniki parametrlər.
+                Məhsul səhifəsində və filter sistemində istifadə olunan
+                standart parametrlər.
               </p>
             </div>
+
+            <datalist id="standard-spec-keys">
+              {STANDARD_SPEC_KEYS.map((key) => (
+                <option key={key} value={key} />
+              ))}
+            </datalist>
 
             <form
               action={addSpecificationWithId}
               className="grid gap-3 md:grid-cols-[1fr_1fr_auto]"
             >
-              <input
-                name="spec_key_az"
-                required
-                placeholder="Məsələn: Resolution"
-                className="h-11 rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-              />
+              <div>
+                <label className="mb-2 block text-xs font-medium text-neutral-500">
+                  Parametr
+                </label>
+                <input
+                  name="spec_key_az"
+                  required
+                  list="standard-spec-keys"
+                  placeholder="Məsələn: Görüntü keyfiyyəti"
+                  className="h-11 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+                />
+              </div>
 
-              <input
-                name="spec_value_az"
-                required
-                placeholder="Məsələn: 4MP"
-                className="h-11 rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-              />
+              <div>
+                <label className="mb-2 block text-xs font-medium text-neutral-500">
+                  Dəyər
+                </label>
+                <input
+                  name="spec_value_az"
+                  required
+                  placeholder="Məsələn: 4MP"
+                  className="h-11 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+                />
+              </div>
 
               <button
                 type="submit"
-                className="h-11 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                className="mt-6 h-11 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800 md:mt-7"
               >
                 Əlavə et
               </button>
             </form>
+
+            <div className="mt-4 rounded-2xl bg-neutral-50 p-4 text-xs leading-6 text-neutral-500">
+              Eyni filterlərin qarışmaması üçün parametr adını mümkün qədər
+              siyahıdan seçin. Lazım olsa custom parametr də yaza bilərsiniz.
+            </div>
 
             <div className="mt-5">
               {sortedSpecifications.length > 0 ? (

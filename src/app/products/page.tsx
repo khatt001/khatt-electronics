@@ -7,21 +7,7 @@ import { getCatalogCategories } from "@/services/categories";
 import { getCatalogProducts } from "@/services/products";
 import { ProductsFilter } from "@/app/products/products-filter";
 
-export const metadata: Metadata = {
-  title: "Məhsullar",
-  description:
-    "KHATT Electronics məhsul kataloqu: kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət, şəbəkə avadanlıqları və təhlükəsizlik həlləri.",
-  alternates: {
-    canonical: "/products",
-  },
-  openGraph: {
-    title: "Məhsullar | KHATT Electronics",
-    description:
-      "Kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət və şəbəkə məhsulları.",
-    url: "/products",
-    type: "website",
-  },
-};
+
 
 type ProductsSearchParams = {
   search?: string | string[];
@@ -104,7 +90,41 @@ function getSortLabel(sort?: string) {
   if (sort === "price_desc") return "Qiymət: bahadan ucuza";
   return null;
 }
+export async function generateMetadata({
+  searchParams,
+}: ProductsPageProps): Promise<Metadata> {
+  const query = await searchParams;
 
+  const hasQuery = Object.values(query).some((value) => {
+    if (Array.isArray(value)) return value.length > 0;
+    return Boolean(value);
+  });
+
+  return {
+    title: "Məhsullar",
+    description:
+      "KHATT Electronics məhsul kataloqu: kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət, şəbəkə avadanlıqları və təhlükəsizlik həlləri.",
+    alternates: {
+      canonical: "/products",
+    },
+    robots: hasQuery
+      ? {
+          index: false,
+          follow: true,
+        }
+      : {
+          index: true,
+          follow: true,
+        },
+    openGraph: {
+      title: "Məhsullar | KHATT Electronics",
+      description:
+        "Kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət və şəbəkə məhsulları.",
+      url: "/products",
+      type: "website",
+    },
+  };
+}
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const query = await searchParams;
 
@@ -167,7 +187,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       <section className="py-10 lg:py-14">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
+          <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
             <aside>
               <ProductsFilter
                 categories={categories}

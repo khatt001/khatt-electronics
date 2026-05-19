@@ -36,6 +36,7 @@ type ProductsFilterProps = {
     sort?: string;
   };
   hasActiveFilters: boolean;
+  categoryMode?: "query" | "route";
 };
 
 function cleanValue(value: string | null | undefined) {
@@ -59,6 +60,7 @@ export function ProductsFilter({
   brands,
   initialQuery,
   hasActiveFilters,
+  categoryMode = "query",
 }: ProductsFilterProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -70,8 +72,17 @@ export function ProductsFilter({
   const [dynamicGroups, setDynamicGroups] = useState<DynamicFilterGroup[]>([]);
   const [loadingFilters, setLoadingFilters] = useState(false);
 
-  const currentCategory = cleanValue(searchParams.get("category"));
+  const currentCategory =
+    categoryMode === "route"
+      ? cleanValue(initialQuery.category)
+      : cleanValue(searchParams.get("category"));
+
   const currentSort = cleanValue(searchParams.get("sort"));
+
+  const clearHref =
+    categoryMode === "route" && currentCategory
+      ? `/category/${currentCategory}`
+      : "/products";
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -79,13 +90,18 @@ export function ProductsFilter({
     searchParams.forEach((value, key) => {
       if (!value) return;
       if (key === "sort") return;
+      if (categoryMode === "route" && key === "category") return;
       count += 1;
     });
 
     return count;
-  }, [searchParams]);
+  }, [searchParams, categoryMode]);
 
   function replaceWithParams(params: URLSearchParams) {
+    if (categoryMode === "route") {
+      params.delete("category");
+    }
+
     const queryString = params.toString();
 
     startTransition(() => {
@@ -105,6 +121,20 @@ export function ProductsFilter({
     }
 
     replaceWithParams(params);
+  }
+
+  function changeCategory(value: string) {
+    if (categoryMode === "route") {
+      startTransition(() => {
+        router.replace(value ? `/category/${value}` : "/products", {
+          scroll: false,
+        });
+      });
+
+      return;
+    }
+
+    setSingleParam("category", value);
   }
 
   function toggleMultiParam(key: string, value: string) {
@@ -210,7 +240,7 @@ export function ProductsFilter({
         <select
           name="category"
           value={currentCategory}
-          onChange={(event) => setSingleParam("category", event.target.value)}
+          onChange={(event) => changeCategory(event.target.value)}
           className="h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
         >
           <option value="">Bütün kateqoriyalar</option>
@@ -226,35 +256,38 @@ export function ProductsFilter({
         <h3 className="mb-3 text-sm font-semibold text-neutral-950">Brand</h3>
 
         <div className="space-y-2">
-          {(brandGroup?.options.length ? brandGroup.options : brands).map(
-            (brand) => {
-              const value = "slug" in brand ? brand.slug : brand.value;
-              const label = "name" in brand ? brand.name : brand.label;
-              const count = "count" in brand ? brand.count : null;
-              const selected = getSelectedValues(
-                searchParams,
-                "brand"
-              ).includes(value);
+          {brands.map((brand) => {
+            const dynamicBrand = brandGroup?.options.find(
+              (option) =>
+                option.label.toLowerCase() === brand.name.toLowerCase()
+            );
 
-              return (
-                <label
-                  key={value}
-                  className="flex cursor-pointer items-center gap-3 text-sm text-neutral-700"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={() => toggleMultiParam("brand", value)}
-                    className="size-4 rounded border-neutral-300 text-neutral-950"
-                  />
-                  <span className="min-w-0 flex-1">{label}</span>
-                  {count !== null ? (
-                    <span className="text-xs text-neutral-400">({count})</span>
-                  ) : null}
-                </label>
-              );
-            }
-          )}
+            const selected = getSelectedValues(searchParams, "brand").includes(
+              brand.slug
+            );
+
+            return (
+              <label
+                key={brand.id}
+                className="flex cursor-pointer items-center gap-3 text-sm text-neutral-700"
+              >
+                <input
+                  type="checkbox"
+                  checked={selected}
+                  onChange={() => toggleMultiParam("brand", brand.slug)}
+                  className="size-4 rounded border-neutral-300 text-neutral-950"
+                />
+
+                <span className="min-w-0 flex-1">{brand.name}</span>
+
+                {dynamicBrand ? (
+                  <span className="text-xs text-neutral-400">
+                    ({dynamicBrand.count})
+                  </span>
+                ) : null}
+              </label>
+            );
+          })}
         </div>
       </div>
 
@@ -375,7 +408,7 @@ export function ProductsFilter({
       </div>
 
       <div className="mb-6 hidden rounded-[2rem] border border-neutral-200 bg-white p-5 shadow-sm lg:block">
-        <div className="mb-5 flex items-center justify-between border-b border-neutral-100 pb-5">
+        <div className="mb-5 flex flex-col gap-4 border-b border-neutral-100 pb-5">
           <div className="flex items-center gap-2">
             <span className="inline-flex size-9 items-center justify-center rounded-full bg-neutral-950 text-white">
               <Filter className="size-4" aria-hidden="true" />
@@ -390,12 +423,12 @@ export function ProductsFilter({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="grid gap-3">
             <select
               name="sort"
               value={currentSort}
               onChange={(event) => setSingleParam("sort", event.target.value)}
-              className="h-11 rounded-full border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
+              className="h-11 w-full rounded-full border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
             >
               <option value="">Ən yeni</option>
               <option value="oldest">Ən köhnə</option>
@@ -406,8 +439,8 @@ export function ProductsFilter({
 
             {hasActiveFilters ? (
               <Link
-                href="/products"
-                className="rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                href={clearHref}
+                className="inline-flex w-full justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
               >
                 Hamısını təmizlə
               </Link>

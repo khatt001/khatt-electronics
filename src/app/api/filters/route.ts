@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSpecSortIndex } from "@/lib/product-specs";
 
 type ProductFilterRow = {
   id: string;
@@ -26,23 +27,7 @@ type FilterGroup = {
   options: FilterOption[];
 };
 
-const IMPORTANT_SPEC_ORDER = [
-  "Gecə görmə məsafəsi",
-  "Görüntü keyfiyyəti",
-  "Korpus materialı",
-  "Korpus növü",
-  "Qida mənbəyi",
-  "Qoşulma növü",
-  "Quraşdırma yeri",
-  "Səsli-səssiz",
-  "Zoom",
-  "Port sayı",
-  "PoE port sayı",
-  "PoE budget",
-  "Sürət",
-  "Managed",
-  "Rack mount",
-];
+
 
 function normalizeValue(value: string | null | undefined) {
   return String(value ?? "").trim();
@@ -83,12 +68,10 @@ function getStockLabel(stockStatus: ProductFilterRow["stock_status"]) {
 
 function sortSpecGroups(groups: FilterGroup[]) {
   return groups.sort((a, b) => {
-    const indexA = IMPORTANT_SPEC_ORDER.indexOf(a.label);
-    const indexB = IMPORTANT_SPEC_ORDER.indexOf(b.label);
+    const indexA = getSpecSortIndex(a.label);
+    const indexB = getSpecSortIndex(b.label);
 
-    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-    if (indexA !== -1) return -1;
-    if (indexB !== -1) return 1;
+    if (indexA !== indexB) return indexA - indexB;
 
     return a.label.localeCompare(b.label, "az");
   });
