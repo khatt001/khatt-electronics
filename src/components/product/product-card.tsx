@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ShoppingBag } from "lucide-react";
 import { QuickAddToCartButton } from "@/components/cart/quick-add-to-cart-button";
+import { FavoriteButton } from "@/components/favorites/favorites-button";
 import type { ProductCardItem } from "@/services/products";
 
 type ProductCardProps = {
@@ -14,34 +15,53 @@ export function ProductCard({ product }: ProductCardProps) {
     product.stockStatus === "in_stock" &&
     product.stockQuantity > 0;
 
+  const favoriteItem = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: product.price,
+    priceAmount: product.priceAmount,
+    imageUrl: product.imageUrl,
+    category: product.category,
+    brand: product.brand,
+    stockStatus: product.stockStatus,
+    stockQuantity: product.stockQuantity,
+  };
+
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl">
-      <Link
-        href={product.href}
-        className="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-neutral-100 via-white to-neutral-50 p-8"
-        aria-label={`${product.name} məhsuluna bax`}
-      >
-        <span className="absolute left-4 top-4 z-10 rounded-full border border-white/70 bg-white/90 px-3 py-1 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">
+      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-neutral-100 via-white to-neutral-50">
+        <Link
+          href={product.href}
+          className="absolute inset-0 flex items-center justify-center p-8"
+          aria-label={`${product.name} məhsuluna bax`}
+        >
+          {product.imageUrl ? (
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+              className="object-contain p-8 transition duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex size-28 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-sm">
+              <ShoppingBag
+                className="size-10 text-neutral-800"
+                aria-hidden="true"
+              />
+            </div>
+          )}
+        </Link>
+
+        <span className="absolute left-4 top-4 z-20 rounded-full border border-white/70 bg-white/90 px-3 py-1 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">
           {product.badge}
         </span>
 
-        {product.imageUrl ? (
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-            className="object-contain p-8 transition duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex size-28 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-sm">
-            <ShoppingBag
-              className="size-10 text-neutral-800"
-              aria-hidden="true"
-            />
-          </div>
-        )}
-      </Link>
+        <div className="absolute right-4 top-4 z-30">
+          <FavoriteButton item={favoriteItem} />
+        </div>
+      </div>
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
@@ -68,6 +88,14 @@ export function ProductCard({ product }: ProductCardProps) {
               <p className="text-xs text-neutral-400">Qiymət</p>
               <p className="mt-1 text-sm font-semibold text-neutral-900">
                 {product.price}
+              </p>
+
+              <p className="mt-1 text-xs text-neutral-500">
+                {product.stockStatus === "in_stock" && product.stockQuantity > 0
+                  ? `Stokda ${product.stockQuantity} ədəd`
+                  : product.stockStatus === "pre_order"
+                    ? "Öncədən sifariş"
+                    : "Stokda yoxdur"}
               </p>
             </div>
 

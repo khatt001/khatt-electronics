@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   BarChart3,
   Clock,
-  Heart,
   Mail,
   Menu,
   Phone,
@@ -17,6 +16,7 @@ import { NavbarSearch } from "@/components/layout/navbar-search";
 import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import { CartNavLink } from "@/components/cart/cart-nav-link";
+import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -110,20 +110,27 @@ export default function Navbar() {
             <NavbarSearch />
           </div>
 
-          <nav
-            aria-label="Əsas naviqasiya"
-            className="hidden items-center gap-5 xl:flex"
-          >
-            {navLinks.slice(2).map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+         <nav
+  aria-label="Əsas naviqasiya"
+  className="hidden items-center gap-5 xl:flex"
+>
+  <Link
+    href="/products"
+    className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
+  >
+    Məhsullar
+  </Link>
+
+  {navLinks.slice(2).map((link) => (
+    <Link
+      key={link.href}
+      href={link.href}
+      className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
+    >
+      {link.name}
+    </Link>
+  ))}
+</nav>
 
           <div className="ml-auto flex items-center gap-1.5">
             <Link
@@ -134,22 +141,15 @@ export default function Navbar() {
               <BarChart3 size={18} aria-hidden="true" />
             </Link>
 
-            <Link
-              href="/favorites"
-              aria-label="Sevimlilər"
-              className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
-            >
-              <Heart size={18} aria-hidden="true" />
-            </Link>
-
+           <FavoritesNavLink />
            <CartNavLink />
 
-            <Link
-              href="/contact"
-              className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
-            >
-              Qiymət təklifi al
-            </Link>
+           <Link
+  href="/track-order"
+  className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
+>
+  Sifariş izləmə
+</Link>
 
             <button
               type="button"
@@ -276,13 +276,23 @@ export default function Navbar() {
             ))}
           </div>
 
-          <Link
-            href="/contact"
-            onClick={() => setOpen(false)}
-            className="mt-8 inline-flex w-full justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
-          >
-            Qiymət təklifi al
-          </Link>
+        <div className="mt-8 grid grid-cols-2 gap-3">
+  <Link
+    href="/products"
+    onClick={() => setOpen(false)}
+    className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+  >
+    Məhsullar
+  </Link>
+
+  <Link
+    href="/track-order"
+    onClick={() => setOpen(false)}
+    className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
+  >
+    Sifariş izləmə
+  </Link>
+</div>
         </div>
       </div>
     </header>

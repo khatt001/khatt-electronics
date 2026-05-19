@@ -5,6 +5,9 @@ import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { CartToast } from "@/components/cart/cart-toast";
+import { FavoritesProvider } from "@/components/favorites/favorites-provider";
+
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
@@ -74,11 +77,16 @@ export default function RootLayout({
     <html lang="az" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         <CartProvider>
-    <Navbar />
-    {children}
-    <Footer />
-    <FloatingWhatsApp />
-  </CartProvider>
+          <FavoritesProvider>
+
+            <Navbar />
+            {children}
+            <Footer />
+            <FloatingWhatsApp />
+            <CartToast />
+          </FavoritesProvider>
+
+        </CartProvider>
       </body>
     </html>
   );

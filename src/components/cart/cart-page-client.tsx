@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import {
   ArrowRight,
   Minus,
@@ -15,7 +16,19 @@ import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
 
 export function CartPageClient() {
-  const { items, subtotal, updateQuantity, removeItem, clearCart } = useCart();
+  const {
+    items,
+    subtotal,
+    updateQuantity,
+    removeItem,
+    clearCart,
+    syncCart,
+    isSyncing,
+  } = useCart();
+
+  useEffect(() => {
+    void syncCart();
+  }, [syncCart]);
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
@@ -107,7 +120,7 @@ export function CartPageClient() {
                             onClick={() =>
                               updateQuantity(item.id, item.quantity - 1)
                             }
-                            disabled={item.quantity <= 1}
+                            disabled={item.quantity <= 1 || isSyncing}
                             aria-label="Say azalt"
                             className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                           >
@@ -123,7 +136,7 @@ export function CartPageClient() {
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            disabled={item.quantity >= item.maxQuantity}
+                            disabled={item.quantity >= item.maxQuantity || isSyncing}
                             aria-label="Say artır"
                             className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                           >
@@ -154,7 +167,8 @@ export function CartPageClient() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-neutral-500">Məhsul sayı</span>
                     <span className="font-medium text-neutral-950">
-                      {items.reduce((total, item) => total + item.quantity, 0)} ədəd
+                      {items.reduce((total, item) => total + item.quantity, 0)}{" "}
+                      ədəd
                     </span>
                   </div>
 
@@ -180,9 +194,20 @@ export function CartPageClient() {
                   </strong>
                 </div>
 
+                {isSyncing ? (
+                  <p className="mt-3 text-center text-xs text-neutral-500">
+                    Səbət məlumatları yenilənir...
+                  </p>
+                ) : null}
+
                 <Link
                   href="/checkout"
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-neutral-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  aria-disabled={isSyncing}
+                  className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold transition ${
+                    isSyncing
+                      ? "pointer-events-none bg-neutral-300 text-white"
+                      : "bg-neutral-950 text-white hover:bg-neutral-800"
+                  }`}
                 >
                   Sifarişi tamamla
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />
@@ -191,7 +216,8 @@ export function CartPageClient() {
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600"
+                  disabled={isSyncing}
+                  className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Səbəti təmizlə
                 </button>

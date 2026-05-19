@@ -3,17 +3,22 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CreditCard, PackageSearch, WalletCards } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { createOrder } from "@/app/checkout/actions";
 import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
+import { PhoneInput } from "@/components/checkout/phone-input";
 
 export function CheckoutPageClient() {
   const searchParams = useSearchParams();
-  const { items, subtotal } = useCart();
+  const { items, subtotal, syncCart, isSyncing } = useCart();
 
   const error = searchParams.get("error");
+
+  useEffect(() => {
+    void syncCart();
+  }, [syncCart]);
 
   const checkoutItems = useMemo(
     () =>
@@ -67,6 +72,12 @@ export function CheckoutPageClient() {
                   </div>
                 ) : null}
 
+                {isSyncing ? (
+                  <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700">
+                    Səbət məlumatları yenilənir. Zəhmət olmasa gözləyin...
+                  </div>
+                ) : null}
+
                 <div className="mt-6 grid gap-5 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium">
@@ -85,12 +96,7 @@ export function CheckoutPageClient() {
                     <label className="mb-2 block text-sm font-medium">
                       Telefon
                     </label>
-                    <input
-                      name="phone"
-                      required
-                      className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="+994..."
-                    />
+                    <PhoneInput name="phone" required />
                   </div>
 
                   <div>
@@ -236,9 +242,10 @@ export function CheckoutPageClient() {
 
                 <button
                   type="submit"
-                  className="mt-6 h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  disabled={isSyncing}
+                  className="mt-6 h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300"
                 >
-                  Sifarişi təsdiqlə
+                  {isSyncing ? "Yenilənir..." : "Sifarişi təsdiqlə"}
                 </button>
 
                 <Link

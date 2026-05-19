@@ -42,7 +42,17 @@ type TrackedOrderRow = {
 };
 
 function normalizePhone(value: string) {
-  return value.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, "");
+
+  if (digits.startsWith("994")) {
+    return digits.slice(3).slice(-9);
+  }
+
+  if (digits.startsWith("0")) {
+    return digits.slice(1).slice(-9);
+  }
+
+  return digits.slice(-9);
 }
 
 export async function trackOrder({
@@ -52,7 +62,7 @@ export async function trackOrder({
   orderNumber: string;
   phone: string;
 }): Promise<TrackedOrder | null> {
-  const cleanOrderNumber = orderNumber.trim();
+  const cleanOrderNumber = orderNumber.trim().toUpperCase();
   const cleanPhone = normalizePhone(phone);
 
   if (!cleanOrderNumber || cleanPhone.length < 7) {
@@ -90,12 +100,11 @@ export async function trackOrder({
     return null;
   }
 
-  const dbPhone = normalizePhone(data.phone);
+const dbPhone = normalizePhone(data.phone);
 
-  if (!dbPhone.endsWith(cleanPhone) && !cleanPhone.endsWith(dbPhone)) {
-    return null;
-  }
-
+if (dbPhone !== cleanPhone) {
+  return null;
+}
   return {
     ...data,
     total: Number(data.total),

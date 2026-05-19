@@ -4,7 +4,7 @@ import { PackageSearch, Search } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
 import { trackOrder } from "@/services/order-tracking";
-
+import { PhoneInput } from "@/components/checkout/phone-input";
 export const metadata: Metadata = {
   title: "Sifariş izləmə",
   description:
@@ -133,13 +133,7 @@ export default async function TrackOrderPage({
                   <label className="mb-2 block text-sm font-medium">
                     Telefon nömrəsi
                   </label>
-                  <input
-                    name="phone"
-                    defaultValue={phone}
-                    required
-                    className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                    placeholder="+994..."
-                  />
+                <PhoneInput name="phone" defaultValue={phone} required />
                 </div>
 
                 <button
