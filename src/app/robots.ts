@@ -1,20 +1,38 @@
 import type { MetadataRoute } from "next";
-
-function getSiteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-}
+import { getBaseUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = getSiteUrl();
+  const baseUrl = getBaseUrl();
 
   return {
     rules: [
       {
         userAgent: "*",
-        allow: ["/"],
-        disallow: ["/admin", "/admin/"],
+        allow: [
+          "/",
+          "/products",
+          "/category",
+          "/services",
+          "/solutions",
+          "/projects",
+          "/about",
+          "/contact",
+          "/track-order",
+          "/favorites",
+          "/compare",
+        ],
+        disallow: [
+          "/admin",
+          "/cart",
+          "/checkout",
+          "/checkout/success",
+          "/api",
+          "/en",
+          "/ru",
+        ],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

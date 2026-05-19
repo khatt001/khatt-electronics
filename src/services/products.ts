@@ -22,9 +22,10 @@ export type CatalogProduct = ProductCardItem;
 export type CatalogProductFilters = {
   search?: string;
   category?: string;
-  brand?: string;
-  stock?: string;
+  brand?: string | string[];
+  stock?: string | string[];
   sort?: string;
+  specs?: Record<string, string[]>;
 };
 
 type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
@@ -35,9 +36,9 @@ type ProductRow = {
   slug: string;
   price: number | string | null;
   price_visible: boolean;
- stock_status: StockStatus;
-stock_quantity: number | null;
-is_featured: boolean;
+  stock_status: StockStatus;
+  stock_quantity: number | null;
+  is_featured: boolean;
   category: {
     name_az: string;
     slug: string;
@@ -125,6 +126,23 @@ type ProductDetailRow = {
   }[];
 };
 
+function asArray(value?: string | string[]) {
+  if (!value) return [];
+  return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
+}
+
+function normalizeStockValue(value: string): StockStatus | null {
+  if (value === "in_stock" || value === "Stokda var") return "in_stock";
+  if (value === "out_of_stock" || value === "Stokda yoxdur") {
+    return "out_of_stock";
+  }
+  if (value === "pre_order" || value === "Öncədən sifariş") {
+    return "pre_order";
+  }
+
+  return null;
+}
+
 function formatPrice(priceVisible: boolean, price: number | string | null) {
   return priceVisible && price
     ? `${Number(price).toFixed(2)} AZN`
@@ -186,20 +204,65 @@ async function getCategoryIdBySlug(slug: string) {
   return data.id;
 }
 
-async function getBrandIdBySlug(slug: string) {
+async function getBrandIdsBySlugs(slugs: string[]) {
+  if (slugs.length === 0) return [];
+
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("brands")
     .select("id")
-    .eq("slug", slug)
+    .in("slug", slugs)
     .eq("is_active", true)
-    .maybeSingle()
-    .returns<{ id: string } | null>();
+    .returns<{ id: string }[]>();
 
-  if (error || !data) return null;
+  if (error || !data) return [];
 
-  return data.id;
+  return data.map((brand) => brand.id);
+}
+
+async function getProductIdsBySpecs(specs: Record<string, string[]>) {
+  const entries = Object.entries(specs).filter(
+    ([key, values]) => key.trim() && values.length > 0
+  );
+
+  if (entries.length === 0) return null;
+
+  const supabase = createServerSupabaseClient();
+
+  let matchedIds: string[] | null = null;
+
+  for (const [specKey, values] of entries) {
+    const { data, error } = await supabase
+      .from("product_specifications")
+      .select("product_id")
+      .eq("spec_key_az", specKey)
+      .in("spec_value_az", values)
+      .returns<{ product_id: string }[]>();
+
+    if (error || !data) {
+      return [];
+    }
+
+    const idsForSpec = Array.from(
+      new Set(data.map((row) => row.product_id))
+    );
+
+    if (matchedIds === null) {
+      matchedIds = idsForSpec;
+    } else {
+      const idsForSpecSet = new Set<string>(idsForSpec);
+      matchedIds = matchedIds.filter((productId: string) =>
+        idsForSpecSet.has(productId)
+      );
+    }
+
+    if (matchedIds.length === 0) {
+      return [];
+    }
+  }
+
+  return matchedIds;
 }
 
 export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
@@ -214,9 +277,9 @@ export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
       slug,
       price,
       price_visible,
-     stock_status,
-stock_quantity,
-is_featured,
+      stock_status,
+      stock_quantity,
+      is_featured,
       category:categories (
         name_az,
         slug
@@ -254,7 +317,20 @@ export async function getCatalogProducts(
     ? await getCategoryIdBySlug(filters.category)
     : null;
 
-  const brandId = filters.brand ? await getBrandIdBySlug(filters.brand) : null;
+  const brandValues = asArray(filters.brand);
+  const brandIds = await getBrandIdsBySlugs(brandValues);
+
+  const stockValues = asArray(filters.stock)
+    .map(normalizeStockValue)
+    .filter((stock): stock is StockStatus => Boolean(stock));
+
+  const specProductIds = filters.specs
+    ? await getProductIdsBySpecs(filters.specs)
+    : null;
+
+  if (filters.category && !categoryId) return [];
+  if (brandValues.length > 0 && brandIds.length === 0) return [];
+  if (specProductIds && specProductIds.length === 0) return [];
 
   let query = supabase
     .from("products")
@@ -265,9 +341,9 @@ export async function getCatalogProducts(
       slug,
       price,
       price_visible,
-     stock_status,
-stock_quantity,
-is_featured,
+      stock_status,
+      stock_quantity,
+      is_featured,
       category:categories (
         name_az,
         slug
@@ -288,18 +364,24 @@ is_featured,
     query = query.ilike("name_az", `%${filters.search}%`);
   }
 
-  if (filters.stock) {
-    query = query.eq("stock_status", filters.stock);
+  if (stockValues.length === 1) {
+    query = query.eq("stock_status", stockValues[0]);
+  } else if (stockValues.length > 1) {
+    query = query.in("stock_status", stockValues);
   }
 
-  if (filters.category) {
-    if (!categoryId) return [];
+  if (categoryId) {
     query = query.eq("category_id", categoryId);
   }
 
-  if (filters.brand) {
-    if (!brandId) return [];
-    query = query.eq("brand_id", brandId);
+  if (brandIds.length === 1) {
+    query = query.eq("brand_id", brandIds[0]);
+  } else if (brandIds.length > 1) {
+    query = query.in("brand_id", brandIds);
+  }
+
+  if (specProductIds && specProductIds.length > 0) {
+    query = query.in("id", specProductIds);
   }
 
   if (filters.sort === "oldest") {
@@ -347,8 +429,7 @@ export async function getProductBySlug(
       price,
       price_visible,
       stock_status,
-            stock_quantity,
-
+      stock_quantity,
       seo_title_az,
       seo_description_az,
       category:categories (
@@ -398,7 +479,7 @@ export async function getProductBySlug(
     id: data.id,
     name: data.name_az,
     slug: data.slug,
-      stockQuantity: data.stock_quantity ?? 0,
+    stockQuantity: data.stock_quantity ?? 0,
     stockStatus: data.stock_status,
     category: data.category?.name_az ?? "Məhsul",
     brand: data.brand?.name ?? null,

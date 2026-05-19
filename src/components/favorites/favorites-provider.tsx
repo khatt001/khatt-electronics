@@ -19,11 +19,13 @@ import {
 type FavoritesContextValue = {
   items: FavoriteItem[];
   count: number;
+  isSyncing: boolean;
   addFavorite: (item: FavoriteItem) => void;
   removeFavorite: (productId: string) => void;
   toggleFavorite: (item: FavoriteItem) => void;
   clearFavorites: () => void;
   isFavorite: (productId: string) => boolean;
+  syncFavorites: () => Promise<void>;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
@@ -53,6 +55,7 @@ function writeFavoritesToStorage(items: FavoriteItem[]) {
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<FavoriteItem[]>([]);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -97,6 +100,45 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     setItems([]);
   }, []);
 
+  const syncFavorites = useCallback(async () => {
+    if (!mounted) return;
+
+    const currentItems = readFavoritesFromStorage();
+
+    if (currentItems.length === 0) {
+      setItems([]);
+      return;
+    }
+
+    setIsSyncing(true);
+
+    try {
+      const response = await fetch("/api/favorites/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: currentItems.map((item) => ({
+            id: item.id,
+          })),
+        }),
+      });
+
+      if (!response.ok) return;
+
+      const data = (await response.json()) as {
+        items?: FavoriteItem[];
+      };
+
+      if (!Array.isArray(data.items)) return;
+
+      setItems(data.items);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [mounted]);
+
   const isFavorite = useCallback(
     (productId: string) => items.some((item) => item.id === productId),
     [items]
@@ -106,19 +148,23 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     () => ({
       items,
       count: getFavoritesCount(items),
+      isSyncing,
       addFavorite,
       removeFavorite,
       toggleFavorite,
       clearFavorites,
       isFavorite,
+      syncFavorites,
     }),
     [
       items,
+      isSyncing,
       addFavorite,
       removeFavorite,
       toggleFavorite,
       clearFavorites,
       isFavorite,
+      syncFavorites,
     ]
   );
 

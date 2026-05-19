@@ -13,6 +13,12 @@ import { ProductGallery } from "@/components/product/product-gallery";
 import { getProductBySlug } from "@/services/products";
 import { siteConfig } from "@/data/site";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { FavoriteButton } from "@/components/favorites/favorites-button";
+import { BuyNowButton } from "@/components/cart/buy-now-button";
+import { CompareButton } from "@/components/compare/compare-button";
+import { JsonLd } from "@/components/seo/json-ld";
+import { createBreadcrumbSchema, getBaseUrl } from "@/lib/seo";
+
 type ProductDetailPageProps = {
   params: Promise<{
     slug: string;
@@ -58,11 +64,11 @@ export async function generateMetadata({
       type: "website",
       images: imageUrl
         ? [
-          {
-            url: imageUrl,
-            alt: product.name,
-          },
-        ]
+            {
+              url: imageUrl,
+              alt: product.name,
+            },
+          ]
         : undefined,
     },
     twitter: {
@@ -74,20 +80,24 @@ export async function generateMetadata({
   };
 }
 
+function getPriceAmount(price: string) {
+  if (price === "Qiymət sorğu ilə") return null;
+
+  const normalizedPrice = Number(String(price).replace("AZN", "").trim());
+
+  if (!Number.isFinite(normalizedPrice)) return null;
+
+  return normalizedPrice;
+}
+
 function getProductJsonLd(product: ProductDetailData) {
   if (!product) return null;
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || siteConfig.websiteUrl || "https://khatt.electronics";
+  const baseUrl = getBaseUrl();
+  const priceNumber = getPriceAmount(product.price);
+  const productUrl = `${baseUrl}/products/${product.slug}`;
 
-  const priceNumber =
-    product.price === "Qiymət sorğu ilə"
-      ? null
-      : Number(String(product.price).replace("AZN", "").trim());
-
-  const productUrl = `${siteUrl}/products/${product.slug}`;
-
-  return {
+  const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
@@ -99,28 +109,51 @@ function getProductJsonLd(product: ProductDetailData) {
     image: product.images.map((image) => image.url),
     brand: product.brand
       ? {
-        "@type": "Brand",
-        name: product.brand,
-      }
+          "@type": "Brand",
+          name: product.brand,
+        }
       : undefined,
     category: product.category,
+    sku: product.slug,
     url: productUrl,
     offers:
-      priceNumber && !Number.isNaN(priceNumber)
+      priceNumber !== null
         ? {
-          "@type": "Offer",
-          price: priceNumber,
-          priceCurrency: "AZN",
-          availability:
-            product.badge === "Stokda var"
-              ? "https://schema.org/InStock"
-              : product.badge === "Öncədən sifariş"
-                ? "https://schema.org/PreOrder"
-                : "https://schema.org/OutOfStock",
-          url: productUrl,
-        }
+            "@type": "Offer",
+            price: priceNumber,
+            priceCurrency: "AZN",
+            availability:
+              product.stockStatus === "in_stock" && product.stockQuantity > 0
+                ? "https://schema.org/InStock"
+                : product.stockStatus === "pre_order"
+                  ? "https://schema.org/PreOrder"
+                  : "https://schema.org/OutOfStock",
+            itemCondition: "https://schema.org/NewCondition",
+            url: productUrl,
+            seller: {
+              "@type": "Organization",
+              name: siteConfig.name,
+            },
+          }
         : undefined,
   };
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    {
+      name: "Ana səhifə",
+      url: baseUrl,
+    },
+    {
+      name: "Məhsullar",
+      url: `${baseUrl}/products`,
+    },
+    {
+      name: product.name,
+      url: productUrl,
+    },
+  ]);
+
+  return [productSchema, breadcrumbSchema];
 }
 
 export default async function ProductDetailPage({
@@ -134,17 +167,54 @@ export default async function ProductDetailPage({
   }
 
   const jsonLd = getProductJsonLd(product);
+  const priceAmount = getPriceAmount(product.price);
+
+  const canBuy =
+    priceAmount !== null &&
+    product.stockStatus === "in_stock" &&
+    product.stockQuantity > 0;
+
+  const cartItem = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: priceAmount ?? 0,
+    priceLabel: product.price,
+    imageUrl: product.images[0]?.url ?? null,
+    category: product.category,
+    brand: product.brand,
+    maxQuantity: product.stockQuantity,
+  };
+
+  const favoriteItem = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: product.price,
+    priceAmount,
+    imageUrl: product.images[0]?.url ?? null,
+    category: product.category,
+    brand: product.brand,
+    stockStatus: product.stockStatus,
+    stockQuantity: product.stockQuantity,
+  };
+
+  const compareItem = {
+  id: product.id,
+  name: product.name,
+  slug: product.slug,
+  price: product.price,
+  priceAmount,
+  imageUrl: product.images[0]?.url ?? null,
+  category: product.category,
+  brand: product.brand,
+  stockStatus: product.stockStatus,
+  stockQuantity: product.stockQuantity,
+};
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
-      {jsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      ) : null}
+     {jsonLd ? <JsonLd data={jsonLd} /> : null}
 
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
@@ -164,7 +234,7 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} productName={product.name} />
 
             <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-8">
-              <div className="mb-5 flex flex-wrap gap-2">
+              <div className="mb-5 flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">
                   {product.category}
                 </span>
@@ -178,6 +248,11 @@ export default async function ProductDetailPage({
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
                   {product.badge}
                 </span>
+
+               <div className="ml-auto flex gap-2">
+  <FavoriteButton item={favoriteItem} />
+  <CompareButton item={compareItem} />
+</div>
               </div>
 
               <h1 className="text-4xl font-semibold leading-tight text-neutral-950 md:text-5xl">
@@ -195,11 +270,20 @@ export default async function ProductDetailPage({
                 <strong className="mt-2 block text-3xl text-neutral-950">
                   {product.price}
                 </strong>
+
+                {priceAmount === null ? (
+                  <p className="mt-2 text-sm text-neutral-500">
+                    Bu məhsul üçün sifarişdən əvvəl məsləhət almağınız tövsiyə
+                    olunur.
+                  </p>
+                ) : null}
               </div>
+
               <div className="mt-4 rounded-3xl border border-neutral-200 bg-white p-5">
                 <p className="text-sm text-neutral-500">Stok vəziyyəti</p>
 
-                {product.stockStatus === "in_stock" && product.stockQuantity > 0 ? (
+                {product.stockStatus === "in_stock" &&
+                product.stockQuantity > 0 ? (
                   <strong className="mt-2 block text-lg text-emerald-700">
                     Stokda {product.stockQuantity} ədəd var
                   </strong>
@@ -213,32 +297,24 @@ export default async function ProductDetailPage({
                   </strong>
                 )}
               </div>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+
+              <div className="mt-8 grid gap-3">
                 <AddToCartButton
-                  item={{
-                    id: product.id,
-                    name: product.name,
-                    slug: product.slug,
-                    price:
-                      product.price === "Qiymət sorğu ilə"
-                        ? 0
-                        : Number(String(product.price).replace("AZN", "").trim()),
-                    priceLabel: product.price,
-                    imageUrl: product.images[0]?.url ?? null,
-                    category: product.category,
-                    brand: product.brand,
-                    maxQuantity: product.stockQuantity,
-                  }}
+                  item={cartItem}
                   maxQuantity={product.stockQuantity}
-                  disabled={product.stockStatus !== "in_stock" || product.stockQuantity <= 0}
+                  disabled={!canBuy}
                 />
 
-                <Link
-                  href="/cart"
-                  className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
-                >
-                  Səbətə bax
-                </Link>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <BuyNowButton item={cartItem} disabled={!canBuy} />
+
+                  <Link
+                    href="/cart"
+                    className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
+                  >
+                    Səbətə bax
+                  </Link>
+                </div>
 
                 <a
                   href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(
@@ -246,9 +322,9 @@ export default async function ProductDetailPage({
                   )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-600 sm:col-span-2"
+                  className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-600"
                 >
-                  WhatsApp ilə yaz
+                  WhatsApp ilə məsləhət al
                 </a>
               </div>
 

@@ -1,56 +1,96 @@
 import type { MetadataRoute } from "next";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getBaseUrl } from "@/lib/seo";
+import { getSitemapCategories, getSitemapProducts } from "@/services/sitemap";
 
-function getSiteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+function createUrl(path: string) {
+  const baseUrl = getBaseUrl();
+  return `${baseUrl}${path}`;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = getSiteUrl();
-  const supabase = createServerSupabaseClient();
+  const [products, categories] = await Promise.all([
+    getSitemapProducts(),
+    getSitemapCategories(),
+  ]);
 
-  const staticRoutes: MetadataRoute.Sitemap = [
+  const now = new Date();
+
+  const staticPages: MetadataRoute.Sitemap = [
     {
-      url: siteUrl,
-      lastModified: new Date(),
+      url: createUrl("/"),
+      lastModified: now,
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: `${siteUrl}/products`,
-      lastModified: new Date(),
+      url: createUrl("/products"),
+      lastModified: now,
       changeFrequency: "daily",
-      priority: 0.9,
+      priority: 0.95,
     },
     {
-      url: `${siteUrl}/contact`,
-      lastModified: new Date(),
+      url: createUrl("/services"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: createUrl("/solutions"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
+      url: createUrl("/projects"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
+      url: createUrl("/about"),
+      lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.65,
+    },
+    {
+      url: createUrl("/contact"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: createUrl("/track-order"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.45,
+    },
+    {
+      url: createUrl("/favorites"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.35,
+    },
+    {
+      url: createUrl("/compare"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
   ];
 
-  const { data: products } = await supabase
-    .from("products")
-    .select("slug, updated_at, created_at")
-    .eq("status", "active")
-    .order("created_at", { ascending: false })
-    .limit(500)
-    .returns<
-      {
-        slug: string;
-        updated_at: string | null;
-        created_at: string;
-      }[]
-    >();
+  const productPages: MetadataRoute.Sitemap = products.map((product) => ({
+    url: createUrl(`/products/${product.slug}`),
+    lastModified: product.updated_at ? new Date(product.updated_at) : now,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  }));
 
-  const productRoutes: MetadataRoute.Sitemap =
-    products?.map((product) => ({
-      url: `${siteUrl}/products/${product.slug}`,
-      lastModified: product.updated_at ?? product.created_at,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    })) ?? [];
+  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
+  url: createUrl(`/category/${category.slug}`),
+  lastModified: category.updated_at ? new Date(category.updated_at) : now,
+  changeFrequency: "weekly",
+  priority: 0.8,
+}));
 
-  return [...staticRoutes, ...productRoutes];
+  return [...staticPages, ...categoryPages, ...productPages];
 }

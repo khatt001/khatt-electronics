@@ -4,6 +4,7 @@ import { ArrowUpRight, ShoppingBag } from "lucide-react";
 import { QuickAddToCartButton } from "@/components/cart/quick-add-to-cart-button";
 import { FavoriteButton } from "@/components/favorites/favorites-button";
 import type { ProductCardItem } from "@/services/products";
+import { CompareButton } from "@/components/compare/compare-button";
 
 type ProductCardProps = {
   product: ProductCardItem;
@@ -27,7 +28,18 @@ export function ProductCard({ product }: ProductCardProps) {
     stockStatus: product.stockStatus,
     stockQuantity: product.stockQuantity,
   };
-
+const compareItem = {
+  id: product.id,
+  name: product.name,
+  slug: product.slug,
+  price: product.price,
+  priceAmount: product.priceAmount,
+  imageUrl: product.imageUrl,
+  category: product.category,
+  brand: product.brand,
+  stockStatus: product.stockStatus,
+  stockQuantity: product.stockQuantity,
+};
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl">
       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-neutral-100 via-white to-neutral-50">
@@ -58,9 +70,10 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.badge}
         </span>
 
-        <div className="absolute right-4 top-4 z-30">
-          <FavoriteButton item={favoriteItem} />
-        </div>
+       <div className="absolute right-4 top-4 z-30 flex flex-col gap-2">
+  <FavoriteButton item={favoriteItem} />
+  <CompareButton item={compareItem} />
+</div>
       </div>
 
       <div className="flex flex-1 flex-col p-5">

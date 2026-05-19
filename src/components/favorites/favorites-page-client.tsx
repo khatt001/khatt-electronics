@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { Heart, PackageSearch, ShoppingCart, Trash2 } from "lucide-react";
 import { useFavorites } from "@/components/favorites/favorites-provider";
 import { useCart } from "@/components/cart/cart-provider";
@@ -9,8 +10,19 @@ import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
 
 export function FavoritesPageClient() {
-  const { items, removeFavorite, clearFavorites } = useFavorites();
+  const {
+    items,
+    removeFavorite,
+    clearFavorites,
+    syncFavorites,
+    isSyncing,
+  } = useFavorites();
+
   const { addItem } = useCart();
+
+  useEffect(() => {
+    void syncFavorites();
+  }, [syncFavorites]);
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
@@ -33,11 +45,18 @@ export function FavoritesPageClient() {
         <Container>
           {items.length > 0 ? (
             <div className="space-y-6">
-              <div className="flex justify-end">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-neutral-500">
+                  {isSyncing
+                    ? "Sevimli məhsullar yenilənir..."
+                    : `${items.length} məhsul sevimlilərdədir`}
+                </p>
+
                 <button
                   type="button"
                   onClick={clearFavorites}
-                  className="rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600"
+                  disabled={isSyncing}
+                  className="w-fit rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Hamısını təmizlə
                 </button>
@@ -126,7 +145,7 @@ export function FavoritesPageClient() {
                                 quantity: 1,
                               });
                             }}
-                            disabled={!canAddToCart}
+                            disabled={!canAddToCart || isSyncing}
                             className="inline-flex h-11 items-center justify-center rounded-full bg-neutral-950 px-4 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300"
                           >
                             <ShoppingCart
@@ -139,8 +158,9 @@ export function FavoritesPageClient() {
                           <button
                             type="button"
                             onClick={() => removeFavorite(item.id)}
+                            disabled={isSyncing}
                             aria-label="Sevimlilərdən sil"
-                            className="inline-flex size-11 items-center justify-center rounded-full border border-red-200 text-red-600 transition hover:border-red-600"
+                            className="inline-flex size-11 items-center justify-center rounded-full border border-red-200 text-red-600 transition hover:border-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             <Trash2 className="size-4" aria-hidden="true" />
                           </button>

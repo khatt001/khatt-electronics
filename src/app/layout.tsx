@@ -7,6 +7,9 @@ import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { CartToast } from "@/components/cart/cart-toast";
 import { FavoritesProvider } from "@/components/favorites/favorites-provider";
+import { CompareProvider } from "@/components/compare/compare-provider";
+import { JsonLd } from "@/components/seo/json-ld";
+import { createOrganizationSchema, createWebsiteSchema } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -76,17 +79,18 @@ export default function RootLayout({
   return (
     <html lang="az" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-        <CartProvider>
-          <FavoritesProvider>
-
-            <Navbar />
-            {children}
-            <Footer />
-            <FloatingWhatsApp />
-            <CartToast />
-          </FavoritesProvider>
-
-        </CartProvider>
+        <JsonLd data={[createOrganizationSchema(), createWebsiteSchema()]} />
+       <CartProvider>
+  <FavoritesProvider>
+    <CompareProvider>
+      <Navbar />
+      {children}
+      <Footer />
+      <FloatingWhatsApp />
+      <CartToast />
+    </CompareProvider>
+  </FavoritesProvider>
+</CartProvider>
       </body>
     </html>
   );

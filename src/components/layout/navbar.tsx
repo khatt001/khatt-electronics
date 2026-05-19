@@ -17,6 +17,8 @@ import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import { CartNavLink } from "@/components/cart/cart-nav-link";
 import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
+import { CompareNavLink } from "@/components/compare/compare-nav-link";
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -133,13 +135,7 @@ export default function Navbar() {
 </nav>
 
           <div className="ml-auto flex items-center gap-1.5">
-            <Link
-              href="/compare"
-              aria-label="Müqayisə"
-              className="hidden size-10 items-center justify-center rounded-full text-neutral-700 transition hover:bg-neutral-100 hover:text-neutral-950 md:inline-flex"
-            >
-              <BarChart3 size={18} aria-hidden="true" />
-            </Link>
+           <CompareNavLink />
 
            <FavoritesNavLink />
            <CartNavLink />

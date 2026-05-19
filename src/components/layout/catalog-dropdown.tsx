@@ -8,6 +8,7 @@ import {
   Grid3X3,
   PackageSearch,
   ShieldCheck,
+  ShoppingBag,
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -80,7 +81,7 @@ export function CatalogDropdown({
       }
     }
 
-    loadCategories();
+    void loadCategories();
   }, [open, categories.length]);
 
   function closeDropdown() {
@@ -151,7 +152,7 @@ export function CatalogDropdown({
                   {categories.map((category) => (
                     <Link
                       key={category.id}
-                      href={`/products?category=${category.slug}`}
+                      href={`/category/${category.slug}`}
                       onClick={closeDropdown}
                       className="group flex items-center gap-3 rounded-2xl border border-transparent p-3 transition hover:border-neutral-200 hover:bg-neutral-50"
                     >
@@ -187,19 +188,19 @@ export function CatalogDropdown({
               <div className="rounded-3xl bg-neutral-950 p-5 text-white">
                 <ShieldCheck className="size-7" aria-hidden="true" />
                 <h4 className="mt-4 text-lg font-semibold">
-                  Layihə üçün uyğun məhsul seçək
+                  Layihənizə uyğun məhsul seçin
                 </h4>
                 <p className="mt-2 text-sm leading-6 text-white/65">
-                  Kamera, PoE switch, access control və digər məhsullar üzrə
-                  qiymət təklifi hazırlaya bilərik.
+                  Kamera, PoE switch, access control və digər avadanlıqları
+                  kateqoriyalar üzrə rahat seçə bilərsiniz.
                 </p>
 
                 <Link
-                  href="/contact"
+                  href="/products"
                   onClick={closeDropdown}
                   className="mt-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
                 >
-                  Qiymət təklifi al
+                  Məhsullara bax
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>
@@ -211,6 +212,15 @@ export function CatalogDropdown({
               >
                 Bütün məhsullar
                 <Camera className="size-4" aria-hidden="true" />
+              </Link>
+
+              <Link
+                href="/track-order"
+                onClick={closeDropdown}
+                className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
+              >
+                Sifariş izləmə
+                <ShoppingBag className="size-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
