@@ -12,11 +12,14 @@ import { Container } from "@/components/layout/container";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { getProductBySlug } from "@/services/products";
 import { siteConfig } from "@/data/site";
+
 type ProductDetailPageProps = {
   params: Promise<{
     slug: string;
   }>;
 };
+
+type ProductDetailData = Awaited<ReturnType<typeof getProductBySlug>>;
 
 export async function generateMetadata({
   params,
@@ -27,15 +30,96 @@ export async function generateMetadata({
   if (!product) {
     return {
       title: "Məhsul tapılmadı",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const title = product.seoTitle ?? product.name;
+  const description =
+    product.seoDescription ??
+    product.shortDescription ??
+    `${product.name} — KHATT Electronics məhsul səhifəsi.`;
+
+  const imageUrl = product.images[0]?.url;
+
   return {
-    title: product.seoTitle ?? product.name,
+    title,
+    description,
+    alternates: {
+      canonical: `/products/${product.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/products/${product.slug}`,
+      type: "website",
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              alt: product.name,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
+
+function getProductJsonLd(product: ProductDetailData) {
+  if (!product) return null;
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || siteConfig.websiteUrl || "https://khatt.electronics";
+
+  const priceNumber =
+    product.price === "Qiymət sorğu ilə"
+      ? null
+      : Number(String(product.price).replace("AZN", "").trim());
+
+  const productUrl = `${siteUrl}/products/${product.slug}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
     description:
       product.seoDescription ??
       product.shortDescription ??
-      `${product.name} — KHATT Electronics məhsul səhifəsi.`,
+      product.description ??
+      product.name,
+    image: product.images.map((image) => image.url),
+    brand: product.brand
+      ? {
+          "@type": "Brand",
+          name: product.brand,
+        }
+      : undefined,
+    category: product.category,
+    url: productUrl,
+    offers:
+      priceNumber && !Number.isNaN(priceNumber)
+        ? {
+            "@type": "Offer",
+            price: priceNumber,
+            priceCurrency: "AZN",
+            availability:
+              product.badge === "Stokda var"
+                ? "https://schema.org/InStock"
+                : product.badge === "Öncədən sifariş"
+                  ? "https://schema.org/PreOrder"
+                  : "https://schema.org/OutOfStock",
+            url: productUrl,
+          }
+        : undefined,
   };
 }
 
@@ -49,8 +133,19 @@ export default async function ProductDetailPage({
     notFound();
   }
 
+  const jsonLd = getProductJsonLd(product);
+
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+      {jsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
+
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
           <Link
@@ -104,18 +199,23 @@ export default async function ProductDetailPage({
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <Link
-                  href={`/contact?product=${encodeURIComponent(product.name)}&source=estimate`}
+                  href={`/contact?product=${encodeURIComponent(
+                    product.name
+                  )}&source=estimate`}
                   className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-neutral-800"
                 >
                   Smeta istə
                 </Link>
 
                 <Link
-                  href={`/contact?product=${encodeURIComponent(product.name)}&source=consultation`}
+                  href={`/contact?product=${encodeURIComponent(
+                    product.name
+                  )}&source=consultation`}
                   className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
                 >
                   Konsultasiya al
                 </Link>
+
                 <a
                   href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(
                     `Salam. Bu məhsul haqqında məlumat almaq istəyirəm: ${product.name}`

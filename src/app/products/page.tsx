@@ -1,11 +1,26 @@
 import Link from "next/link";
-import { Filter, Search } from "lucide-react";
+import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { Container } from "@/components/layout/container";
 import { getCatalogBrands } from "@/services/brands";
 import { getCatalogCategories } from "@/services/categories";
 import { getCatalogProducts } from "@/services/products";
 import { ProductsFilter } from "@/app/products/products-filter";
+export const metadata: Metadata = {
+  title: "Məhsullar",
+  description:
+    "KHATT Electronics məhsul kataloqu: kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət, şəbəkə avadanlıqları və təhlükəsizlik həlləri.",
+  alternates: {
+    canonical: "/products",
+  },
+  openGraph: {
+    title: "Məhsullar | KHATT Electronics",
+    description:
+      "Kamera sistemləri, videomüşahidə avadanlıqları, keçidə nəzarət və şəbəkə məhsulları.",
+    url: "/products",
+    type: "website",
+  },
+};
 type ProductsPageProps = {
   searchParams: Promise<{
     search?: string;

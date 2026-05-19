@@ -16,9 +16,12 @@ import {
 import { Container } from "@/components/layout/container";
 
 export const metadata: Metadata = {
-  title: "Həllər",
+  title: "Layihələr",
   description:
-    "KHATT Electronics obyekt tipinə uyğun təhlükəsizlik, videomüşahidə, keçidə nəzarət, domofon və şəbəkə həlləri təqdim edir.",
+    "KHATT Electronics tərəfindən təqdim olunan videomüşahidə, təhlükəsizlik, keçidə nəzarət və şəbəkə infrastrukturu layihə istiqamətləri.",
+  alternates: {
+    canonical: "/projects",
+  },
 };
 
 const solutions = [

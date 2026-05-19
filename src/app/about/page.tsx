@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "Haqqımızda",
   description:
     "KHATT Electronics təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri üzrə peşəkar xidmət göstərir.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const values = [
