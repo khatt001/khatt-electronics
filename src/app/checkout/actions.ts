@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
@@ -23,16 +24,39 @@ const checkoutSchema = z.object({
   items: z.array(checkoutItemSchema).min(1, "Səbət boşdur."),
 });
 
+type ProductForCheckout = {
+  id: string;
+  name_az: string;
+  slug: string;
+  price: number | string | null;
+  price_visible: boolean;
+  stock_status: "in_stock" | "out_of_stock" | "pre_order";
+  stock_quantity: number | null;
+  status: string;
+};
+
 function createOrderNumber() {
   const date = new Date();
-  const datePart = date
-    .toISOString()
-    .slice(0, 10)
-    .replaceAll("-", "");
-
+  const datePart = date.toISOString().slice(0, 10).replaceAll("-", "");
   const randomPart = Math.floor(1000 + Math.random() * 9000);
 
   return `KH-${datePart}-${randomPart}`;
+}
+
+function getErrorUrl(message: string) {
+  return `/checkout?error=${encodeURIComponent(message)}`;
+}
+
+function normalizePrice(value: number | string | null) {
+  if (value === null) return null;
+
+  const price = Number(value);
+
+  if (!Number.isFinite(price) || price < 0) {
+    return null;
+  }
+
+  return price;
 }
 
 export async function createOrder(formData: FormData) {
@@ -43,7 +67,7 @@ export async function createOrder(formData: FormData) {
   try {
     items = JSON.parse(rawItems);
   } catch {
-    redirect(`/checkout?error=${encodeURIComponent("Səbət məlumatı düzgün deyil.")}`);
+    redirect(getErrorUrl("Səbət məlumatı düzgün deyil."));
   }
 
   const parsed = checkoutSchema.safeParse({
@@ -59,9 +83,7 @@ export async function createOrder(formData: FormData) {
 
   if (!parsed.success) {
     redirect(
-      `/checkout?error=${encodeURIComponent(
-        parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
-      )}`
+      getErrorUrl(parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.")
     );
   }
 
@@ -69,17 +91,92 @@ export async function createOrder(formData: FormData) {
 
   if (data.payment_method === "card") {
     redirect(
-      `/checkout?error=${encodeURIComponent(
+      getErrorUrl(
         "Kartla ödəniş hələ aktiv deyil. Zəhmət olmasa nağd ödənişi seçin."
-      )}`
+      )
     );
   }
 
-  const subtotal = data.items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const productIds = data.items.map((item) => item.id);
 
+  const { data: products, error: productsError } = await supabaseAdmin
+    .from("products")
+    .select(
+      `
+      id,
+      name_az,
+      slug,
+      price,
+      price_visible,
+      stock_status,
+      stock_quantity,
+      status
+    `
+    )
+    .in("id", productIds)
+    .returns<ProductForCheckout[]>();
+
+  if (productsError) {
+    redirect(getErrorUrl(productsError.message));
+  }
+
+  if (!products || products.length !== data.items.length) {
+    redirect(getErrorUrl("Səbətdəki məhsullardan biri tapılmadı."));
+  }
+
+  const productsById = new Map(products.map((product) => [product.id, product]));
+
+  const verifiedItems = data.items.map((item) => {
+    const product = productsById.get(item.id);
+
+    if (!product) {
+      redirect(getErrorUrl("Səbətdəki məhsullardan biri tapılmadı."));
+    }
+
+    if (product.status !== "active") {
+      redirect(getErrorUrl(`${product.name_az} artıq aktiv məhsul deyil.`));
+    }
+
+    if (product.stock_status !== "in_stock") {
+      redirect(getErrorUrl(`${product.name_az} stokda deyil.`));
+    }
+
+    const stockQuantity = product.stock_quantity ?? 0;
+
+    if (stockQuantity <= 0) {
+      redirect(getErrorUrl(`${product.name_az} stokda yoxdur.`));
+    }
+
+    if (item.quantity > stockQuantity) {
+      redirect(
+        getErrorUrl(
+          `${product.name_az} üçün stokda yalnız ${stockQuantity} ədəd var.`
+        )
+      );
+    }
+
+    if (!product.price_visible) {
+      redirect(getErrorUrl(`${product.name_az} üçün qiymət aktiv deyil.`));
+    }
+
+    const unitPrice = normalizePrice(product.price);
+
+    if (unitPrice === null) {
+      redirect(getErrorUrl(`${product.name_az} üçün qiymət düzgün deyil.`));
+    }
+
+    return {
+      productId: product.id,
+      productName: product.name_az,
+      productSlug: product.slug,
+      unitPrice,
+      quantity: item.quantity,
+      lineTotal: unitPrice * item.quantity,
+      stockQuantity,
+    };
+  });
+
+  const subtotal = verifiedItems.reduce((total, item) => total + item.lineTotal, 0);
   const deliveryFee = 0;
   const total = subtotal + deliveryFee;
 
@@ -104,21 +201,17 @@ export async function createOrder(formData: FormData) {
     .single();
 
   if (orderError || !order) {
-    redirect(
-      `/checkout?error=${encodeURIComponent(
-        orderError?.message ?? "Sifariş yaradılmadı."
-      )}`
-    );
+    redirect(getErrorUrl(orderError?.message ?? "Sifariş yaradılmadı."));
   }
 
-  const orderItems = data.items.map((item) => ({
+  const orderItems = verifiedItems.map((item) => ({
     order_id: order.id,
-    product_id: item.id,
-    product_name: item.name,
-    product_slug: item.slug,
-    unit_price: item.price,
+    product_id: item.productId,
+    product_name: item.productName,
+    product_slug: item.productSlug,
+    unit_price: item.unitPrice,
     quantity: item.quantity,
-    line_total: item.price * item.quantity,
+    line_total: item.lineTotal,
   }));
 
   const { error: itemsError } = await supabaseAdmin
@@ -127,13 +220,38 @@ export async function createOrder(formData: FormData) {
 
   if (itemsError) {
     await supabaseAdmin.from("orders").delete().eq("id", order.id);
-
-    redirect(
-      `/checkout?error=${encodeURIComponent(
-        itemsError.message || "Sifariş məhsulları əlavə edilmədi."
-      )}`
-    );
+    redirect(getErrorUrl(itemsError.message || "Sifariş məhsulları əlavə edilmədi."));
   }
+
+  for (const item of verifiedItems) {
+    const newStockQuantity = Math.max(0, item.stockQuantity - item.quantity);
+
+    const { error: stockError } = await supabaseAdmin
+      .from("products")
+      .update({
+        stock_quantity: newStockQuantity,
+        stock_status: newStockQuantity > 0 ? "in_stock" : "out_of_stock",
+      })
+      .eq("id", item.productId);
+
+    if (stockError) {
+      await supabaseAdmin.from("order_items").delete().eq("order_id", order.id);
+      await supabaseAdmin.from("orders").delete().eq("id", order.id);
+
+      redirect(
+        getErrorUrl(
+          `${item.productName} üçün stok yenilənmədi: ${stockError.message}`
+        )
+      );
+    }
+
+    revalidatePath(`/products/${item.productSlug}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin/products");
 
   redirect(`/checkout/success?order=${encodeURIComponent(order.order_number)}`);
 }

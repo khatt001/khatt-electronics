@@ -2,9 +2,10 @@ import Link from "next/link";
 import {
   getAdminDashboardStats,
   getRecentAdminInquiries,
+  getRecentAdminOrders,
   getRecentAdminProducts,
 } from "@/services/admin-dashboard";
-
+import { formatPrice } from "@/lib/cart";
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("az-AZ", {
     dateStyle: "medium",
@@ -16,30 +17,50 @@ function getStatusLabel(status: string) {
   if (status === "active") return "Aktiv";
   if (status === "draft") return "Qaralama";
   if (status === "archived") return "Arxiv";
+
+  if (status === "new") return "Yeni";
   if (status === "contacted") return "Əlaqə saxlanılıb";
   if (status === "closed") return "Bağlanıb";
-  return "Yeni";
+
+  if (status === "confirmed") return "Təsdiqləndi";
+  if (status === "preparing") return "Hazırlanır";
+  if (status === "delivered") return "Təhvil verildi";
+  if (status === "cancelled") return "Ləğv edildi";
+
+  if (status === "pending") return "Gözləyir";
+  if (status === "paid") return "Ödənilib";
+  if (status === "failed") return "Uğursuz";
+
+  return status;
 }
 
 function getStatusClassName(status: string) {
-  if (status === "active" || status === "new") {
+  if (status === "active" || status === "new" || status === "paid") {
     return "bg-emerald-50 text-emerald-700";
   }
 
-  if (status === "draft" || status === "contacted") {
+  if (status === "draft" || status === "contacted" || status === "confirmed") {
     return "bg-blue-50 text-blue-700";
+  }
+
+  if (status === "preparing" || status === "pending") {
+    return "bg-amber-50 text-amber-700";
+  }
+
+  if (status === "cancelled" || status === "failed") {
+    return "bg-red-50 text-red-700";
   }
 
   return "bg-neutral-100 text-neutral-500";
 }
 
 export default async function AdminDashboardPage() {
-  const [stats, recentProducts, recentInquiries] = await Promise.all([
-    getAdminDashboardStats(),
-    getRecentAdminProducts(),
-    getRecentAdminInquiries(),
-  ]);
-
+ const [stats, recentProducts, recentOrders, recentInquiries] = await Promise.all([
+  getAdminDashboardStats(),
+  getRecentAdminProducts(),
+  getRecentAdminOrders(),
+  getRecentAdminInquiries(),
+]);
   const statCards = [
     {
       label: "Ümumi məhsul",
@@ -71,6 +92,21 @@ export default async function AdminDashboardPage() {
       value: stats.totalBrands,
       href: "/admin/brands",
     },
+    {
+  label: "Ümumi sifariş",
+  value: stats.totalOrders,
+  href: "/admin/orders",
+},
+{
+  label: "Yeni sifariş",
+  value: stats.newOrders,
+  href: "/admin/orders",
+},
+{
+  label: "Bugünkü sifariş",
+  value: stats.todayOrders,
+  href: "/admin/orders",
+},
   ];
 
   return (
@@ -99,8 +135,16 @@ export default async function AdminDashboardPage() {
           </Link>
         ))}
       </div>
-
-      <div className="mt-8 grid gap-8 xl:grid-cols-2">
+<div className="mt-8 rounded-3xl border border-neutral-200 bg-neutral-950 p-6 text-white">
+  <p className="text-sm text-white/60">Ümumi satış məbləği</p>
+  <strong className="mt-3 block text-4xl font-semibold">
+    {formatPrice(stats.totalSales)}
+  </strong>
+  <p className="mt-3 text-sm text-white/60">
+    Ləğv edilməmiş sifarişlərin ümumi məbləği.
+  </p>
+</div>
+      <div className="mt-8 grid gap-8 xl:grid-cols-3">
         <section className="rounded-3xl border border-neutral-200 p-5">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
@@ -153,7 +197,73 @@ export default async function AdminDashboardPage() {
             </p>
           )}
         </section>
+<section className="rounded-3xl border border-neutral-200 p-5">
+  <div className="mb-5 flex items-center justify-between gap-4">
+    <div>
+      <h3 className="text-xl font-semibold">Son sifarişlər</h3>
+      <p className="mt-1 text-sm text-neutral-500">
+        Checkout-dan gələn son sifarişlər.
+      </p>
+    </div>
 
+    <Link
+      href="/admin/orders"
+      className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-medium transition hover:border-neutral-950"
+    >
+      Hamısı
+    </Link>
+  </div>
+
+  {recentOrders.length > 0 ? (
+    <div className="divide-y divide-neutral-200">
+      {recentOrders.map((order) => (
+        <div
+          key={order.id}
+          className="flex items-start justify-between gap-4 py-4"
+        >
+          <div>
+            <Link
+              href={`/admin/orders/${order.id}`}
+              className="font-medium text-neutral-950 transition hover:underline"
+            >
+              {order.order_number}
+            </Link>
+
+            <p className="mt-1 text-sm text-neutral-700">
+              {order.customer_name}
+            </p>
+
+            <p className="mt-1 text-xs text-neutral-500">
+              {order.phone}
+            </p>
+
+            <p className="mt-1 text-xs text-neutral-400">
+              {formatDate(order.created_at)}
+            </p>
+          </div>
+
+          <div className="shrink-0 text-right">
+            <p className="text-sm font-semibold text-neutral-950">
+              {formatPrice(Number(order.total))}
+            </p>
+
+            <span
+              className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-medium ${getStatusClassName(
+                order.order_status
+              )}`}
+            >
+              {getStatusLabel(order.order_status)}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="rounded-2xl border border-dashed border-neutral-300 p-5 text-sm text-neutral-500">
+      Hələ sifariş yoxdur.
+    </p>
+  )}
+</section>
         <section className="rounded-3xl border border-neutral-200 p-5">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>

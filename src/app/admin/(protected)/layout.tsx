@@ -6,6 +6,7 @@ const adminLinks = [
   { name: "Məhsullar", href: "/admin/products" },
   { name: "Kateqoriyalar", href: "/admin/categories" },
   { name: "Brendlər", href: "/admin/brands" },
+  { name: "Sifarişlər", href: "/admin/orders" },
   { name: "Sorğular", href: "/admin/inquiries" },
 ];
 

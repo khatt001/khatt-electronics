@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, Home, PackageSearch } from "lucide-react";
 import { Container } from "@/components/layout/container";
-
+import { ClearCartOnSuccess } from "@/components/checkout/clear-cart-on-success";
 type CheckoutSuccessPageProps = {
   searchParams: Promise<{
     order?: string;
@@ -16,6 +16,8 @@ export default async function CheckoutSuccessPage({
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+            <ClearCartOnSuccess />
+
       <section className="flex min-h-[calc(100vh-7.5rem)] items-center py-16">
         <Container>
           <div className="mx-auto max-w-3xl rounded-[2rem] border border-neutral-200 bg-white p-8 text-center shadow-sm lg:p-12">

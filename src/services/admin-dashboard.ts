@@ -8,8 +8,11 @@ export type AdminDashboardStats = {
   newInquiries: number;
   totalCategories: number;
   totalBrands: number;
+  totalOrders: number;
+  newOrders: number;
+  todayOrders: number;
+  totalSales: number;
 };
-
 export type RecentAdminProduct = {
   id: string;
   name_az: string;
@@ -26,7 +29,16 @@ export type RecentAdminInquiry = {
   status: string;
   created_at: string;
 };
-
+export type RecentAdminOrder = {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  phone: string;
+  order_status: string;
+  payment_status: string;
+  total: number | string;
+  created_at: string;
+};
 async function getTotalProductsCount() {
   const { count, error } = await supabaseAdmin
     .from("products")
@@ -107,7 +119,70 @@ async function getTotalBrandsCount() {
 
   return count ?? 0;
 }
+function getTodayStartIso() {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return todayStart.toISOString();
+}
 
+async function getTotalOrdersCount() {
+  const { count, error } = await supabaseAdmin
+    .from("orders")
+    .select("id", { count: "exact", head: true });
+
+  if (error) {
+    console.error("Failed to count orders:", error.message);
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
+async function getNewOrdersCount() {
+  const { count, error } = await supabaseAdmin
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .eq("order_status", "new");
+
+  if (error) {
+    console.error("Failed to count new orders:", error.message);
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
+async function getTodayOrdersCount() {
+  const { count, error } = await supabaseAdmin
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", getTodayStartIso());
+
+  if (error) {
+    console.error("Failed to count today orders:", error.message);
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
+async function getTotalSalesAmount() {
+  const { data, error } = await supabaseAdmin
+    .from("orders")
+    .select("total")
+    .neq("order_status", "cancelled");
+
+  if (error) {
+    console.error("Failed to sum order sales:", error.message);
+    return 0;
+  }
+
+  return (
+    data?.reduce((sum, order) => {
+      return sum + Number(order.total ?? 0);
+    }, 0) ?? 0
+  );
+}
 export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
   const [
     totalProducts,
@@ -116,6 +191,10 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
     newInquiries,
     totalCategories,
     totalBrands,
+    totalOrders,
+    newOrders,
+    todayOrders,
+    totalSales,
   ] = await Promise.all([
     getTotalProductsCount(),
     getActiveProductsCount(),
@@ -123,6 +202,10 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
     getNewInquiriesCount(),
     getTotalCategoriesCount(),
     getTotalBrandsCount(),
+    getTotalOrdersCount(),
+    getNewOrdersCount(),
+    getTodayOrdersCount(),
+    getTotalSalesAmount(),
   ]);
 
   return {
@@ -132,6 +215,10 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
     newInquiries,
     totalCategories,
     totalBrands,
+    totalOrders,
+    newOrders,
+    todayOrders,
+    totalSales,
   };
 }
 
@@ -161,6 +248,32 @@ export async function getRecentAdminInquiries(): Promise<RecentAdminInquiry[]> {
 
   if (error) {
     console.error("Failed to fetch recent admin inquiries:", error.message);
+    return [];
+  }
+
+  return data;
+}
+export async function getRecentAdminOrders(): Promise<RecentAdminOrder[]> {
+  const { data, error } = await supabaseAdmin
+    .from("orders")
+    .select(
+      `
+      id,
+      order_number,
+      customer_name,
+      phone,
+      order_status,
+      payment_status,
+      total,
+      created_at
+    `
+    )
+    .order("created_at", { ascending: false })
+    .limit(5)
+    .returns<RecentAdminOrder[]>();
+
+  if (error) {
+    console.error("Failed to fetch recent admin orders:", error.message);
     return [];
   }
 
