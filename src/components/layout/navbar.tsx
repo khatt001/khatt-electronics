@@ -123,7 +123,7 @@ export default function Navbar() {
     Məhsullar
   </Link>
 
-  {navLinks.slice(2).map((link) => (
+  {navLinks.slice(1).map((link) => (
     <Link
       key={link.href}
       href={link.href}

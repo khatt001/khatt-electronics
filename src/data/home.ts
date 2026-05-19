@@ -126,30 +126,32 @@ export const featuredProducts = [
 ] as const;
 
 export const quickStats = [
-  { label: "Kamera sistemləri", value: "CCTV" },
-  { label: "Keçid həlləri", value: "Access" },
-  { label: "Şəbəkə avadanlığı", value: "PoE" },
+  { label: "Kamera və təhlükəsizlik", value: "CCTV" },
+  { label: "Onlayn sifariş", value: "Cart" },
+  { label: "Texniki seçim dəstəyi", value: "Support" },
 ] as const;
 
 export const services = [
+  "Məhsul seçimi üzrə məsləhət",
   "Sistem layihələndirilməsi",
   "Professional quraşdırılma",
   "Uzaqdan konfiqurasiya",
-  "Texniki dəstək",
   "Servis və baxım",
   "Korporativ həllər",
 ] as const;
 
 export const promoItems = [
   {
-    title: "Obyekt üçün tam kamera sistemi",
-    description: "Kamera, qeydiyyatçı, kabel və quraşdırılma üzrə kompleks təklif.",
-    href: "/products",
+    title: "Kamera sistemi qurmaq istəyirsiniz?",
+    description:
+      "Məhsulları kataloqdan seçin, uyğun kamera, qeydiyyatçı və aksesuarları səbətə əlavə edin.",
+    href: "/products?category=video-nezaret",
     icon: Monitor,
   },
   {
-    title: "Şəbəkə və PoE infrastrukturu",
-    description: "Stabil internet, switch və access point həlləri.",
+    title: "Şəbəkə və PoE avadanlıqları",
+    description:
+      "PoE switch, router və access point kimi avadanlıqları layihənizə uyğun seçin.",
     href: "/products?category=sebeke",
     icon: Router,
   },

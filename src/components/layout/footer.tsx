@@ -11,11 +11,26 @@ const footerLinks = [
 ];
 
 const serviceLinks = [
-  "Videomüşahidə sistemləri",
-  "Keçidə nəzarət",
-  "Domofon sistemləri",
-  "Siqnalizasiya",
-  "Şəbəkə avadanlıqları",
+  {
+    name: "Videomüşahidə sistemləri",
+    href: "/products?category=video-nezaret",
+  },
+  {
+    name: "Keçidə nəzarət",
+    href: "/products?category=girise-nezaret",
+  },
+  {
+    name: "Domofon sistemləri",
+    href: "/products?category=domofoniya",
+  },
+  {
+    name: "Siqnalizasiya",
+    href: "/products?category=siqnalizasiya",
+  },
+  {
+    name: "Şəbəkə avadanlıqları",
+    href: "/products?category=sebeke",
+  },
 ];
 
 export function Footer() {
@@ -27,13 +42,31 @@ export function Footer() {
             <Link href="/" className="text-xl font-semibold tracking-tight">
               {siteConfig.name}
             </Link>
+
             <p className="mt-4 max-w-sm text-sm leading-7 text-white/60">
               {siteConfig.description}
             </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/products"
+                className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200"
+              >
+                Məhsullara bax
+              </Link>
+
+              <Link
+                href="/track-order"
+                className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+              >
+                Sifarişi izlə
+              </Link>
+            </div>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold">Səhifələr</h3>
+
             <div className="mt-4 space-y-3">
               {footerLinks.map((link) => (
                 <Link
@@ -48,18 +81,24 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Xidmətlər</h3>
+            <h3 className="text-sm font-semibold">Kateqoriyalar</h3>
+
             <div className="mt-4 space-y-3">
               {serviceLinks.map((service) => (
-                <p key={service} className="text-sm text-white/60">
-                  {service}
-                </p>
+                <Link
+                  key={service.href}
+                  href={service.href}
+                  className="block text-sm text-white/60 transition hover:text-white"
+                >
+                  {service.name}
+                </Link>
               ))}
             </div>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold">Əlaqə</h3>
+
             <div className="mt-4 space-y-3">
               <a
                 href={siteConfig.phoneHref}
@@ -82,6 +121,13 @@ export function Footer() {
                 {siteConfig.address}
               </div>
             </div>
+
+            <Link
+              href="/contact"
+              className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+            >
+              Əlaqə səhifəsinə keç
+            </Link>
           </div>
         </div>
 
@@ -90,7 +136,8 @@ export function Footer() {
             © {new Date().getFullYear()} {siteConfig.name}. Bütün hüquqlar
             qorunur.
           </p>
-          <p>Premium security & electronics solutions.</p>
+
+          <p>Təhlükəsizlik, elektronika və smart texnologiya həlləri.</p>
         </div>
       </Container>
     </footer>

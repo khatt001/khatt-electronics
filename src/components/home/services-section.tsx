@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { services } from "@/data/home";
@@ -8,15 +9,33 @@ export function ServicesSection() {
       <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
-            Xidmətlər
+            Dəstək və xidmət
           </p>
+
           <h2 className="text-4xl font-semibold md:text-5xl">
-            Satışdan sonra da dəstək
+            Məhsul seçimi və quraşdırılmada yanınızdayıq
           </h2>
+
           <p className="mt-6 leading-8 text-white/60">
-            Məhsul seçimi, sistem layihələndirilməsi, quraşdırılma,
-            konfiqurasiya və texniki dəstəyi bir yerdə təqdim edirik.
+            Məhsulu onlayn sifariş edə, layihənizə uyğun seçim üçün bizimlə
+            əlaqə saxlaya və sifarişinizi sonradan izləyə bilərsiniz.
           </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/products"
+              className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200"
+            >
+              Məhsullara bax
+            </Link>
+
+            <Link
+              href="/contact"
+              className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Məsləhət al
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

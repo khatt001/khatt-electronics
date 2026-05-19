@@ -55,6 +55,77 @@ function createParamsFromCurrent(searchParams: URLSearchParams) {
   return new URLSearchParams(searchParams.toString());
 }
 
+function FilterSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-3xl border border-neutral-200 bg-white p-4">
+      <h3 className="mb-3 text-sm font-semibold text-neutral-950">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+function CheckboxRow({
+  label,
+  count,
+  checked,
+  onChange,
+}: {
+  label: string;
+  count?: number | null;
+  checked: boolean;
+  onChange: () => void;
+}) {
+  return (
+    <label
+      className={cn(
+        "group flex cursor-pointer items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
+        checked
+          ? "bg-neutral-950 text-white"
+          : "text-neutral-700 hover:bg-neutral-100"
+      )}
+    >
+      <span
+        className={cn(
+          "flex size-4 items-center justify-center rounded border transition",
+          checked
+            ? "border-white bg-white"
+            : "border-neutral-300 bg-white group-hover:border-neutral-500"
+        )}
+      >
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          className="sr-only"
+        />
+
+        {checked ? (
+          <span className="size-2 rounded-sm bg-neutral-950" />
+        ) : null}
+      </span>
+
+      <span className="min-w-0 flex-1 truncate">{label}</span>
+
+      {typeof count === "number" && count > 0 ? (
+        <span
+          className={cn(
+            "text-xs",
+            checked ? "text-white/60" : "text-neutral-400"
+          )}
+        >
+          {count}
+        </span>
+      ) : null}
+    </label>
+  );
+}
+
 export function ProductsFilter({
   categories,
   brands,
@@ -213,35 +284,32 @@ export function ProductsFilter({
   const stockGroup = dynamicGroups.find((group) => group.type === "stock");
 
   const filterPanel = (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-4">
+      <FilterSection title="Axtarış">
         <label className="relative block">
           <span className="sr-only">Məhsul axtar</span>
           <Search
             className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
             aria-hidden="true"
           />
+
           <input
             type="search"
             name="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Məhsul axtar..."
-            className="h-12 w-full rounded-2xl border border-neutral-200 pl-11 pr-4 text-sm outline-none transition focus:border-neutral-950"
+            className="h-12 w-full rounded-2xl border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
           />
         </label>
-      </div>
+      </FilterSection>
 
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-neutral-950">
-          Kateqoriya
-        </h3>
-
+      <FilterSection title="Kateqoriya">
         <select
           name="category"
           value={currentCategory}
           onChange={(event) => changeCategory(event.target.value)}
-          className="h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
+          className="h-12 w-full rounded-2xl border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
         >
           <option value="">Bütün kateqoriyalar</option>
           {categories.map((category) => (
@@ -250,12 +318,10 @@ export function ProductsFilter({
             </option>
           ))}
         </select>
-      </div>
+      </FilterSection>
 
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-neutral-950">Brand</h3>
-
-        <div className="space-y-2">
+      <FilterSection title="Brand">
+        <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
           {brands.map((brand) => {
             const dynamicBrand = brandGroup?.options.find(
               (option) =>
@@ -267,36 +333,20 @@ export function ProductsFilter({
             );
 
             return (
-              <label
+              <CheckboxRow
                 key={brand.id}
-                className="flex cursor-pointer items-center gap-3 text-sm text-neutral-700"
-              >
-                <input
-                  type="checkbox"
-                  checked={selected}
-                  onChange={() => toggleMultiParam("brand", brand.slug)}
-                  className="size-4 rounded border-neutral-300 text-neutral-950"
-                />
-
-                <span className="min-w-0 flex-1">{brand.name}</span>
-
-                {dynamicBrand ? (
-                  <span className="text-xs text-neutral-400">
-                    ({dynamicBrand.count})
-                  </span>
-                ) : null}
-              </label>
+                label={brand.name}
+                count={dynamicBrand?.count}
+                checked={selected}
+                onChange={() => toggleMultiParam("brand", brand.slug)}
+              />
             );
           })}
         </div>
-      </div>
+      </FilterSection>
 
-      <div>
-        <h3 className="mb-3 text-sm font-semibold text-neutral-950">
-          Stok vəziyyəti
-        </h3>
-
-        <div className="space-y-2">
+      <FilterSection title="Stok vəziyyəti">
+        <div className="space-y-1">
           {(stockGroup?.options ?? [
             { value: "Stokda var", label: "Stokda var", count: 0 },
             { value: "Stokda yoxdur", label: "Stokda yoxdur", count: 0 },
@@ -307,30 +357,20 @@ export function ProductsFilter({
             );
 
             return (
-              <label
+              <CheckboxRow
                 key={option.value}
-                className="flex cursor-pointer items-center gap-3 text-sm text-neutral-700"
-              >
-                <input
-                  type="checkbox"
-                  checked={selected}
-                  onChange={() => toggleMultiParam("stock", option.value)}
-                  className="size-4 rounded border-neutral-300 text-neutral-950"
-                />
-                <span className="min-w-0 flex-1">{option.label}</span>
-                {option.count ? (
-                  <span className="text-xs text-neutral-400">
-                    ({option.count})
-                  </span>
-                ) : null}
-              </label>
+                label={option.label}
+                count={option.count}
+                checked={selected}
+                onChange={() => toggleMultiParam("stock", option.value)}
+              />
             );
           })}
         </div>
-      </div>
+      </FilterSection>
 
       {loadingFilters ? (
-        <div className="rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-500">
+        <div className="rounded-3xl border border-neutral-200 bg-white p-4 text-sm text-neutral-500">
           Filterlər yüklənir...
         </div>
       ) : null}
@@ -339,12 +379,8 @@ export function ProductsFilter({
         const paramKey = getSpecParamKey(group.key);
 
         return (
-          <div key={group.key}>
-            <h3 className="mb-3 text-sm font-semibold text-neutral-950">
-              {group.label}
-            </h3>
-
-            <div className="space-y-2">
+          <FilterSection key={group.key} title={group.label}>
+            <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
               {group.options.map((option) => {
                 const selected = getSelectedValues(
                   searchParams,
@@ -352,25 +388,17 @@ export function ProductsFilter({
                 ).includes(option.value);
 
                 return (
-                  <label
+                  <CheckboxRow
                     key={option.value}
-                    className="flex cursor-pointer items-center gap-3 text-sm text-neutral-700"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selected}
-                      onChange={() => toggleMultiParam(paramKey, option.value)}
-                      className="size-4 rounded border-neutral-300 text-neutral-950"
-                    />
-                    <span className="min-w-0 flex-1">{option.label}</span>
-                    <span className="text-xs text-neutral-400">
-                      ({option.count})
-                    </span>
-                  </label>
+                    label={option.label}
+                    count={option.count}
+                    checked={selected}
+                    onChange={() => toggleMultiParam(paramKey, option.value)}
+                  />
                 );
               })}
             </div>
-          </div>
+          </FilterSection>
         );
       })}
     </div>
@@ -407,18 +435,19 @@ export function ProductsFilter({
         </select>
       </div>
 
-      <div className="mb-6 hidden rounded-[2rem] border border-neutral-200 bg-white p-5 shadow-sm lg:block">
-        <div className="mb-5 flex flex-col gap-4 border-b border-neutral-100 pb-5">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex size-9 items-center justify-center rounded-full bg-neutral-950 text-white">
+      <div className="hidden lg:sticky lg:top-36 lg:block">
+        <div className="mb-4 rounded-[2rem] border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="mb-5 flex items-center gap-3 border-b border-neutral-100 pb-5">
+            <span className="inline-flex size-10 items-center justify-center rounded-full bg-neutral-950 text-white">
               <Filter className="size-4" aria-hidden="true" />
             </span>
+
             <div>
               <h2 className="text-lg font-semibold text-neutral-950">
-                Məhsul filterləri
+                Filterlər
               </h2>
               <p className="text-sm text-neutral-500">
-                Kateqoriyaya görə filterlər avtomatik dəyişir.
+                Məhsulları dəqiqləşdirin.
               </p>
             </div>
           </div>
@@ -428,7 +457,7 @@ export function ProductsFilter({
               name="sort"
               value={currentSort}
               onChange={(event) => setSingleParam("sort", event.target.value)}
-              className="h-11 w-full rounded-full border border-neutral-200 bg-white px-4 text-sm outline-none transition focus:border-neutral-950"
+              className="h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
             >
               <option value="">Ən yeni</option>
               <option value="oldest">Ən köhnə</option>
@@ -440,7 +469,7 @@ export function ProductsFilter({
             {hasActiveFilters ? (
               <Link
                 href={clearHref}
-                className="inline-flex w-full justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                className="inline-flex w-full justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
               >
                 Hamısını təmizlə
               </Link>
@@ -459,11 +488,11 @@ export function ProductsFilter({
       >
         <div
           className={cn(
-            "absolute right-0 top-0 h-full w-[min(92vw,420px)] overflow-y-auto bg-white p-5 shadow-2xl transition-transform",
+            "absolute right-0 top-0 h-full w-[min(92vw,430px)] overflow-y-auto bg-[#f6f6f4] p-5 shadow-2xl transition-transform",
             mobileOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
-          <div className="mb-5 flex items-center justify-between border-b border-neutral-100 pb-4">
+          <div className="mb-5 flex items-center justify-between rounded-3xl border border-neutral-200 bg-white p-4">
             <div>
               <h2 className="text-lg font-semibold text-neutral-950">
                 Filterlər
@@ -485,13 +514,15 @@ export function ProductsFilter({
 
           {filterPanel}
 
-          <button
-            type="button"
-            onClick={() => setMobileOpen(false)}
-            className="mt-8 h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white"
-          >
-            Nəticələri göstər
-          </button>
+          <div className="sticky bottom-0 mt-5 border-t border-neutral-200 bg-[#f6f6f4] py-4">
+            <button
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white"
+            >
+              Nəticələri göstər
+            </button>
+          </div>
         </div>
       </div>
     </>

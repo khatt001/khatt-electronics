@@ -57,7 +57,7 @@ export function SearchStrip() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-medium transition hover:border-neutral-950"
+                 className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-semibold text-neutral-700 transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-neutral-950"
                 >
                   <Icon className="size-4" aria-hidden="true" />
                   <span className="hidden sm:inline">{item.title}</span>
