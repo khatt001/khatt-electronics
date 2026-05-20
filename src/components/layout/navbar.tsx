@@ -113,7 +113,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           </div>
 
           <div className="hidden flex-1 lg:block">
-            <NavbarSearch placeholder={t.searchPlaceholder} />
+            <NavbarSearch placeholder={t.searchPlaceholder} locale={locale} />
           </div>
 
           <nav
@@ -199,6 +199,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
         <div className="relative z-20 shrink-0 border-b border-black/10 px-5 py-4">
           <NavbarSearch
             placeholder={t.searchPlaceholder}
+            locale={locale}
             onNavigate={() => setOpen(false)}
           />
         </div>

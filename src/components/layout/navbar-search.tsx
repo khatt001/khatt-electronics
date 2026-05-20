@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingBag, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import type { Locale } from "@/data/translations/layout";
 
 type NavbarSearchProduct = {
   id: string;
@@ -18,17 +19,70 @@ type NavbarSearchProduct = {
 type NavbarSearchProps = {
   placeholder?: string;
   onNavigate?: () => void;
+  locale?: Locale;
 };
 
+const navbarSearchTranslations = {
+  az: {
+    placeholder: "Məhsul, model və ya kateqoriya axtar...",
+    srLabel: "Məhsul axtarışı",
+    clearAria: "Axtarışı təmizlə",
+    resultsTitle: "Axtarış nəticələri",
+    loading: "Axtarılır...",
+    empty: "Bu axtarışa uyğun məhsul tapılmadı.",
+    viewAll: "Bütün nəticələrə bax",
+  },
+  en: {
+    placeholder: "Search product, model or category...",
+    srLabel: "Product search",
+    clearAria: "Clear search",
+    resultsTitle: "Search results",
+    loading: "Searching...",
+    empty: "No products found for this search.",
+    viewAll: "View all results",
+  },
+  ru: {
+    placeholder: "Поиск товара, модели или категории...",
+    srLabel: "Поиск товара",
+    clearAria: "Очистить поиск",
+    resultsTitle: "Результаты поиска",
+    loading: "Поиск...",
+    empty: "По этому запросу товары не найдены.",
+    viewAll: "Смотреть все результаты",
+  },
+} as const;
+
+function withLocalePath(locale: Locale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
+
+function localizeProductHref(locale: Locale, href: string) {
+  if (locale === "az") {
+    return href;
+  }
+
+  if (href.startsWith(`/${locale}/`)) {
+    return href;
+  }
+
+  return `/${locale}${href}`;
+}
+
 export function NavbarSearch({
-  placeholder = "Məhsul, model və ya kateqoriya axtar...",
+  placeholder,
   onNavigate,
+  locale = "az",
 }: NavbarSearchProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<NavbarSearchProduct[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const t = navbarSearchTranslations[locale];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -60,7 +114,9 @@ export function NavbarSearch({
         setIsLoading(true);
 
         const response = await fetch(
-          `/api/search/products?q=${encodeURIComponent(cleanQuery)}`,
+          `/api/search/products?q=${encodeURIComponent(
+            cleanQuery
+          )}&locale=${locale}`,
           {
             signal: controller.signal,
           }
@@ -87,7 +143,7 @@ export function NavbarSearch({
       controller.abort();
       window.clearTimeout(timeout);
     };
-  }, [query]);
+  }, [query, locale]);
 
   function closeSearch() {
     setIsOpen(false);
@@ -95,11 +151,19 @@ export function NavbarSearch({
     setProducts([]);
   }
 
+  const cleanQuery = query.trim();
+  const effectivePlaceholder = placeholder ?? t.placeholder;
+
   return (
     <div ref={wrapperRef} className="relative">
       <label className="relative block">
-        <span className="sr-only">Məhsul axtarışı</span>
-        <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+        <span className="sr-only">{t.srLabel}</span>
+
+        <Search
+          className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
+          aria-hidden="true"
+        />
+
         <input
           type="search"
           value={query}
@@ -108,11 +172,11 @@ export function NavbarSearch({
             setIsOpen(true);
           }}
           onFocus={() => {
-            if (query.trim().length >= 2) {
+            if (cleanQuery.length >= 2) {
               setIsOpen(true);
             }
           }}
-          placeholder={placeholder}
+          placeholder={effectivePlaceholder}
           className="h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 pl-11 pr-11 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
         />
 
@@ -120,7 +184,7 @@ export function NavbarSearch({
           <button
             type="button"
             onClick={closeSearch}
-            aria-label="Axtarışı təmizlə"
+            aria-label={t.clearAria}
             className="absolute right-3 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-950"
           >
             <X className="size-4" aria-hidden="true" />
@@ -128,22 +192,22 @@ export function NavbarSearch({
         ) : null}
       </label>
 
-      {isOpen && query.trim().length >= 2 ? (
+      {isOpen && cleanQuery.length >= 2 ? (
         <div className="absolute left-0 right-0 top-[calc(100%+0.75rem)] z-50 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl shadow-black/10">
           <div className="border-b border-neutral-100 px-4 py-3">
             <p className="text-xs uppercase tracking-[0.18em] text-neutral-400">
-              Axtarış nəticələri
+              {t.resultsTitle}
             </p>
           </div>
 
           {isLoading ? (
-            <div className="p-4 text-sm text-neutral-500">Axtarılır...</div>
+            <div className="p-4 text-sm text-neutral-500">{t.loading}</div>
           ) : products.length > 0 ? (
             <div className="max-h-[420px] overflow-y-auto p-2">
               {products.map((product) => (
                 <Link
                   key={product.id}
-                  href={product.href}
+                  href={localizeProductHref(locale, product.href)}
                   onClick={() => {
                     closeSearch();
                     onNavigate?.();
@@ -183,6 +247,7 @@ export function NavbarSearch({
                     <p className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-neutral-950">
                       {product.name}
                     </p>
+
                     <p className="mt-1 text-xs font-medium text-neutral-500">
                       {product.price}
                     </p>
@@ -191,21 +256,21 @@ export function NavbarSearch({
               ))}
             </div>
           ) : (
-            <div className="p-5 text-sm text-neutral-500">
-              Bu axtarışa uyğun məhsul tapılmadı.
-            </div>
+            <div className="p-5 text-sm text-neutral-500">{t.empty}</div>
           )}
 
           <div className="border-t border-neutral-100 p-3">
             <Link
-              href={`/products?search=${encodeURIComponent(query.trim())}`}
+              href={`${withLocalePath(locale, "/products")}?search=${encodeURIComponent(
+                cleanQuery
+              )}`}
               onClick={() => {
                 closeSearch();
                 onNavigate?.();
               }}
               className="flex justify-center rounded-full bg-neutral-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
             >
-              Bütün nəticələrə bax
+              {t.viewAll}
             </Link>
           </div>
         </div>
