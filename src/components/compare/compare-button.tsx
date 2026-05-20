@@ -2,37 +2,56 @@
 
 import { BarChart3 } from "lucide-react";
 import { useCompare } from "@/components/compare/compare-provider";
-import type { CompareItem } from "@/types/compare";
 import { cn } from "@/lib/utils";
+import type { CompareItem } from "@/types/compare";
+
+export type CompareButtonLocale = "az" | "en" | "ru";
+
+const compareButtonTranslations = {
+  az: {
+    add: "Müqayisəyə əlavə et",
+    remove: "Müqayisədən sil",
+    limit: "Müqayisə limiti dolub",
+  },
+  en: {
+    add: "Add to compare",
+    remove: "Remove from compare",
+    limit: "Compare limit reached",
+  },
+  ru: {
+    add: "Добавить к сравнению",
+    remove: "Удалить из сравнения",
+    limit: "Лимит сравнения достигнут",
+  },
+} as const;
 
 type CompareButtonProps = {
   item: CompareItem;
-  className?: string;
+  locale?: CompareButtonLocale;
 };
 
-export function CompareButton({ item, className }: CompareButtonProps) {
-  const { isCompared, toggleCompare, count, limit } = useCompare();
+export function CompareButton({ item, locale = "az" }: CompareButtonProps) {
+  const { items, toggleCompare, limit } = useCompare();
+  const t = compareButtonTranslations[locale];
 
-  const active = isCompared(item.id);
-  const limitReached = !active && count >= limit;
+  const isCompared = items.some((compareItem) => compareItem.id === item.id);
+  const limitReached = !isCompared && items.length >= limit;
+  const label = limitReached ? t.limit : isCompared ? t.remove : t.add;
 
   return (
     <button
       type="button"
       onClick={() => toggleCompare(item)}
       disabled={limitReached}
-      aria-label={active ? "Müqayisədən çıxar" : "Müqayisəyə əlavə et"}
-      title={limitReached ? `Maksimum ${limit} məhsul müqayisə edilə bilər` : undefined}
+      aria-label={label}
+      title={label}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950 disabled:cursor-not-allowed disabled:opacity-45",
-        active && "border-blue-200 bg-blue-50 text-blue-700 hover:text-blue-700",
-        className
+        "inline-flex size-10 items-center justify-center rounded-full border border-white/70 bg-white/90 text-neutral-800 shadow-sm backdrop-blur transition hover:bg-white",
+        isCompared ? "text-emerald-600" : "hover:text-emerald-600",
+        limitReached ? "cursor-not-allowed opacity-50" : ""
       )}
     >
-      <BarChart3
-        className={cn("size-4", active && "fill-current")}
-        aria-hidden="true"
-      />
+      <BarChart3 className="size-5" aria-hidden="true" />
     </button>
   );
 }

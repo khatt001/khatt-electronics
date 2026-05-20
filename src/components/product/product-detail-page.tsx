@@ -227,8 +227,8 @@ export async function ProductDetailPageView({
                                 </span>
 
                                 <div className="ml-auto flex gap-2">
-                                    <FavoriteButton item={favoriteItem} />
-                                    <CompareButton item={compareItem} />
+                                    <FavoriteButton item={favoriteItem} locale={locale} />
+                                    <CompareButton item={compareItem} locale={locale} />
                                 </div>
                             </div>
 
@@ -283,7 +283,7 @@ export async function ProductDetailPageView({
                                 />
 
                                 <div className="grid gap-3 sm:grid-cols-2">
-                                   <BuyNowButton item={cartItem} disabled={!canBuy} />
+                                    <BuyNowButton item={cartItem} disabled={!canBuy} />
                                     <Link
                                         href={withLocalePath(locale, "/cart")}
                                         className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
