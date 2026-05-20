@@ -148,6 +148,14 @@ export function CompareProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          locale:
+            window.location.pathname === "/en" ||
+              window.location.pathname.startsWith("/en/")
+              ? "en"
+              : window.location.pathname === "/ru" ||
+                window.location.pathname.startsWith("/ru/")
+                ? "ru"
+                : "az",
           items: currentItems.map((item) => ({
             id: item.id,
           })),

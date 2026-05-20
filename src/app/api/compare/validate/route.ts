@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { MAX_COMPARE_ITEMS } from "@/lib/compare";
 
+type CompareValidateLocale = "az" | "en" | "ru";
+
 type ValidateCompareRequestItem = {
   id: string;
 };
@@ -32,10 +34,42 @@ type ProductForCompareValidation = {
   }[];
 };
 
-function formatPrice(priceVisible: boolean, price: number | string | null) {
+const compareValidateTranslations = {
+  az: {
+    priceOnRequest: "Qiymət sorğu ilə",
+    productFallback: "Məhsul",
+    invalidCompare: "Müqayisə məlumatı yoxlanmadı.",
+  },
+  en: {
+    priceOnRequest: "Price on request",
+    productFallback: "Product",
+    invalidCompare: "Compare data could not be validated.",
+  },
+  ru: {
+    priceOnRequest: "Цена по запросу",
+    productFallback: "Товар",
+    invalidCompare: "Данные сравнения не удалось проверить.",
+  },
+} as const;
+
+function getLocale(value: unknown): CompareValidateLocale {
+  if (value === "en" || value === "ru") {
+    return value;
+  }
+
+  return "az";
+}
+
+function formatPrice(
+  priceVisible: boolean,
+  price: number | string | null,
+  locale: CompareValidateLocale
+) {
+  const t = compareValidateTranslations[locale];
+
   return priceVisible && price
     ? `${Number(price).toFixed(2)} AZN`
-    : "Qiymət sorğu ilə";
+    : t.priceOnRequest;
 }
 
 function getPriceAmount(priceVisible: boolean, price: number | string | null) {
@@ -59,10 +93,16 @@ function getPrimaryImage(images: ProductForCompareValidation["images"]) {
 }
 
 export async function POST(request: Request) {
+  let locale: CompareValidateLocale = "az";
+
   try {
     const body = (await request.json()) as {
       items?: ValidateCompareRequestItem[];
+      locale?: CompareValidateLocale;
     };
+
+    locale = getLocale(body.locale);
+    const t = compareValidateTranslations[locale];
 
     const items = Array.isArray(body.items) ? body.items : [];
 
@@ -133,10 +173,10 @@ export async function POST(request: Request) {
         id: product.id,
         name: product.name_az,
         slug: product.slug,
-        price: formatPrice(product.price_visible, product.price),
+        price: formatPrice(product.price_visible, product.price, locale),
         priceAmount: getPriceAmount(product.price_visible, product.price),
         imageUrl: getPrimaryImage(product.images ?? []),
-        category: product.category?.name_az ?? "Məhsul",
+        category: product.category?.name_az ?? t.productFallback,
         brand: product.brand?.name ?? null,
         stockStatus: product.stock_status,
         stockQuantity: product.stock_quantity ?? 0,
@@ -152,9 +192,11 @@ export async function POST(request: Request) {
       items: validItems,
     });
   } catch {
+    const t = compareValidateTranslations[locale];
+
     return NextResponse.json(
       {
-        error: "Müqayisə məlumatı yoxlanmadı.",
+        error: t.invalidCompare,
       },
       { status: 400 }
     );
