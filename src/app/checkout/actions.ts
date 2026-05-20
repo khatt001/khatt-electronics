@@ -5,26 +5,6 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
-const checkoutItemSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1),
-  slug: z.string().min(1),
-  price: z.coerce.number().min(0),
-  quantity: z.coerce.number().int().min(1),
-});
-
-const checkoutSchema = z.object({
-  locale: z.enum(["az", "en", "ru"]).default("az"),
-  customer_name: z.string().min(2, "Ad və soyad minimum 2 simvol olmalıdır."),
-  phone: z.string().min(7, "Telefon nömrəsi düzgün deyil."),
-  email: z.string().email("Email düzgün deyil.").optional().or(z.literal("")),
-  city: z.string().min(2, "Şəhər yazılmalıdır."),
-  address: z.string().min(5, "Ünvan minimum 5 simvol olmalıdır."),
-  note: z.string().optional(),
-  payment_method: z.enum(["cash", "card"]),
-  items: z.array(checkoutItemSchema).min(1, "Səbət boşdur."),
-});
-
 type CheckoutLocale = "az" | "en" | "ru";
 
 type ProductForCheckout = {
@@ -37,6 +17,102 @@ type ProductForCheckout = {
   stock_quantity: number | null;
   status: string;
 };
+
+const checkoutActionTranslations = {
+  az: {
+    fullNameMin: "Ad və soyad minimum 2 simvol olmalıdır.",
+    phoneInvalid: "Telefon nömrəsi düzgün deyil.",
+    emailInvalid: "Email düzgün deyil.",
+    cityRequired: "Şəhər yazılmalıdır.",
+    addressMin: "Ünvan minimum 5 simvol olmalıdır.",
+    emptyCart: "Səbət boşdur.",
+    invalidCartData: "Səbət məlumatı düzgün deyil.",
+    invalidData: "Məlumatlar düzgün deyil.",
+    cardUnavailable:
+      "Kartla ödəniş hələ aktiv deyil. Zəhmət olmasa nağd ödənişi seçin.",
+    productNotFound: "Səbətdəki məhsullardan biri tapılmadı.",
+    productInactive: "artıq aktiv məhsul deyil.",
+    productNotInStock: "stokda deyil.",
+    productOutOfStock: "stokda yoxdur.",
+    stockOnlyPrefix: "üçün stokda yalnız",
+    stockOnlySuffix: "ədəd var.",
+    priceNotActive: "üçün qiymət aktiv deyil.",
+    priceInvalid: "üçün qiymət düzgün deyil.",
+    orderNotCreated: "Sifariş yaradılmadı.",
+    orderItemsNotAdded: "Sifariş məhsulları əlavə edilmədi.",
+    stockUpdateFailed: "üçün stok yenilənmədi:",
+  },
+  en: {
+    fullNameMin: "Full name must be at least 2 characters.",
+    phoneInvalid: "Phone number is invalid.",
+    emailInvalid: "Email is invalid.",
+    cityRequired: "City is required.",
+    addressMin: "Address must be at least 5 characters.",
+    emptyCart: "Cart is empty.",
+    invalidCartData: "Cart data is invalid.",
+    invalidData: "Information is invalid.",
+    cardUnavailable:
+      "Card payment is not active yet. Please choose cash payment.",
+    productNotFound: "One of the products in the cart was not found.",
+    productInactive: "is no longer an active product.",
+    productNotInStock: "is not in stock.",
+    productOutOfStock: "is out of stock.",
+    stockOnlyPrefix: "has only",
+    stockOnlySuffix: "pcs in stock.",
+    priceNotActive: "price is not active.",
+    priceInvalid: "price is invalid.",
+    orderNotCreated: "Order was not created.",
+    orderItemsNotAdded: "Order products were not added.",
+    stockUpdateFailed: "stock was not updated:",
+  },
+  ru: {
+    fullNameMin: "Имя и фамилия должны быть минимум 2 символа.",
+    phoneInvalid: "Номер телефона неверный.",
+    emailInvalid: "Email неверный.",
+    cityRequired: "Укажите город.",
+    addressMin: "Адрес должен быть минимум 5 символов.",
+    emptyCart: "Корзина пуста.",
+    invalidCartData: "Данные корзины неверные.",
+    invalidData: "Данные неверные.",
+    cardUnavailable:
+      "Оплата картой пока не активна. Пожалуйста, выберите оплату наличными.",
+    productNotFound: "Один из товаров в корзине не найден.",
+    productInactive: "больше не является активным товаром.",
+    productNotInStock: "нет в наличии.",
+    productOutOfStock: "нет в наличии.",
+    stockOnlyPrefix: "в наличии только",
+    stockOnlySuffix: "шт.",
+    priceNotActive: "цена не активна.",
+    priceInvalid: "цена неверная.",
+    orderNotCreated: "Заказ не создан.",
+    orderItemsNotAdded: "Товары заказа не добавлены.",
+    stockUpdateFailed: "наличие не обновлено:",
+  },
+} as const;
+
+const checkoutItemSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  slug: z.string().min(1),
+  price: z.coerce.number().min(0),
+  quantity: z.coerce.number().int().min(1),
+});
+
+function getCheckoutSchema(locale: CheckoutLocale) {
+  const t = checkoutActionTranslations[locale];
+
+  return z.object({
+    locale: z.enum(["az", "en", "ru"]).default("az"),
+    customer_name: z.string().min(2, t.fullNameMin),
+    phone: z.string().min(7, t.phoneInvalid),
+    email: z.string().email(t.emailInvalid).optional().or(z.literal("")),
+    city: z.string().min(2, t.cityRequired),
+    address: z.string().min(5, t.addressMin),
+    note: z.string().optional(),
+    payment_method: z.enum(["cash", "card"]),
+    items: z.array(checkoutItemSchema).min(1, t.emptyCart),
+  });
+}
 
 function createOrderNumber() {
   const date = new Date();
@@ -74,10 +150,41 @@ function normalizePrice(value: number | string | null) {
   return price;
 }
 
+function productMessage(
+  productName: string,
+  message: string,
+  locale: CheckoutLocale
+) {
+  if (locale === "az") {
+    return `${productName} ${message}`;
+  }
+
+  return `${productName} ${message}`;
+}
+
+function stockLimitMessage(
+  productName: string,
+  stockQuantity: number,
+  locale: CheckoutLocale
+) {
+  const t = checkoutActionTranslations[locale];
+
+  if (locale === "az") {
+    return `${productName} ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
+  }
+
+  if (locale === "ru") {
+    return `${productName}: ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
+  }
+
+  return `${productName} ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
+}
+
 export async function createOrder(formData: FormData) {
   const localeRaw = String(formData.get("locale") ?? "az");
   const locale: CheckoutLocale =
     localeRaw === "en" || localeRaw === "ru" ? localeRaw : "az";
+  const t = checkoutActionTranslations[locale];
 
   const rawItems = String(formData.get("items") ?? "[]");
 
@@ -86,8 +193,10 @@ export async function createOrder(formData: FormData) {
   try {
     items = JSON.parse(rawItems);
   } catch {
-    redirect(getErrorUrl("Səbət məlumatı düzgün deyil.", locale));
+    redirect(getErrorUrl(t.invalidCartData, locale));
   }
+
+  const checkoutSchema = getCheckoutSchema(locale);
 
   const parsed = checkoutSchema.safeParse({
     locale,
@@ -103,22 +212,14 @@ export async function createOrder(formData: FormData) {
 
   if (!parsed.success) {
     redirect(
-      getErrorUrl(
-        parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
-        locale
-      )
+      getErrorUrl(parsed.error.issues[0]?.message ?? t.invalidData, locale)
     );
   }
 
   const data = parsed.data;
 
   if (data.payment_method === "card") {
-    redirect(
-      getErrorUrl(
-        "Kartla ödəniş hələ aktiv deyil. Zəhmət olmasa nağd ödənişi seçin.",
-        locale
-      )
-    );
+    redirect(getErrorUrl(t.cardUnavailable, locale));
   }
 
   const productIds = data.items.map((item) => item.id);
@@ -145,7 +246,7 @@ export async function createOrder(formData: FormData) {
   }
 
   if (!products || products.length !== data.items.length) {
-    redirect(getErrorUrl("Səbətdəki məhsullardan biri tapılmadı.", locale));
+    redirect(getErrorUrl(t.productNotFound, locale));
   }
 
   const productsById = new Map(products.map((product) => [product.id, product]));
@@ -154,40 +255,59 @@ export async function createOrder(formData: FormData) {
     const product = productsById.get(item.id);
 
     if (!product) {
-      redirect(getErrorUrl("Səbətdəki məhsullardan biri tapılmadı.", locale));
+      redirect(getErrorUrl(t.productNotFound, locale));
     }
 
     if (product.status !== "active") {
-      redirect(getErrorUrl(`${product.name_az} artıq aktiv məhsul deyil.`, locale));
-    }
-
-    if (product.stock_status !== "in_stock") {
-      redirect(getErrorUrl(`${product.name_az} stokda deyil.`, locale));
-    }
-
-    const stockQuantity = product.stock_quantity ?? 0;
-
-    if (stockQuantity <= 0) {
-      redirect(getErrorUrl(`${product.name_az} stokda yoxdur.`, locale));
-    }
-
-    if (item.quantity > stockQuantity) {
       redirect(
         getErrorUrl(
-          `${product.name_az} üçün stokda yalnız ${stockQuantity} ədəd var.`,
+          productMessage(product.name_az, t.productInactive, locale),
           locale
         )
       );
     }
 
+    if (product.stock_status !== "in_stock") {
+      redirect(
+        getErrorUrl(
+          productMessage(product.name_az, t.productNotInStock, locale),
+          locale
+        )
+      );
+    }
+
+    const stockQuantity = product.stock_quantity ?? 0;
+
+    if (stockQuantity <= 0) {
+      redirect(
+        getErrorUrl(
+          productMessage(product.name_az, t.productOutOfStock, locale),
+          locale
+        )
+      );
+    }
+
+    if (item.quantity > stockQuantity) {
+      redirect(
+        getErrorUrl(stockLimitMessage(product.name_az, stockQuantity, locale), locale)
+      );
+    }
+
     if (!product.price_visible) {
-      redirect(getErrorUrl(`${product.name_az} üçün qiymət aktiv deyil.`, locale));
+      redirect(
+        getErrorUrl(
+          productMessage(product.name_az, t.priceNotActive, locale),
+          locale
+        )
+      );
     }
 
     const unitPrice = normalizePrice(product.price);
 
     if (unitPrice === null) {
-      redirect(getErrorUrl(`${product.name_az} üçün qiymət düzgün deyil.`, locale));
+      redirect(
+        getErrorUrl(productMessage(product.name_az, t.priceInvalid, locale), locale)
+      );
     }
 
     return {
@@ -226,7 +346,7 @@ export async function createOrder(formData: FormData) {
     .single();
 
   if (orderError || !order) {
-    redirect(getErrorUrl(orderError?.message ?? "Sifariş yaradılmadı.", locale));
+    redirect(getErrorUrl(orderError?.message ?? t.orderNotCreated, locale));
   }
 
   const orderItems = verifiedItems.map((item) => ({
@@ -245,12 +365,7 @@ export async function createOrder(formData: FormData) {
 
   if (itemsError) {
     await supabaseAdmin.from("orders").delete().eq("id", order.id);
-    redirect(
-      getErrorUrl(
-        itemsError.message || "Sifariş məhsulları əlavə edilmədi.",
-        locale
-      )
-    );
+    redirect(getErrorUrl(itemsError.message || t.orderItemsNotAdded, locale));
   }
 
   for (const item of verifiedItems) {
@@ -270,7 +385,7 @@ export async function createOrder(formData: FormData) {
 
       redirect(
         getErrorUrl(
-          `${item.productName} üçün stok yenilənmədi: ${stockError.message}`,
+          `${item.productName} ${t.stockUpdateFailed} ${stockError.message}`,
           locale
         )
       );
