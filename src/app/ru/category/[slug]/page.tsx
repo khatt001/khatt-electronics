@@ -25,15 +25,15 @@ export async function generateMetadata({
   return generateCategoryMetadata({
     slug,
     query,
-    locale: "az",
+    locale: "ru",
   });
 }
 
-export default async function CategoryPage({
+export default async function RussianCategoryPage({
   params,
   searchParams,
 }: CategoryPageProps) {
   const [{ slug }, query] = await Promise.all([params, searchParams]);
 
-  return <CategoryPageView slug={slug} query={query} locale="az" />;
+  return <CategoryPageView slug={slug} query={query} locale="ru" />;
 }
