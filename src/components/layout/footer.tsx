@@ -2,10 +2,8 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/data/site";
-import {
-  footerTranslations,
-  type Locale,
-} from "@/data/translations/layout";
+import { footerTranslations } from "@/data/translations/layout";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type FooterProps = {
   locale?: Locale;
@@ -20,7 +18,7 @@ export function Footer({ locale = "az" }: FooterProps) {
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
           <div>
             <Link
-              href={locale === "az" ? "/" : `/${locale}`}
+              href={localizedPath("/", locale)}
               className="text-xl font-semibold tracking-tight"
             >
               {siteConfig.name}
@@ -32,18 +30,14 @@ export function Footer({ locale = "az" }: FooterProps) {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={locale === "az" ? "/products" : `/${locale}/products`}
+                href={localizedPath("/products", locale)}
                 className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200"
               >
                 {t.productsButton}
               </Link>
 
               <Link
-                href={
-                  locale === "az"
-                    ? "/track-order"
-                    : `/${locale}/track-order`
-                }
+                href={localizedPath("/track-order", locale)}
                 className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
               >
                 {t.trackOrderButton}
@@ -71,13 +65,13 @@ export function Footer({ locale = "az" }: FooterProps) {
             <h3 className="text-sm font-semibold">{t.categoriesTitle}</h3>
 
             <div className="mt-4 space-y-3">
-              {t.categoryLinks.map((service) => (
+              {t.categoryLinks.map((category) => (
                 <Link
-                  key={service.href}
-                  href={service.href}
+                  key={category.href}
+                  href={category.href}
                   className="block text-sm text-white/60 transition hover:text-white"
                 >
-                  {service.name}
+                  {category.name}
                 </Link>
               ))}
             </div>
@@ -110,7 +104,7 @@ export function Footer({ locale = "az" }: FooterProps) {
             </div>
 
             <Link
-              href={locale === "az" ? "/contact" : `/${locale}/contact`}
+              href={localizedPath("/contact", locale)}
               className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
             >
               {t.contactPageButton}
