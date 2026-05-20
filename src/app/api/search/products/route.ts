@@ -1,9 +1,48 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
+type SearchLocale = "az" | "en" | "ru";
+
+const searchApiTranslations = {
+  az: {
+    productFallback: "Məhsul",
+    priceOnRequest: "Qiymət sorğu ilə",
+  },
+  en: {
+    productFallback: "Product",
+    priceOnRequest: "Price on request",
+  },
+  ru: {
+    productFallback: "Товар",
+    priceOnRequest: "Цена по запросу",
+  },
+} as const;
+
+function getLocale(value: string | null): SearchLocale {
+  if (value === "en" || value === "ru") {
+    return value;
+  }
+
+  return "az";
+}
+
+function formatPrice(
+  priceVisible: boolean,
+  price: number | string | null,
+  locale: SearchLocale
+) {
+  const t = searchApiTranslations[locale];
+
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : t.priceOnRequest;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q")?.trim() ?? "";
+  const locale = getLocale(searchParams.get("locale"));
+  const t = searchApiTranslations[locale];
 
   if (query.length < 2) {
     return NextResponse.json({ products: [] });
@@ -66,13 +105,10 @@ export async function GET(request: Request) {
       id: product.id,
       name: product.name_az,
       href: `/products/${product.slug}`,
-      category: product.category?.name_az ?? "Məhsul",
+      category: product.category?.name_az ?? t.productFallback,
       brand: product.brand?.name ?? null,
       imageUrl: sortedImages[0]?.url ?? null,
-      price:
-        product.price_visible && product.price
-          ? `${Number(product.price).toFixed(2)} AZN`
-          : "Qiymət sorğu ilə",
+      price: formatPrice(product.price_visible, product.price, locale),
     };
   });
 
