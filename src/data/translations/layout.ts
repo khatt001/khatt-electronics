@@ -41,23 +41,23 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     categoryLinks: [
       {
         name: "Videomüşahidə sistemləri",
-        href: "/products?category=video-nezaret",
+        href: "/category/video-nezaret",
       },
       {
         name: "Keçidə nəzarət",
-        href: "/products?category=girise-nezaret",
+        href: "/category/girise-nezaret",
       },
       {
         name: "Domofon sistemləri",
-        href: "/products?category=domofoniya",
+        href: "/category/domofoniya",
       },
       {
         name: "Siqnalizasiya",
-        href: "/products?category=siqnalizasiya",
+        href: "/category/siqnalizasiya",
       },
       {
         name: "Şəbəkə avadanlıqları",
-        href: "/products?category=sebeke",
+        href: "/category/sebeke",
       },
     ],
   },
@@ -82,23 +82,23 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     categoryLinks: [
       {
         name: "Video surveillance systems",
-        href: "/en/products?category=video-nezaret",
+        href: "/en/category/video-nezaret",
       },
       {
         name: "Access control",
-        href: "/en/products?category=girise-nezaret",
+        href: "/en/category/girise-nezaret",
       },
       {
         name: "Intercom systems",
-        href: "/en/products?category=domofoniya",
+        href: "/en/category/domofoniya",
       },
       {
         name: "Alarm systems",
-        href: "/en/products?category=siqnalizasiya",
+        href: "/en/category/siqnalizasiya",
       },
       {
         name: "Network equipment",
-        href: "/en/products?category=sebeke",
+        href: "/en/category/sebeke",
       },
     ],
   },
@@ -123,23 +123,23 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     categoryLinks: [
       {
         name: "Системы видеонаблюдения",
-        href: "/ru/products?category=video-nezaret",
+        href: "/ru/category/video-nezaret",
       },
       {
         name: "Контроль доступа",
-        href: "/ru/products?category=girise-nezaret",
+        href: "/ru/category/girise-nezaret",
       },
       {
         name: "Домофонные системы",
-        href: "/ru/products?category=domofoniya",
+        href: "/ru/category/domofoniya",
       },
       {
         name: "Сигнализация",
-        href: "/ru/products?category=siqnalizasiya",
+        href: "/ru/category/siqnalizasiya",
       },
       {
         name: "Сетевое оборудование",
-        href: "/ru/products?category=sebeke",
+        href: "/ru/category/sebeke",
       },
     ],
   },
