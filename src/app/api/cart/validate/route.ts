@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
+type CartValidateLocale = "az" | "en" | "ru";
+
 type ValidateCartRequestItem = {
   id: string;
   quantity: number;
@@ -27,6 +29,29 @@ type ProductForCartValidation = {
   }[];
 };
 
+const cartValidateTranslations = {
+  az: {
+    productFallback: "Məhsul",
+    invalidCart: "Cart məlumatı yoxlanmadı.",
+  },
+  en: {
+    productFallback: "Product",
+    invalidCart: "Cart data could not be validated.",
+  },
+  ru: {
+    productFallback: "Товар",
+    invalidCart: "Данные корзины не удалось проверить.",
+  },
+} as const;
+
+function getLocale(value: unknown): CartValidateLocale {
+  if (value === "en" || value === "ru") {
+    return value;
+  }
+
+  return "az";
+}
+
 function formatPrice(priceVisible: boolean, price: number | string | null) {
   return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : null;
 }
@@ -42,10 +67,16 @@ function getPrimaryImage(images: ProductForCartValidation["images"]) {
 }
 
 export async function POST(request: Request) {
+  let locale: CartValidateLocale = "az";
+
   try {
     const body = (await request.json()) as {
       items?: ValidateCartRequestItem[];
+      locale?: CartValidateLocale;
     };
+
+    locale = getLocale(body.locale);
+    const t = cartValidateTranslations[locale];
 
     const items = Array.isArray(body.items) ? body.items : [];
 
@@ -121,7 +152,7 @@ export async function POST(request: Request) {
           price,
           priceLabel: formatPrice(product.price_visible, product.price),
           imageUrl: getPrimaryImage(product.images ?? []),
-          category: product.category?.name_az ?? "Məhsul",
+          category: product.category?.name_az ?? t.productFallback,
           brand: product.brand?.name ?? null,
           maxQuantity: stockQuantity,
           quantity: Math.min(stockQuantity, requestedQuantity),
@@ -133,9 +164,11 @@ export async function POST(request: Request) {
       items: validItems,
     });
   } catch {
+    const t = cartValidateTranslations[locale];
+
     return NextResponse.json(
       {
-        error: "Cart məlumatı yoxlanmadı.",
+        error: t.invalidCart,
       },
       { status: 400 }
     );

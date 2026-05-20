@@ -18,6 +18,8 @@ import {
   normalizeQuantity,
 } from "@/lib/cart";
 
+type CartLocale = "az" | "en" | "ru";
+
 type AddToCartInput = Omit<CartItem, "quantity"> & {
   quantity?: number;
 };
@@ -46,6 +48,24 @@ const CartContext = createContext<CartContextValue | null>(null);
 function normalizeMaxQuantity(value: number) {
   if (!Number.isFinite(value)) return 1;
   return Math.max(0, Math.floor(value));
+}
+
+function getLocaleFromPathname(): CartLocale {
+  if (typeof window === "undefined") {
+    return "az";
+  }
+
+  const pathname = window.location.pathname;
+
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    return "en";
+  }
+
+  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
+    return "ru";
+  }
+
+  return "az";
 }
 
 function readCartFromStorage(): CartItem[] {
@@ -229,45 +249,46 @@ export function CartProvider({ children }: { children: ReactNode }) {
     hideToast();
   }, [hideToast]);
 
-const syncCart = useCallback(async () => {
-  if (!mounted) return;
+  const syncCart = useCallback(async () => {
+    if (!mounted) return;
 
-  const currentItems = readCartFromStorage();
+    const currentItems = readCartFromStorage();
 
-  if (currentItems.length === 0) {
-    setItems([]);
-    return;
-  }
+    if (currentItems.length === 0) {
+      setItems([]);
+      return;
+    }
 
-  setIsSyncing(true);
+    setIsSyncing(true);
 
-  try {
-    const response = await fetch("/api/cart/validate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: currentItems.map((item) => ({
-          id: item.id,
-          quantity: item.quantity,
-        })),
-      }),
-    });
+    try {
+      const response = await fetch("/api/cart/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          locale: getLocaleFromPathname(),
+          items: currentItems.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+          })),
+        }),
+      });
 
-    if (!response.ok) return;
+      if (!response.ok) return;
 
-    const data = (await response.json()) as {
-      items?: CartItem[];
-    };
+      const data = (await response.json()) as {
+        items?: CartItem[];
+      };
 
-    if (!Array.isArray(data.items)) return;
+      if (!Array.isArray(data.items)) return;
 
-    setItems(data.items);
-  } finally {
-    setIsSyncing(false);
-  }
-}, [mounted]);
+      setItems(data.items);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [mounted]);
 
   const isInCart = useCallback(
     (productId: string) => items.some((item) => item.id === productId),
