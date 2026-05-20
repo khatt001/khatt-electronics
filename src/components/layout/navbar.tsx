@@ -11,10 +11,8 @@ import { CartNavLink } from "@/components/cart/cart-nav-link";
 import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
 import { CompareNavLink } from "@/components/compare/compare-nav-link";
 import { siteConfig } from "@/data/site";
-import {
-  navbarTranslations,
-  type Locale,
-} from "@/data/translations/navbar";
+import { navbarTranslations } from "@/data/translations/navbar";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type NavbarProps = {
   locale?: Locale;
@@ -101,7 +99,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
       <Container>
         <div className="flex h-16 items-center gap-4 lg:h-20">
           <Link
-            href={locale === "az" ? "/" : `/${locale}`}
+            href={localizedPath("/", locale)}
             aria-label={t.logoAriaLabel}
             className="shrink-0 font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 lg:text-2xl"
           >
@@ -137,7 +135,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             <CartNavLink locale={locale} />
 
             <Link
-              href={locale === "az" ? "/track-order" : `/${locale}/track-order`}
+              href={localizedPath("/track-order", locale)}
               className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
             >
               {t.trackOrder}
@@ -178,7 +176,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
       >
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-black/10 px-5">
           <Link
-            href={locale === "az" ? "/" : `/${locale}`}
+            href={localizedPath("/", locale)}
             onClick={() => setOpen(false)}
             aria-label={t.logoAriaLabel}
             className="font-serif text-xl font-semibold tracking-[0.24em]"
@@ -207,6 +205,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-5">
           <div className="mb-5 w-full max-w-full overflow-visible">
             <CatalogDropdown
+              locale={locale}
               variant="mobile"
               onNavigate={() => setOpen(false)}
             />
@@ -214,7 +213,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
 
           <div className="grid grid-cols-3 gap-2">
             <Link
-              href={locale === "az" ? "/compare" : `/${locale}/compare`}
+              href={localizedPath("/compare", locale)}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
@@ -222,7 +221,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             </Link>
 
             <Link
-              href={locale === "az" ? "/favorites" : `/${locale}/favorites`}
+              href={localizedPath("/favorites", locale)}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
@@ -230,7 +229,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             </Link>
 
             <Link
-              href={locale === "az" ? "/cart" : `/${locale}/cart`}
+              href={localizedPath("/cart", locale)}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
@@ -271,7 +270,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
 
           <div className="mt-8 grid grid-cols-2 gap-3">
             <Link
-              href={locale === "az" ? "/products" : `/${locale}/products`}
+              href={localizedPath("/products", locale)}
               onClick={() => setOpen(false)}
               className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
             >
@@ -279,7 +278,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             </Link>
 
             <Link
-              href={locale === "az" ? "/track-order" : `/${locale}/track-order`}
+              href={localizedPath("/track-order", locale)}
               onClick={() => setOpen(false)}
               className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
             >
