@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getSpecSortIndex } from "@/lib/product-specs";
 
+type FilterLocale = "az" | "en" | "ru";
+
 type ProductFilterRow = {
   id: string;
   stock_status: "in_stock" | "out_of_stock" | "pre_order";
@@ -27,7 +29,37 @@ type FilterGroup = {
   options: FilterOption[];
 };
 
+const filterApiTranslations = {
+  az: {
+    stockGroup: "Stok vəziyyəti",
+    stockIn: "Stokda var",
+    stockPreOrder: "Öncədən sifariş",
+    stockOut: "Stokda yoxdur",
+    localeCode: "az",
+  },
+  en: {
+    stockGroup: "Stock status",
+    stockIn: "In stock",
+    stockPreOrder: "Pre-order",
+    stockOut: "Out of stock",
+    localeCode: "en",
+  },
+  ru: {
+    stockGroup: "Наличие",
+    stockIn: "В наличии",
+    stockPreOrder: "Предзаказ",
+    stockOut: "Нет в наличии",
+    localeCode: "ru",
+  },
+} as const;
 
+function getLocale(value: string | null): FilterLocale {
+  if (value === "en" || value === "ru") {
+    return value;
+  }
+
+  return "az";
+}
 
 function normalizeValue(value: string | null | undefined) {
   return String(value ?? "").trim();
@@ -41,7 +73,12 @@ function incrementOption(map: Map<string, number>, value: string) {
   map.set(cleanValue, (map.get(cleanValue) ?? 0) + 1);
 }
 
-function mapToOptions(map: Map<string, number>): FilterOption[] {
+function mapToOptions(
+  map: Map<string, number>,
+  locale: FilterLocale
+): FilterOption[] {
+  const t = filterApiTranslations[locale];
+
   return Array.from(map.entries())
     .map(([value, count]) => ({
       value,
@@ -56,24 +93,31 @@ function mapToOptions(map: Map<string, number>): FilterOption[] {
         return numberA - numberB;
       }
 
-      return a.label.localeCompare(b.label, "az");
+      return a.label.localeCompare(b.label, t.localeCode);
     });
 }
 
-function getStockLabel(stockStatus: ProductFilterRow["stock_status"]) {
-  if (stockStatus === "in_stock") return "Stokda var";
-  if (stockStatus === "pre_order") return "Öncədən sifariş";
-  return "Stokda yoxdur";
+function getStockLabel(
+  stockStatus: ProductFilterRow["stock_status"],
+  locale: FilterLocale
+) {
+  const t = filterApiTranslations[locale];
+
+  if (stockStatus === "in_stock") return t.stockIn;
+  if (stockStatus === "pre_order") return t.stockPreOrder;
+  return t.stockOut;
 }
 
-function sortSpecGroups(groups: FilterGroup[]) {
+function sortSpecGroups(groups: FilterGroup[], locale: FilterLocale) {
+  const t = filterApiTranslations[locale];
+
   return groups.sort((a, b) => {
     const indexA = getSpecSortIndex(a.label);
     const indexB = getSpecSortIndex(b.label);
 
     if (indexA !== indexB) return indexA - indexB;
 
-    return a.label.localeCompare(b.label, "az");
+    return a.label.localeCompare(b.label, t.localeCode);
   });
 }
 
@@ -96,6 +140,8 @@ async function getCategoryIdBySlug(categorySlug: string) {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categorySlug = searchParams.get("category");
+  const locale = getLocale(searchParams.get("locale"));
+  const t = filterApiTranslations[locale];
 
   let categoryId: string | null = null;
 
@@ -150,7 +196,7 @@ export async function GET(request: Request) {
       incrementOption(brandMap, product.brand.name);
     }
 
-    incrementOption(stockMap, getStockLabel(product.stock_status));
+    incrementOption(stockMap, getStockLabel(product.stock_status, locale));
 
     product.specifications?.forEach((spec) => {
       const key = normalizeValue(spec.spec_key_az);
@@ -171,16 +217,16 @@ export async function GET(request: Request) {
       key: "brand",
       label: "Brand",
       type: "brand",
-      options: mapToOptions(brandMap),
+      options: mapToOptions(brandMap, locale),
     });
   }
 
   if (stockMap.size > 0) {
     groups.push({
       key: "stock",
-      label: "Stok vəziyyəti",
+      label: t.stockGroup,
       type: "stock",
-      options: mapToOptions(stockMap),
+      options: mapToOptions(stockMap, locale),
     });
   }
 
@@ -189,11 +235,11 @@ export async function GET(request: Request) {
       key,
       label: key,
       type: "spec" as const,
-      options: mapToOptions(map),
+      options: mapToOptions(map, locale),
     }))
     .filter((group) => group.options.length > 0);
 
-  groups.push(...sortSpecGroups(specGroups));
+  groups.push(...sortSpecGroups(specGroups, locale));
 
   return NextResponse.json({
     groups,

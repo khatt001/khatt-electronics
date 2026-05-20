@@ -64,14 +64,37 @@ function getLocalePrefix(locale: ProductsFilterLocale) {
   return locale === "az" ? "" : `/${locale}`;
 }
 
+function getStockValue(value: string) {
+  if (value === "Stokda var" || value === "In stock" || value === "В наличии") {
+    return "in_stock";
+  }
+
+  if (
+    value === "Stokda yoxdur" ||
+    value === "Out of stock" ||
+    value === "Нет в наличии"
+  ) {
+    return "out_of_stock";
+  }
+
+  if (
+    value === "Öncədən sifariş" ||
+    value === "Pre-order" ||
+    value === "Предзаказ"
+  ) {
+    return "pre_order";
+  }
+
+  return value;
+}
+
 function translateStockLabel(label: string, locale: ProductsFilterLocale) {
   const t = productsFilterTranslations[locale];
+  const value = getStockValue(label);
 
-  if (label === "Stokda var" || label === "in_stock") return t.stockIn;
-  if (label === "Stokda yoxdur" || label === "out_of_stock") return t.stockOut;
-  if (label === "Öncədən sifariş" || label === "pre_order") {
-    return t.stockPreOrder;
-  }
+  if (value === "in_stock") return t.stockIn;
+  if (value === "out_of_stock") return t.stockOut;
+  if (value === "pre_order") return t.stockPreOrder;
 
   return label;
 }
@@ -222,7 +245,9 @@ export function ProductsFilter({
     if (categoryMode === "route") {
       startTransition(() => {
         router.replace(
-          value ? `${localePrefix}/category/${value}` : `${localePrefix}/products`,
+          value
+            ? `${localePrefix}/category/${value}`
+            : `${localePrefix}/products`,
           {
             scroll: false,
           }
@@ -237,14 +262,15 @@ export function ProductsFilter({
 
   function toggleMultiParam(key: string, value: string) {
     const params = createParamsFromCurrent(searchParams);
+    const cleanOptionValue = key === "stock" ? getStockValue(value) : value;
     const values = params.getAll(key);
-    const exists = values.includes(value);
+    const exists = values.includes(cleanOptionValue);
 
     params.delete(key);
 
     const nextValues = exists
-      ? values.filter((item) => item !== value)
-      : [...values, value];
+      ? values.filter((item) => item !== cleanOptionValue)
+      : [...values, cleanOptionValue];
 
     nextValues.forEach((item) => params.append(key, item));
 
@@ -275,14 +301,13 @@ export function ProductsFilter({
         setLoadingFilters(true);
 
         const params = new URLSearchParams();
+        params.set("locale", locale);
 
         if (currentCategory) {
           params.set("category", currentCategory);
         }
 
-        const response = await fetch(
-          params.toString() ? `/api/filters?${params}` : "/api/filters"
-        );
+        const response = await fetch(`/api/filters?${params.toString()}`);
 
         const result = (await response.json()) as {
           groups?: DynamicFilterGroup[];
@@ -297,7 +322,7 @@ export function ProductsFilter({
     }
 
     void loadDynamicFilters();
-  }, [currentCategory]);
+  }, [currentCategory, locale]);
 
   const visibleDynamicGroups = useMemo(() => {
     return dynamicGroups.filter((group) => {
@@ -309,6 +334,12 @@ export function ProductsFilter({
 
   const brandGroup = dynamicGroups.find((group) => group.type === "brand");
   const stockGroup = dynamicGroups.find((group) => group.type === "stock");
+
+  const stockOptions = stockGroup?.options ?? [
+    { value: "in_stock", label: t.stockIn, count: 0 },
+    { value: "out_of_stock", label: t.stockOut, count: 0 },
+    { value: "pre_order", label: t.stockPreOrder, count: 0 },
+  ];
 
   const filterPanel = (
     <div className="space-y-4">
@@ -374,22 +405,19 @@ export function ProductsFilter({
 
       <FilterSection title={t.stockTitle}>
         <div className="space-y-1">
-          {(stockGroup?.options ?? [
-            { value: "Stokda var", label: "Stokda var", count: 0 },
-            { value: "Stokda yoxdur", label: "Stokda yoxdur", count: 0 },
-            { value: "Öncədən sifariş", label: "Öncədən sifariş", count: 0 },
-          ]).map((option) => {
+          {stockOptions.map((option) => {
+            const optionValue = getStockValue(option.value);
             const selected = getSelectedValues(searchParams, "stock").includes(
-              option.value
+              optionValue
             );
 
             return (
               <CheckboxRow
-                key={option.value}
+                key={optionValue}
                 label={translateStockLabel(option.label, locale)}
                 count={option.count}
                 checked={selected}
-                onChange={() => toggleMultiParam("stock", option.value)}
+                onChange={() => toggleMultiParam("stock", optionValue)}
               />
             );
           })}
