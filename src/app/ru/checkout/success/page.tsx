@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CheckoutSuccessPage } from "@/components/checkout/checkout-success-page";
 import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
 
-const t = checkoutSuccessTranslations.az;
+const t = checkoutSuccessTranslations.ru;
 
 type CheckoutSuccessRouteProps = {
   searchParams: Promise<{
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: t.metadataTitle,
   description: t.metadataDescription,
   alternates: {
-    canonical: "/checkout/success",
+    canonical: "/ru/checkout/success",
     languages: {
       az: "/checkout/success",
       en: "/en/checkout/success",
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function CheckoutSuccessRoute({
+export default async function RussianCheckoutSuccessRoute({
   searchParams,
 }: CheckoutSuccessRouteProps) {
   const query = await searchParams;
 
-  return <CheckoutSuccessPage locale="az" orderNumber={query.order} />;
+  return <CheckoutSuccessPage locale="ru" orderNumber={query.order} />;
 }
