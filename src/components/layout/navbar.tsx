@@ -132,9 +132,9 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           </nav>
 
           <div className="ml-auto flex items-center gap-1.5">
-            <CompareNavLink />
-            <FavoritesNavLink />
-            <CartNavLink />
+            <CompareNavLink locale={locale} />
+            <FavoritesNavLink locale={locale} />
+            <CartNavLink locale={locale} />
 
             <Link
               href={locale === "az" ? "/track-order" : `/${locale}/track-order`}

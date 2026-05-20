@@ -5,17 +5,40 @@ import { useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import type { CartItem } from "@/types/cart";
 
+export type QuickAddToCartLocale = "az" | "en" | "ru";
+
+const quickAddTranslations = {
+  az: {
+    added: "Əlavə olundu",
+    stockLimit: "Stok limiti",
+    addToCart: "Səbətə əlavə et",
+  },
+  en: {
+    added: "Added",
+    stockLimit: "Stock limit",
+    addToCart: "Add to cart",
+  },
+  ru: {
+    added: "Добавлено",
+    stockLimit: "Лимит склада",
+    addToCart: "В корзину",
+  },
+} as const;
+
 type QuickAddToCartButtonProps = {
   item: Omit<CartItem, "quantity">;
   disabled?: boolean;
+  locale?: QuickAddToCartLocale;
 };
 
 export function QuickAddToCartButton({
   item,
   disabled = false,
+  locale = "az",
 }: QuickAddToCartButtonProps) {
   const { addItem, items } = useCart();
   const [added, setAdded] = useState(false);
+  const t = quickAddTranslations[locale];
 
   const currentQuantity =
     items.find((cartItem) => cartItem.id === item.id)?.quantity ?? 0;
@@ -47,10 +70,10 @@ export function QuickAddToCartButton({
     >
       <ShoppingCart className="mr-2 size-4" aria-hidden="true" />
       {added
-        ? "Əlavə olundu"
+        ? t.added
         : remainingQuantity === 0
-          ? "Stok limiti"
-          : "Səbətə əlavə et"}
+          ? t.stockLimit
+          : t.addToCart}
     </button>
   );
 }

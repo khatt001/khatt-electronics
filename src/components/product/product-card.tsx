@@ -187,6 +187,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
                   maxQuantity: product.stockQuantity,
                 }}
                 disabled={!canAddToCart}
+                locale={locale}
               />
             ) : (
               <button
