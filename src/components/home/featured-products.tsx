@@ -22,7 +22,7 @@ function withLocalePath(locale: Locale, path: string) {
 export async function FeaturedProducts({
   locale = "az",
 }: FeaturedProductsProps) {
-  const products = await getFeaturedProducts();
+  const products = await getFeaturedProducts(locale);
   const t = homeTranslations[locale];
 
   return (

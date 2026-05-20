@@ -1,6 +1,8 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
+export type ProductLocale = "az" | "en" | "ru";
+
 export type ProductCardItem = {
   id: string;
   name: string;
@@ -126,6 +128,30 @@ type ProductDetailRow = {
   }[];
 };
 
+const productServiceTranslations = {
+  az: {
+    priceOnRequest: "Qiymət sorğu ilə",
+    badgeInStock: "Stokda var",
+    badgePreOrder: "Öncədən sifariş",
+    badgeOnRequest: "Sorğu ilə",
+    productFallback: "Məhsul",
+  },
+  en: {
+    priceOnRequest: "Price on request",
+    badgeInStock: "In stock",
+    badgePreOrder: "Pre-order",
+    badgeOnRequest: "On request",
+    productFallback: "Product",
+  },
+  ru: {
+    priceOnRequest: "Цена по запросу",
+    badgeInStock: "В наличии",
+    badgePreOrder: "Предзаказ",
+    badgeOnRequest: "По запросу",
+    productFallback: "Товар",
+  },
+} as const;
+
 function asArray(value?: string | string[]) {
   if (!value) return [];
   return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
@@ -143,16 +169,27 @@ function normalizeStockValue(value: string): StockStatus | null {
   return null;
 }
 
-function formatPrice(priceVisible: boolean, price: number | string | null) {
+function formatPrice(
+  priceVisible: boolean,
+  price: number | string | null,
+  locale: ProductLocale = "az"
+) {
+  const t = productServiceTranslations[locale];
+
   return priceVisible && price
     ? `${Number(price).toFixed(2)} AZN`
-    : "Qiymət sorğu ilə";
+    : t.priceOnRequest;
 }
 
-function formatBadge(stockStatus: StockStatus) {
-  if (stockStatus === "in_stock") return "Stokda var";
-  if (stockStatus === "pre_order") return "Öncədən sifariş";
-  return "Sorğu ilə";
+function formatBadge(
+  stockStatus: StockStatus,
+  locale: ProductLocale = "az"
+) {
+  const t = productServiceTranslations[locale];
+
+  if (stockStatus === "in_stock") return t.badgeInStock;
+  if (stockStatus === "pre_order") return t.badgePreOrder;
+  return t.badgeOnRequest;
 }
 
 function sortImages<T extends { is_primary: boolean }>(images: T[]) {
@@ -168,7 +205,12 @@ function getPrimaryImage(images: ProductRow["images"]) {
   return sortedImages[0]?.url ?? null;
 }
 
-function formatProduct(product: ProductRow): ProductCardItem {
+function formatProduct(
+  product: ProductRow,
+  locale: ProductLocale = "az"
+): ProductCardItem {
+  const t = productServiceTranslations[locale];
+
   const priceAmount =
     product.price_visible && product.price !== null ? Number(product.price) : null;
 
@@ -176,13 +218,13 @@ function formatProduct(product: ProductRow): ProductCardItem {
     id: product.id,
     name: product.name_az,
     slug: product.slug,
-    category: product.category?.name_az ?? "Məhsul",
+    category: product.category?.name_az ?? t.productFallback,
     brand: product.brand?.name ?? null,
-    price: formatPrice(product.price_visible, product.price),
+    price: formatPrice(product.price_visible, product.price, locale),
     priceAmount: Number.isFinite(priceAmount) ? priceAmount : null,
     stockStatus: product.stock_status,
     stockQuantity: product.stock_quantity ?? 0,
-    badge: formatBadge(product.stock_status),
+    badge: formatBadge(product.stock_status, locale),
     href: `/products/${product.slug}`,
     imageUrl: getPrimaryImage(product.images ?? []),
   };
@@ -265,7 +307,9 @@ async function getProductIdsBySpecs(specs: Record<string, string[]>) {
   return matchedIds;
 }
 
-export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
+export async function getFeaturedProducts(
+  locale: ProductLocale = "az"
+): Promise<FeaturedProduct[]> {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
@@ -305,11 +349,12 @@ export async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
     return [];
   }
 
-  return data.map(formatProduct);
+  return data.map((product) => formatProduct(product, locale));
 }
 
 export async function getCatalogProducts(
-  filters: CatalogProductFilters = {}
+  filters: CatalogProductFilters = {},
+  locale: ProductLocale = "az"
 ): Promise<CatalogProduct[]> {
   const supabase = createServerSupabaseClient();
 
@@ -409,13 +454,15 @@ export async function getCatalogProducts(
     return [];
   }
 
-  return data.map(formatProduct);
+  return data.map((product) => formatProduct(product, locale));
 }
 
 export async function getProductBySlug(
-  slug: string
+  slug: string,
+  locale: ProductLocale = "az"
 ): Promise<ProductDetail | null> {
   const supabase = createServerSupabaseClient();
+  const t = productServiceTranslations[locale];
 
   const { data, error } = await supabase
     .from("products")
@@ -481,10 +528,10 @@ export async function getProductBySlug(
     slug: data.slug,
     stockQuantity: data.stock_quantity ?? 0,
     stockStatus: data.stock_status,
-    category: data.category?.name_az ?? "Məhsul",
+    category: data.category?.name_az ?? t.productFallback,
     brand: data.brand?.name ?? null,
-    price: formatPrice(data.price_visible, data.price),
-    badge: formatBadge(data.stock_status),
+    price: formatPrice(data.price_visible, data.price, locale),
+    badge: formatBadge(data.stock_status, locale),
     shortDescription: data.short_description_az,
     description: data.description_az,
     seoTitle: data.seo_title_az,

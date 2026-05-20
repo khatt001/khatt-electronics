@@ -140,14 +140,17 @@ export default async function RussianProductsPage({
     const specs = getSpecsFromQuery(query);
 
     const [products, categories, brands] = await Promise.all([
-        getCatalogProducts({
-            search,
-            category,
-            brand: brandValues,
-            stock: stockValues,
-            sort,
-            specs,
-        }),
+        getCatalogProducts(
+            {
+                search,
+                category,
+                brand: brandValues,
+                stock: stockValues,
+                sort,
+                specs,
+            },
+            "ru"
+        ),
         getCatalogCategories(),
         getCatalogBrands(),
     ]);
@@ -290,7 +293,7 @@ export default async function RussianProductsPage({
                             {products.length > 0 ? (
                                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                     {products.map((product) => (
-                                       <ProductCard key={product.id} product={product} locale="ru" />
+                                        <ProductCard key={product.id} product={product} locale="ru" />
                                     ))}
                                 </div>
                             ) : (

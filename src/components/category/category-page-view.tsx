@@ -197,14 +197,17 @@ export async function CategoryPageView({
   const specs = getSpecsFromQuery(query);
 
   const [products, categories, brands] = await Promise.all([
-    getCatalogProducts({
-      search,
-      category: category.slug,
-      brand: brandValues,
-      stock: stockValues,
-      sort,
-      specs,
-    }),
+   getCatalogProducts(
+  {
+    search,
+    category: category.slug,
+    brand: brandValues,
+    stock: stockValues,
+    sort,
+    specs,
+  },
+  locale
+),
     getCatalogCategories(),
     getCatalogBrands(),
   ]);

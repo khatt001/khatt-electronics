@@ -135,7 +135,7 @@ export async function ProductDetailPageView({
     slug,
     locale = "az",
 }: ProductDetailPageViewProps) {
-    const product = await getProductBySlug(slug);
+    const product = await getProductBySlug(slug,locale);
     const t = productDetailTranslations[locale];
 
     if (!product) {

@@ -13,7 +13,7 @@ export async function generateMetadata({
   params,
 }: ProductDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug, "ru");
   const t = productDetailTranslations.ru;
 
   if (!product) {
