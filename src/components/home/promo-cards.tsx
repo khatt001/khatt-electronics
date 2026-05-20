@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, Calculator, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  homeTranslations,
-  type Locale,
-} from "@/data/translations/home";
+import { homeTranslations } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 type PromoCardsProps = {
   locale?: Locale;

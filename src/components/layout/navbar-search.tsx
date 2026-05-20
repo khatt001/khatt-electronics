@@ -101,11 +101,16 @@ export function NavbarSearch({
   useEffect(() => {
     const cleanQuery = query.trim();
 
-    if (cleanQuery.length < 2) {
-      setProducts([]);
-      setIsLoading(false);
-      return;
-    }
+   if (cleanQuery.length < 2) {
+  const timeoutId = window.setTimeout(() => {
+    setProducts([]);
+    setIsLoading(false);
+  }, 0);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}
 
     const controller = new AbortController();
 

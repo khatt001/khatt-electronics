@@ -58,10 +58,16 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+ useEffect(() => {
+  const timeoutId = window.setTimeout(() => {
     setItems(readFavoritesFromStorage());
     setMounted(true);
-  }, []);
+  }, 0);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, []);
 
   useEffect(() => {
     if (!mounted) return;

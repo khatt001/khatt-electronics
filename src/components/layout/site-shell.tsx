@@ -5,23 +5,11 @@ import Navbar from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { CartToast } from "@/components/cart/cart-toast";
-import type { Locale } from "@/data/translations/layout";
+import { getLocaleFromPathname } from "@/lib/i18n";
 
 type SiteShellProps = {
   children: React.ReactNode;
 };
-
-function getLocaleFromPathname(pathname: string): Locale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return "en";
-  }
-
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
-    return "ru";
-  }
-
-  return "az";
-}
 
 export function SiteShell({ children }: SiteShellProps) {
   const pathname = usePathname();

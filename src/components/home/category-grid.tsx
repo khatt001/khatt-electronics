@@ -10,10 +10,8 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { getCatalogCategories } from "@/services/categories";
-import {
-  homeTranslations,
-  type Locale,
-} from "@/data/translations/home";
+import { homeTranslations } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 const categoryIcons = [
   Camera,

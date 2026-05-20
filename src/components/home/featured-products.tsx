@@ -2,10 +2,8 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
 import { getFeaturedProducts } from "@/services/products";
-import {
-  homeTranslations,
-  type Locale,
-} from "@/data/translations/home";
+import { homeTranslations } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 type FeaturedProductsProps = {
   locale?: Locale;

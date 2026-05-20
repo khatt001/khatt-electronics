@@ -64,9 +64,15 @@ export function CompareProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+  const timeoutId = window.setTimeout(() => {
     setItems(readCompareFromStorage());
     setMounted(true);
-  }, []);
+  }, 0);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, []);
 
   useEffect(() => {
     if (!mounted) return;

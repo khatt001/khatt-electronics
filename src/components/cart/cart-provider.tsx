@@ -154,15 +154,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+  const timeoutId = window.setTimeout(() => {
     setItems(readCartFromStorage());
     setMounted(true);
+  }, 0);
 
-    return () => {
-      if (toastTimeoutRef.current) {
-        clearTimeout(toastTimeoutRef.current);
-      }
-    };
-  }, []);
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, []);
 
   useEffect(() => {
     if (!mounted) return;

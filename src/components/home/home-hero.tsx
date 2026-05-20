@@ -2,7 +2,7 @@ import { Container } from "@/components/layout/container";
 import { CatalogSidebar } from "@/components/home/catalog-sidebar";
 import { HeroBanner } from "@/components/home/hero-banner";
 import { PromoCards } from "@/components/home/promo-cards";
-import type { Locale } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 type HomeHeroProps = {
   locale?: Locale;

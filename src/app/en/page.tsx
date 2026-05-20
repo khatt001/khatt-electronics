@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { CategoryGrid } from "@/components/home/category-grid";
-import { FeaturedProducts } from "@/components/home/featured-products";
-import { HomeHero } from "@/components/home/home-hero";
-import { SearchStrip } from "@/components/home/search-strip";
-import { ServicesSection } from "@/components/home/services-section";
+import { HomePageContent } from "@/components/home/home-page-content";
 
 export const metadata: Metadata = {
   title: "KHATT Electronics | Security and smart electronics",
@@ -27,13 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function EnglishHomePage() {
-  return (
-    <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
-      <HomeHero locale="en" />
-      <SearchStrip locale="en" />
-      <FeaturedProducts locale="en" />
-      <CategoryGrid locale="en" />
-      <ServicesSection locale="en" />
-    </main>
-  );
+  return <HomePageContent locale="en" />;
 }

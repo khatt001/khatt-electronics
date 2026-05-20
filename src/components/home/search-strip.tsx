@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { miniCategories } from "@/data/home";
-import {
-  homeTranslations,
-  type Locale,
-} from "@/data/translations/home";
+import { homeTranslations } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 type SearchStripProps = {
   locale?: Locale;

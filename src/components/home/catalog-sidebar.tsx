@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, ShoppingBag } from "lucide-react";
-import {
-  homeTranslations,
-  type Locale,
-} from "@/data/translations/home";
+import { homeTranslations } from "@/data/translations/home";
+import type { Locale } from "@/lib/i18n";
 
 type CatalogSidebarProps = {
   locale?: Locale;

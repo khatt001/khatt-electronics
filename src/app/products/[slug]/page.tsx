@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getProductBySlug } from "@/services/products";
 import {
-  getProductDetailJsonLd,
   ProductDetailPageView,
 } from "@/components/product/product-detail-page";
 import { productDetailTranslations } from "@/data/translations/product-detail";
