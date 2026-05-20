@@ -109,7 +109,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           </Link>
 
           <div className="hidden lg:block">
-            <CatalogDropdown />
+            <CatalogDropdown locale={locale} />
           </div>
 
           <div className="hidden flex-1 lg:block">

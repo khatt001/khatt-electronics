@@ -21,14 +21,74 @@ type CatalogCategory = {
   description: string | null;
 };
 
+type CatalogDropdownLocale = "az" | "en" | "ru";
+
 type CatalogDropdownProps = {
   onNavigate?: () => void;
   variant?: "desktop" | "mobile";
+  locale?: CatalogDropdownLocale;
 };
+
+const catalogDropdownTranslations = {
+  az: {
+    catalog: "Kataloq",
+    eyebrow: "Məhsul kataloqu",
+    title: "Kateqoriyalar",
+    closeAria: "Kataloqu bağla",
+    loading: "Kateqoriyalar yüklənir...",
+    empty: "Aktiv kateqoriya tapılmadı.",
+    categoryFallback: "Bu kateqoriyadakı məhsullara bax",
+    ctaTitle: "Layihənizə uyğun məhsul seçin",
+    ctaDescription:
+      "Kamera, PoE switch, access control və digər avadanlıqları kateqoriyalar üzrə rahat seçə bilərsiniz.",
+    productsLink: "Məhsullara bax",
+    allProducts: "Bütün məhsullar",
+    trackOrder: "Sifariş izləmə",
+  },
+  en: {
+    catalog: "Catalog",
+    eyebrow: "Product catalog",
+    title: "Categories",
+    closeAria: "Close catalog",
+    loading: "Loading categories...",
+    empty: "No active categories found.",
+    categoryFallback: "View products in this category",
+    ctaTitle: "Choose products for your project",
+    ctaDescription:
+      "Easily browse cameras, PoE switches, access control and other equipment by categories.",
+    productsLink: "View products",
+    allProducts: "All products",
+    trackOrder: "Track order",
+  },
+  ru: {
+    catalog: "Каталог",
+    eyebrow: "Каталог товаров",
+    title: "Категории",
+    closeAria: "Закрыть каталог",
+    loading: "Категории загружаются...",
+    empty: "Активные категории не найдены.",
+    categoryFallback: "Смотреть товары в этой категории",
+    ctaTitle: "Выберите товары для вашего проекта",
+    ctaDescription:
+      "Удобно выбирайте камеры, PoE switch, access control и другое оборудование по категориям.",
+    productsLink: "Смотреть товары",
+    allProducts: "Все товары",
+    trackOrder: "Отследить заказ",
+  },
+} as const;
+
+function withLocalePath(locale: CatalogDropdownLocale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
 
 export function CatalogDropdown({
   onNavigate,
   variant = "desktop",
+  locale = "az",
 }: CatalogDropdownProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -36,6 +96,7 @@ export function CatalogDropdown({
   const [loading, setLoading] = useState(false);
 
   const isMobile = variant === "mobile";
+  const t = catalogDropdownTranslations[locale];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -104,7 +165,7 @@ export function CatalogDropdown({
         )}
       >
         <PackageSearch className="size-4" aria-hidden="true" />
-        Kataloq
+        {t.catalog}
       </button>
 
       {open ? (
@@ -119,17 +180,17 @@ export function CatalogDropdown({
           <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-neutral-400">
-                Məhsul kataloqu
+                {t.eyebrow}
               </p>
               <h3 className="mt-1 text-lg font-semibold text-neutral-950">
-                Kateqoriyalar
+                {t.title}
               </h3>
             </div>
 
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Kataloqu bağla"
+              aria-label={t.closeAria}
               className="inline-flex size-9 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-950"
             >
               <X className="size-4" aria-hidden="true" />
@@ -145,14 +206,14 @@ export function CatalogDropdown({
             >
               {loading ? (
                 <div className="rounded-2xl bg-neutral-50 p-5 text-sm text-neutral-500">
-                  Kateqoriyalar yüklənir...
+                  {t.loading}
                 </div>
               ) : categories.length > 0 ? (
                 <div className="grid gap-2">
                   {categories.map((category) => (
                     <Link
                       key={category.id}
-                      href={`/category/${category.slug}`}
+                      href={withLocalePath(locale, `/category/${category.slug}`)}
                       onClick={closeDropdown}
                       className="group flex items-center gap-3 rounded-2xl border border-transparent p-3 transition hover:border-neutral-200 hover:bg-neutral-50"
                     >
@@ -165,8 +226,7 @@ export function CatalogDropdown({
                           {category.name}
                         </p>
                         <p className="mt-1 line-clamp-1 text-xs text-neutral-500">
-                          {category.description ??
-                            "Bu kateqoriyadakı məhsullara bax"}
+                          {category.description ?? t.categoryFallback}
                         </p>
                       </div>
 
@@ -179,7 +239,7 @@ export function CatalogDropdown({
                 </div>
               ) : (
                 <div className="rounded-2xl bg-neutral-50 p-5 text-sm text-neutral-500">
-                  Aktiv kateqoriya tapılmadı.
+                  {t.empty}
                 </div>
               )}
             </div>
@@ -188,38 +248,37 @@ export function CatalogDropdown({
               <div className="rounded-3xl bg-neutral-950 p-5 text-white">
                 <ShieldCheck className="size-7" aria-hidden="true" />
                 <h4 className="mt-4 text-lg font-semibold">
-                  Layihənizə uyğun məhsul seçin
+                  {t.ctaTitle}
                 </h4>
                 <p className="mt-2 text-sm leading-6 text-white/65">
-                  Kamera, PoE switch, access control və digər avadanlıqları
-                  kateqoriyalar üzrə rahat seçə bilərsiniz.
+                  {t.ctaDescription}
                 </p>
 
                 <Link
-                  href="/products"
+                  href={withLocalePath(locale, "/products")}
                   onClick={closeDropdown}
                   className="mt-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
                 >
-                  Məhsullara bax
+                  {t.productsLink}
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>
 
               <Link
-                href="/products"
+                href={withLocalePath(locale, "/products")}
                 onClick={closeDropdown}
                 className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
               >
-                Bütün məhsullar
+                {t.allProducts}
                 <Camera className="size-4" aria-hidden="true" />
               </Link>
 
               <Link
-                href="/track-order"
+                href={withLocalePath(locale, "/track-order")}
                 onClick={closeDropdown}
                 className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
               >
-                Sifariş izləmə
+                {t.trackOrder}
                 <ShoppingBag className="size-4" aria-hidden="true" />
               </Link>
             </div>
