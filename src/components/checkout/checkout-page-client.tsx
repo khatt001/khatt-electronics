@@ -79,7 +79,7 @@ export function CheckoutPageClient({
                 name="items"
                 value={JSON.stringify(checkoutItems)}
               />
-
+<input type="hidden" name="locale" value={locale} />
               <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-8">
                 <h2 className="text-2xl font-semibold text-neutral-950">
                   {t.customerInfoTitle}
