@@ -1,19 +1,28 @@
 import Link from "next/link";
 import { ChevronRight, ShoppingBag } from "lucide-react";
-import { catalogCategories } from "@/data/home";
+import {
+  homeTranslations,
+  type Locale,
+} from "@/data/translations/home";
 
-export function CatalogSidebar() {
+type CatalogSidebarProps = {
+  locale?: Locale;
+};
+
+export function CatalogSidebar({ locale = "az" }: CatalogSidebarProps) {
+  const t = homeTranslations[locale];
+
   return (
     <aside className="hidden rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm lg:block">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-[0.18em]">
-          Məhsul kataloqu
+          {t.catalogTitle}
         </h2>
         <ShoppingBag className="size-4 text-neutral-500" aria-hidden="true" />
       </div>
 
-      <nav className="space-y-1" aria-label="Məhsul kataloqu">
-        {catalogCategories.map((category) => (
+      <nav className="space-y-1" aria-label={t.catalogAriaLabel}>
+        {t.catalogCategories.map((category) => (
           <Link
             key={category.href}
             href={category.href}

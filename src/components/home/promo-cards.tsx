@@ -1,13 +1,24 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { promoItems } from "@/data/home";
+import { ArrowRight, Calculator, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  homeTranslations,
+  type Locale,
+} from "@/data/translations/home";
 
-export function PromoCards() {
+type PromoCardsProps = {
+  locale?: Locale;
+};
+
+const promoIcons = [Calculator, FileText];
+
+export function PromoCards({ locale = "az" }: PromoCardsProps) {
+  const t = homeTranslations[locale];
+
   return (
     <aside className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-      {promoItems.map((item, index) => {
-        const Icon = item.icon;
+      {t.promoItems.map((item, index) => {
+        const Icon = promoIcons[index % promoIcons.length];
         const featured = index === 0;
 
         return (
@@ -48,7 +59,7 @@ export function PromoCards() {
             </p>
 
             <span className="relative mt-6 inline-flex items-center text-sm font-semibold">
-              Ətraflı
+              {t.promoReadMore}
               <ArrowRight
                 className="ml-2 size-4 transition group-hover:translate-x-1"
                 aria-hidden="true"

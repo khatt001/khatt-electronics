@@ -13,9 +13,9 @@ export function HomeHero({ locale = "az" }: HomeHeroProps) {
     <section className="border-b border-black/10 bg-white">
       <Container className="py-5">
         <div className="grid gap-4 lg:grid-cols-[280px_1fr_280px]">
-          <CatalogSidebar />
+          <CatalogSidebar locale={locale} />
           <HeroBanner locale={locale} />
-          <PromoCards />
+          <PromoCards locale={locale} />
         </div>
       </Container>
     </section>

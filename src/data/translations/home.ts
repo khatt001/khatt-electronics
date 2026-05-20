@@ -12,6 +12,21 @@ export type HomeTranslation = {
     label: string;
   }[];
 
+  catalogTitle: string;
+  catalogAriaLabel: string;
+  catalogCategories: {
+    title: string;
+    href: string;
+    subcategories: string[];
+  }[];
+
+  promoReadMore: string;
+  promoItems: {
+    title: string;
+    description: string;
+    href: string;
+  }[];
+
   searchPlaceholder: string;
   searchButton: string;
 
@@ -49,6 +64,52 @@ export const homeTranslations: Record<Locale, HomeTranslation> = {
       { value: "24/7", label: "Texniki dəstək" },
       { value: "100+", label: "Məhsul seçimi" },
       { value: "AZ", label: "Lokal xidmət" },
+    ],
+
+    catalogTitle: "Məhsul kataloqu",
+    catalogAriaLabel: "Məhsul kataloqu",
+    catalogCategories: [
+      {
+        title: "Videomüşahidə",
+        href: "/products?category=video-nezaret",
+        subcategories: ["IP kamera", "NVR", "DVR", "PTZ"],
+      },
+      {
+        title: "Keçidə nəzarət",
+        href: "/products?category=girise-nezaret",
+        subcategories: ["Turniket", "Kart oxuyucu", "Biometrik sistem"],
+      },
+      {
+        title: "Domofon",
+        href: "/products?category=domofoniya",
+        subcategories: ["IP domofon", "Monitor", "Panel"],
+      },
+      {
+        title: "Siqnalizasiya",
+        href: "/products?category=siqnalizasiya",
+        subcategories: ["Sensor", "Panel", "Sirena"],
+      },
+      {
+        title: "Şəbəkə",
+        href: "/products?category=sebeke",
+        subcategories: ["Switch", "Router", "Kabel"],
+      },
+    ],
+
+    promoReadMore: "Ətraflı",
+    promoItems: [
+      {
+        title: "Layihəyə uyğun seçim",
+        description:
+          "Obyektinizə uyğun kamera, NVR, PoE switch və kabel ehtiyacını birlikdə hesablayaq.",
+        href: "/contact?source=consultation",
+      },
+      {
+        title: "Qiymət təklifi al",
+        description:
+          "Məhsul siyahınızı göndərin, sizə uyğun qiymət təklifi hazırlayaq.",
+        href: "/contact?source=estimate",
+      },
     ],
 
     searchPlaceholder: "Məhsul, kateqoriya və ya model axtar...",
@@ -98,6 +159,52 @@ export const homeTranslations: Record<Locale, HomeTranslation> = {
       { value: "AZ", label: "Local service" },
     ],
 
+    catalogTitle: "Product catalog",
+    catalogAriaLabel: "Product catalog",
+    catalogCategories: [
+      {
+        title: "Video surveillance",
+        href: "/en/products?category=video-nezaret",
+        subcategories: ["IP camera", "NVR", "DVR", "PTZ"],
+      },
+      {
+        title: "Access control",
+        href: "/en/products?category=girise-nezaret",
+        subcategories: ["Turnstile", "Card reader", "Biometric system"],
+      },
+      {
+        title: "Intercom",
+        href: "/en/products?category=domofoniya",
+        subcategories: ["IP intercom", "Monitor", "Panel"],
+      },
+      {
+        title: "Alarm systems",
+        href: "/en/products?category=siqnalizasiya",
+        subcategories: ["Sensor", "Panel", "Siren"],
+      },
+      {
+        title: "Networking",
+        href: "/en/products?category=sebeke",
+        subcategories: ["Switch", "Router", "Cable"],
+      },
+    ],
+
+    promoReadMore: "Learn more",
+    promoItems: [
+      {
+        title: "Project-based selection",
+        description:
+          "Let us calculate the camera, NVR, PoE switch and cable requirements for your site.",
+        href: "/en/contact?source=consultation",
+      },
+      {
+        title: "Request a quote",
+        description:
+          "Send your product list and we will prepare a suitable price offer for you.",
+        href: "/en/contact?source=estimate",
+      },
+    ],
+
     searchPlaceholder: "Search by product, category or model...",
     searchButton: "Search",
 
@@ -143,6 +250,52 @@ export const homeTranslations: Record<Locale, HomeTranslation> = {
       { value: "24/7", label: "Техническая поддержка" },
       { value: "100+", label: "Ассортимент товаров" },
       { value: "AZ", label: "Локальный сервис" },
+    ],
+
+    catalogTitle: "Каталог товаров",
+    catalogAriaLabel: "Каталог товаров",
+    catalogCategories: [
+      {
+        title: "Видеонаблюдение",
+        href: "/ru/products?category=video-nezaret",
+        subcategories: ["IP камера", "NVR", "DVR", "PTZ"],
+      },
+      {
+        title: "Контроль доступа",
+        href: "/ru/products?category=girise-nezaret",
+        subcategories: ["Турникет", "Картридер", "Биометрия"],
+      },
+      {
+        title: "Домофон",
+        href: "/ru/products?category=domofoniya",
+        subcategories: ["IP домофон", "Монитор", "Панель"],
+      },
+      {
+        title: "Сигнализация",
+        href: "/ru/products?category=siqnalizasiya",
+        subcategories: ["Датчик", "Панель", "Сирена"],
+      },
+      {
+        title: "Сеть",
+        href: "/ru/products?category=sebeke",
+        subcategories: ["Switch", "Router", "Кабель"],
+      },
+    ],
+
+    promoReadMore: "Подробнее",
+    promoItems: [
+      {
+        title: "Подбор под проект",
+        description:
+          "Рассчитаем камеры, NVR, PoE switch и кабельные потребности под ваш объект.",
+        href: "/ru/contact?source=consultation",
+      },
+      {
+        title: "Получить предложение",
+        description:
+          "Отправьте список товаров, и мы подготовим для вас подходящее ценовое предложение.",
+        href: "/ru/contact?source=estimate",
+      },
     ],
 
     searchPlaceholder: "Поиск по товару, категории или модели...",
