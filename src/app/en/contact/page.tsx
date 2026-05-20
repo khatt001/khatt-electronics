@@ -174,7 +174,10 @@ export default async function EnglishContactPage({
                   />
                 </div>
 
-                <ContactSubmitButton />
+                <ContactSubmitButton
+  label={t.submitLabel}
+  pendingLabel={t.submitPendingLabel}
+/>
               </form>
             </div>
 

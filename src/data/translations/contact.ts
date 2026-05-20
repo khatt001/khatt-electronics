@@ -31,6 +31,9 @@ export const contactTranslations = {
     messageLabel: "Mesaj",
     messagePlaceholder: "Layihə və ya məhsul sorğunuzu yazın...",
 
+    submitLabel: "Sorğu göndər",
+    submitPendingLabel: "Göndərilir...",
+
     contactInfoTitle: "Əlaqə məlumatları",
 
     supportTitle: "Texniki seçimdə dəstək",
@@ -77,6 +80,9 @@ export const contactTranslations = {
     messageLabel: "Message",
     messagePlaceholder: "Write your project or product request...",
 
+    submitLabel: "Send inquiry",
+    submitPendingLabel: "Sending...",
+
     contactInfoTitle: "Contact information",
 
     supportTitle: "Support with technical selection",
@@ -122,6 +128,9 @@ export const contactTranslations = {
     companyPlaceholder: "Название компании",
     messageLabel: "Сообщение",
     messagePlaceholder: "Напишите запрос по проекту или товару...",
+
+    submitLabel: "Отправить запрос",
+    submitPendingLabel: "Отправляется...",
 
     contactInfoTitle: "Контактная информация",
 
