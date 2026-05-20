@@ -1,6 +1,6 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import type { ProductCardItem } from "@/services/products";
+import type { ProductCardItem, ProductLocale } from "@/services/products";
 
 export type CatalogCategory = {
   id: string;
@@ -54,16 +54,51 @@ export type CategoryDetail = {
   seoDescription: string | null;
 };
 
-function formatPrice(priceVisible: boolean, price: number | string | null) {
+const categoryServiceTranslations = {
+  az: {
+    priceOnRequest: "Qiymət sorğu ilə",
+    badgeInStock: "Stokda var",
+    badgePreOrder: "Öncədən sifariş",
+    badgeOutOfStock: "Stokda yoxdur",
+    productFallback: "Məhsul",
+  },
+  en: {
+    priceOnRequest: "Price on request",
+    badgeInStock: "In stock",
+    badgePreOrder: "Pre-order",
+    badgeOutOfStock: "Out of stock",
+    productFallback: "Product",
+  },
+  ru: {
+    priceOnRequest: "Цена по запросу",
+    badgeInStock: "В наличии",
+    badgePreOrder: "Предзаказ",
+    badgeOutOfStock: "Нет в наличии",
+    productFallback: "Товар",
+  },
+} as const;
+
+function formatPrice(
+  priceVisible: boolean,
+  price: number | string | null,
+  locale: ProductLocale = "az"
+) {
+  const t = categoryServiceTranslations[locale];
+
   return priceVisible && price
     ? `${Number(price).toFixed(2)} AZN`
-    : "Qiymət sorğu ilə";
+    : t.priceOnRequest;
 }
 
-function formatBadge(stockStatus: CategoryProductRow["stock_status"]) {
-  if (stockStatus === "in_stock") return "Stokda var";
-  if (stockStatus === "pre_order") return "Öncədən sifariş";
-  return "Stokda yoxdur";
+function formatBadge(
+  stockStatus: CategoryProductRow["stock_status"],
+  locale: ProductLocale = "az"
+) {
+  const t = categoryServiceTranslations[locale];
+
+  if (stockStatus === "in_stock") return t.badgeInStock;
+  if (stockStatus === "pre_order") return t.badgePreOrder;
+  return t.badgeOutOfStock;
 }
 
 function getPrimaryImage(images: CategoryProductRow["images"]) {
@@ -76,7 +111,12 @@ function getPrimaryImage(images: CategoryProductRow["images"]) {
   return sortedImages[0]?.url ?? null;
 }
 
-function formatProduct(product: CategoryProductRow): ProductCardItem {
+function formatProduct(
+  product: CategoryProductRow,
+  locale: ProductLocale = "az"
+): ProductCardItem {
+  const t = categoryServiceTranslations[locale];
+
   const priceAmount =
     product.price_visible && product.price !== null
       ? Number(product.price)
@@ -86,13 +126,13 @@ function formatProduct(product: CategoryProductRow): ProductCardItem {
     id: product.id,
     name: product.name_az,
     slug: product.slug,
-    category: product.category?.name_az ?? "Məhsul",
+    category: product.category?.name_az ?? t.productFallback,
     brand: product.brand?.name ?? null,
-    price: formatPrice(product.price_visible, product.price),
+    price: formatPrice(product.price_visible, product.price, locale),
     priceAmount: Number.isFinite(priceAmount) ? priceAmount : null,
     stockStatus: product.stock_status,
     stockQuantity: product.stock_quantity ?? 0,
-    badge: formatBadge(product.stock_status),
+    badge: formatBadge(product.stock_status, locale),
     href: `/products/${product.slug}`,
     imageUrl: getPrimaryImage(product.images ?? []),
   };
@@ -149,7 +189,8 @@ export async function getCategoryBySlug(
 }
 
 export async function getCategoryProducts(
-  categoryId: string
+  categoryId: string,
+  locale: ProductLocale = "az"
 ): Promise<ProductCardItem[]> {
   const supabase = createServerSupabaseClient();
 
@@ -185,7 +226,7 @@ export async function getCategoryProducts(
     return [];
   }
 
-  return data.map(formatProduct);
+  return data.map((product) => formatProduct(product, locale));
 }
 
 export async function getCategorySlugs(): Promise<string[]> {
