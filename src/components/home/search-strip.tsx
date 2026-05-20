@@ -67,24 +67,22 @@ export function SearchStrip({ locale = "az" }: SearchStripProps) {
             </button>
           </form>
 
-          <div className="grid grid-cols-3 gap-3 lg:w-[420px]">
-            {miniCategories.map((item) => {
-              const Icon = item.icon;
-              const href =
-                locale === "az" ? item.href : `/${locale}${item.href}`;
+        <div className="grid grid-cols-3 gap-3 lg:w-[420px]">
+  {miniCategories[locale].map((item) => {
+    const Icon = item.icon;
 
-              return (
-                <Link
-                  key={item.href}
-                  href={href}
-                  className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-semibold text-neutral-700 transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-neutral-950"
-                >
-                  <Icon className="size-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">{item.title}</span>
-                </Link>
-              );
-            })}
-          </div>
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-semibold text-neutral-700 transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-neutral-950"
+      >
+        <Icon className="size-4" aria-hidden="true" />
+        <span className="hidden sm:inline">{item.title}</span>
+      </Link>
+    );
+  })}
+</div>
         </div>
       </div>
     </section>
