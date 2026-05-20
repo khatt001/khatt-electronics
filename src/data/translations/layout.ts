@@ -1,4 +1,6 @@
 import type { Locale } from "@/lib/i18n";
+import type { FooterNavigationKey } from "@/data/navigation";
+
 export type FooterTranslation = {
   description: string;
   productsButton: string;
@@ -9,10 +11,7 @@ export type FooterTranslation = {
   contactPageButton: string;
   copyrightSuffix: string;
   tagline: string;
-  footerLinks: {
-    name: string;
-    href: string;
-  }[];
+  footerLinks: Record<FooterNavigationKey, string>;
   categoryLinks: {
     name: string;
     href: string;
@@ -31,12 +30,12 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     contactPageButton: "Əlaqə səhifəsinə keç",
     copyrightSuffix: "Bütün hüquqlar qorunur.",
     tagline: "Təhlükəsizlik, elektronika və smart texnologiya həlləri.",
-    footerLinks: [
-      { name: "Ana səhifə", href: "/" },
-      { name: "Məhsullar", href: "/products" },
-      { name: "Sifariş izləmə", href: "/track-order" },
-      { name: "Əlaqə", href: "/contact" },
-    ],
+    footerLinks: {
+      home: "Ana səhifə",
+      products: "Məhsullar",
+      trackOrder: "Sifariş izləmə",
+      contact: "Əlaqə",
+    },
     categoryLinks: [
       {
         name: "Videomüşahidə sistemləri",
@@ -72,12 +71,12 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     contactPageButton: "Go to contact page",
     copyrightSuffix: "All rights reserved.",
     tagline: "Security, electronics and smart technology solutions.",
-    footerLinks: [
-      { name: "Home", href: "/en" },
-      { name: "Products", href: "/en/products" },
-      { name: "Track order", href: "/en/track-order" },
-      { name: "Contact", href: "/en/contact" },
-    ],
+    footerLinks: {
+      home: "Home",
+      products: "Products",
+      trackOrder: "Track order",
+      contact: "Contact",
+    },
     categoryLinks: [
       {
         name: "Video surveillance systems",
@@ -113,12 +112,12 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
     contactPageButton: "Перейти на страницу контактов",
     copyrightSuffix: "Все права защищены.",
     tagline: "Решения для безопасности, электроники и умных технологий.",
-    footerLinks: [
-      { name: "Главная", href: "/ru" },
-      { name: "Товары", href: "/ru/products" },
-      { name: "Отследить заказ", href: "/ru/track-order" },
-      { name: "Контакты", href: "/ru/contact" },
-    ],
+    footerLinks: {
+      home: "Главная",
+      products: "Товары",
+      trackOrder: "Отследить заказ",
+      contact: "Контакты",
+    },
     categoryLinks: [
       {
         name: "Системы видеонаблюдения",

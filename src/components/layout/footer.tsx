@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/data/site";
+import { getFooterNavigationLinks } from "@/data/navigation";
 import { footerTranslations } from "@/data/translations/layout";
 import { localizedPath, type Locale } from "@/lib/i18n";
 
@@ -11,6 +12,7 @@ type FooterProps = {
 
 export function Footer({ locale = "az" }: FooterProps) {
   const t = footerTranslations[locale];
+  const footerLinks = getFooterNavigationLinks(t.footerLinks, locale);
 
   return (
     <footer className="border-t border-black/10 bg-neutral-950 text-white">
@@ -49,7 +51,7 @@ export function Footer({ locale = "az" }: FooterProps) {
             <h3 className="text-sm font-semibold">{t.pagesTitle}</h3>
 
             <div className="mt-4 space-y-3">
-              {t.footerLinks.map((link) => (
+              {footerLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
