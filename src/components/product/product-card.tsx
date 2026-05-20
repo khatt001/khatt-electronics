@@ -127,7 +127,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
 
         <div className="absolute right-4 top-4 z-30 flex flex-col gap-2">
           <FavoriteButton item={favoriteItem} locale={locale} />
-<CompareButton item={compareItem} locale={locale} />
+          <CompareButton item={compareItem} locale={locale} />
         </div>
       </div>
 
