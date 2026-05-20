@@ -5,6 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
+import {
+  productsFilterTranslations,
+  type ProductsFilterLocale,
+} from "@/data/translations/products-filter";
 
 type FilterOption = {
   id: string;
@@ -37,6 +41,7 @@ type ProductsFilterProps = {
   };
   hasActiveFilters: boolean;
   categoryMode?: "query" | "route";
+  locale?: ProductsFilterLocale;
 };
 
 function cleanValue(value: string | null | undefined) {
@@ -53,6 +58,22 @@ function getSelectedValues(searchParams: URLSearchParams, key: string) {
 
 function createParamsFromCurrent(searchParams: URLSearchParams) {
   return new URLSearchParams(searchParams.toString());
+}
+
+function getLocalePrefix(locale: ProductsFilterLocale) {
+  return locale === "az" ? "" : `/${locale}`;
+}
+
+function translateStockLabel(label: string, locale: ProductsFilterLocale) {
+  const t = productsFilterTranslations[locale];
+
+  if (label === "Stokda var" || label === "in_stock") return t.stockIn;
+  if (label === "Stokda yoxdur" || label === "out_of_stock") return t.stockOut;
+  if (label === "Öncədən sifariş" || label === "pre_order") {
+    return t.stockPreOrder;
+  }
+
+  return label;
 }
 
 function FilterSection({
@@ -132,11 +153,14 @@ export function ProductsFilter({
   initialQuery,
   hasActiveFilters,
   categoryMode = "query",
+  locale = "az",
 }: ProductsFilterProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const t = productsFilterTranslations[locale];
+  const localePrefix = getLocalePrefix(locale);
 
   const [search, setSearch] = useState(initialQuery.search ?? "");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -152,8 +176,8 @@ export function ProductsFilter({
 
   const clearHref =
     categoryMode === "route" && currentCategory
-      ? `/category/${currentCategory}`
-      : "/products";
+      ? `${localePrefix}/category/${currentCategory}`
+      : `${localePrefix}/products`;
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -197,9 +221,12 @@ export function ProductsFilter({
   function changeCategory(value: string) {
     if (categoryMode === "route") {
       startTransition(() => {
-        router.replace(value ? `/category/${value}` : "/products", {
-          scroll: false,
-        });
+        router.replace(
+          value ? `${localePrefix}/category/${value}` : `${localePrefix}/products`,
+          {
+            scroll: false,
+          }
+        );
       });
 
       return;
@@ -285,9 +312,9 @@ export function ProductsFilter({
 
   const filterPanel = (
     <div className="space-y-4">
-      <FilterSection title="Axtarış">
+      <FilterSection title={t.searchTitle}>
         <label className="relative block">
-          <span className="sr-only">Məhsul axtar</span>
+          <span className="sr-only">{t.searchSrLabel}</span>
           <Search
             className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
             aria-hidden="true"
@@ -298,20 +325,20 @@ export function ProductsFilter({
             name="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Məhsul axtar..."
+            placeholder={t.searchPlaceholder}
             className="h-12 w-full rounded-2xl border border-neutral-200 bg-neutral-50 pl-11 pr-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
           />
         </label>
       </FilterSection>
 
-      <FilterSection title="Kateqoriya">
+      <FilterSection title={t.categoryTitle}>
         <select
           name="category"
           value={currentCategory}
           onChange={(event) => changeCategory(event.target.value)}
           className="h-12 w-full rounded-2xl border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
         >
-          <option value="">Bütün kateqoriyalar</option>
+          <option value="">{t.allCategories}</option>
           {categories.map((category) => (
             <option key={category.id} value={category.slug}>
               {category.name}
@@ -320,7 +347,7 @@ export function ProductsFilter({
         </select>
       </FilterSection>
 
-      <FilterSection title="Brand">
+      <FilterSection title={t.brandTitle}>
         <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
           {brands.map((brand) => {
             const dynamicBrand = brandGroup?.options.find(
@@ -345,7 +372,7 @@ export function ProductsFilter({
         </div>
       </FilterSection>
 
-      <FilterSection title="Stok vəziyyəti">
+      <FilterSection title={t.stockTitle}>
         <div className="space-y-1">
           {(stockGroup?.options ?? [
             { value: "Stokda var", label: "Stokda var", count: 0 },
@@ -359,7 +386,7 @@ export function ProductsFilter({
             return (
               <CheckboxRow
                 key={option.value}
-                label={option.label}
+                label={translateStockLabel(option.label, locale)}
                 count={option.count}
                 checked={selected}
                 onChange={() => toggleMultiParam("stock", option.value)}
@@ -371,7 +398,7 @@ export function ProductsFilter({
 
       {loadingFilters ? (
         <div className="rounded-3xl border border-neutral-200 bg-white p-4 text-sm text-neutral-500">
-          Filterlər yüklənir...
+          {t.loadingFilters}
         </div>
       ) : null}
 
@@ -413,7 +440,7 @@ export function ProductsFilter({
           className="inline-flex items-center rounded-full bg-neutral-950 px-5 py-3 text-sm font-semibold text-white"
         >
           <SlidersHorizontal className="mr-2 size-4" aria-hidden="true" />
-          Filter
+          {t.mobileFilterButton}
           {activeFilterCount > 0 ? (
             <span className="ml-2 rounded-full bg-white px-2 py-0.5 text-xs text-neutral-950">
               {activeFilterCount}
@@ -427,11 +454,11 @@ export function ProductsFilter({
           onChange={(event) => setSingleParam("sort", event.target.value)}
           className="h-11 rounded-full border border-neutral-200 bg-white px-4 text-sm outline-none"
         >
-          <option value="">Ən yeni</option>
-          <option value="oldest">Ən köhnə</option>
-          <option value="featured">Seçilmişlər əvvəl</option>
-          <option value="price_asc">Qiymət: ucuzdan bahaya</option>
-          <option value="price_desc">Qiymət: bahadan ucuza</option>
+          <option value="">{t.sortNewest}</option>
+          <option value="oldest">{t.sortOldest}</option>
+          <option value="featured">{t.sortFeatured}</option>
+          <option value="price_asc">{t.sortPriceAsc}</option>
+          <option value="price_desc">{t.sortPriceDesc}</option>
         </select>
       </div>
 
@@ -444,10 +471,10 @@ export function ProductsFilter({
 
             <div>
               <h2 className="text-lg font-semibold text-neutral-950">
-                Filterlər
+                {t.filtersTitle}
               </h2>
               <p className="text-sm text-neutral-500">
-                Məhsulları dəqiqləşdirin.
+                {t.filtersDescription}
               </p>
             </div>
           </div>
@@ -459,11 +486,11 @@ export function ProductsFilter({
               onChange={(event) => setSingleParam("sort", event.target.value)}
               className="h-11 w-full rounded-full border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none transition focus:border-neutral-950 focus:bg-white"
             >
-              <option value="">Ən yeni</option>
-              <option value="oldest">Ən köhnə</option>
-              <option value="featured">Seçilmişlər əvvəl</option>
-              <option value="price_asc">Qiymət: ucuzdan bahaya</option>
-              <option value="price_desc">Qiymət: bahadan ucuza</option>
+              <option value="">{t.sortNewest}</option>
+              <option value="oldest">{t.sortOldest}</option>
+              <option value="featured">{t.sortFeatured}</option>
+              <option value="price_asc">{t.sortPriceAsc}</option>
+              <option value="price_desc">{t.sortPriceDesc}</option>
             </select>
 
             {hasActiveFilters ? (
@@ -471,7 +498,7 @@ export function ProductsFilter({
                 href={clearHref}
                 className="inline-flex w-full justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
               >
-                Hamısını təmizlə
+                {t.clearAll}
               </Link>
             ) : null}
           </div>
@@ -495,17 +522,17 @@ export function ProductsFilter({
           <div className="mb-5 flex items-center justify-between rounded-3xl border border-neutral-200 bg-white p-4">
             <div>
               <h2 className="text-lg font-semibold text-neutral-950">
-                Filterlər
+                {t.filtersTitle}
               </h2>
               <p className="text-sm text-neutral-500">
-                Məhsulları dəqiqləşdirin.
+                {t.filtersDescription}
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              aria-label="Filteri bağla"
+              aria-label={t.closeFilterAria}
               className="inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral-100"
             >
               <X className="size-5" aria-hidden="true" />
@@ -520,7 +547,7 @@ export function ProductsFilter({
               onClick={() => setMobileOpen(false)}
               className="h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white"
             >
-              Nəticələri göstər
+              {t.showResults}
             </button>
           </div>
         </div>
