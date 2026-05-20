@@ -11,6 +11,7 @@ import { CartNavLink } from "@/components/cart/cart-nav-link";
 import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
 import { CompareNavLink } from "@/components/compare/compare-nav-link";
 import { siteConfig } from "@/data/site";
+import { getMainNavigationLinks } from "@/data/navigation";
 import { navbarTranslations } from "@/data/translations/navbar";
 import { localizedPath, type Locale } from "@/lib/i18n";
 
@@ -21,6 +22,7 @@ type NavbarProps = {
 export default function Navbar({ locale = "az" }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const t = navbarTranslations[locale];
+  const navLinks = getMainNavigationLinks(t.navLinks, locale);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -118,7 +120,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             aria-label={t.mainNavigationLabel}
             className="hidden items-center gap-5 xl:flex"
           >
-            {t.navLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -155,7 +157,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
         </div>
 
         <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-black/10 lg:flex xl:hidden">
-          {t.navLinks.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -238,7 +240,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           </div>
 
           <nav aria-label={t.mobileMenuLabel} className="mt-6 flex flex-col">
-            {t.navLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

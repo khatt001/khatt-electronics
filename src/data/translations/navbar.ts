@@ -1,4 +1,6 @@
 import type { Locale } from "@/lib/i18n";
+import type { MainNavigationKey } from "@/data/navigation";
+
 export type NavbarTranslation = {
   languageLabel: string;
   workingHours: string;
@@ -13,10 +15,7 @@ export type NavbarTranslation = {
   favorites: string;
   cart: string;
   productsCta: string;
-  navLinks: {
-    name: string;
-    href: string;
-  }[];
+  navLinks: Record<MainNavigationKey, string>;
   languages: {
     label: string;
     href: string;
@@ -39,14 +38,14 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
     favorites: "Sevimli",
     cart: "Səbət",
     productsCta: "Məhsullar",
-    navLinks: [
-      { name: "Məhsullar", href: "/products" },
-      { name: "Həllər", href: "/solutions" },
-      { name: "Xidmətlər", href: "/services" },
-      { name: "Layihələr", href: "/projects" },
-      { name: "Haqqımızda", href: "/about" },
-      { name: "Əlaqə", href: "/contact" },
-    ],
+    navLinks: {
+      products: "Məhsullar",
+      solutions: "Həllər",
+      services: "Xidmətlər",
+      projects: "Layihələr",
+      about: "Haqqımızda",
+      contact: "Əlaqə",
+    },
     languages: [
       { label: "AZ", href: "/", locale: "az" },
       { label: "EN", href: "/en", locale: "en" },
@@ -68,14 +67,14 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
     favorites: "Favorites",
     cart: "Cart",
     productsCta: "Products",
-    navLinks: [
-      { name: "Products", href: "/en/products" },
-      { name: "Solutions", href: "/en/solutions" },
-      { name: "Services", href: "/en/services" },
-      { name: "Projects", href: "/en/projects" },
-      { name: "About", href: "/en/about" },
-      { name: "Contact", href: "/en/contact" },
-    ],
+    navLinks: {
+      products: "Products",
+      solutions: "Solutions",
+      services: "Services",
+      projects: "Projects",
+      about: "About",
+      contact: "Contact",
+    },
     languages: [
       { label: "AZ", href: "/", locale: "az" },
       { label: "EN", href: "/en", locale: "en" },
@@ -97,14 +96,14 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
     favorites: "Избранное",
     cart: "Корзина",
     productsCta: "Товары",
-    navLinks: [
-      { name: "Товары", href: "/ru/products" },
-      { name: "Решения", href: "/ru/solutions" },
-      { name: "Услуги", href: "/ru/services" },
-      { name: "Проекты", href: "/ru/projects" },
-      { name: "О нас", href: "/ru/about" },
-      { name: "Контакты", href: "/ru/contact" },
-    ],
+    navLinks: {
+      products: "Товары",
+      solutions: "Решения",
+      services: "Услуги",
+      projects: "Проекты",
+      about: "О нас",
+      contact: "Контакты",
+    },
     languages: [
       { label: "AZ", href: "/", locale: "az" },
       { label: "EN", href: "/en", locale: "en" },
