@@ -30,10 +30,10 @@ export default function EnglishHomePage() {
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
       <HomeHero locale="en" />
-      <SearchStrip />
-      <FeaturedProducts />
-      <CategoryGrid />
-      <ServicesSection />
+      <SearchStrip locale="en" />
+      <FeaturedProducts locale="en" />
+      <CategoryGrid locale="en" />
+      <ServicesSection locale="en" />
     </main>
   );
 }

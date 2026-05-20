@@ -2,25 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  BarChart3,
-  Clock,
-  Mail,
-  Menu,
-  Phone,
-  X,
-} from "lucide-react";
+import { Clock, Mail, Menu, Phone, X } from "lucide-react";
 import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
 import { Container } from "@/components/layout/container";
 import { NavbarSearch } from "@/components/layout/navbar-search";
-import { languages, navLinks } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import { CartNavLink } from "@/components/cart/cart-nav-link";
 import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
 import { CompareNavLink } from "@/components/compare/compare-nav-link";
+import { siteConfig } from "@/data/site";
+import {
+  navbarTranslations,
+  type Locale,
+} from "@/data/translations/navbar";
 
-export default function Navbar() {
+type NavbarProps = {
+  locale?: Locale;
+};
+
+export default function Navbar({ locale = "az" }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const t = navbarTranslations[locale];
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -51,38 +53,40 @@ export default function Navbar() {
           <div className="flex h-10 items-center justify-between text-xs">
             <div className="flex items-center gap-6 text-white/70">
               <a
-                href="tel:+994000000000"
+                href={siteConfig.phoneHref}
                 className="inline-flex items-center gap-2 transition hover:text-white"
               >
                 <Phone className="size-3.5" aria-hidden="true" />
-                +994 00 000 00 00
+                {siteConfig.phone}
               </a>
 
               <a
-                href="mailto:info@khatt.electronics"
+                href={siteConfig.emailHref}
                 className="inline-flex items-center gap-2 transition hover:text-white"
               >
                 <Mail className="size-3.5" aria-hidden="true" />
-                info@khatt.electronics
+                {siteConfig.email}
               </a>
 
               <span className="inline-flex items-center gap-2">
                 <Clock className="size-3.5" aria-hidden="true" />
-                B.e - Şənbə: 09:00 - 18:00
+                {t.workingHours}
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-white/45">Dil:</span>
+              <span className="text-white/45">{t.languageLabel}</span>
 
               <div className="flex items-center gap-2">
-                {languages.map((language) => (
+                {t.languages.map((language) => (
                   <Link
                     key={language.label}
                     href={language.href}
                     className={cn(
                       "transition hover:text-white",
-                      language.label === "AZ" ? "text-white" : "text-white/50"
+                      language.locale === locale
+                        ? "text-white"
+                        : "text-white/50"
                     )}
                   >
                     {language.label}
@@ -97,8 +101,8 @@ export default function Navbar() {
       <Container>
         <div className="flex h-16 items-center gap-4 lg:h-20">
           <Link
-            href="/"
-            aria-label="KHATT Electronics ana səhifə"
+            href={locale === "az" ? "/" : `/${locale}`}
+            aria-label={t.logoAriaLabel}
             className="shrink-0 font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 lg:text-2xl"
           >
             KHATT
@@ -109,47 +113,39 @@ export default function Navbar() {
           </div>
 
           <div className="hidden flex-1 lg:block">
-            <NavbarSearch />
+            <NavbarSearch placeholder={t.searchPlaceholder} />
           </div>
 
-         <nav
-  aria-label="Əsas naviqasiya"
-  className="hidden items-center gap-5 xl:flex"
->
-  <Link
-    href="/products"
-    className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
-  >
-    Məhsullar
-  </Link>
-
-  {navLinks.slice(1).map((link) => (
-    <Link
-      key={link.href}
-      href={link.href}
-      className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
-    >
-      {link.name}
-    </Link>
-  ))}
-</nav>
+          <nav
+            aria-label={t.mainNavigationLabel}
+            className="hidden items-center gap-5 xl:flex"
+          >
+            {t.navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
           <div className="ml-auto flex items-center gap-1.5">
-           <CompareNavLink />
+            <CompareNavLink />
+            <FavoritesNavLink />
+            <CartNavLink />
 
-           <FavoritesNavLink />
-           <CartNavLink />
-
-           <Link
-  href="/track-order"
-  className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
->
-  Sifariş izləmə
-</Link>
+            <Link
+              href={locale === "az" ? "/track-order" : `/${locale}/track-order`}
+              className="hidden rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950 lg:inline-flex"
+            >
+              {t.trackOrder}
+            </Link>
 
             <button
               type="button"
-              aria-label="Mobil menyunu aç"
+              aria-label={t.mobileMenuOpenLabel}
               aria-expanded={open}
               aria-controls="mobile-menu"
               onClick={() => setOpen(true)}
@@ -161,7 +157,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-black/10 lg:flex xl:hidden">
-          {navLinks.map((link) => (
+          {t.navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -182,9 +178,9 @@ export default function Navbar() {
       >
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-black/10 px-5">
           <Link
-            href="/"
+            href={locale === "az" ? "/" : `/${locale}`}
             onClick={() => setOpen(false)}
-            aria-label="KHATT Electronics ana səhifə"
+            aria-label={t.logoAriaLabel}
             className="font-serif text-xl font-semibold tracking-[0.24em]"
           >
             KHATT
@@ -192,7 +188,7 @@ export default function Navbar() {
 
           <button
             type="button"
-            aria-label="Mobil menyunu bağla"
+            aria-label={t.mobileMenuCloseLabel}
             onClick={() => setOpen(false)}
             className="inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral-100"
           >
@@ -202,7 +198,7 @@ export default function Navbar() {
 
         <div className="relative z-20 shrink-0 border-b border-black/10 px-5 py-4">
           <NavbarSearch
-            placeholder="Məhsul axtar..."
+            placeholder={t.searchPlaceholder}
             onNavigate={() => setOpen(false)}
           />
         </div>
@@ -217,32 +213,32 @@ export default function Navbar() {
 
           <div className="grid grid-cols-3 gap-2">
             <Link
-              href="/compare"
+              href={locale === "az" ? "/compare" : `/${locale}/compare`}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
-              Müqayisə
+              {t.compare}
             </Link>
 
             <Link
-              href="/favorites"
+              href={locale === "az" ? "/favorites" : `/${locale}/favorites`}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
-              Sevimli
+              {t.favorites}
             </Link>
 
             <Link
-              href="/cart"
+              href={locale === "az" ? "/cart" : `/${locale}/cart`}
               onClick={() => setOpen(false)}
               className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
             >
-              Səbət
+              {t.cart}
             </Link>
           </div>
 
-          <nav aria-label="Mobil menyu" className="mt-6 flex flex-col">
-            {navLinks.map((link) => (
+          <nav aria-label={t.mobileMenuLabel} className="mt-6 flex flex-col">
+            {t.navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -255,14 +251,14 @@ export default function Navbar() {
           </nav>
 
           <div className="mt-6 flex items-center gap-3">
-            {languages.map((language) => (
+            {t.languages.map((language) => (
               <Link
                 key={language.label}
                 href={language.href}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium",
-                  language.label === "AZ"
+                  language.locale === locale
                     ? "border-neutral-950 bg-neutral-950 text-white"
                     : "border-neutral-200 text-neutral-700"
                 )}
@@ -272,23 +268,23 @@ export default function Navbar() {
             ))}
           </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-3">
-  <Link
-    href="/products"
-    onClick={() => setOpen(false)}
-    className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
-  >
-    Məhsullar
-  </Link>
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            <Link
+              href={locale === "az" ? "/products" : `/${locale}/products`}
+              onClick={() => setOpen(false)}
+              className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+            >
+              {t.productsCta}
+            </Link>
 
-  <Link
-    href="/track-order"
-    onClick={() => setOpen(false)}
-    className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
-  >
-    Sifariş izləmə
-  </Link>
-</div>
+            <Link
+              href={locale === "az" ? "/track-order" : `/${locale}/track-order`}
+              onClick={() => setOpen(false)}
+              className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
+            >
+              {t.trackOrder}
+            </Link>
+          </div>
         </div>
       </div>
     </header>

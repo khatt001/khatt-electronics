@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { getCatalogCategories } from "@/services/categories";
+import {
+  homeTranslations,
+  type Locale,
+} from "@/data/translations/home";
 
 const categoryIcons = [
   Camera,
@@ -20,9 +24,22 @@ const categoryIcons = [
   Boxes,
 ];
 
-export async function CategoryGrid() {
+type CategoryGridProps = {
+  locale?: Locale;
+};
+
+function withLocalePath(locale: Locale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
+
+export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
   const categories = await getCatalogCategories();
   const visibleCategories = categories.slice(0, 6);
+  const t = homeTranslations[locale];
 
   if (visibleCategories.length === 0) {
     return null;
@@ -34,24 +51,23 @@ export async function CategoryGrid() {
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500">
-              Kateqoriyalar
+              {t.categoriesEyebrow}
             </p>
 
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-              Əsas məhsul istiqamətləri
+              {t.categoriesTitle}
             </h2>
 
             <p className="mt-4 leading-8 text-neutral-600">
-              Təhlükəsizlik, videomüşahidə, şəbəkə və ağıllı sistemlər üzrə
-              məhsulları kateqoriyalara görə kəşf edin.
+              {t.categoriesDescription}
             </p>
           </div>
 
           <Link
-            href="/products"
+            href={withLocalePath(locale, "/products")}
             className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
           >
-            Bütün məhsullar
+            {t.categoriesViewAll}
             <ArrowRight className="ml-2 size-4" aria-hidden="true" />
           </Link>
         </div>
@@ -63,7 +79,7 @@ export async function CategoryGrid() {
             return (
               <Link
                 key={category.id}
-                href={`/category/${category.slug}`}
+                href={withLocalePath(locale, `/category/${category.slug}`)}
                 className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-neutral-950 hover:shadow-xl"
               >
                 <div className="absolute -right-10 -top-10 size-32 rounded-full bg-neutral-100 transition duration-300 group-hover:scale-125" />
@@ -78,12 +94,11 @@ export async function CategoryGrid() {
                   </h3>
 
                   <p className="mt-3 line-clamp-2 leading-7 text-neutral-600">
-                    {category.description ??
-                      `${category.name} kateqoriyasına aid məhsullara baxın.`}
+                    {category.description ?? t.categoryFallbackDescription}
                   </p>
 
                   <span className="mt-8 inline-flex items-center text-sm font-medium text-neutral-950">
-                    Kateqoriyaya bax
+                    {t.categoryViewButton}
                     <ArrowRight
                       className="ml-2 size-4 transition group-hover:translate-x-1"
                       aria-hidden="true"

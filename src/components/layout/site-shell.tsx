@@ -29,7 +29,7 @@ export function SiteShell({ children }: SiteShellProps) {
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       {children}
       <Footer locale={locale} />
       <FloatingWhatsApp />

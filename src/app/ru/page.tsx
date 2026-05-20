@@ -30,10 +30,10 @@ export default function RussianHomePage() {
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
       <HomeHero locale="ru" />
-      <SearchStrip />
-      <FeaturedProducts />
-      <CategoryGrid />
-      <ServicesSection />
+      <SearchStrip locale="ru" />
+      <FeaturedProducts locale="ru" />
+      <CategoryGrid locale="ru" />
+      <ServicesSection locale="ru" />
     </main>
   );
 }
