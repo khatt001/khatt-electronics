@@ -2,19 +2,13 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type ServicesSectionProps = {
   locale?: Locale;
 };
 
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
 
-  return `/${locale}${path}`;
-}
 
 export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
   const t = homeTranslations[locale];
@@ -37,14 +31,14 @@ export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href={withLocalePath(locale, "/products")}
+              href={localizedPath("/products", locale)}
               className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200"
             >
               {t.servicesProductsButton}
             </Link>
 
             <Link
-              href={withLocalePath(locale, "/contact")}
+              href={`${localizedPath("/contact", locale)}?source=services`}
               className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.servicesConsultationButton}

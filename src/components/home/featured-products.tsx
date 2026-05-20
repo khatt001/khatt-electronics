@@ -3,19 +3,13 @@ import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
 import { getFeaturedProducts } from "@/services/products";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type FeaturedProductsProps = {
   locale?: Locale;
 };
 
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
 
-  return `/${locale}${path}`;
-}
 
 export async function FeaturedProducts({
   locale = "az",
@@ -37,7 +31,7 @@ export async function FeaturedProducts({
           </div>
 
           <Link
-            href={withLocalePath(locale, "/products")}
+            href={localizedPath("/products", locale)}
             className="hidden text-sm font-medium text-neutral-700 transition hover:text-neutral-950 sm:inline-flex"
           >
             {t.featuredViewAll}

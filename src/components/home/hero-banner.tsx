@@ -7,7 +7,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type HeroBannerProps = {
   locale?: Locale;
@@ -48,7 +48,7 @@ export function HeroBanner({ locale = "az" }: HeroBannerProps) {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              href={locale === "az" ? "/products" : `/${locale}/products`}
+              href={localizedPath("/products", locale)}
               className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-300"
             >
               <ShoppingCart className="mr-2 size-4" aria-hidden="true" />
@@ -57,7 +57,7 @@ export function HeroBanner({ locale = "az" }: HeroBannerProps) {
             </Link>
 
             <Link
-              href={locale === "az" ? "/contact" : `/${locale}/contact`}
+              href={`${localizedPath("/contact", locale)}?source=hero`}
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.consultationButton}

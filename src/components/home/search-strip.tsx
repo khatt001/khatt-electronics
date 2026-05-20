@@ -6,19 +6,11 @@ import { Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { miniCategories } from "@/data/home";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type SearchStripProps = {
   locale?: Locale;
 };
-
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 export function SearchStrip({ locale = "az" }: SearchStripProps) {
   const router = useRouter();
@@ -29,7 +21,7 @@ export function SearchStrip({ locale = "az" }: SearchStripProps) {
     event.preventDefault();
 
     const cleanSearch = search.trim();
-    const productsPath = withLocalePath(locale, "/products");
+    const productsPath = localizedPath("/products", locale);
 
     if (!cleanSearch) {
       router.push(productsPath);
@@ -65,22 +57,22 @@ export function SearchStrip({ locale = "az" }: SearchStripProps) {
             </button>
           </form>
 
-        <div className="grid grid-cols-3 gap-3 lg:w-[420px]">
-  {miniCategories[locale].map((item) => {
-    const Icon = item.icon;
+          <div className="grid grid-cols-3 gap-3 lg:w-[420px]">
+            {miniCategories[locale].map((item) => {
+              const Icon = item.icon;
 
-    return (
-      <Link
-        key={item.href}
-        href={item.href}
-        className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-semibold text-neutral-700 transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-neutral-950"
-      >
-        <Icon className="size-4" aria-hidden="true" />
-        <span className="hidden sm:inline">{item.title}</span>
-      </Link>
-    );
-  })}
-</div>
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-4 text-xs font-semibold text-neutral-700 transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-neutral-950"
+                >
+                  <Icon className="size-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">{item.title}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

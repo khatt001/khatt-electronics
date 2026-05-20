@@ -11,7 +11,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { getCatalogCategories } from "@/services/categories";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 const categoryIcons = [
   Camera,
@@ -26,13 +26,7 @@ type CategoryGridProps = {
   locale?: Locale;
 };
 
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
 
-  return `/${locale}${path}`;
-}
 
 export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
   const categories = await getCatalogCategories();
@@ -62,7 +56,7 @@ export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
           </div>
 
           <Link
-            href={withLocalePath(locale, "/products")}
+            href={localizedPath("/products", locale)}
             className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
           >
             {t.categoriesViewAll}
@@ -77,7 +71,7 @@ export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
             return (
               <Link
                 key={category.id}
-                href={withLocalePath(locale, `/category/${category.slug}`)}
+                href={localizedPath(`/category/${category.slug}`, locale)}
                 className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-neutral-950 hover:shadow-xl"
               >
                 <div className="absolute -right-10 -top-10 size-32 rounded-full bg-neutral-100 transition duration-300 group-hover:scale-125" />
