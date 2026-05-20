@@ -9,6 +9,8 @@ import {
   productCardTranslations,
   type ProductCardLocale,
 } from "@/data/translations/product-card";
+import { getCategoryName } from "@/data/translations/categories";
+import { localizedPath } from "@/lib/i18n";
 
 type ProductCardProps = {
   product: ProductCardItem;
@@ -49,11 +51,7 @@ function getLocalizedStock(product: ProductCardItem, locale: ProductCardLocale) 
 }
 
 function getLocalizedHref(product: ProductCardItem, locale: ProductCardLocale) {
-  if (locale === "az") {
-    return product.href;
-  }
-
-  return `/${locale}${product.href}`;
+  return localizedPath(product.href, locale);
 }
 
 export function ProductCard({ product, locale = "az" }: ProductCardProps) {
@@ -68,6 +66,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
   const localizedBadge = getLocalizedBadge(product, locale);
   const localizedPrice = getLocalizedPrice(product, locale);
   const localizedStock = getLocalizedStock(product, locale);
+  const localizedCategory = getCategoryName(product.category, locale);
 
   const favoriteItem = {
     id: product.id,
@@ -76,7 +75,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
     price: localizedPrice,
     priceAmount: product.priceAmount,
     imageUrl: product.imageUrl,
-    category: product.category,
+    category: localizedCategory,
     brand: product.brand,
     stockStatus: product.stockStatus,
     stockQuantity: product.stockQuantity,
@@ -89,7 +88,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
     price: localizedPrice,
     priceAmount: product.priceAmount,
     imageUrl: product.imageUrl,
-    category: product.category,
+    category: localizedCategory,
     brand: product.brand,
     stockStatus: product.stockStatus,
     stockQuantity: product.stockQuantity,
@@ -134,7 +133,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
       <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-600">
-            {product.category}
+            {localizedCategory}
           </span>
 
           {product.brand ? (
@@ -182,7 +181,7 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
                   price: product.priceAmount,
                   priceLabel: localizedPrice,
                   imageUrl: product.imageUrl,
-                  category: product.category,
+                  category: localizedCategory,
                   brand: product.brand,
                   maxQuantity: product.stockQuantity,
                 }}

@@ -1,5 +1,8 @@
 import type { Locale } from "@/lib/i18n";
-import type { FooterNavigationKey } from "@/data/navigation";
+import type {
+  FooterCategoryKey,
+  FooterNavigationKey,
+} from "@/data/navigation";
 
 export type FooterTranslation = {
   description: string;
@@ -12,10 +15,7 @@ export type FooterTranslation = {
   copyrightSuffix: string;
   tagline: string;
   footerLinks: Record<FooterNavigationKey, string>;
-  categoryLinks: {
-    name: string;
-    href: string;
-  }[];
+  categoryLinks: Record<FooterCategoryKey, string>;
 };
 
 export const footerTranslations: Record<Locale, FooterTranslation> = {
@@ -36,28 +36,13 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
       trackOrder: "Sifariş izləmə",
       contact: "Əlaqə",
     },
-    categoryLinks: [
-      {
-        name: "Videomüşahidə sistemləri",
-        href: "/category/video-nezaret",
-      },
-      {
-        name: "Keçidə nəzarət",
-        href: "/category/girise-nezaret",
-      },
-      {
-        name: "Domofon sistemləri",
-        href: "/category/domofoniya",
-      },
-      {
-        name: "Siqnalizasiya",
-        href: "/category/siqnalizasiya",
-      },
-      {
-        name: "Şəbəkə avadanlıqları",
-        href: "/category/sebeke",
-      },
-    ],
+    categoryLinks: {
+      videoSurveillance: "Videomüşahidə sistemləri",
+      accessControl: "Keçidə nəzarət",
+      intercom: "Domofon sistemləri",
+      alarm: "Siqnalizasiya",
+      network: "Şəbəkə avadanlıqları",
+    },
   },
 
   en: {
@@ -77,28 +62,13 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
       trackOrder: "Track order",
       contact: "Contact",
     },
-    categoryLinks: [
-      {
-        name: "Video surveillance systems",
-        href: "/en/category/video-nezaret",
-      },
-      {
-        name: "Access control",
-        href: "/en/category/girise-nezaret",
-      },
-      {
-        name: "Intercom systems",
-        href: "/en/category/domofoniya",
-      },
-      {
-        name: "Alarm systems",
-        href: "/en/category/siqnalizasiya",
-      },
-      {
-        name: "Network equipment",
-        href: "/en/category/sebeke",
-      },
-    ],
+    categoryLinks: {
+      videoSurveillance: "Video surveillance systems",
+      accessControl: "Access control",
+      intercom: "Intercom systems",
+      alarm: "Alarm systems",
+      network: "Network equipment",
+    },
   },
 
   ru: {
@@ -118,27 +88,12 @@ export const footerTranslations: Record<Locale, FooterTranslation> = {
       trackOrder: "Отследить заказ",
       contact: "Контакты",
     },
-    categoryLinks: [
-      {
-        name: "Системы видеонаблюдения",
-        href: "/ru/category/video-nezaret",
-      },
-      {
-        name: "Контроль доступа",
-        href: "/ru/category/girise-nezaret",
-      },
-      {
-        name: "Домофонные системы",
-        href: "/ru/category/domofoniya",
-      },
-      {
-        name: "Сигнализация",
-        href: "/ru/category/siqnalizasiya",
-      },
-      {
-        name: "Сетевое оборудование",
-        href: "/ru/category/sebeke",
-      },
-    ],
+    categoryLinks: {
+      videoSurveillance: "Системы видеонаблюдения",
+      accessControl: "Контроль доступа",
+      intercom: "Домофонные системы",
+      alarm: "Сигнализация",
+      network: "Сетевое оборудование",
+    },
   },
 };

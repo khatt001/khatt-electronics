@@ -47,9 +47,33 @@ export const footerNavigationItems = [
   },
 ] as const;
 
+export const footerCategoryItems = [
+  {
+    key: "videoSurveillance",
+    path: "/category/video-nezaret",
+  },
+  {
+    key: "accessControl",
+    path: "/category/girise-nezaret",
+  },
+  {
+    key: "intercom",
+    path: "/category/domofoniya",
+  },
+  {
+    key: "alarm",
+    path: "/category/siqnalizasiya",
+  },
+  {
+    key: "network",
+    path: "/category/sebeke",
+  },
+] as const;
+
 export type MainNavigationKey = (typeof mainNavigationItems)[number]["key"];
 export type FooterNavigationKey =
   (typeof footerNavigationItems)[number]["key"];
+export type FooterCategoryKey = (typeof footerCategoryItems)[number]["key"];
 
 export type NavigationLink = {
   name: string;
@@ -71,6 +95,16 @@ export function getFooterNavigationLinks(
   locale: Locale
 ): NavigationLink[] {
   return footerNavigationItems.map((item) => ({
+    name: labels[item.key],
+    href: localizedPath(item.path, locale),
+  }));
+}
+
+export function getFooterCategoryLinks(
+  labels: Record<FooterCategoryKey, string>,
+  locale: Locale
+): NavigationLink[] {
+  return footerCategoryItems.map((item) => ({
     name: labels[item.key],
     href: localizedPath(item.path, locale),
   }));
