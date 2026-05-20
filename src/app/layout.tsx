@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import Navbar from "@/components/layout/navbar";
 import "./globals.css";
-import { Footer } from "@/components/layout/footer";
-import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { CartProvider } from "@/components/cart/cart-provider";
-import { CartToast } from "@/components/cart/cart-toast";
 import { FavoritesProvider } from "@/components/favorites/favorites-provider";
 import { CompareProvider } from "@/components/compare/compare-provider";
 import { JsonLd } from "@/components/seo/json-ld";
+import { SiteShell } from "@/components/layout/site-shell";
 import { createOrganizationSchema, createWebsiteSchema } from "@/lib/seo";
 
 const inter = Inter({
@@ -80,17 +77,14 @@ export default function RootLayout({
     <html lang="az" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         <JsonLd data={[createOrganizationSchema(), createWebsiteSchema()]} />
-       <CartProvider>
-  <FavoritesProvider>
-    <CompareProvider>
-      <Navbar />
-      {children}
-      <Footer />
-      <FloatingWhatsApp />
-      <CartToast />
-    </CompareProvider>
-  </FavoritesProvider>
-</CartProvider>
+
+        <CartProvider>
+          <FavoritesProvider>
+            <CompareProvider>
+              <SiteShell>{children}</SiteShell>
+            </CompareProvider>
+          </FavoritesProvider>
+        </CartProvider>
       </body>
     </html>
   );

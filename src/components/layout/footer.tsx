@@ -2,73 +2,60 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/data/site";
+import {
+  footerTranslations,
+  type Locale,
+} from "@/data/translations/layout";
 
-const footerLinks = [
-  { name: "Ana səhifə", href: "/" },
-  { name: "Məhsullar", href: "/products" },
-  { name: "Sifariş izləmə", href: "/track-order" },
-  { name: "Əlaqə", href: "/contact" },
-];
+type FooterProps = {
+  locale?: Locale;
+};
 
-const serviceLinks = [
-  {
-    name: "Videomüşahidə sistemləri",
-    href: "/products?category=video-nezaret",
-  },
-  {
-    name: "Keçidə nəzarət",
-    href: "/products?category=girise-nezaret",
-  },
-  {
-    name: "Domofon sistemləri",
-    href: "/products?category=domofoniya",
-  },
-  {
-    name: "Siqnalizasiya",
-    href: "/products?category=siqnalizasiya",
-  },
-  {
-    name: "Şəbəkə avadanlıqları",
-    href: "/products?category=sebeke",
-  },
-];
+export function Footer({ locale = "az" }: FooterProps) {
+  const t = footerTranslations[locale];
 
-export function Footer() {
   return (
     <footer className="border-t border-black/10 bg-neutral-950 text-white">
       <Container className="py-12 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
           <div>
-            <Link href="/" className="text-xl font-semibold tracking-tight">
+            <Link
+              href={locale === "az" ? "/" : `/${locale}`}
+              className="text-xl font-semibold tracking-tight"
+            >
               {siteConfig.name}
             </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-7 text-white/60">
-              {siteConfig.description}
+              {t.description}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/products"
+                href={locale === "az" ? "/products" : `/${locale}/products`}
                 className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-neutral-950 transition hover:bg-neutral-200"
               >
-                Məhsullara bax
+                {t.productsButton}
               </Link>
 
               <Link
-                href="/track-order"
+                href={
+                  locale === "az"
+                    ? "/track-order"
+                    : `/${locale}/track-order`
+                }
                 className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
               >
-                Sifarişi izlə
+                {t.trackOrderButton}
               </Link>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Səhifələr</h3>
+            <h3 className="text-sm font-semibold">{t.pagesTitle}</h3>
 
             <div className="mt-4 space-y-3">
-              {footerLinks.map((link) => (
+              {t.footerLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -81,10 +68,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Kateqoriyalar</h3>
+            <h3 className="text-sm font-semibold">{t.categoriesTitle}</h3>
 
             <div className="mt-4 space-y-3">
-              {serviceLinks.map((service) => (
+              {t.categoryLinks.map((service) => (
                 <Link
                   key={service.href}
                   href={service.href}
@@ -97,7 +84,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Əlaqə</h3>
+            <h3 className="text-sm font-semibold">{t.contactTitle}</h3>
 
             <div className="mt-4 space-y-3">
               <a
@@ -123,21 +110,21 @@ export function Footer() {
             </div>
 
             <Link
-              href="/contact"
+              href={locale === "az" ? "/contact" : `/${locale}/contact`}
               className="mt-5 inline-flex rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
             >
-              Əlaqə səhifəsinə keç
+              {t.contactPageButton}
             </Link>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-white/50 md:flex-row md:items-center md:justify-between">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. Bütün hüquqlar
-            qorunur.
+            © {new Date().getFullYear()} {siteConfig.name}.{" "}
+            {t.copyrightSuffix}
           </p>
 
-          <p>Təhlükəsizlik, elektronika və smart texnologiya həlləri.</p>
+          <p>{t.tagline}</p>
         </div>
       </Container>
     </footer>
