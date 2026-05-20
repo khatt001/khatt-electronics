@@ -115,7 +115,7 @@ export function CheckoutPageClient({
                     <label className="mb-2 block text-sm font-medium">
                       {t.phoneLabel}
                     </label>
-                    <PhoneInput name="phone" required />
+                    <PhoneInput name="phone" required locale={locale} />
                   </div>
 
                   <div>

@@ -1,65 +1,102 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
+export type PhoneInputLocale = "az" | "en" | "ru";
+
 type PhoneInputProps = {
   name: string;
-  defaultValue?: string;
   required?: boolean;
+  defaultValue?: string;
+  locale?: PhoneInputLocale;
 };
 
-function formatAzerbaijanPhone(value: string) {
+const phoneInputTranslations = {
+  az: {
+    placeholder: "+994 XX XXX XX XX",
+    ariaLabel: "Telefon nömrəsi",
+  },
+  en: {
+    placeholder: "+994 XX XXX XX XX",
+    ariaLabel: "Phone number",
+  },
+  ru: {
+    placeholder: "+994 XX XXX XX XX",
+    ariaLabel: "Номер телефона",
+  },
+} as const;
+
+function normalizePhoneValue(value: string) {
   const digits = value.replace(/\D/g, "");
 
-  let localDigits = digits;
+  if (!digits) return "";
 
-  if (localDigits.startsWith("994")) {
-    localDigits = localDigits.slice(3);
+  if (digits.startsWith("994")) {
+    return `+${digits.slice(0, 12)}`;
   }
 
-  if (localDigits.startsWith("0")) {
-    localDigits = localDigits.slice(1);
+  if (digits.startsWith("0")) {
+    return `+994${digits.slice(1, 10)}`;
   }
 
-  localDigits = localDigits.slice(0, 9);
+  return `+994${digits.slice(0, 9)}`;
+}
 
-  const p1 = localDigits.slice(0, 2);
-  const p2 = localDigits.slice(2, 5);
-  const p3 = localDigits.slice(5, 7);
-  const p4 = localDigits.slice(7, 9);
+function formatPhoneValue(value: string) {
+  const normalized = normalizePhoneValue(value);
+  const digits = normalized.replace(/\D/g, "");
 
-  let result = "+994";
+  if (!digits) return "";
 
-  if (p1) result += ` ${p1}`;
-  if (p2) result += ` ${p2}`;
-  if (p3) result += ` ${p3}`;
-  if (p4) result += ` ${p4}`;
+  const country = digits.slice(0, 3);
+  const operator = digits.slice(3, 5);
+  const first = digits.slice(5, 8);
+  const second = digits.slice(8, 10);
+  const third = digits.slice(10, 12);
 
-  return result;
+  return [
+    country ? `+${country}` : "",
+    operator,
+    first,
+    second,
+    third,
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 export function PhoneInput({
   name,
-  defaultValue = "",
   required = false,
+  defaultValue = "",
+  locale = "az",
 }: PhoneInputProps) {
+  const t = phoneInputTranslations[locale];
+
+  const [displayValue, setDisplayValue] = useState(() =>
+    formatPhoneValue(defaultValue)
+  );
+
+  const normalizedValue = useMemo(
+    () => normalizePhoneValue(displayValue),
+    [displayValue]
+  );
+
   return (
-    <input
-      name={name}
-      required={required}
-      type="tel"
-      inputMode="tel"
-      defaultValue={defaultValue || "+994 "}
-      onChange={(event) => {
-        event.currentTarget.value = formatAzerbaijanPhone(
-          event.currentTarget.value
-        );
-      }}
-      onFocus={(event) => {
-        if (!event.currentTarget.value.trim()) {
-          event.currentTarget.value = "+994 ";
-        }
-      }}
-      className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-      placeholder="+994 50 123 45 67"
-    />
+    <>
+      <input type="hidden" name={name} value={normalizedValue} />
+
+      <input
+        type="tel"
+        required={required}
+        value={displayValue}
+        onChange={(event) => {
+          setDisplayValue(formatPhoneValue(event.target.value));
+        }}
+        placeholder={t.placeholder}
+        aria-label={t.ariaLabel}
+        className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+      />
+    </>
   );
 }
