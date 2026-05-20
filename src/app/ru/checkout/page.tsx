@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { CheckoutPageClient } from "@/components/checkout/checkout-page-client";
 import { checkoutTranslations } from "@/data/translations/checkout";
 
-const t = checkoutTranslations.az;
+const t = checkoutTranslations.ru;
 
 export const metadata: Metadata = {
   title: t.metadataTitle,
   description: t.metadataDescription,
   alternates: {
-    canonical: "/checkout",
+    canonical: "/ru/checkout",
     languages: {
       az: "/checkout",
       en: "/en/checkout",
@@ -17,6 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CheckoutPage() {
-  return <CheckoutPageClient locale="az" />;
+export default function RussianCheckoutPage() {
+  return <CheckoutPageClient locale="ru" />;
 }

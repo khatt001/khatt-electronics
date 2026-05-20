@@ -9,10 +9,29 @@ import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
 import { PhoneInput } from "@/components/checkout/phone-input";
+import {
+  checkoutTranslations,
+  type CheckoutLocale,
+} from "@/data/translations/checkout";
 
-export function CheckoutPageClient() {
+type CheckoutPageClientProps = {
+  locale?: CheckoutLocale;
+};
+
+function withLocalePath(locale: CheckoutLocale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
+
+export function CheckoutPageClient({
+  locale = "az",
+}: CheckoutPageClientProps) {
   const searchParams = useSearchParams();
   const { items, subtotal, syncCart, isSyncing } = useCart();
+  const t = checkoutTranslations[locale];
 
   const error = searchParams.get("error");
 
@@ -37,13 +56,13 @@ export function CheckoutPageClient() {
       <section className="border-b border-black/10 bg-white">
         <Container className="py-12">
           <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
-            Checkout
+            {t.eyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
-            Sifarişi tamamla
+            {t.title}
           </h1>
           <p className="mt-5 max-w-2xl leading-8 text-neutral-600">
-            Əlaqə və çatdırılma məlumatlarını daxil edin, sifarişinizi tamamlayın.
+            {t.description}
           </p>
         </Container>
       </section>
@@ -63,7 +82,7 @@ export function CheckoutPageClient() {
 
               <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-8">
                 <h2 className="text-2xl font-semibold text-neutral-950">
-                  Müştəri məlumatları
+                  {t.customerInfoTitle}
                 </h2>
 
                 {error ? (
@@ -74,85 +93,85 @@ export function CheckoutPageClient() {
 
                 {isSyncing ? (
                   <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700">
-                    Səbət məlumatları yenilənir. Zəhmət olmasa gözləyin...
+                    {t.syncingMessage}
                   </div>
                 ) : null}
 
                 <div className="mt-6 grid gap-5 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium">
-                      Ad və soyad
+                      {t.fullNameLabel}
                     </label>
                     <input
                       name="customer_name"
                       required
                       minLength={2}
                       className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="Ad Soyad"
+                      placeholder={t.fullNamePlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium">
-                      Telefon
+                      {t.phoneLabel}
                     </label>
                     <PhoneInput name="phone" required />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium">
-                      Email
+                      {t.emailLabel}
                     </label>
                     <input
                       name="email"
                       type="email"
                       className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="email@example.com"
+                      placeholder={t.emailPlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium">
-                      Şəhər
+                      {t.cityLabel}
                     </label>
                     <input
                       name="city"
                       required
-                      defaultValue="Bakı"
+                      defaultValue={t.cityDefault}
                       className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="Bakı"
+                      placeholder={t.cityPlaceholder}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="mb-2 block text-sm font-medium">
-                      Ünvan
+                      {t.addressLabel}
                     </label>
                     <input
                       name="address"
                       required
                       minLength={5}
                       className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="Küçə, bina, mənzil / obyekt ünvanı"
+                      placeholder={t.addressPlaceholder}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="mb-2 block text-sm font-medium">
-                      Qeyd
+                      {t.noteLabel}
                     </label>
                     <textarea
                       name="note"
                       rows={4}
                       className="w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none transition focus:border-neutral-950"
-                      placeholder="Əlavə qeydiniz varsa yazın..."
+                      placeholder={t.notePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div className="mt-8">
                   <h3 className="text-xl font-semibold text-neutral-950">
-                    Ödəniş üsulu
+                    {t.paymentTitle}
                   </h3>
 
                   <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -167,10 +186,10 @@ export function CheckoutPageClient() {
                       <span>
                         <span className="flex items-center gap-2 font-semibold">
                           <WalletCards className="size-4" />
-                          Nağd ödəniş
+                          {t.cashPaymentTitle}
                         </span>
                         <span className="mt-1 block text-sm text-white/60">
-                          Sifariş təsdiqləndikdən sonra nağd ödəniş.
+                          {t.cashPaymentDescription}
                         </span>
                       </span>
                     </label>
@@ -186,10 +205,10 @@ export function CheckoutPageClient() {
                       <span>
                         <span className="flex items-center gap-2 font-semibold">
                           <CreditCard className="size-4" />
-                          Kartla ödəniş
+                          {t.cardPaymentTitle}
                         </span>
                         <span className="mt-1 block text-sm">
-                          Tezliklə aktiv olacaq.
+                          {t.cardPaymentDescription}
                         </span>
                       </span>
                     </label>
@@ -199,7 +218,7 @@ export function CheckoutPageClient() {
 
               <aside className="h-fit rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-semibold text-neutral-950">
-                  Sifariş xülasəsi
+                  {t.summaryTitle}
                 </h2>
 
                 <div className="mt-5 space-y-4 border-b border-neutral-100 pb-5">
@@ -223,17 +242,17 @@ export function CheckoutPageClient() {
 
                 <div className="mt-5 space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-neutral-500">Ara cəm</span>
+                    <span className="text-neutral-500">{t.subtotal}</span>
                     <span className="font-medium">{formatPrice(subtotal)}</span>
                   </div>
 
                   <div className="flex justify-between text-sm">
-                    <span className="text-neutral-500">Çatdırılma</span>
+                    <span className="text-neutral-500">{t.delivery}</span>
                     <span className="font-medium">0.00 AZN</span>
                   </div>
 
                   <div className="flex justify-between border-t border-neutral-100 pt-4">
-                    <span className="text-sm text-neutral-500">Cəmi</span>
+                    <span className="text-sm text-neutral-500">{t.total}</span>
                     <strong className="text-2xl text-neutral-950">
                       {formatPrice(subtotal)}
                     </strong>
@@ -245,14 +264,14 @@ export function CheckoutPageClient() {
                   disabled={isSyncing}
                   className="mt-6 h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300"
                 >
-                  {isSyncing ? "Yenilənir..." : "Sifarişi təsdiqlə"}
+                  {isSyncing ? t.updatingButton : t.confirmButton}
                 </button>
 
                 <Link
-                  href="/cart"
+                  href={withLocalePath(locale, "/cart")}
                   className="mt-3 inline-flex w-full justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
                 >
-                  Səbətə qayıt
+                  {t.backToCart}
                 </Link>
               </aside>
             </form>
@@ -263,18 +282,18 @@ export function CheckoutPageClient() {
               </div>
 
               <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-400">
-                Boş səbət
+                {t.emptyEyebrow}
               </p>
 
               <h2 className="mt-4 text-4xl font-semibold leading-tight text-neutral-950 md:text-5xl">
-                Checkout üçün səbətdə məhsul yoxdur
+                {t.emptyTitle}
               </h2>
 
               <Link
-                href="/products"
+                href={withLocalePath(locale, "/products")}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
-                Məhsullara bax
+                {t.emptyButton}
               </Link>
             </div>
           )}
