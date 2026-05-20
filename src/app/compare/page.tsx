@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
 import { ComparePageClient } from "@/components/compare/compare-page-client";
+import { compareTranslations } from "@/data/translations/compare";
+
+const t = compareTranslations.az;
 
 export const metadata: Metadata = {
-  title: "Məhsul müqayisəsi",
-  description:
-    "KHATT Electronics məhsullarını qiymət, kateqoriya, brend və stok vəziyyətinə görə müqayisə edin.",
+  title: t.metadataTitle,
+  description: t.metadataDescription,
   alternates: {
     canonical: "/compare",
+    languages: {
+      az: "/compare",
+      en: "/en/compare",
+      ru: "/ru/compare",
+    },
   },
 };
 
 export default function ComparePage() {
-  return <ComparePageClient />;
+  return <ComparePageClient locale="az" />;
 }

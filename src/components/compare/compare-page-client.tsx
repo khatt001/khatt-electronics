@@ -7,23 +7,44 @@ import { BarChart3, PackageSearch, ShoppingCart, Trash2 } from "lucide-react";
 import { useCart } from "@/components/cart/cart-provider";
 import { useCompare } from "@/components/compare/compare-provider";
 import { Container } from "@/components/layout/container";
+import {
+  compareTranslations,
+  type CompareLocale,
+} from "@/data/translations/compare";
 
-function getStockLabel(item: {
-  stockStatus: "in_stock" | "out_of_stock" | "pre_order";
-  stockQuantity: number;
-}) {
+type ComparePageClientProps = {
+  locale?: CompareLocale;
+};
+
+function withLocalePath(locale: CompareLocale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
+
+function getStockLabel(
+  item: {
+    stockStatus: "in_stock" | "out_of_stock" | "pre_order";
+    stockQuantity: number;
+  },
+  locale: CompareLocale
+) {
+  const t = compareTranslations[locale];
+
   if (item.stockStatus === "in_stock" && item.stockQuantity > 0) {
-    return `Stokda ${item.stockQuantity} ədəd`;
+    return `${t.inStockPrefix} ${item.stockQuantity} ${t.inStockSuffix}`;
   }
 
   if (item.stockStatus === "pre_order") {
-    return "Öncədən sifariş";
+    return t.preOrder;
   }
 
-  return "Stokda yoxdur";
+  return t.outOfStock;
 }
 
-export function ComparePageClient() {
+export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
   const {
     items,
     removeCompare,
@@ -34,6 +55,7 @@ export function ComparePageClient() {
   } = useCompare();
 
   const { addItem } = useCart();
+  const t = compareTranslations[locale];
 
   useEffect(() => {
     void syncCompare();
@@ -67,14 +89,13 @@ export function ComparePageClient() {
       <section className="border-b border-black/10 bg-white">
         <Container className="py-12">
           <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
-            Müqayisə
+            {t.eyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
-            Məhsulları müqayisə edin
+            {t.title}
           </h1>
           <p className="mt-5 max-w-2xl leading-8 text-neutral-600">
-            Kamera, təhlükəsizlik və şəbəkə avadanlıqlarını texniki
-            göstəricilər, qiymət və stok üzrə yan-yana müqayisə edin.
+            {t.description}
           </p>
         </Container>
       </section>
@@ -86,8 +107,8 @@ export function ComparePageClient() {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-neutral-500">
                   {isSyncing
-                    ? "Müqayisə məlumatları yenilənir..."
-                    : `${items.length}/${limit} məhsul müqayisədədir`}
+                    ? t.syncing
+                    : `${items.length}/${limit} ${t.countText}`}
                 </p>
 
                 <button
@@ -96,7 +117,7 @@ export function ComparePageClient() {
                   disabled={isSyncing}
                   className="w-fit rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Hamısını təmizlə
+                  {t.clearAll}
                 </button>
               </div>
 
@@ -105,7 +126,7 @@ export function ComparePageClient() {
                   <thead>
                     <tr>
                       <th className="sticky left-0 z-20 w-44 border-b border-neutral-200 bg-neutral-50 p-4 text-left text-sm font-semibold text-neutral-700">
-                        Xüsusiyyət
+                        {t.featureColumn}
                       </th>
 
                       {items.map((item) => (
@@ -118,14 +139,17 @@ export function ComparePageClient() {
                               type="button"
                               onClick={() => removeCompare(item.id)}
                               disabled={isSyncing}
-                              aria-label="Müqayisədən sil"
+                              aria-label={t.removeAria}
                               className="absolute right-0 top-0 inline-flex size-8 items-center justify-center rounded-full border border-red-200 text-red-600 transition hover:border-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               <Trash2 className="size-4" aria-hidden="true" />
                             </button>
 
                             <Link
-                              href={`/products/${item.slug}`}
+                              href={withLocalePath(
+                                locale,
+                                `/products/${item.slug}`
+                              )}
                               className="mx-auto flex size-32 items-center justify-center rounded-2xl bg-neutral-100"
                             >
                               {item.imageUrl ? (
@@ -142,7 +166,10 @@ export function ComparePageClient() {
                             </Link>
 
                             <Link
-                              href={`/products/${item.slug}`}
+                              href={withLocalePath(
+                                locale,
+                                `/products/${item.slug}`
+                              )}
                               className="mt-4 line-clamp-2 block text-center text-sm font-semibold text-neutral-950 transition hover:text-neutral-600"
                             >
                               {item.name}
@@ -156,7 +183,7 @@ export function ComparePageClient() {
                   <tbody>
                     <tr>
                       <td className="sticky left-0 z-10 border-b border-neutral-200 bg-neutral-50 p-4 text-sm font-medium text-neutral-700">
-                        Qiymət
+                        {t.price}
                       </td>
                       {items.map((item) => (
                         <td
@@ -170,7 +197,7 @@ export function ComparePageClient() {
 
                     <tr>
                       <td className="sticky left-0 z-10 border-b border-neutral-200 bg-neutral-50 p-4 text-sm font-medium text-neutral-700">
-                        Kateqoriya
+                        {t.category}
                       </td>
                       {items.map((item) => (
                         <td
@@ -184,7 +211,7 @@ export function ComparePageClient() {
 
                     <tr>
                       <td className="sticky left-0 z-10 border-b border-neutral-200 bg-neutral-50 p-4 text-sm font-medium text-neutral-700">
-                        Brend
+                        {t.brand}
                       </td>
                       {items.map((item) => (
                         <td
@@ -198,14 +225,14 @@ export function ComparePageClient() {
 
                     <tr>
                       <td className="sticky left-0 z-10 border-b border-neutral-200 bg-neutral-50 p-4 text-sm font-medium text-neutral-700">
-                        Stok
+                        {t.stock}
                       </td>
                       {items.map((item) => (
                         <td
                           key={item.id}
                           className="border-b border-l border-neutral-200 p-4 text-center text-sm"
                         >
-                          {getStockLabel(item)}
+                          {getStockLabel(item, locale)}
                         </td>
                       ))}
                     </tr>
@@ -217,7 +244,7 @@ export function ComparePageClient() {
                             colSpan={items.length + 1}
                             className="border-b border-neutral-200 bg-neutral-950 px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-white"
                           >
-                            Texniki göstəricilər
+                            {t.technicalSpecs}
                           </td>
                         </tr>
 
@@ -242,7 +269,7 @@ export function ComparePageClient() {
 
                     <tr>
                       <td className="sticky left-0 z-10 bg-neutral-50 p-4 text-sm font-medium text-neutral-700">
-                        Sifariş
+                        {t.order}
                       </td>
 
                       {items.map((item) => {
@@ -286,7 +313,7 @@ export function ComparePageClient() {
                                 className="mr-2 size-4"
                                 aria-hidden="true"
                               />
-                              Səbətə əlavə et
+                              {t.addToCart}
                             </button>
                           </td>
                         );
@@ -303,24 +330,23 @@ export function ComparePageClient() {
               </div>
 
               <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-400">
-                Boş müqayisə
+                {t.emptyEyebrow}
               </p>
 
               <h2 className="mt-4 text-4xl font-semibold leading-tight text-neutral-950 md:text-5xl">
-                Müqayisə üçün məhsul yoxdur
+                {t.emptyTitle}
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl leading-8 text-neutral-600">
-                Məhsulları müqayisəyə əlavə edərək seçim prosesini daha rahat
-                edin.
+                {t.emptyDescription}
               </p>
 
               <Link
-                href="/products"
+                href={withLocalePath(locale, "/products")}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 <PackageSearch className="mr-2 size-4" aria-hidden="true" />
-                Məhsullara bax
+                {t.emptyButton}
               </Link>
             </div>
           )}
