@@ -33,7 +33,7 @@ export function SiteShell({ children }: SiteShellProps) {
       {children}
       <Footer locale={locale} />
       <FloatingWhatsApp />
-      <CartToast />
+      <CartToast locale={locale} />
     </>
   );
 }
