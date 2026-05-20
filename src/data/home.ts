@@ -11,7 +11,7 @@ import {
   Video,
   Zap,
 } from "lucide-react";
-import type { Locale } from "@/data/translations/layout";
+import type { Locale } from "@/lib/i18n";
 
 export const catalogCategories = {
   az: [

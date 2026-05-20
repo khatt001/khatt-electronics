@@ -1,5 +1,4 @@
-import type { Locale } from "@/data/translations/layout";
-
+import type { Locale } from "@/lib/i18n";
 export type NavigationLink = {
   name: string;
   href: string;

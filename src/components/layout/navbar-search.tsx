@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingBag, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { Locale } from "@/data/translations/layout";
+import type { Locale } from "@/lib/i18n";
 
 type NavbarSearchProduct = {
   id: string;
