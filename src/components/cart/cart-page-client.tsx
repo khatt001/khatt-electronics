@@ -14,8 +14,24 @@ import {
 import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
+import {
+  cartTranslations,
+  type CartLocale,
+} from "@/data/translations/cart";
 
-export function CartPageClient() {
+type CartPageClientProps = {
+  locale?: CartLocale;
+};
+
+function withLocalePath(locale: CartLocale, path: string) {
+  if (locale === "az") {
+    return path;
+  }
+
+  return `/${locale}${path}`;
+}
+
+export function CartPageClient({ locale = "az" }: CartPageClientProps) {
   const {
     items,
     subtotal,
@@ -26,6 +42,8 @@ export function CartPageClient() {
     isSyncing,
   } = useCart();
 
+  const t = cartTranslations[locale];
+
   useEffect(() => {
     void syncCart();
   }, [syncCart]);
@@ -35,13 +53,13 @@ export function CartPageClient() {
       <section className="border-b border-black/10 bg-white">
         <Container className="py-12">
           <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
-            Səbət
+            {t.eyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
-            Səbətinizdəki məhsullar
+            {t.title}
           </h1>
           <p className="mt-5 max-w-2xl leading-8 text-neutral-600">
-            Məhsulları yoxlayın, sayını dəyişin və sifarişi tamamlamağa keçin.
+            {t.description}
           </p>
         </Container>
       </section>
@@ -57,7 +75,7 @@ export function CartPageClient() {
                     className="grid gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:grid-cols-[120px_1fr] lg:p-5"
                   >
                     <Link
-                      href={`/products/${item.slug}`}
+                      href={withLocalePath(locale, `/products/${item.slug}`)}
                       className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-neutral-100"
                     >
                       {item.imageUrl ? (
@@ -92,21 +110,24 @@ export function CartPageClient() {
                           </div>
 
                           <Link
-                            href={`/products/${item.slug}`}
+                            href={withLocalePath(
+                              locale,
+                              `/products/${item.slug}`
+                            )}
                             className="line-clamp-2 text-lg font-semibold text-neutral-950 transition hover:text-neutral-600"
                           >
                             {item.name}
                           </Link>
 
                           <p className="mt-2 text-sm font-medium text-neutral-500">
-                            Stok limiti: {item.maxQuantity} ədəd
+                            {t.stockLimit}: {item.maxQuantity} {t.stockUnit}
                           </p>
                         </div>
 
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          aria-label="Məhsulu səbətdən sil"
+                          aria-label={t.removeProductAria}
                           className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-red-600 transition hover:bg-red-50"
                         >
                           <Trash2 className="size-5" aria-hidden="true" />
@@ -121,7 +142,7 @@ export function CartPageClient() {
                               updateQuantity(item.id, item.quantity - 1)
                             }
                             disabled={item.quantity <= 1 || isSyncing}
-                            aria-label="Say azalt"
+                            aria-label={t.decreaseQuantityAria}
                             className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             <Minus className="size-4" aria-hidden="true" />
@@ -136,8 +157,10 @@ export function CartPageClient() {
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            disabled={item.quantity >= item.maxQuantity || isSyncing}
-                            aria-label="Say artır"
+                            disabled={
+                              item.quantity >= item.maxQuantity || isSyncing
+                            }
+                            aria-label={t.increaseQuantityAria}
                             className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             <Plus className="size-4" aria-hidden="true" />
@@ -146,7 +169,7 @@ export function CartPageClient() {
 
                         <div className="text-left sm:text-right">
                           <p className="text-sm text-neutral-500">
-                            Bir ədəd: {item.priceLabel}
+                            {t.oneItemPrice}: {item.priceLabel}
                           </p>
                           <p className="mt-1 text-xl font-semibold text-neutral-950">
                             {formatPrice(item.price * item.quantity)}
@@ -160,35 +183,35 @@ export function CartPageClient() {
 
               <aside className="h-fit rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-semibold text-neutral-950">
-                  Sifariş xülasəsi
+                  {t.summaryTitle}
                 </h2>
 
                 <div className="mt-5 space-y-3 border-b border-neutral-100 pb-5">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-500">Məhsul sayı</span>
+                    <span className="text-neutral-500">{t.productCount}</span>
                     <span className="font-medium text-neutral-950">
                       {items.reduce((total, item) => total + item.quantity, 0)}{" "}
-                      ədəd
+                      {t.stockUnit}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-500">Ara cəm</span>
+                    <span className="text-neutral-500">{t.subtotal}</span>
                     <span className="font-medium text-neutral-950">
                       {formatPrice(subtotal)}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-neutral-500">Çatdırılma</span>
-                    <span className="font-medium text-neutral-950">
-                      Checkout-da hesablanacaq
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <span className="text-neutral-500">{t.delivery}</span>
+                    <span className="text-right font-medium text-neutral-950">
+                      {t.deliveryDescription}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-5 flex items-center justify-between">
-                  <span className="text-sm text-neutral-500">Cəmi</span>
+                  <span className="text-sm text-neutral-500">{t.total}</span>
                   <strong className="text-2xl text-neutral-950">
                     {formatPrice(subtotal)}
                   </strong>
@@ -196,12 +219,12 @@ export function CartPageClient() {
 
                 {isSyncing ? (
                   <p className="mt-3 text-center text-xs text-neutral-500">
-                    Səbət məlumatları yenilənir...
+                    {t.syncing}
                   </p>
                 ) : null}
 
                 <Link
-                  href="/checkout"
+                  href={withLocalePath(locale, "/checkout")}
                   aria-disabled={isSyncing}
                   className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold transition ${
                     isSyncing
@@ -209,7 +232,7 @@ export function CartPageClient() {
                       : "bg-neutral-950 text-white hover:bg-neutral-800"
                   }`}
                 >
-                  Sifarişi tamamla
+                  {t.checkoutButton}
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
 
@@ -219,7 +242,7 @@ export function CartPageClient() {
                   disabled={isSyncing}
                   className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Səbəti təmizlə
+                  {t.clearCartButton}
                 </button>
               </aside>
             </div>
@@ -230,24 +253,23 @@ export function CartPageClient() {
               </div>
 
               <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-400">
-                Boş səbət
+                {t.emptyEyebrow}
               </p>
 
               <h2 className="mt-4 text-4xl font-semibold leading-tight text-neutral-950 md:text-5xl">
-                Səbətiniz hələ boşdur
+                {t.emptyTitle}
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl leading-8 text-neutral-600">
-                Məhsul kataloquna keçərək kamera, şəbəkə və təhlükəsizlik
-                avadanlıqlarını səbətə əlavə edə bilərsiniz.
+                {t.emptyDescription}
               </p>
 
               <Link
-                href="/products"
+                href={withLocalePath(locale, "/products")}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 <PackageSearch className="mr-2 size-4" aria-hidden="true" />
-                Məhsullara bax
+                {t.emptyButton}
               </Link>
             </div>
           )}

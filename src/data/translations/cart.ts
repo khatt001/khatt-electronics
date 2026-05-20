@@ -8,37 +8,35 @@ export const cartTranslations = {
 
     metadataTitle: "Səbət",
     metadataDescription:
-      "KHATT Electronics səbətinizdəki məhsulları yoxlayın və sifarişi tamamlayın.",
+      "KHATT Electronics səbət səhifəsi. Məhsullarınızı səbətə əlavə edin və sifarişi tamamlayın.",
 
     eyebrow: "Səbət",
-    title: "Sifariş səbəti",
+    title: "Səbətinizdəki məhsullar",
     description:
-      "Seçdiyiniz məhsulları yoxlayın, sayını dəyişin və sifarişi tamamlayın.",
-
-    emptyTitle: "Səbət boşdur",
-    emptyDescription:
-      "Məhsulları səbətə əlavə etdikdən sonra burada görünəcək.",
-    emptyButton: "Məhsullara bax",
-
-    productColumn: "Məhsul",
-    priceColumn: "Qiymət",
-    quantityColumn: "Say",
-    totalColumn: "Cəmi",
-
-    orderSummaryTitle: "Sifariş xülasəsi",
-    subtotalLabel: "Ara cəm",
-    deliveryLabel: "Çatdırılma",
-    deliveryValue: "Razılaşma ilə",
-    totalLabel: "Yekun",
-    checkoutButton: "Sifarişi tamamla",
-    continueShoppingButton: "Alış-verişə davam et",
-
-    removeItem: "Sil",
-    decreaseQuantity: "Azalt",
-    increaseQuantity: "Artır",
+      "Məhsulları yoxlayın, sayını dəyişin və sifarişi tamamlamağa keçin.",
 
     stockLimit: "Stok limiti",
-    priceOnRequest: "Qiymət sorğu ilə",
+    stockUnit: "ədəd",
+    removeProductAria: "Məhsulu səbətdən sil",
+    decreaseQuantityAria: "Say azalt",
+    increaseQuantityAria: "Say artır",
+    oneItemPrice: "Bir ədəd",
+
+    summaryTitle: "Sifariş xülasəsi",
+    productCount: "Məhsul sayı",
+    subtotal: "Ara cəm",
+    delivery: "Çatdırılma",
+    deliveryDescription: "Checkout-da hesablanacaq",
+    total: "Cəmi",
+    syncing: "Səbət məlumatları yenilənir...",
+    checkoutButton: "Sifarişi tamamla",
+    clearCartButton: "Səbəti təmizlə",
+
+    emptyEyebrow: "Boş səbət",
+    emptyTitle: "Səbətiniz hələ boşdur",
+    emptyDescription:
+      "Məhsul kataloquna keçərək kamera, şəbəkə və təhlükəsizlik avadanlıqlarını səbətə əlavə edə bilərsiniz.",
+    emptyButton: "Məhsullara bax",
   },
 
   en: {
@@ -48,37 +46,35 @@ export const cartTranslations = {
 
     metadataTitle: "Cart",
     metadataDescription:
-      "Review the products in your KHATT Electronics cart and complete your order.",
+      "KHATT Electronics cart page. Add products to your cart and complete your order.",
 
     eyebrow: "Cart",
-    title: "Order cart",
+    title: "Products in your cart",
     description:
-      "Review your selected products, update quantities and complete your order.",
-
-    emptyTitle: "Your cart is empty",
-    emptyDescription:
-      "Products will appear here after you add them to your cart.",
-    emptyButton: "View products",
-
-    productColumn: "Product",
-    priceColumn: "Price",
-    quantityColumn: "Qty",
-    totalColumn: "Total",
-
-    orderSummaryTitle: "Order summary",
-    subtotalLabel: "Subtotal",
-    deliveryLabel: "Delivery",
-    deliveryValue: "By agreement",
-    totalLabel: "Total",
-    checkoutButton: "Complete order",
-    continueShoppingButton: "Continue shopping",
-
-    removeItem: "Remove",
-    decreaseQuantity: "Decrease",
-    increaseQuantity: "Increase",
+      "Review your products, change quantities and proceed to complete your order.",
 
     stockLimit: "Stock limit",
-    priceOnRequest: "Price on request",
+    stockUnit: "pcs",
+    removeProductAria: "Remove product from cart",
+    decreaseQuantityAria: "Decrease quantity",
+    increaseQuantityAria: "Increase quantity",
+    oneItemPrice: "One item",
+
+    summaryTitle: "Order summary",
+    productCount: "Product count",
+    subtotal: "Subtotal",
+    delivery: "Delivery",
+    deliveryDescription: "Calculated at checkout",
+    total: "Total",
+    syncing: "Cart data is updating...",
+    checkoutButton: "Complete order",
+    clearCartButton: "Clear cart",
+
+    emptyEyebrow: "Empty cart",
+    emptyTitle: "Your cart is still empty",
+    emptyDescription:
+      "Go to the product catalog to add camera, network and security equipment to your cart.",
+    emptyButton: "View products",
   },
 
   ru: {
@@ -88,36 +84,34 @@ export const cartTranslations = {
 
     metadataTitle: "Корзина",
     metadataDescription:
-      "Проверьте товары в корзине KHATT Electronics и завершите заказ.",
+      "Страница корзины KHATT Electronics. Добавьте товары в корзину и завершите заказ.",
 
     eyebrow: "Корзина",
-    title: "Корзина заказа",
+    title: "Товары в вашей корзине",
     description:
-      "Проверьте выбранные товары, измените количество и завершите заказ.",
-
-    emptyTitle: "Корзина пуста",
-    emptyDescription:
-      "Товары появятся здесь после добавления в корзину.",
-    emptyButton: "Смотреть товары",
-
-    productColumn: "Товар",
-    priceColumn: "Цена",
-    quantityColumn: "Кол-во",
-    totalColumn: "Итого",
-
-    orderSummaryTitle: "Сводка заказа",
-    subtotalLabel: "Промежуточный итог",
-    deliveryLabel: "Доставка",
-    deliveryValue: "По договоренности",
-    totalLabel: "Итого",
-    checkoutButton: "Оформить заказ",
-    continueShoppingButton: "Продолжить покупки",
-
-    removeItem: "Удалить",
-    decreaseQuantity: "Уменьшить",
-    increaseQuantity: "Увеличить",
+      "Проверьте товары, измените количество и перейдите к оформлению заказа.",
 
     stockLimit: "Лимит склада",
-    priceOnRequest: "Цена по запросу",
+    stockUnit: "шт.",
+    removeProductAria: "Удалить товар из корзины",
+    decreaseQuantityAria: "Уменьшить количество",
+    increaseQuantityAria: "Увеличить количество",
+    oneItemPrice: "За единицу",
+
+    summaryTitle: "Сводка заказа",
+    productCount: "Количество товаров",
+    subtotal: "Промежуточный итог",
+    delivery: "Доставка",
+    deliveryDescription: "Будет рассчитано при оформлении",
+    total: "Итого",
+    syncing: "Данные корзины обновляются...",
+    checkoutButton: "Оформить заказ",
+    clearCartButton: "Очистить корзину",
+
+    emptyEyebrow: "Пустая корзина",
+    emptyTitle: "Ваша корзина пока пуста",
+    emptyDescription:
+      "Перейдите в каталог товаров, чтобы добавить камеры, сетевое оборудование и системы безопасности в корзину.",
+    emptyButton: "Смотреть товары",
   },
 } as const;
