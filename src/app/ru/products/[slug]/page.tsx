@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { getProductBySlug } from "@/services/products";
-import {
-  getProductDetailJsonLd,
-  ProductDetailPageView,
-} from "@/components/product/product-detail-page";
+import { ProductDetailPageView } from "@/components/product/product-detail-page";
 import { productDetailTranslations } from "@/data/translations/product-detail";
 
 type ProductDetailPageProps = {
@@ -17,7 +14,7 @@ export async function generateMetadata({
 }: ProductDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  const t = productDetailTranslations.az;
+  const t = productDetailTranslations.ru;
 
   if (!product) {
     return {
@@ -41,7 +38,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/products/${product.slug}`,
+      canonical: `/ru/products/${product.slug}`,
       languages: {
         az: `/products/${product.slug}`,
         en: `/en/products/${product.slug}`,
@@ -51,7 +48,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `/products/${product.slug}`,
+      url: `/ru/products/${product.slug}`,
       type: "website",
       images: imageUrl
         ? [
@@ -71,10 +68,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductDetailPage({
+export default async function RussianProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
 
-  return <ProductDetailPageView slug={slug} locale="az" />;
+  return <ProductDetailPageView slug={slug} locale="ru" />;
 }
