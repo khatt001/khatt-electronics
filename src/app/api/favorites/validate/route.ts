@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
+type FavoritesValidateLocale = "az" | "en" | "ru";
+
 type ValidateFavoritesRequestItem = {
   id: string;
 };
@@ -26,8 +28,42 @@ type ProductForFavoritesValidation = {
   }[];
 };
 
-function formatPrice(priceVisible: boolean, price: number | string | null) {
-  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Qiymət sorğu ilə";
+const favoritesValidateTranslations = {
+  az: {
+    priceOnRequest: "Qiymət sorğu ilə",
+    productFallback: "Məhsul",
+    invalidFavorites: "Sevimlilər yoxlanmadı.",
+  },
+  en: {
+    priceOnRequest: "Price on request",
+    productFallback: "Product",
+    invalidFavorites: "Favorites could not be validated.",
+  },
+  ru: {
+    priceOnRequest: "Цена по запросу",
+    productFallback: "Товар",
+    invalidFavorites: "Избранное не удалось проверить.",
+  },
+} as const;
+
+function getLocale(value: unknown): FavoritesValidateLocale {
+  if (value === "en" || value === "ru") {
+    return value;
+  }
+
+  return "az";
+}
+
+function formatPrice(
+  priceVisible: boolean,
+  price: number | string | null,
+  locale: FavoritesValidateLocale
+) {
+  const t = favoritesValidateTranslations[locale];
+
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : t.priceOnRequest;
 }
 
 function getPriceAmount(priceVisible: boolean, price: number | string | null) {
@@ -51,10 +87,16 @@ function getPrimaryImage(images: ProductForFavoritesValidation["images"]) {
 }
 
 export async function POST(request: Request) {
+  let locale: FavoritesValidateLocale = "az";
+
   try {
     const body = (await request.json()) as {
       items?: ValidateFavoritesRequestItem[];
+      locale?: FavoritesValidateLocale;
     };
+
+    locale = getLocale(body.locale);
+    const t = favoritesValidateTranslations[locale];
 
     const items = Array.isArray(body.items) ? body.items : [];
 
@@ -114,10 +156,10 @@ export async function POST(request: Request) {
         id: product.id,
         name: product.name_az,
         slug: product.slug,
-        price: formatPrice(product.price_visible, product.price),
+        price: formatPrice(product.price_visible, product.price, locale),
         priceAmount: getPriceAmount(product.price_visible, product.price),
         imageUrl: getPrimaryImage(product.images ?? []),
-        category: product.category?.name_az ?? "Məhsul",
+        category: product.category?.name_az ?? t.productFallback,
         brand: product.brand?.name ?? null,
         stockStatus: product.stock_status,
         stockQuantity: product.stock_quantity ?? 0,
@@ -127,9 +169,11 @@ export async function POST(request: Request) {
       items: validItems,
     });
   } catch {
+    const t = favoritesValidateTranslations[locale];
+
     return NextResponse.json(
       {
-        error: "Sevimlilər yoxlanmadı.",
+        error: t.invalidFavorites,
       },
       { status: 400 }
     );
