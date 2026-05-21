@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Clock, Mail, Menu, Phone, X } from "lucide-react";
 import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
 import { Container } from "@/components/layout/container";
@@ -18,17 +19,16 @@ import {
   switchLocalePathname,
   type Locale,
 } from "@/lib/i18n";
-import { usePathname } from "next/navigation";
 
 type NavbarProps = {
   locale?: Locale;
 };
 
 export default function Navbar({ locale = "az" }: NavbarProps) {
- const [open, setOpen] = useState(false);
-const pathname = usePathname();
-const t = navbarTranslations[locale];
-const navLinks = getMainNavigationLinks(t.navLinks, locale);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const t = navbarTranslations[locale];
+  const navLinks = getMainNavigationLinks(t.navLinks, locale);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
