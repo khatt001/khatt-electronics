@@ -17,11 +17,14 @@ export const projectsTranslations = {
       "KHATT Electronics tərəfindən həyata keçirilə bilən videomüşahidə, təhlükəsizlik, keçidə nəzarət və şəbəkə infrastrukturu layihə istiqamətləri.",
 
     eyebrow: "Layihələr",
-    title: "Təhlükəsizlik və elektronika layihələri üçün praktik həll nümunələri",
+    title:
+      "Təhlükəsizlik və elektronika layihələri üçün praktik həll nümunələri",
     description:
       "Real obyekt ehtiyaclarına uyğun kamera, keçidə nəzarət, siqnalizasiya və şəbəkə infrastrukturu üzrə layihə yanaşmalarını burada təqdim edirik.",
     quoteButton: "Layihə üçün sorğu göndər",
     servicesButton: "Xidmətlərə bax",
+    cameraPlanning: "CCTV və təhlükəsizlik planlaması",
+    networkPlanning: "Şəbəkə və infrastruktur yanaşması",
 
     projects: [
       {
@@ -38,7 +41,12 @@ export const projectsTranslations = {
         description:
           "Satış nöqtələrində kassa zonası, giriş hissəsi, vitrin və anbar sahələrinin izlənməsi üçün sistem planlaması.",
         icon: Store,
-        items: ["Kassa kamerası", "Giriş nəzarəti", "Anbar kamerası", "Mobil baxış"],
+        items: [
+          "Kassa kamerası",
+          "Giriş nəzarəti",
+          "Anbar kamerası",
+          "Mobil baxış",
+        ],
       },
       {
         title: "Anbar perimetr nəzarəti",
@@ -70,7 +78,12 @@ export const projectsTranslations = {
         description:
           "Zavod və istehsalat zonalarında təhlükəli sahələr, iş axını və giriş-çıxış üçün texniki nəzarət sistemi.",
         icon: Factory,
-        items: ["İstehsal kamera", "Alarm inteqrasiyası", "Access point", "Texniki nəzarət"],
+        items: [
+          "İstehsal kamera",
+          "Alarm inteqrasiyası",
+          "Access point",
+          "Texniki nəzarət",
+        ],
       },
     ],
 
@@ -105,6 +118,8 @@ export const projectsTranslations = {
       "Here we present project approaches for CCTV, access control, alarm and network infrastructure based on real facility needs.",
     quoteButton: "Send project request",
     servicesButton: "View services",
+    cameraPlanning: "CCTV and security planning",
+    networkPlanning: "Network and infrastructure approach",
 
     projects: [
       {
@@ -121,7 +136,12 @@ export const projectsTranslations = {
         description:
           "System planning for monitoring cash desk areas, entrance zones, showcases and warehouse areas in retail points.",
         icon: Store,
-        items: ["Cash desk camera", "Entrance monitoring", "Warehouse camera", "Mobile viewing"],
+        items: [
+          "Cash desk camera",
+          "Entrance monitoring",
+          "Warehouse camera",
+          "Mobile viewing",
+        ],
       },
       {
         title: "Warehouse perimeter monitoring",
@@ -153,7 +173,12 @@ export const projectsTranslations = {
         description:
           "Technical monitoring system for risk zones, workflow and entrance-exit points in factories and production areas.",
         icon: Factory,
-        items: ["Production camera", "Alarm integration", "Access point", "Technical monitoring"],
+        items: [
+          "Production camera",
+          "Alarm integration",
+          "Access point",
+          "Technical monitoring",
+        ],
       },
     ],
 
@@ -183,11 +208,14 @@ export const projectsTranslations = {
       "Проектные направления KHATT Electronics в сфере видеонаблюдения, безопасности, контроля доступа и сетевой инфраструктуры.",
 
     eyebrow: "Проекты",
-    title: "Практические примеры решений для проектов безопасности и электроники",
+    title:
+      "Практические примеры решений для проектов безопасности и электроники",
     description:
       "Здесь представлены проектные подходы по видеонаблюдению, контролю доступа, сигнализации и сетевой инфраструктуре с учетом реальных потребностей объектов.",
     quoteButton: "Отправить запрос по проекту",
     servicesButton: "Смотреть услуги",
+    cameraPlanning: "Планирование CCTV и безопасности",
+    networkPlanning: "Сетевой и инфраструктурный подход",
 
     projects: [
       {
@@ -204,7 +232,12 @@ export const projectsTranslations = {
         description:
           "Планирование системы для контроля кассовой зоны, входа, витрин и складских зон в торговых точках.",
         icon: Store,
-        items: ["Камера кассы", "Контроль входа", "Камера склада", "Мобильный просмотр"],
+        items: [
+          "Камера кассы",
+          "Контроль входа",
+          "Камера склада",
+          "Мобильный просмотр",
+        ],
       },
       {
         title: "Периметр склада",
@@ -236,7 +269,12 @@ export const projectsTranslations = {
         description:
           "Техническая система контроля для опасных зон, рабочего процесса и точек входа-выхода на производстве.",
         icon: Factory,
-        items: ["Производственная камера", "Интеграция alarm", "Access point", "Технический мониторинг"],
+        items: [
+          "Производственная камера",
+          "Интеграция alarm",
+          "Access point",
+          "Технический мониторинг",
+        ],
       },
     ],
 

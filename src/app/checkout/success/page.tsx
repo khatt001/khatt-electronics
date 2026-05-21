@@ -1,8 +1,5 @@
-import type { Metadata } from "next";
 import { CheckoutSuccessPage } from "@/components/checkout/checkout-success-page";
-import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
-
-const t = checkoutSuccessTranslations.az;
+import { generateCheckoutSuccessMetadata } from "@/lib/page-metadata";
 
 type CheckoutSuccessRouteProps = {
   searchParams: Promise<{
@@ -10,18 +7,9 @@ type CheckoutSuccessRouteProps = {
   }>;
 };
 
-export const metadata: Metadata = {
-  title: t.metadataTitle,
-  description: t.metadataDescription,
-  alternates: {
-    canonical: "/checkout/success",
-    languages: {
-      az: "/checkout/success",
-      en: "/en/checkout/success",
-      ru: "/ru/checkout/success",
-    },
-  },
-};
+export const metadata = generateCheckoutSuccessMetadata({
+  locale: "az",
+});
 
 export default async function CheckoutSuccessRoute({
   searchParams,

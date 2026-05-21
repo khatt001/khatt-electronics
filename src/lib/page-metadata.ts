@@ -11,6 +11,15 @@ import type { Locale } from "@/lib/i18n";
 import { aboutTranslations } from "@/data/translations/about";
 import { servicesPageTranslations } from "@/data/translations/services-page";
 import { solutionsPageTranslations } from "@/data/translations/solutions-page";
+import { cartTranslations } from "@/data/translations/cart";
+import { favoritesTranslations } from "@/data/translations/favorites";
+import { contactTranslations } from "@/data/translations/contact";
+import { compareTranslations } from "@/data/translations/compare";
+import { checkoutTranslations } from "@/data/translations/checkout";
+import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
+import { trackOrderTranslations } from "@/data/translations/track-order";
+import { projectsTranslations } from "@/data/translations/projects";
+
 function hasSearchQuery(query: Record<string, string | string[] | undefined>) {
   return Object.values(query).some((value) => {
     if (Array.isArray(value)) return value.length > 0;
@@ -173,12 +182,28 @@ export function generateProductsListingMetadata({
         },
   };
 }
-type StaticPageKey = "about" | "services" | "solutions";
-
+type StaticPageKey =
+  | "about"
+  | "services"
+  | "solutions"
+  | "cart"
+  | "favorites"
+  | "contact"
+  | "compare"
+  | "checkout"
+  | "track-order"
+  | "projects";
 const staticPageTranslations = {
   about: aboutTranslations,
   services: servicesPageTranslations,
   solutions: solutionsPageTranslations,
+  cart: cartTranslations,
+  favorites: favoritesTranslations,
+  contact: contactTranslations,
+  compare: compareTranslations,
+  checkout: checkoutTranslations,
+  "track-order": trackOrderTranslations,
+  projects: projectsTranslations,
 } as const;
 
 function getStaticPagePath(page: StaticPageKey) {
@@ -195,6 +220,28 @@ export function generateStaticPageMetadata({
   const translations = staticPageTranslations[page];
   const t = translations[locale];
   const path = getStaticPagePath(page);
+  const canonical = localizedPath(path, locale);
+
+  return {
+    title: t.metadataTitle,
+    description: t.metadataDescription,
+    alternates: {
+      canonical,
+      languages: {
+        az: path,
+        en: `/en${path}`,
+        ru: `/ru${path}`,
+      },
+    },
+  };
+}
+export function generateCheckoutSuccessMetadata({
+  locale,
+}: {
+  locale: Locale;
+}): Metadata {
+  const t = checkoutSuccessTranslations[locale];
+  const path = "/checkout/success";
   const canonical = localizedPath(path, locale);
 
   return {

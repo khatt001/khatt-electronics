@@ -1,21 +1,10 @@
-import type { Metadata } from "next";
 import { FavoritesPageClient } from "@/components/favorites/favorites-page-client";
-import { favoritesTranslations } from "@/data/translations/favorites";
+import { generateStaticPageMetadata } from "@/lib/page-metadata";
 
-const t = favoritesTranslations.en;
-
-export const metadata: Metadata = {
-  title: t.metadataTitle,
-  description: t.metadataDescription,
-  alternates: {
-    canonical: "/en/favorites",
-    languages: {
-      az: "/favorites",
-      en: "/en/favorites",
-      ru: "/ru/favorites",
-    },
-  },
-};
+export const metadata = generateStaticPageMetadata({
+  page: "favorites",
+  locale: "en",
+});
 
 export default function EnglishFavoritesPage() {
   return <FavoritesPageClient locale="en" />;

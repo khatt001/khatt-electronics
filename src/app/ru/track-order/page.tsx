@@ -1,21 +1,5 @@
-import type { Metadata } from "next";
 import { TrackOrderPage } from "@/components/order/track-order-page";
-import { trackOrderTranslations } from "@/data/translations/track-order";
-
-const t = trackOrderTranslations.ru;
-
-export const metadata: Metadata = {
-  title: t.metadataTitle,
-  description: t.metadataDescription,
-  alternates: {
-    canonical: "/ru/track-order",
-    languages: {
-      az: "/track-order",
-      en: "/en/track-order",
-      ru: "/ru/track-order",
-    },
-  },
-};
+import { generateStaticPageMetadata } from "@/lib/page-metadata";
 
 type TrackOrderRouteProps = {
   searchParams: Promise<{
@@ -23,6 +7,11 @@ type TrackOrderRouteProps = {
     phone?: string;
   }>;
 };
+
+export const metadata = generateStaticPageMetadata({
+  page: "track-order",
+  locale: "ru",
+});
 
 export default async function RussianTrackOrderRoute({
   searchParams,
