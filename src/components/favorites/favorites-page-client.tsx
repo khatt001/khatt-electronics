@@ -7,6 +7,8 @@ import { Heart, PackageSearch, ShoppingCart, Trash2 } from "lucide-react";
 import { useFavorites } from "@/components/favorites/favorites-provider";
 import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
+import { localizedPath } from "@/lib/i18n";
+import { getCategoryName } from "@/data/translations/categories";
 import {
   favoritesTranslations,
   type FavoritesLocale,
@@ -15,14 +17,6 @@ import {
 type FavoritesPageClientProps = {
   locale?: FavoritesLocale;
 };
-
-function withLocalePath(locale: FavoritesLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 function getStockLabel(
   stockStatus: string,
@@ -104,13 +98,18 @@ export function FavoritesPageClient({
                     item.stockStatus === "in_stock" &&
                     item.stockQuantity > 0;
 
+                  const localizedCategory = getCategoryName(
+                    item.category,
+                    locale
+                  );
+
                   return (
                     <article
                       key={item.id}
                       className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm"
                     >
                       <Link
-                        href={withLocalePath(locale, `/products/${item.slug}`)}
+                        href={localizedPath(`/products/${item.slug}`, locale)}
                         className="relative flex aspect-square items-center justify-center bg-neutral-100"
                       >
                         {item.imageUrl ? (
@@ -129,7 +128,7 @@ export function FavoritesPageClient({
                       <div className="p-5">
                         <div className="mb-3 flex flex-wrap gap-2">
                           <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-500">
-                            {item.category}
+                            {localizedCategory}
                           </span>
 
                           {item.brand ? (
@@ -140,7 +139,7 @@ export function FavoritesPageClient({
                         </div>
 
                         <Link
-                          href={withLocalePath(locale, `/products/${item.slug}`)}
+                          href={localizedPath(`/products/${item.slug}`, locale)}
                           className="line-clamp-2 text-lg font-semibold text-neutral-950 transition hover:text-neutral-600"
                         >
                           {item.name}
@@ -173,7 +172,7 @@ export function FavoritesPageClient({
                                 price: item.priceAmount,
                                 priceLabel: item.price,
                                 imageUrl: item.imageUrl,
-                                category: item.category,
+                                category: localizedCategory,
                                 brand: item.brand,
                                 maxQuantity: item.stockQuantity,
                                 quantity: 1,
@@ -224,7 +223,7 @@ export function FavoritesPageClient({
               </p>
 
               <Link
-                href={withLocalePath(locale, "/products")}
+                href={localizedPath("/products", locale)}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 <PackageSearch className="mr-2 size-4" aria-hidden="true" />

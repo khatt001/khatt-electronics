@@ -7,6 +7,8 @@ import { BarChart3, PackageSearch, ShoppingCart, Trash2 } from "lucide-react";
 import { useCart } from "@/components/cart/cart-provider";
 import { useCompare } from "@/components/compare/compare-provider";
 import { Container } from "@/components/layout/container";
+import { localizedPath } from "@/lib/i18n";
+import { getCategoryName } from "@/data/translations/categories";
 import {
   compareTranslations,
   type CompareLocale,
@@ -15,14 +17,6 @@ import {
 type ComparePageClientProps = {
   locale?: CompareLocale;
 };
-
-function withLocalePath(locale: CompareLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 function getStockLabel(
   item: {
@@ -146,9 +140,9 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
                             </button>
 
                             <Link
-                              href={withLocalePath(
-                                locale,
-                                `/products/${item.slug}`
+                              href={localizedPath(
+                                `/products/${item.slug}`,
+                                locale
                               )}
                               className="mx-auto flex size-32 items-center justify-center rounded-2xl bg-neutral-100"
                             >
@@ -166,9 +160,9 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
                             </Link>
 
                             <Link
-                              href={withLocalePath(
-                                locale,
-                                `/products/${item.slug}`
+                              href={localizedPath(
+                                `/products/${item.slug}`,
+                                locale
                               )}
                               className="mt-4 line-clamp-2 block text-center text-sm font-semibold text-neutral-950 transition hover:text-neutral-600"
                             >
@@ -204,7 +198,7 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
                           key={item.id}
                           className="border-b border-l border-neutral-200 p-4 text-center text-sm"
                         >
-                          {item.category}
+                          {getCategoryName(item.category, locale)}
                         </td>
                       ))}
                     </tr>
@@ -278,6 +272,11 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
                           item.stockStatus === "in_stock" &&
                           item.stockQuantity > 0;
 
+                        const localizedCategory = getCategoryName(
+                          item.category,
+                          locale
+                        );
+
                         return (
                           <td
                             key={item.id}
@@ -300,7 +299,7 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
                                   price: item.priceAmount,
                                   priceLabel: item.price,
                                   imageUrl: item.imageUrl,
-                                  category: item.category,
+                                  category: localizedCategory,
                                   brand: item.brand,
                                   maxQuantity: item.stockQuantity,
                                   quantity: 1,
@@ -342,7 +341,7 @@ export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
               </p>
 
               <Link
-                href={withLocalePath(locale, "/products")}
+                href={localizedPath("/products", locale)}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 <PackageSearch className="mr-2 size-4" aria-hidden="true" />

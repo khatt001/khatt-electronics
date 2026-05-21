@@ -14,6 +14,8 @@ import {
 import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
 import { formatPrice } from "@/lib/cart";
+import { localizedPath } from "@/lib/i18n";
+import { getCategoryName } from "@/data/translations/categories";
 import {
   cartTranslations,
   type CartLocale,
@@ -22,14 +24,6 @@ import {
 type CartPageClientProps = {
   locale?: CartLocale;
 };
-
-function withLocalePath(locale: CartLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 export function CartPageClient({ locale = "az" }: CartPageClientProps) {
   const {
@@ -69,116 +63,123 @@ export function CartPageClient({ locale = "az" }: CartPageClientProps) {
           {items.length > 0 ? (
             <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
               <div className="space-y-4">
-                {items.map((item) => (
-                  <article
-                    key={item.id}
-                    className="grid gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:grid-cols-[120px_1fr] lg:p-5"
-                  >
-                    <Link
-                      href={withLocalePath(locale, `/products/${item.slug}`)}
-                      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-neutral-100"
+                {items.map((item) => {
+                  const localizedCategory = getCategoryName(
+                    item.category,
+                    locale
+                  );
+
+                  return (
+                    <article
+                      key={item.id}
+                      className="grid gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:grid-cols-[120px_1fr] lg:p-5"
                     >
-                      {item.imageUrl ? (
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.name}
-                          fill
-                          sizes="120px"
-                          className="object-contain p-3"
-                        />
-                      ) : (
-                        <ShoppingCart
-                          className="size-8 text-neutral-400"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Link>
+                      <Link
+                        href={localizedPath(`/products/${item.slug}`, locale)}
+                        className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-neutral-100"
+                      >
+                        {item.imageUrl ? (
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.name}
+                            fill
+                            sizes="120px"
+                            className="object-contain p-3"
+                          />
+                        ) : (
+                          <ShoppingCart
+                            className="size-8 text-neutral-400"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Link>
 
-                    <div className="min-w-0">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                          <div className="mb-2 flex flex-wrap gap-2">
-                            <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-500">
-                              {item.category}
-                            </span>
-
-                            {item.brand ? (
-                              <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs text-white">
-                                {item.brand}
+                      <div className="min-w-0">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <div className="mb-2 flex flex-wrap gap-2">
+                              <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs text-neutral-500">
+                                {localizedCategory}
                               </span>
-                            ) : null}
+
+                              {item.brand ? (
+                                <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs text-white">
+                                  {item.brand}
+                                </span>
+                              ) : null}
+                            </div>
+
+                            <Link
+                              href={localizedPath(
+                                `/products/${item.slug}`,
+                                locale
+                              )}
+                              className="line-clamp-2 text-lg font-semibold text-neutral-950 transition hover:text-neutral-600"
+                            >
+                              {item.name}
+                            </Link>
+
+                            <p className="mt-2 text-sm font-medium text-neutral-500">
+                              {t.stockLimit}: {item.maxQuantity} {t.stockUnit}
+                            </p>
                           </div>
 
-                          <Link
-                            href={withLocalePath(
-                              locale,
-                              `/products/${item.slug}`
-                            )}
-                            className="line-clamp-2 text-lg font-semibold text-neutral-950 transition hover:text-neutral-600"
-                          >
-                            {item.name}
-                          </Link>
-
-                          <p className="mt-2 text-sm font-medium text-neutral-500">
-                            {t.stockLimit}: {item.maxQuantity} {t.stockUnit}
-                          </p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => removeItem(item.id)}
-                          aria-label={t.removeProductAria}
-                          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-red-600 transition hover:bg-red-50"
-                        >
-                          <Trash2 className="size-5" aria-hidden="true" />
-                        </button>
-                      </div>
-
-                      <div className="mt-5 flex flex-col gap-4 border-t border-neutral-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex w-fit items-center rounded-full border border-neutral-200 p-1">
                           <button
                             type="button"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
-                            disabled={item.quantity <= 1 || isSyncing}
-                            aria-label={t.decreaseQuantityAria}
-                            className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
+                            onClick={() => removeItem(item.id)}
+                            aria-label={t.removeProductAria}
+                            className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-red-600 transition hover:bg-red-50"
                           >
-                            <Minus className="size-4" aria-hidden="true" />
-                          </button>
-
-                          <span className="min-w-12 text-center text-sm font-semibold">
-                            {item.quantity}
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                            disabled={
-                              item.quantity >= item.maxQuantity || isSyncing
-                            }
-                            aria-label={t.increaseQuantityAria}
-                            className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
-                          >
-                            <Plus className="size-4" aria-hidden="true" />
+                            <Trash2 className="size-5" aria-hidden="true" />
                           </button>
                         </div>
 
-                        <div className="text-left sm:text-right">
-                          <p className="text-sm text-neutral-500">
-                            {t.oneItemPrice}: {item.priceLabel}
-                          </p>
-                          <p className="mt-1 text-xl font-semibold text-neutral-950">
-                            {formatPrice(item.price * item.quantity)}
-                          </p>
+                        <div className="mt-5 flex flex-col gap-4 border-t border-neutral-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex w-fit items-center rounded-full border border-neutral-200 p-1">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity - 1)
+                              }
+                              disabled={item.quantity <= 1 || isSyncing}
+                              aria-label={t.decreaseQuantityAria}
+                              className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <Minus className="size-4" aria-hidden="true" />
+                            </button>
+
+                            <span className="min-w-12 text-center text-sm font-semibold">
+                              {item.quantity}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateQuantity(item.id, item.quantity + 1)
+                              }
+                              disabled={
+                                item.quantity >= item.maxQuantity || isSyncing
+                              }
+                              aria-label={t.increaseQuantityAria}
+                              className="inline-flex size-9 items-center justify-center rounded-full transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <Plus className="size-4" aria-hidden="true" />
+                            </button>
+                          </div>
+
+                          <div className="text-left sm:text-right">
+                            <p className="text-sm text-neutral-500">
+                              {t.oneItemPrice}: {item.priceLabel}
+                            </p>
+                            <p className="mt-1 text-xl font-semibold text-neutral-950">
+                              {formatPrice(item.price * item.quantity)}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </article>
-                ))}
+                    </article>
+                  );
+                })}
               </div>
 
               <aside className="h-fit rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
@@ -224,7 +225,7 @@ export function CartPageClient({ locale = "az" }: CartPageClientProps) {
                 ) : null}
 
                 <Link
-                  href={withLocalePath(locale, "/checkout")}
+                  href={localizedPath("/checkout", locale)}
                   aria-disabled={isSyncing}
                   className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold transition ${
                     isSyncing
@@ -265,7 +266,7 @@ export function CartPageClient({ locale = "az" }: CartPageClientProps) {
               </p>
 
               <Link
-                href={withLocalePath(locale, "/products")}
+                href={localizedPath("/products", locale)}
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 <PackageSearch className="mr-2 size-4" aria-hidden="true" />
