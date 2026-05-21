@@ -1,21 +1,10 @@
-import type { Metadata } from "next";
 import { SolutionsPageView } from "@/components/solutions/solutions-page-view";
-import { solutionsPageTranslations } from "@/data/translations/solutions-page";
+import { generateStaticPageMetadata } from "@/lib/page-metadata";
 
-const t = solutionsPageTranslations.en;
-
-export const metadata: Metadata = {
-  title: t.metadataTitle,
-  description: t.metadataDescription,
-  alternates: {
-    canonical: "/en/solutions",
-    languages: {
-      az: "/solutions",
-      en: "/en/solutions",
-      ru: "/ru/solutions",
-    },
-  },
-};
+export const metadata = generateStaticPageMetadata({
+  page: "solutions",
+  locale: "en",
+});
 
 export default function EnglishSolutionsPage() {
   return <SolutionsPageView locale="en" />;

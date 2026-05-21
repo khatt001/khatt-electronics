@@ -7,6 +7,10 @@ import { localizedPath } from "@/lib/i18n";
 import { getCategoryBySlug } from "@/services/categories";
 import { categoryPageTranslations } from "@/data/translations/category-page";
 import type { CategorySearchParams } from "@/components/category/category-page-view";
+import type { Locale } from "@/lib/i18n";
+import { aboutTranslations } from "@/data/translations/about";
+import { servicesPageTranslations } from "@/data/translations/services-page";
+import { solutionsPageTranslations } from "@/data/translations/solutions-page";
 function hasSearchQuery(query: Record<string, string | string[] | undefined>) {
   return Object.values(query).some((value) => {
     if (Array.isArray(value)) return value.length > 0;
@@ -167,5 +171,42 @@ export function generateProductsListingMetadata({
           index: true,
           follow: true,
         },
+  };
+}
+type StaticPageKey = "about" | "services" | "solutions";
+
+const staticPageTranslations = {
+  about: aboutTranslations,
+  services: servicesPageTranslations,
+  solutions: solutionsPageTranslations,
+} as const;
+
+function getStaticPagePath(page: StaticPageKey) {
+  return `/${page}`;
+}
+
+export function generateStaticPageMetadata({
+  page,
+  locale,
+}: {
+  page: StaticPageKey;
+  locale: Locale;
+}): Metadata {
+  const translations = staticPageTranslations[page];
+  const t = translations[locale];
+  const path = getStaticPagePath(page);
+  const canonical = localizedPath(path, locale);
+
+  return {
+    title: t.metadataTitle,
+    description: t.metadataDescription,
+    alternates: {
+      canonical,
+      languages: {
+        az: path,
+        en: `/en${path}`,
+        ru: `/ru${path}`,
+      },
+    },
   };
 }
