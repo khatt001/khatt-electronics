@@ -117,6 +117,7 @@ export function ProductCard({
               sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain p-8 transition duration-500 group-hover:scale-105"
             />
+            
           ) : (
             <div className="flex size-28 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-sm">
               <ShoppingBag
