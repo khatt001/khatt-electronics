@@ -53,7 +53,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
   }, []);
 
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/90 backdrop-blur-xl">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/95 backdrop-blur-xl">
       <div className="hidden border-b border-black/10 bg-neutral-950 text-white lg:block">
         <Container>
           <div className="flex h-10 items-center justify-between text-xs">
@@ -105,11 +105,11 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
       </div>
 
       <Container>
-        <div className="flex h-16 items-center gap-4 lg:h-20">
+        <div className="flex h-14 items-center gap-2 lg:h-20 lg:gap-4">
           <Link
             href={localizedPath("/", locale)}
             aria-label={t.logoAriaLabel}
-            className="shrink-0 font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 lg:text-2xl"
+            className="shrink-0 font-serif text-lg font-semibold tracking-[0.22em] text-neutral-950 lg:text-2xl"
           >
             KHATT
           </Link>
@@ -137,7 +137,24 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className="ml-auto flex items-center gap-1">
+            <div className="mr-1 flex items-center rounded-full border border-neutral-200 bg-neutral-50 p-0.5 lg:hidden">
+              {t.languages.map((language) => (
+                <Link
+                  key={language.label}
+                  href={switchLocalePathname(pathname, language.locale)}
+                  className={cn(
+                    "rounded-full px-2 py-1 text-[11px] font-semibold transition",
+                    language.locale === locale
+                      ? "bg-neutral-950 text-white"
+                      : "text-neutral-500"
+                  )}
+                >
+                  {language.label}
+                </Link>
+              ))}
+            </div>
+
             <CompareNavLink locale={locale} />
             <FavoritesNavLink locale={locale} />
             <CartNavLink locale={locale} />
@@ -160,6 +177,10 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
               <Menu size={22} aria-hidden="true" />
             </button>
           </div>
+        </div>
+
+        <div className="border-t border-black/10 py-2 lg:hidden">
+          <NavbarSearch placeholder={t.searchPlaceholder} locale={locale} />
         </div>
 
         <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-black/10 lg:flex xl:hidden">

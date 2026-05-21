@@ -2,13 +2,21 @@ import Link from "next/link";
 import { ArrowRight, Calculator, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { homeTranslations } from "@/data/translations/home";
-import type { Locale } from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type PromoCardsProps = {
   locale?: Locale;
 };
 
 const promoIcons = [Calculator, FileText];
+
+function getLocalizedPromoHref(href: string, locale: Locale) {
+  const url = new URL(href, "https://khatt.local");
+  const source = url.searchParams.get("source");
+  const path = localizedPath("/contact", locale);
+
+  return source ? `${path}?source=${source}` : path;
+}
 
 export function PromoCards({ locale = "az" }: PromoCardsProps) {
   const t = homeTranslations[locale];
@@ -18,13 +26,14 @@ export function PromoCards({ locale = "az" }: PromoCardsProps) {
       {t.promoItems.map((item, index) => {
         const Icon = promoIcons[index % promoIcons.length];
         const featured = index === 0;
+        const href = getLocalizedPromoHref(item.href, locale);
 
         return (
           <Link
             key={item.title}
-            href={item.href}
+            href={href}
             className={cn(
-              "group relative overflow-hidden rounded-[2rem] border p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg",
+              "group relative overflow-hidden rounded-[2rem] border p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl",
               featured
                 ? "border-emerald-300/30 bg-emerald-400 text-neutral-950"
                 : "border-neutral-200 bg-white text-neutral-950"
@@ -45,7 +54,9 @@ export function PromoCards({ locale = "az" }: PromoCardsProps) {
               <Icon className="size-6" aria-hidden="true" />
             </div>
 
-            <h3 className="relative text-xl font-semibold">{item.title}</h3>
+            <h3 className="relative text-xl font-semibold leading-tight">
+              {item.title}
+            </h3>
 
             <p
               className={cn(

@@ -11,8 +11,8 @@ type HomeHeroProps = {
 export function HomeHero({ locale = "az" }: HomeHeroProps) {
   return (
     <section className="border-b border-black/10 bg-white">
-      <Container className="py-5">
-        <div className="grid gap-4 lg:grid-cols-[280px_1fr_280px]">
+      <Container className="py-5 lg:py-6">
+        <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)_280px]">
           <CatalogSidebar locale={locale} />
           <HeroBanner locale={locale} />
           <PromoCards locale={locale} />

@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { CartToast } from "@/components/cart/cart-toast";
+import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { getLocaleFromPathname } from "@/lib/i18n";
 
 type SiteShellProps = {
@@ -18,10 +19,11 @@ export function SiteShell({ children }: SiteShellProps) {
   return (
     <>
       <Navbar locale={locale} />
-      {children}
+      <div className="pt-[7.25rem] lg:pt-0">{children}</div>
       <Footer locale={locale} />
       <FloatingWhatsApp />
       <CartToast locale={locale} />
+      <MobileBottomNav locale={locale} />
     </>
   );
 }
