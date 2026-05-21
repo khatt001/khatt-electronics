@@ -1,9 +1,9 @@
 import {
   CategoryPageView,
-  generateCategoryMetadata,
   getCategoryStaticParams,
   type CategorySearchParams,
 } from "@/components/category/category-page-view";
+import { generateCategoryPageMetadata } from "@/lib/page-metadata";
 
 type CategoryPageProps = {
   params: Promise<{
@@ -22,7 +22,7 @@ export async function generateMetadata({
 }: CategoryPageProps) {
   const [{ slug }, query] = await Promise.all([params, searchParams]);
 
-  return generateCategoryMetadata({
+  return generateCategoryPageMetadata({
     slug,
     query,
     locale: "en",

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, PackageSearch } from "lucide-react";
@@ -121,60 +120,7 @@ export async function getCategoryStaticParams() {
   }));
 }
 
-export async function generateCategoryMetadata({
-  slug,
-  query,
-  locale = "az",
-}: {
-  slug: string;
-  query: CategorySearchParams;
-  locale?: CategoryPageLocale;
-}): Promise<Metadata> {
-  const category = await getCategoryBySlug(slug,locale);
-  const t = categoryPageTranslations[locale];
 
-  if (!category) {
-    return {
-      title: t.notFoundTitle,
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-
-  const hasQuery = Object.values(query).some((value) => {
-    if (Array.isArray(value)) return value.length > 0;
-    return Boolean(value);
-  });
-
-  const canonical = localizedPath(`/category/${category.slug}`, locale);
-
-  return {
-    title: category.seoTitle ?? `${category.name} ${t.metadataProductsSuffix}`,
-    description:
-      category.seoDescription ??
-      category.description ??
-      `${category.name} ${t.metadataFallbackSuffix}`,
-    alternates: {
-      canonical,
-      languages: {
-        az: `/category/${category.slug}`,
-        en: `/en/category/${category.slug}`,
-        ru: `/ru/category/${category.slug}`,
-      },
-    },
-    robots: hasQuery
-      ? {
-          index: false,
-          follow: true,
-        }
-      : {
-          index: true,
-          follow: true,
-        },
-  };
-}
 
 export async function CategoryPageView({
   slug,

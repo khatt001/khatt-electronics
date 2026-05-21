@@ -4,7 +4,9 @@ import { productDetailTranslations } from "@/data/translations/product-detail";
 import { productsTranslations } from "@/data/translations/products";
 import type { ProductsSearchParams } from "@/components/product/products-page-view";
 import { localizedPath } from "@/lib/i18n";
-
+import { getCategoryBySlug } from "@/services/categories";
+import { categoryPageTranslations } from "@/data/translations/category-page";
+import type { CategorySearchParams } from "@/components/category/category-page-view";
 function hasSearchQuery(query: Record<string, string | string[] | undefined>) {
   return Object.values(query).some((value) => {
     if (Array.isArray(value)) return value.length > 0;
@@ -112,5 +114,58 @@ export function generateProductsListingMetadata({
       url: productsPath,
       type: "website",
     },
+  };
+}export async function generateCategoryPageMetadata({
+  slug,
+  query,
+  locale,
+}: {
+  slug: string;
+  query: CategorySearchParams;
+  locale: ProductLocale;
+}): Promise<Metadata> {
+  const category = await getCategoryBySlug(slug, locale);
+  const t = categoryPageTranslations[locale];
+
+  if (!category) {
+    return {
+      title: t.notFoundTitle,
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const queryActive = Object.values(query).some((value) => {
+    if (Array.isArray(value)) return value.length > 0;
+    return Boolean(value);
+  });
+
+  const categoryPath = localizedPath(`/category/${category.slug}`, locale);
+
+  return {
+    title: category.seoTitle ?? `${category.name} ${t.metadataProductsSuffix}`,
+    description:
+      category.seoDescription ??
+      category.description ??
+      `${category.name} ${t.metadataFallbackSuffix}`,
+    alternates: {
+      canonical: categoryPath,
+      languages: {
+        az: `/category/${category.slug}`,
+        en: `/en/category/${category.slug}`,
+        ru: `/ru/category/${category.slug}`,
+      },
+    },
+    robots: queryActive
+      ? {
+          index: false,
+          follow: true,
+        }
+      : {
+          index: true,
+          follow: true,
+        },
   };
 }
