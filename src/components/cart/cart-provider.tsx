@@ -17,8 +17,8 @@ import {
   getCartSubtotal,
   normalizeQuantity,
 } from "@/lib/cart";
+import { getClientLocaleFromPathname } from "@/lib/client-locale";
 
-type CartLocale = "az" | "en" | "ru";
 
 type AddToCartInput = Omit<CartItem, "quantity"> & {
   quantity?: number;
@@ -50,23 +50,7 @@ function normalizeMaxQuantity(value: number) {
   return Math.max(0, Math.floor(value));
 }
 
-function getLocaleFromPathname(): CartLocale {
-  if (typeof window === "undefined") {
-    return "az";
-  }
 
-  const pathname = window.location.pathname;
-
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return "en";
-  }
-
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
-    return "ru";
-  }
-
-  return "az";
-}
 
 function readCartFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
@@ -268,7 +252,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          locale: getLocaleFromPathname(),
+          locale: getClientLocaleFromPathname(),
           items: currentItems.map((item) => ({
             id: item.id,
             quantity: item.quantity,

@@ -16,6 +16,7 @@ import {
   getCompareCount,
   isValidCompareItem,
 } from "@/lib/compare";
+import { getClientLocaleFromPathname } from "@/lib/client-locale";
 
 type CompareContextValue = {
   items: CompareItem[];
@@ -63,7 +64,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+ useEffect(() => {
   const timeoutId = window.setTimeout(() => {
     setItems(readCompareFromStorage());
     setMounted(true);
@@ -154,14 +155,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          locale:
-            window.location.pathname === "/en" ||
-              window.location.pathname.startsWith("/en/")
-              ? "en"
-              : window.location.pathname === "/ru" ||
-                window.location.pathname.startsWith("/ru/")
-                ? "ru"
-                : "az",
+          locale: getClientLocaleFromPathname(),
           items: currentItems.map((item) => ({
             id: item.id,
           })),

@@ -4,12 +4,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { localizedPath } from "@/lib/i18n";
 
 type CheckoutLocale = "az" | "en" | "ru";
 
 type ProductForCheckout = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   price: number | string | null;
   price_visible: boolean;
@@ -98,6 +101,16 @@ const checkoutItemSchema = z.object({
   quantity: z.coerce.number().int().min(1),
 });
 
+function getLocalizedProductName(
+  product: ProductForCheckout,
+  locale: CheckoutLocale
+) {
+  if (locale === "en") return product.name_en || product.name_az;
+  if (locale === "ru") return product.name_ru || product.name_az;
+
+  return product.name_az;
+}
+
 function getCheckoutSchema(locale: CheckoutLocale) {
   const t = checkoutActionTranslations[locale];
 
@@ -122,20 +135,17 @@ function createOrderNumber() {
   return `KH-${datePart}-${randomPart}`;
 }
 
-function getLocalePrefix(locale: CheckoutLocale) {
-  return locale === "az" ? "" : `/${locale}`;
-}
-
 function getErrorUrl(message: string, locale: CheckoutLocale = "az") {
-  return `${getLocalePrefix(locale)}/checkout?error=${encodeURIComponent(
+  return `${localizedPath("/checkout", locale)}?error=${encodeURIComponent(
     message
   )}`;
 }
 
 function getSuccessUrl(orderNumber: string, locale: CheckoutLocale) {
-  return `${getLocalePrefix(locale)}/checkout/success?order=${encodeURIComponent(
-    orderNumber
-  )}`;
+  return `${localizedPath(
+    "/checkout/success",
+    locale
+  )}?order=${encodeURIComponent(orderNumber)}`;
 }
 
 function normalizePrice(value: number | string | null) {
@@ -150,15 +160,7 @@ function normalizePrice(value: number | string | null) {
   return price;
 }
 
-function productMessage(
-  productName: string,
-  message: string,
-  locale: CheckoutLocale
-) {
-  if (locale === "az") {
-    return `${productName} ${message}`;
-  }
-
+function productMessage(productName: string, message: string) {
   return `${productName} ${message}`;
 }
 
@@ -169,15 +171,30 @@ function stockLimitMessage(
 ) {
   const t = checkoutActionTranslations[locale];
 
-  if (locale === "az") {
-    return `${productName} ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
-  }
-
   if (locale === "ru") {
     return `${productName}: ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
   }
 
   return `${productName} ${t.stockOnlyPrefix} ${stockQuantity} ${t.stockOnlySuffix}`;
+}
+
+function revalidateProductPaths(productSlug: string) {
+  revalidatePath(`/products/${productSlug}`);
+  revalidatePath(`/en/products/${productSlug}`);
+  revalidatePath(`/ru/products/${productSlug}`);
+}
+
+function revalidateCheckoutRelatedPaths() {
+  revalidatePath("/");
+  revalidatePath("/en");
+  revalidatePath("/ru");
+
+  revalidatePath("/products");
+  revalidatePath("/en/products");
+  revalidatePath("/ru/products");
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin/products");
 }
 
 export async function createOrder(formData: FormData) {
@@ -230,6 +247,8 @@ export async function createOrder(formData: FormData) {
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       price,
       price_visible,
@@ -258,21 +277,17 @@ export async function createOrder(formData: FormData) {
       redirect(getErrorUrl(t.productNotFound, locale));
     }
 
+    const productName = getLocalizedProductName(product, locale);
+
     if (product.status !== "active") {
       redirect(
-        getErrorUrl(
-          productMessage(product.name_az, t.productInactive, locale),
-          locale
-        )
+        getErrorUrl(productMessage(productName, t.productInactive), locale)
       );
     }
 
     if (product.stock_status !== "in_stock") {
       redirect(
-        getErrorUrl(
-          productMessage(product.name_az, t.productNotInStock, locale),
-          locale
-        )
+        getErrorUrl(productMessage(productName, t.productNotInStock), locale)
       );
     }
 
@@ -280,39 +295,31 @@ export async function createOrder(formData: FormData) {
 
     if (stockQuantity <= 0) {
       redirect(
-        getErrorUrl(
-          productMessage(product.name_az, t.productOutOfStock, locale),
-          locale
-        )
+        getErrorUrl(productMessage(productName, t.productOutOfStock), locale)
       );
     }
 
     if (item.quantity > stockQuantity) {
       redirect(
-        getErrorUrl(stockLimitMessage(product.name_az, stockQuantity, locale), locale)
+        getErrorUrl(stockLimitMessage(productName, stockQuantity, locale), locale)
       );
     }
 
     if (!product.price_visible) {
       redirect(
-        getErrorUrl(
-          productMessage(product.name_az, t.priceNotActive, locale),
-          locale
-        )
+        getErrorUrl(productMessage(productName, t.priceNotActive), locale)
       );
     }
 
     const unitPrice = normalizePrice(product.price);
 
     if (unitPrice === null) {
-      redirect(
-        getErrorUrl(productMessage(product.name_az, t.priceInvalid, locale), locale)
-      );
+      redirect(getErrorUrl(productMessage(productName, t.priceInvalid), locale));
     }
 
     return {
       productId: product.id,
-      productName: product.name_az,
+      productName,
       productSlug: product.slug,
       unitPrice,
       quantity: item.quantity,
@@ -321,7 +328,10 @@ export async function createOrder(formData: FormData) {
     };
   });
 
-  const subtotal = verifiedItems.reduce((total, item) => total + item.lineTotal, 0);
+  const subtotal = verifiedItems.reduce(
+    (total, item) => total + item.lineTotal,
+    0
+  );
   const deliveryFee = 0;
   const total = subtotal + deliveryFee;
 
@@ -391,17 +401,10 @@ export async function createOrder(formData: FormData) {
       );
     }
 
-    revalidatePath(`/products/${item.productSlug}`);
-    revalidatePath(`/en/products/${item.productSlug}`);
-    revalidatePath(`/ru/products/${item.productSlug}`);
+    revalidateProductPaths(item.productSlug);
   }
 
-  revalidatePath("/");
-  revalidatePath("/products");
-  revalidatePath("/en/products");
-  revalidatePath("/ru/products");
-  revalidatePath("/admin/orders");
-  revalidatePath("/admin/products");
+  revalidateCheckoutRelatedPaths();
 
   redirect(getSuccessUrl(order.order_number, locale));
 }
