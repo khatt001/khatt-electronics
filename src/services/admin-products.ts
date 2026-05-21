@@ -88,11 +88,17 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
 export type AdminProductDetail = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   category_id: string;
   brand_id: string | null;
   short_description_az: string | null;
+  short_description_en: string | null;
+  short_description_ru: string | null;
   description_az: string | null;
+  description_en: string | null;
+  description_ru: string | null;
   price: number | string | null;
   price_visible: boolean;
   stock_status: string;
@@ -100,7 +106,11 @@ export type AdminProductDetail = {
   status: string;
   is_featured: boolean;
   seo_title_az: string | null;
+  seo_title_en: string | null;
+  seo_title_ru: string | null;
   seo_description_az: string | null;
+  seo_description_en: string | null;
+  seo_description_ru: string | null;
   images: {
     id: string;
     url: string;
@@ -111,7 +121,11 @@ export type AdminProductDetail = {
   specifications: {
     id: string;
     spec_key_az: string;
+    spec_key_en: string | null;
+    spec_key_ru: string | null;
     spec_value_az: string;
+    spec_value_en: string | null;
+    spec_value_ru: string | null;
     sort_order: number;
   }[];
 };
@@ -127,11 +141,17 @@ export async function getAdminProductById(
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       category_id,
       brand_id,
       short_description_az,
+      short_description_en,
+      short_description_ru,
       description_az,
+      description_en,
+      description_ru,
       price,
       price_visible,
       stock_status,
@@ -139,7 +159,11 @@ export async function getAdminProductById(
       status,
       is_featured,
       seo_title_az,
+      seo_title_en,
+      seo_title_ru,
       seo_description_az,
+      seo_description_en,
+      seo_description_ru,
       images:product_images (
         id,
         url,
@@ -150,7 +174,11 @@ export async function getAdminProductById(
       specifications:product_specifications (
         id,
         spec_key_az,
+        spec_key_en,
+        spec_key_ru,
         spec_value_az,
+        spec_value_en,
+        spec_value_ru,
         sort_order
       )
     `
