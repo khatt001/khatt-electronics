@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getSpecSortIndex } from "@/lib/product-specs";
+import { isLocale } from "@/lib/i18n";
 
 type FilterLocale = "az" | "en" | "ru";
 
@@ -12,7 +13,11 @@ type ProductFilterRow = {
   } | null;
   specifications: {
     spec_key_az: string;
+    spec_key_en: string | null;
+    spec_key_ru: string | null;
     spec_value_az: string;
+    spec_value_en: string | null;
+    spec_value_ru: string | null;
   }[];
 };
 
@@ -31,6 +36,7 @@ type FilterGroup = {
 
 const filterApiTranslations = {
   az: {
+    brandGroup: "Brend",
     stockGroup: "Stok vəziyyəti",
     stockIn: "Stokda var",
     stockPreOrder: "Öncədən sifariş",
@@ -38,6 +44,7 @@ const filterApiTranslations = {
     localeCode: "az",
   },
   en: {
+    brandGroup: "Brand",
     stockGroup: "Stock status",
     stockIn: "In stock",
     stockPreOrder: "Pre-order",
@@ -45,6 +52,7 @@ const filterApiTranslations = {
     localeCode: "en",
   },
   ru: {
+    brandGroup: "Бренд",
     stockGroup: "Наличие",
     stockIn: "В наличии",
     stockPreOrder: "Предзаказ",
@@ -54,15 +62,47 @@ const filterApiTranslations = {
 } as const;
 
 function getLocale(value: string | null): FilterLocale {
-  if (value === "en" || value === "ru") {
-    return value;
-  }
-
-  return "az";
+  return value && isLocale(value) ? value : "az";
 }
 
 function normalizeValue(value: string | null | undefined) {
   return String(value ?? "").trim();
+}
+
+function getLocalizedText(
+  locale: FilterLocale,
+  az: string | null,
+  en?: string | null,
+  ru?: string | null
+) {
+  if (locale === "en") return normalizeValue(en) || normalizeValue(az);
+  if (locale === "ru") return normalizeValue(ru) || normalizeValue(az);
+
+  return normalizeValue(az);
+}
+
+function getLocalizedSpecKey(
+  spec: ProductFilterRow["specifications"][number],
+  locale: FilterLocale
+) {
+  return getLocalizedText(
+    locale,
+    spec.spec_key_az,
+    spec.spec_key_en,
+    spec.spec_key_ru
+  );
+}
+
+function getLocalizedSpecValue(
+  spec: ProductFilterRow["specifications"][number],
+  locale: FilterLocale
+) {
+  return getLocalizedText(
+    locale,
+    spec.spec_value_az,
+    spec.spec_value_en,
+    spec.spec_value_ru
+  );
 }
 
 function incrementOption(map: Map<string, number>, value: string) {
@@ -105,6 +145,7 @@ function getStockLabel(
 
   if (stockStatus === "in_stock") return t.stockIn;
   if (stockStatus === "pre_order") return t.stockPreOrder;
+
   return t.stockOut;
 }
 
@@ -167,7 +208,11 @@ export async function GET(request: Request) {
       ),
       specifications:product_specifications (
         spec_key_az,
-        spec_value_az
+        spec_key_en,
+        spec_key_ru,
+        spec_value_az,
+        spec_value_en,
+        spec_value_ru
       )
     `
     )
@@ -199,8 +244,8 @@ export async function GET(request: Request) {
     incrementOption(stockMap, getStockLabel(product.stock_status, locale));
 
     product.specifications?.forEach((spec) => {
-      const key = normalizeValue(spec.spec_key_az);
-      const value = normalizeValue(spec.spec_value_az);
+      const key = getLocalizedSpecKey(spec, locale);
+      const value = getLocalizedSpecValue(spec, locale);
 
       if (!key || !value) return;
 
@@ -215,7 +260,7 @@ export async function GET(request: Request) {
   if (brandMap.size > 0) {
     groups.push({
       key: "brand",
-      label: "Brand",
+      label: t.brandGroup,
       type: "brand",
       options: mapToOptions(brandMap, locale),
     });
