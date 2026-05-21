@@ -13,16 +13,22 @@ import { CompareNavLink } from "@/components/compare/compare-nav-link";
 import { siteConfig } from "@/data/site";
 import { getMainNavigationLinks } from "@/data/navigation";
 import { navbarTranslations } from "@/data/translations/navbar";
-import { localizedPath, type Locale } from "@/lib/i18n";
+import {
+  localizedPath,
+  switchLocalePathname,
+  type Locale,
+} from "@/lib/i18n";
+import { usePathname } from "next/navigation";
 
 type NavbarProps = {
   locale?: Locale;
 };
 
 export default function Navbar({ locale = "az" }: NavbarProps) {
-  const [open, setOpen] = useState(false);
-  const t = navbarTranslations[locale];
-  const navLinks = getMainNavigationLinks(t.navLinks, locale);
+ const [open, setOpen] = useState(false);
+const pathname = usePathname();
+const t = navbarTranslations[locale];
+const navLinks = getMainNavigationLinks(t.navLinks, locale);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -81,7 +87,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
                 {t.languages.map((language) => (
                   <Link
                     key={language.label}
-                    href={language.href}
+                    href={switchLocalePathname(pathname, language.locale)}
                     className={cn(
                       "transition hover:text-white",
                       language.locale === locale
@@ -256,7 +262,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
             {t.languages.map((language) => (
               <Link
                 key={language.label}
-                href={language.href}
+                href={switchLocalePathname(pathname, language.locale)}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium",

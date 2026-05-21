@@ -18,7 +18,6 @@ export type NavbarTranslation = {
   navLinks: Record<MainNavigationKey, string>;
   languages: {
     label: string;
-    href: string;
     locale: Locale;
   }[];
 };
@@ -47,9 +46,9 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
       contact: "Əlaqə",
     },
     languages: [
-      { label: "AZ", href: "/", locale: "az" },
-      { label: "EN", href: "/en", locale: "en" },
-      { label: "RU", href: "/ru", locale: "ru" },
+      { label: "AZ", locale: "az" },
+      { label: "EN", locale: "en" },
+      { label: "RU",  locale: "ru" },
     ],
   },
 
@@ -76,9 +75,9 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
       contact: "Contact",
     },
     languages: [
-      { label: "AZ", href: "/", locale: "az" },
-      { label: "EN", href: "/en", locale: "en" },
-      { label: "RU", href: "/ru", locale: "ru" },
+      { label: "AZ",  locale: "az" },
+      { label: "EN",  locale: "en" },
+      { label: "RU",  locale: "ru" },
     ],
   },
 
@@ -105,9 +104,9 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
       contact: "Контакты",
     },
     languages: [
-      { label: "AZ", href: "/", locale: "az" },
-      { label: "EN", href: "/en", locale: "en" },
-      { label: "RU", href: "/ru", locale: "ru" },
+      { label: "AZ",  locale: "az" },
+      { label: "EN",  locale: "en" },
+      { label: "RU",  locale: "ru" },
     ],
   },
 };

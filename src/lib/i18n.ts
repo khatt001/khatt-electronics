@@ -37,3 +37,28 @@ export function localizedPath(path: string, locale: Locale): string {
 export function getLocalePrefix(locale: Locale): string {
   return locale === defaultLocale ? "" : `/${locale}`;
 }
+
+export function removeLocaleFromPathname(pathname: string): string {
+  if (pathname === "/en" || pathname === "/ru") {
+    return "/";
+  }
+
+  if (pathname.startsWith("/en/")) {
+    return pathname.replace(/^\/en/, "") || "/";
+  }
+
+  if (pathname.startsWith("/ru/")) {
+    return pathname.replace(/^\/ru/, "") || "/";
+  }
+
+  return pathname || "/";
+}
+
+export function switchLocalePathname(
+  pathname: string,
+  targetLocale: Locale
+): string {
+  const pathnameWithoutLocale = removeLocaleFromPathname(pathname);
+
+  return localizedPath(pathnameWithoutLocale, targetLocale);
+}
