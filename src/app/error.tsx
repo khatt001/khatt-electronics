@@ -3,10 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import {
+  getLocaleFromPathname,
+  localizedPath,
+  type Locale,
+} from "@/lib/i18n";
 
-type Locale = "az" | "en" | "ru";
-
-const translations = {
+const translations: Record<
+  Locale,
+  {
+    eyebrow: string;
+    title: string;
+    description: string;
+    retry: string;
+    home: string;
+  }
+> = {
   az: {
     eyebrow: "Xəta",
     title: "Nəsə düzgün işləmədi",
@@ -31,18 +43,7 @@ const translations = {
     retry: "Попробовать снова",
     home: "Главная",
   },
-} as const;
-
-function getLocale(pathname: string): Locale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) return "ru";
-  return "az";
-}
-
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") return path;
-  return `/${locale}${path}`;
-}
+};
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
@@ -51,7 +52,7 @@ type ErrorPageProps = {
 
 export default function ErrorPage({ reset }: ErrorPageProps) {
   const pathname = usePathname();
-  const locale = getLocale(pathname);
+  const locale = getLocaleFromPathname(pathname);
   const t = translations[locale];
 
   return (
@@ -85,7 +86,7 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
             </button>
 
             <Link
-              href={withLocalePath(locale, "/")}
+              href={localizedPath("/", locale)}
               className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
             >
               {t.home}

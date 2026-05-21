@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-
+import { localizedPath } from "@/lib/i18n";
 type CatalogCategory = {
   id: string;
   name: string;
@@ -77,13 +77,6 @@ const catalogDropdownTranslations = {
   },
 } as const;
 
-function withLocalePath(locale: CatalogDropdownLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 export function CatalogDropdown({
   onNavigate,
@@ -213,7 +206,7 @@ export function CatalogDropdown({
                   {categories.map((category) => (
                     <Link
                       key={category.id}
-                      href={withLocalePath(locale, `/category/${category.slug}`)}
+                      href={localizedPath(`/category/${category.slug}`, locale)}
                       onClick={closeDropdown}
                       className="group flex items-center gap-3 rounded-2xl border border-transparent p-3 transition hover:border-neutral-200 hover:bg-neutral-50"
                     >
@@ -255,7 +248,7 @@ export function CatalogDropdown({
                 </p>
 
                 <Link
-                  href={withLocalePath(locale, "/products")}
+                  href={localizedPath("/products", locale)}
                   onClick={closeDropdown}
                   className="mt-5 inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
                 >
@@ -265,7 +258,7 @@ export function CatalogDropdown({
               </div>
 
               <Link
-                href={withLocalePath(locale, "/products")}
+                href={localizedPath("/products", locale)}
                 onClick={closeDropdown}
                 className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
               >
@@ -274,7 +267,7 @@ export function CatalogDropdown({
               </Link>
 
               <Link
-                href={withLocalePath(locale, "/track-order")}
+                href={localizedPath("/track-order", locale)}
                 onClick={closeDropdown}
                 className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
               >

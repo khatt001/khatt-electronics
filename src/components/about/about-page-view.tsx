@@ -5,18 +5,13 @@ import {
   aboutTranslations,
   type AboutLocale,
 } from "@/data/translations/about";
+import { localizedPath } from "@/lib/i18n";
 
 type AboutPageViewProps = {
   locale?: AboutLocale;
 };
 
-function withLocalePath(locale: AboutLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
 
-  return `/${locale}${path}`;
-}
 
 export function AboutPageView({ locale = "az" }: AboutPageViewProps) {
   const t = aboutTranslations[locale];
@@ -44,7 +39,7 @@ export function AboutPageView({ locale = "az" }: AboutPageViewProps) {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  href={withLocalePath(locale, "/contact")}
+                  href={localizedPath("/contact", locale)}
                   className="inline-flex items-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
                 >
                   {t.contactButton}
@@ -52,7 +47,7 @@ export function AboutPageView({ locale = "az" }: AboutPageViewProps) {
                 </Link>
 
                 <Link
-                  href={withLocalePath(locale, "/services")}
+                  href={localizedPath("/services", locale)}
                   className="inline-flex items-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
                 >
                   {t.servicesButton}
@@ -172,7 +167,7 @@ export function AboutPageView({ locale = "az" }: AboutPageViewProps) {
               </div>
 
               <Link
-                href={withLocalePath(locale, "/contact")}
+                href={localizedPath( "/contact",locale)}
                 className="inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
               >
                 {t.quoteButton}

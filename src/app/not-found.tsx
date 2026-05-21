@@ -3,10 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, PackageSearch } from "lucide-react";
+import {
+  getLocaleFromPathname,
+  localizedPath,
+  type Locale,
+} from "@/lib/i18n";
 
-type Locale = "az" | "en" | "ru";
-
-const translations = {
+const translations: Record<
+  Locale,
+  {
+    eyebrow: string;
+    title: string;
+    description: string;
+    home: string;
+    products: string;
+  }
+> = {
   az: {
     eyebrow: "404",
     title: "Səhifə tapılmadı",
@@ -31,22 +43,11 @@ const translations = {
     home: "Главная",
     products: "Смотреть товары",
   },
-} as const;
-
-function getLocale(pathname: string): Locale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) return "ru";
-  return "az";
-}
-
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") return path;
-  return `/${locale}${path}`;
-}
+};
 
 export default function NotFound() {
   const pathname = usePathname();
-  const locale = getLocale(pathname);
+  const locale = getLocaleFromPathname(pathname);
   const t = translations[locale];
 
   return (
@@ -71,7 +72,7 @@ export default function NotFound() {
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href={withLocalePath(locale, "/")}
+              href={localizedPath("/", locale)}
               className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
             >
               <Home className="mr-2 size-4" aria-hidden="true" />
@@ -79,7 +80,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href={withLocalePath(locale, "/products")}
+              href={localizedPath("/products", locale)}
               className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
             >
               {t.products}

@@ -14,6 +14,7 @@ import { getCatalogProducts } from "@/services/products";
 import { ProductsFilter } from "@/app/products/products-filter";
 import { JsonLd } from "@/components/seo/json-ld";
 import { createBreadcrumbSchema, getBaseUrl } from "@/lib/seo";
+import { localizedPath } from "@/lib/i18n";
 import {
   categoryPageTranslations,
   type CategoryPageLocale,
@@ -32,11 +33,6 @@ export type CategoryPageViewProps = {
   query: CategorySearchParams;
   locale?: CategoryPageLocale;
 };
-
-function withLocalePath(locale: CategoryPageLocale, path: string) {
-  if (locale === "az") return path;
-  return `/${locale}${path}`;
-}
 
 function getFirstValue(value?: string | string[]) {
   if (Array.isArray(value)) return value[0];
@@ -87,7 +83,7 @@ function buildCategoryFilterUrl(
   });
 
   const queryString = params.toString();
-  const basePath = withLocalePath(locale, `/category/${categorySlug}`);
+  const basePath = localizedPath(`/category/${categorySlug}`, locale);
 
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
@@ -96,7 +92,9 @@ function getStockLabel(stock: string | undefined, locale: CategoryPageLocale) {
   const t = categoryPageTranslations[locale];
 
   if (stock === "in_stock" || stock === "Stokda var") return t.stockIn;
-  if (stock === "out_of_stock" || stock === "Stokda yoxdur") return t.stockOut;
+  if (stock === "out_of_stock" || stock === "Stokda yoxdur") {
+    return t.stockOut;
+  }
   if (stock === "pre_order" || stock === "Öncədən sifariş") {
     return t.stockPreOrder;
   }
@@ -150,7 +148,7 @@ export async function generateCategoryMetadata({
     return Boolean(value);
   });
 
-  const canonical = withLocalePath(locale, `/category/${category.slug}`);
+  const canonical = localizedPath(`/category/${category.slug}`, locale);
 
   return {
     title: category.seoTitle ?? `${category.name} ${t.metadataProductsSuffix}`,
@@ -197,17 +195,17 @@ export async function CategoryPageView({
   const specs = getSpecsFromQuery(query);
 
   const [products, categories, brands] = await Promise.all([
-   getCatalogProducts(
-  {
-    search,
-    category: category.slug,
-    brand: brandValues,
-    stock: stockValues,
-    sort,
-    specs,
-  },
-  locale
-),
+    getCatalogProducts(
+      {
+        search,
+        category: category.slug,
+        brand: brandValues,
+        stock: stockValues,
+        sort,
+        specs,
+      },
+      locale
+    ),
     getCatalogCategories(),
     getCatalogBrands(),
   ]);
@@ -226,16 +224,16 @@ export async function CategoryPageView({
     Object.keys(specs).length > 0;
 
   const baseUrl = getBaseUrl();
-  const categoryPath = withLocalePath(locale, `/category/${category.slug}`);
+  const categoryPath = localizedPath(`/category/${category.slug}`, locale);
 
   const breadcrumbSchema = createBreadcrumbSchema([
     {
       name: t.homeBreadcrumb,
-      url: `${baseUrl}${withLocalePath(locale, "/")}`,
+      url: `${baseUrl}${localizedPath("/", locale)}`,
     },
     {
       name: t.productsBreadcrumb,
-      url: `${baseUrl}${withLocalePath(locale, "/products")}`,
+      url: `${baseUrl}${localizedPath("/products", locale)}`,
     },
     {
       name: category.name,
@@ -250,7 +248,7 @@ export async function CategoryPageView({
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
           <Link
-            href={withLocalePath(locale, "/products")}
+            href={localizedPath("/products", locale)}
             className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
           >
             <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
@@ -276,7 +274,7 @@ export async function CategoryPageView({
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href={withLocalePath(locale, "/products")}
+              href={localizedPath("/products", locale)}
               className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
             >
               {t.allProducts}

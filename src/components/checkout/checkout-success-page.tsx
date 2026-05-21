@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, ClipboardCheck } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { localizedPath } from "@/lib/i18n";
 import {
   checkoutSuccessTranslations,
   type CheckoutSuccessLocale,
@@ -10,14 +11,6 @@ type CheckoutSuccessPageProps = {
   locale?: CheckoutSuccessLocale;
   orderNumber?: string;
 };
-
-function withLocalePath(locale: CheckoutSuccessLocale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
 
 export function CheckoutSuccessPage({
   locale = "az",
@@ -53,7 +46,10 @@ export function CheckoutSuccessPage({
         <Container>
           <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <ClipboardCheck className="size-8 text-neutral-950" aria-hidden="true" />
+              <ClipboardCheck
+                className="size-8 text-neutral-950"
+                aria-hidden="true"
+              />
 
               <div className="mt-6 space-y-4">
                 {orderNumber ? (
@@ -101,14 +97,14 @@ export function CheckoutSuccessPage({
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
-                  href={withLocalePath(locale, "/products")}
+                  href={localizedPath("/products", locale)}
                   className="inline-flex rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
                 >
                   {t.productsButton}
                 </Link>
 
                 <Link
-                  href={withLocalePath(locale, "/")}
+                  href={localizedPath("/", locale)}
                   className="inline-flex rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
                 >
                   {t.homeButton}

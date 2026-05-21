@@ -9,7 +9,7 @@ import {
   productsTranslations,
   type ProductsLocale,
 } from "@/data/translations/products";
-
+import { localizedPath } from "@/lib/i18n";
 export type ProductsSearchParams = {
   search?: string | string[];
   category?: string | string[];
@@ -51,10 +51,6 @@ function getSpecsFromQuery(query: ProductsSearchParams) {
   return specs;
 }
 
-function withLocalePath(locale: ProductsLocale, path: string) {
-  if (locale === "az") return path;
-  return `/${locale}${path}`;
-}
 
 function buildFilterUrl(
   locale: ProductsLocale,
@@ -77,7 +73,7 @@ function buildFilterUrl(
   });
 
   const queryString = params.toString();
-  const productsPath = withLocalePath(locale, "/products");
+  const productsPath = localizedPath("/products", locale);
 
   return queryString ? `${productsPath}?${queryString}` : productsPath;
 }
@@ -316,7 +312,7 @@ export async function ProductsPageView({
                   </p>
 
                   <Link
-                    href={withLocalePath(locale, "/products")}
+                    href={localizedPath("/products", locale)}
                     className="mt-5 inline-flex rounded-full bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
                   >
                     {t.clearAll}

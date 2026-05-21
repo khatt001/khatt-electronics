@@ -5,15 +5,12 @@ import {
   servicesPageTranslations,
   type ServicesPageLocale,
 } from "@/data/translations/services-page";
-
+import { localizedPath } from "@/lib/i18n";
 type ServicesPageViewProps = {
   locale?: ServicesPageLocale;
 };
 
-function withLocalePath(locale: ServicesPageLocale, path: string) {
-  if (locale === "az") return path;
-  return `/${locale}${path}`;
-}
+
 
 export function ServicesPageView({ locale = "az" }: ServicesPageViewProps) {
   const t = servicesPageTranslations[locale];
@@ -33,14 +30,14 @@ export function ServicesPageView({ locale = "az" }: ServicesPageViewProps) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={withLocalePath(locale, "/contact")}
+                href={localizedPath("/contact", locale)}
                 className="inline-flex items-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 {t.quoteButton}
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Link>
               <Link
-                href={withLocalePath(locale, "/products")}
+                href={localizedPath("/products", locale)}
                 className="inline-flex items-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
               >
                 {t.productsButton}

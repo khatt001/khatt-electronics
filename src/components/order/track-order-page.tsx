@@ -8,20 +8,14 @@ import {
     trackOrderTranslations,
     type TrackOrderLocale,
 } from "@/data/translations/track-order";
-
+import { localizedPath } from "@/lib/i18n";
 type TrackOrderPageProps = {
     locale?: TrackOrderLocale;
     orderNumber?: string;
     phone?: string;
 };
 
-function withLocalePath(locale: TrackOrderLocale, path: string) {
-    if (locale === "az") {
-        return path;
-    }
 
-    return `/${locale}${path}`;
-}
 
 function formatDate(value: string, localeCode: string) {
     return new Intl.DateTimeFormat(localeCode, {
@@ -125,7 +119,7 @@ export async function TrackOrderPage({
                 <Container>
                     <div className="grid gap-8 lg:grid-cols-[420px_1fr]">
                         <form
-                            action={withLocalePath(locale, "/track-order")}
+                            action={localizedPath("/track-order", locale)}
                             className="h-fit rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm"
                         >
                             <h2 className="text-2xl font-semibold text-neutral-950">
@@ -256,10 +250,7 @@ export async function TrackOrderPage({
                                                 >
                                                     <div>
                                                         <Link
-                                                            href={withLocalePath(
-                                                                locale,
-                                                                `/products/${item.product_slug}`
-                                                            )}
+                                                            href={localizedPath(`/products/${item.product_slug}`, locale)}
                                                             className="font-medium text-neutral-950 transition hover:underline"
                                                         >
                                                             {item.product_name}

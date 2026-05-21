@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingBag, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { Locale } from "@/lib/i18n";
-
+import { localizedPath, type Locale } from "@/lib/i18n";
 type NavbarSearchProduct = {
   id: string;
   name: string;
@@ -52,25 +51,6 @@ const navbarSearchTranslations = {
   },
 } as const;
 
-function withLocalePath(locale: Locale, path: string) {
-  if (locale === "az") {
-    return path;
-  }
-
-  return `/${locale}${path}`;
-}
-
-function localizeProductHref(locale: Locale, href: string) {
-  if (locale === "az") {
-    return href;
-  }
-
-  if (href.startsWith(`/${locale}/`)) {
-    return href;
-  }
-
-  return `/${locale}${href}`;
-}
 
 export function NavbarSearch({
   placeholder,
@@ -212,7 +192,7 @@ export function NavbarSearch({
               {products.map((product) => (
                 <Link
                   key={product.id}
-                  href={localizeProductHref(locale, product.href)}
+                  href={localizedPath(product.href, locale)}
                   onClick={() => {
                     closeSearch();
                     onNavigate?.();
@@ -266,9 +246,9 @@ export function NavbarSearch({
 
           <div className="border-t border-neutral-100 p-3">
             <Link
-              href={`${withLocalePath(locale, "/products")}?search=${encodeURIComponent(
-                cleanQuery
-              )}`}
+              href={`${localizedPath("/products", locale)}?search=${encodeURIComponent(
+  cleanQuery
+)}`}
               onClick={() => {
                 closeSearch();
                 onNavigate?.();
