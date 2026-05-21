@@ -152,7 +152,7 @@ export async function ProductsPageView({
       },
       locale
     ),
-    getCatalogCategories(),
+    getCatalogCategories(locale),
     getCatalogBrands(),
   ]);
 

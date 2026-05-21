@@ -116,27 +116,27 @@ export function CatalogDropdown({
   }, [isMobile]);
 
   useEffect(() => {
-    if (!open || categories.length > 0) return;
+  if (!open) return;
 
-    async function loadCategories() {
-      try {
-        setLoading(true);
+  async function loadCategories() {
+    try {
+      setLoading(true);
 
-        const response = await fetch("/api/catalog/categories");
-        const result = (await response.json()) as {
-          categories: CatalogCategory[];
-        };
+      const response = await fetch(`/api/catalog/categories?locale=${locale}`);
+      const result = (await response.json()) as {
+        categories: CatalogCategory[];
+      };
 
-        setCategories(result.categories ?? []);
-      } catch {
-        setCategories([]);
-      } finally {
-        setLoading(false);
-      }
+      setCategories(result.categories ?? []);
+    } catch {
+      setCategories([]);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    void loadCategories();
-  }, [open, categories.length]);
+  void loadCategories();
+}, [open, locale]);
 
   function closeDropdown() {
     setOpen(false);

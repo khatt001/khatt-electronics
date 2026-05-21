@@ -8,8 +8,12 @@ import { requireAdmin } from "@/services/admin";
 
 const categorySchema = z.object({
   name_az: z.string().min(2, "Kateqoriya adı minimum 2 simvol olmalıdır."),
+  name_en: z.string().optional(),
+  name_ru: z.string().optional(),
   slug: z.string().min(2, "Slug minimum 2 simvol olmalıdır."),
   description_az: z.string().optional(),
+  description_en: z.string().optional(),
+  description_ru: z.string().optional(),
   sort_order: z.string().optional(),
 });
 
@@ -32,11 +36,15 @@ export async function createCategory(formData: FormData) {
   await requireAdmin();
 
   const rawData = {
-    name_az: String(formData.get("name_az") ?? "").trim(),
-    slug: String(formData.get("slug") ?? "").trim(),
-    description_az: String(formData.get("description_az") ?? "").trim(),
-    sort_order: String(formData.get("sort_order") ?? "").trim(),
-  };
+  name_az: String(formData.get("name_az") ?? "").trim(),
+  name_en: String(formData.get("name_en") ?? "").trim(),
+  name_ru: String(formData.get("name_ru") ?? "").trim(),
+  slug: String(formData.get("slug") ?? "").trim(),
+  description_az: String(formData.get("description_az") ?? "").trim(),
+  description_en: String(formData.get("description_en") ?? "").trim(),
+  description_ru: String(formData.get("description_ru") ?? "").trim(),
+  sort_order: String(formData.get("sort_order") ?? "").trim(),
+};
 
   const parsed = categorySchema.safeParse(rawData);
 
@@ -64,13 +72,17 @@ export async function createCategory(formData: FormData) {
     );
   }
 
-  const { error } = await supabaseAdmin.from("categories").insert({
-    name_az: category.name_az,
-    slug,
-    description_az: category.description_az || null,
-    sort_order: sortOrder,
-    is_active: true,
-  });
+const { error } = await supabaseAdmin.from("categories").insert({
+  name_az: category.name_az,
+  name_en: category.name_en || null,
+  name_ru: category.name_ru || null,
+  slug,
+  description_az: category.description_az || null,
+  description_en: category.description_en || null,
+  description_ru: category.description_ru || null,
+  sort_order: sortOrder,
+  is_active: true,
+});
 
   if (error) {
     redirect(

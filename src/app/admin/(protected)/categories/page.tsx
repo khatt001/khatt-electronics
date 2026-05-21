@@ -52,8 +52,25 @@ export default async function AdminCategoriesPage({
                 placeholder="Məsələn: Kamera sistemləri"
                 className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
               />
+
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium">Ad EN</label>
+              <input
+                name="name_en"
+                placeholder="Example: Camera systems"
+                className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+              />
             </div>
 
+            <div>
+              <label className="mb-2 block text-sm font-medium">Ad RU</label>
+              <input
+                name="name_ru"
+                placeholder="Например: Системы камер"
+                className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+              />
+            </div>
             <div>
               <label className="mb-2 block text-sm font-medium">Slug</label>
               <input
@@ -75,7 +92,25 @@ export default async function AdminCategoriesPage({
                 className="w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none transition focus:border-neutral-950"
               />
             </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium">Açıqlama EN</label>
+              <textarea
+                name="description_en"
+                rows={3}
+                placeholder="Short category description in English"
+                className="w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none transition focus:border-neutral-950"
+              />
+            </div>
 
+            <div>
+              <label className="mb-2 block text-sm font-medium">Açıqlama RU</label>
+              <textarea
+                name="description_ru"
+                rows={3}
+                placeholder="Краткое описание категории на русском"
+                className="w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none transition focus:border-neutral-950"
+              />
+            </div>
             <div>
               <label className="mb-2 block text-sm font-medium">
                 Sıralama
@@ -141,11 +176,10 @@ export default async function AdminCategoriesPage({
                   >
                     <button
                       type="submit"
-                      className={`rounded-full px-3 py-2 text-xs font-medium ${
-                        category.is_active
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "bg-neutral-100 text-neutral-500"
-                      }`}
+                      className={`rounded-full px-3 py-2 text-xs font-medium ${category.is_active
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-neutral-100 text-neutral-500"
+                        }`}
                     >
                       {category.is_active ? "Aktiv" : "Passiv"}
                     </button>

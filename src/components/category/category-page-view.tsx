@@ -130,7 +130,7 @@ export async function generateCategoryMetadata({
   query: CategorySearchParams;
   locale?: CategoryPageLocale;
 }): Promise<Metadata> {
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug,locale);
   const t = categoryPageTranslations[locale];
 
   if (!category) {
@@ -182,7 +182,7 @@ export async function CategoryPageView({
   locale = "az",
 }: CategoryPageViewProps) {
   const t = categoryPageTranslations[locale];
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug,locale);
 
   if (!category) {
     notFound();
@@ -206,7 +206,7 @@ export async function CategoryPageView({
       },
       locale
     ),
-    getCatalogCategories(),
+    getCatalogCategories(locale),
     getCatalogBrands(),
   ]);
 

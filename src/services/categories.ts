@@ -12,17 +12,29 @@ export type CatalogCategory = {
 type CatalogCategoryRow = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   description_az: string | null;
+  description_en: string | null;
+  description_ru: string | null;
 };
 
 type CategoryDetailRow = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   description_az: string | null;
+  description_en: string | null;
+  description_ru: string | null;
   seo_title: string | null;
   seo_description: string | null;
+  seo_title_en: string | null;
+  seo_title_ru: string | null;
+  seo_description_en: string | null;
+  seo_description_ru: string | null;
 };
 
 type CategoryProductRow = {
@@ -35,6 +47,8 @@ type CategoryProductRow = {
   stock_quantity: number | null;
   category: {
     name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
   } | null;
   brand: {
     name: string;
@@ -78,6 +92,67 @@ const categoryServiceTranslations = {
   },
 } as const;
 
+function getLocalizedCategoryName(
+  category: {
+    name_az: string;
+    name_en?: string | null;
+    name_ru?: string | null;
+  },
+  locale: ProductLocale
+) {
+  if (locale === "en") return category.name_en || category.name_az;
+  if (locale === "ru") return category.name_ru || category.name_az;
+
+  return category.name_az;
+}
+
+function getLocalizedCategoryDescription(
+  category: {
+    description_az: string | null;
+    description_en?: string | null;
+    description_ru?: string | null;
+  },
+  locale: ProductLocale
+) {
+  if (locale === "en") return category.description_en || category.description_az;
+  if (locale === "ru") return category.description_ru || category.description_az;
+
+  return category.description_az;
+}
+
+function getLocalizedCategorySeoTitle(
+  category: {
+    seo_title: string | null;
+    seo_title_en?: string | null;
+    seo_title_ru?: string | null;
+  },
+  locale: ProductLocale
+) {
+  if (locale === "en") return category.seo_title_en || category.seo_title;
+  if (locale === "ru") return category.seo_title_ru || category.seo_title;
+
+  return category.seo_title;
+}
+
+function getLocalizedCategorySeoDescription(
+  category: {
+    seo_description: string | null;
+    seo_description_en?: string | null;
+    seo_description_ru?: string | null;
+  },
+  locale: ProductLocale
+) {
+  if (locale === "en") {
+    return category.seo_description_en || category.seo_description;
+  }
+
+  if (locale === "ru") {
+    return category.seo_description_ru || category.seo_description;
+  }
+
+  return category.seo_description;
+}
+
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
@@ -98,6 +173,7 @@ function formatBadge(
 
   if (stockStatus === "in_stock") return t.badgeInStock;
   if (stockStatus === "pre_order") return t.badgePreOrder;
+
   return t.badgeOutOfStock;
 }
 
@@ -105,6 +181,7 @@ function getPrimaryImage(images: CategoryProductRow["images"]) {
   const sortedImages = [...(images ?? [])].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
     if (!a.is_primary && b.is_primary) return 1;
+
     return 0;
   });
 
@@ -126,7 +203,9 @@ function formatProduct(
     id: product.id,
     name: product.name_az,
     slug: product.slug,
-    category: product.category?.name_az ?? t.productFallback,
+    category: product.category
+      ? getLocalizedCategoryName(product.category, locale)
+      : t.productFallback,
     brand: product.brand?.name ?? null,
     price: formatPrice(product.price_visible, product.price, locale),
     priceAmount: Number.isFinite(priceAmount) ? priceAmount : null,
@@ -138,12 +217,25 @@ function formatProduct(
   };
 }
 
-export async function getCatalogCategories(): Promise<CatalogCategory[]> {
+export async function getCatalogCategories(
+  locale: ProductLocale = "az"
+): Promise<CatalogCategory[]> {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("categories")
-    .select("id, name_az, slug, description_az")
+    .select(
+      `
+      id,
+      name_az,
+      name_en,
+      name_ru,
+      slug,
+      description_az,
+      description_en,
+      description_ru
+    `
+    )
     .eq("is_active", true)
     .order("sort_order", { ascending: true })
     .returns<CatalogCategoryRow[]>();
@@ -155,20 +247,38 @@ export async function getCatalogCategories(): Promise<CatalogCategory[]> {
 
   return data.map((category) => ({
     id: category.id,
-    name: category.name_az,
+    name: getLocalizedCategoryName(category, locale),
     slug: category.slug,
-    description: category.description_az,
+    description: getLocalizedCategoryDescription(category, locale),
   }));
 }
 
 export async function getCategoryBySlug(
-  slug: string
+  slug: string,
+  locale: ProductLocale = "az"
 ): Promise<CategoryDetail | null> {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("categories")
-    .select("id, name_az, slug, description_az, seo_title, seo_description")
+    .select(
+      `
+      id,
+      name_az,
+      name_en,
+      name_ru,
+      slug,
+      description_az,
+      description_en,
+      description_ru,
+      seo_title,
+      seo_title_en,
+      seo_title_ru,
+      seo_description,
+      seo_description_en,
+      seo_description_ru
+    `
+    )
     .eq("slug", slug)
     .eq("is_active", true)
     .maybeSingle()
@@ -180,11 +290,11 @@ export async function getCategoryBySlug(
 
   return {
     id: data.id,
-    name: data.name_az,
+    name: getLocalizedCategoryName(data, locale),
     slug: data.slug,
-    description: data.description_az,
-    seoTitle: data.seo_title,
-    seoDescription: data.seo_description,
+    description: getLocalizedCategoryDescription(data, locale),
+    seoTitle: getLocalizedCategorySeoTitle(data, locale),
+    seoDescription: getLocalizedCategorySeoDescription(data, locale),
   };
 }
 
@@ -206,7 +316,9 @@ export async function getCategoryProducts(
       stock_status,
       stock_quantity,
       category:categories (
-        name_az
+        name_az,
+        name_en,
+        name_ru
       ),
       brand:brands (
         name
@@ -223,13 +335,14 @@ export async function getCategoryProducts(
     .returns<CategoryProductRow[]>();
 
   if (error || !data) {
+    console.error("Failed to fetch category products:", error?.message);
     return [];
   }
 
   return data.map((product) => formatProduct(product, locale));
 }
 
-export async function getCategorySlugs(): Promise<string[]> {
+export async function getCategorySlugs() {
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase

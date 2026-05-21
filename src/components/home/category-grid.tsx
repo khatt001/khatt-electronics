@@ -29,7 +29,7 @@ type CategoryGridProps = {
 
 
 export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
-  const categories = await getCatalogCategories();
+  const categories = await getCatalogCategories(locale);
   const visibleCategories = categories.slice(0, 6);
   const t = homeTranslations[locale];
 
