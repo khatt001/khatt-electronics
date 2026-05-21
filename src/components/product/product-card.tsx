@@ -15,6 +15,7 @@ import { localizedPath } from "@/lib/i18n";
 type ProductCardProps = {
   product: ProductCardItem;
   locale?: ProductCardLocale;
+  priority?: boolean
 };
 
 function getLocalizedBadge(product: ProductCardItem, locale: ProductCardLocale) {
@@ -54,7 +55,11 @@ function getLocalizedHref(product: ProductCardItem, locale: ProductCardLocale) {
   return localizedPath(product.href, locale);
 }
 
-export function ProductCard({ product, locale = "az" }: ProductCardProps) {
+export function ProductCard({
+  product,
+  locale = "az",
+  priority = false,
+}: ProductCardProps) {
   const t = productCardTranslations[locale];
 
   const canAddToCart =
@@ -107,6 +112,8 @@ export function ProductCard({ product, locale = "az" }: ProductCardProps) {
               src={product.imageUrl}
               alt={product.name}
               fill
+              priority={priority}
+              loading={priority ? "eager" : "lazy"}
               sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain p-8 transition duration-500 group-hover:scale-105"
             />

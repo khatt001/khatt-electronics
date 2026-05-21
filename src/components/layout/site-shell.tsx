@@ -16,6 +16,12 @@ export function SiteShell({ children }: SiteShellProps) {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
 
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+
+  if (isAdminRoute) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       <Navbar locale={locale} />

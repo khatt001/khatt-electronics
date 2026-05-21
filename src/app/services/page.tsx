@@ -3,9 +3,9 @@ import { generateStaticPageMetadata } from "@/lib/page-metadata";
 
 export const metadata = generateStaticPageMetadata({
   page: "services",
-  locale: "ru",
+  locale: "az",
 });
 
-export default function RussianServicesPage() {
-  return <ServicesPageView locale="ru" />;
+export default function ServicesPage() {
+  return <ServicesPageView locale="az" />;
 }

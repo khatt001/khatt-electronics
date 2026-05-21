@@ -15,14 +15,14 @@ export async function generateMetadata({
 
   return generateProductDetailMetadata({
     slug,
-    locale: "en",
+    locale: "az",
   });
 }
 
-export default async function EnglishProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
 
-  return <ProductDetailPageView slug={slug} locale="en" />;
+  return <ProductDetailPageView slug={slug} locale="az" />;
 }
