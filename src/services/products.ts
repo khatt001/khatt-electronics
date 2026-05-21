@@ -3,6 +3,8 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export type ProductLocale = "az" | "en" | "ru";
 
+type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
+
 export type ProductCardItem = {
   id: string;
   name: string;
@@ -30,11 +32,23 @@ export type CatalogProductFilters = {
   specs?: Record<string, string[]>;
 };
 
-type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
+type LocalizedProductFields = {
+  name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
+};
+
+type LocalizedCategoryFields = {
+  name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
+};
 
 type ProductRow = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   price: number | string | null;
   price_visible: boolean;
@@ -43,6 +57,8 @@ type ProductRow = {
   is_featured: boolean;
   category: {
     name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
     slug: string;
   } | null;
   brand: {
@@ -91,17 +107,29 @@ export type ProductDetail = {
 type ProductDetailRow = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   short_description_az: string | null;
+  short_description_en: string | null;
+  short_description_ru: string | null;
   description_az: string | null;
+  description_en: string | null;
+  description_ru: string | null;
   price: number | string | null;
   price_visible: boolean;
   stock_status: StockStatus;
   stock_quantity: number | null;
   seo_title_az: string | null;
+  seo_title_en: string | null;
+  seo_title_ru: string | null;
   seo_description_az: string | null;
+  seo_description_en: string | null;
+  seo_description_ru: string | null;
   category: {
     name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
     slug: string;
   } | null;
   brand: {
@@ -116,7 +144,11 @@ type ProductDetailRow = {
   specifications: {
     id: string;
     spec_key_az: string;
+    spec_key_en: string | null;
+    spec_key_ru: string | null;
     spec_value_az: string;
+    spec_value_en: string | null;
+    spec_value_ru: string | null;
     sort_order: number;
   }[];
   downloads: {
@@ -169,6 +201,38 @@ function normalizeStockValue(value: string): StockStatus | null {
   return null;
 }
 
+function getLocalizedProductName(
+  product: LocalizedProductFields,
+  locale: ProductLocale
+) {
+  if (locale === "en") return product.name_en || product.name_az;
+  if (locale === "ru") return product.name_ru || product.name_az;
+
+  return product.name_az;
+}
+
+function getLocalizedCategoryName(
+  category: LocalizedCategoryFields,
+  locale: ProductLocale
+) {
+  if (locale === "en") return category.name_en || category.name_az;
+  if (locale === "ru") return category.name_ru || category.name_az;
+
+  return category.name_az;
+}
+
+function getLocalizedText(
+  locale: ProductLocale,
+  az: string | null,
+  en?: string | null,
+  ru?: string | null
+) {
+  if (locale === "en") return en || az;
+  if (locale === "ru") return ru || az;
+
+  return az;
+}
+
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
@@ -181,14 +245,12 @@ function formatPrice(
     : t.priceOnRequest;
 }
 
-function formatBadge(
-  stockStatus: StockStatus,
-  locale: ProductLocale = "az"
-) {
+function formatBadge(stockStatus: StockStatus, locale: ProductLocale = "az") {
   const t = productServiceTranslations[locale];
 
   if (stockStatus === "in_stock") return t.badgeInStock;
   if (stockStatus === "pre_order") return t.badgePreOrder;
+
   return t.badgeOnRequest;
 }
 
@@ -216,9 +278,11 @@ function formatProduct(
 
   return {
     id: product.id,
-    name: product.name_az,
+    name: getLocalizedProductName(product, locale),
     slug: product.slug,
-    category: product.category?.name_az ?? t.productFallback,
+    category: product.category
+      ? getLocalizedCategoryName(product.category, locale)
+      : t.productFallback,
     brand: product.brand?.name ?? null,
     price: formatPrice(product.price_visible, product.price, locale),
     priceAmount: Number.isFinite(priceAmount) ? priceAmount : null,
@@ -286,9 +350,7 @@ async function getProductIdsBySpecs(specs: Record<string, string[]>) {
       return [];
     }
 
-    const idsForSpec = Array.from(
-      new Set(data.map((row) => row.product_id))
-    );
+    const idsForSpec = Array.from(new Set(data.map((row) => row.product_id)));
 
     if (matchedIds === null) {
       matchedIds = idsForSpec;
@@ -318,6 +380,8 @@ export async function getFeaturedProducts(
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       price,
       price_visible,
@@ -326,6 +390,8 @@ export async function getFeaturedProducts(
       is_featured,
       category:categories (
         name_az,
+        name_en,
+        name_ru,
         slug
       ),
       brand:brands (
@@ -383,6 +449,8 @@ export async function getCatalogProducts(
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       price,
       price_visible,
@@ -391,6 +459,8 @@ export async function getCatalogProducts(
       is_featured,
       category:categories (
         name_az,
+        name_en,
+        name_ru,
         slug
       ),
       brand:brands (
@@ -406,7 +476,17 @@ export async function getCatalogProducts(
     .eq("status", "active");
 
   if (filters.search) {
-    query = query.ilike("name_az", `%${filters.search}%`);
+    if (locale === "en") {
+      query = query.or(
+        `name_en.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`
+      );
+    } else if (locale === "ru") {
+      query = query.or(
+        `name_ru.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`
+      );
+    } else {
+      query = query.ilike("name_az", `%${filters.search}%`);
+    }
   }
 
   if (stockValues.length === 1) {
@@ -470,17 +550,29 @@ export async function getProductBySlug(
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       short_description_az,
+      short_description_en,
+      short_description_ru,
       description_az,
+      description_en,
+      description_ru,
       price,
       price_visible,
       stock_status,
       stock_quantity,
       seo_title_az,
+      seo_title_en,
+      seo_title_ru,
       seo_description_az,
+      seo_description_en,
+      seo_description_ru,
       category:categories (
         name_az,
+        name_en,
+        name_ru,
         slug
       ),
       brand:brands (
@@ -495,7 +587,11 @@ export async function getProductBySlug(
       specifications:product_specifications (
         id,
         spec_key_az,
+        spec_key_en,
+        spec_key_ru,
         spec_value_az,
+        spec_value_en,
+        spec_value_ru,
         sort_order
       ),
       downloads:product_downloads (
@@ -524,18 +620,40 @@ export async function getProductBySlug(
 
   return {
     id: data.id,
-    name: data.name_az,
+    name: getLocalizedProductName(data, locale),
     slug: data.slug,
     stockQuantity: data.stock_quantity ?? 0,
     stockStatus: data.stock_status,
-    category: data.category?.name_az ?? t.productFallback,
+    category: data.category
+      ? getLocalizedCategoryName(data.category, locale)
+      : t.productFallback,
     brand: data.brand?.name ?? null,
     price: formatPrice(data.price_visible, data.price, locale),
     badge: formatBadge(data.stock_status, locale),
-    shortDescription: data.short_description_az,
-    description: data.description_az,
-    seoTitle: data.seo_title_az,
-    seoDescription: data.seo_description_az,
+    shortDescription: getLocalizedText(
+      locale,
+      data.short_description_az,
+      data.short_description_en,
+      data.short_description_ru
+    ),
+    description: getLocalizedText(
+      locale,
+      data.description_az,
+      data.description_en,
+      data.description_ru
+    ),
+    seoTitle: getLocalizedText(
+      locale,
+      data.seo_title_az,
+      data.seo_title_en,
+      data.seo_title_ru
+    ),
+    seoDescription: getLocalizedText(
+      locale,
+      data.seo_description_az,
+      data.seo_description_en,
+      data.seo_description_ru
+    ),
     images: sortImages(data.images ?? []).map((image) => ({
       id: image.id,
       url: image.url,
@@ -546,8 +664,20 @@ export async function getProductBySlug(
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((spec) => ({
         id: spec.id,
-        key: spec.spec_key_az,
-        value: spec.spec_value_az,
+        key:
+          getLocalizedText(
+            locale,
+            spec.spec_key_az,
+            spec.spec_key_en,
+            spec.spec_key_ru
+          ) ?? spec.spec_key_az,
+        value:
+          getLocalizedText(
+            locale,
+            spec.spec_value_az,
+            spec.spec_value_en,
+            spec.spec_value_ru
+          ) ?? spec.spec_value_az,
       })),
     downloads: [...(data.downloads ?? [])]
       .sort((a, b) => a.sort_order - b.sort_order)
