@@ -32,19 +32,38 @@ function normalizeSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+function getOptionalFormValue(formData: FormData, key: string) {
+  const value = String(formData.get(key) ?? "").trim();
+
+  return value || null;
+}
+
+function revalidateCategoryPaths() {
+  revalidatePath("/");
+  revalidatePath("/en");
+  revalidatePath("/ru");
+
+  revalidatePath("/products");
+  revalidatePath("/en/products");
+  revalidatePath("/ru/products");
+
+  revalidatePath("/admin/categories");
+  revalidatePath("/admin/products/new");
+}
+
 export async function createCategory(formData: FormData) {
   await requireAdmin();
 
   const rawData = {
-  name_az: String(formData.get("name_az") ?? "").trim(),
-  name_en: String(formData.get("name_en") ?? "").trim(),
-  name_ru: String(formData.get("name_ru") ?? "").trim(),
-  slug: String(formData.get("slug") ?? "").trim(),
-  description_az: String(formData.get("description_az") ?? "").trim(),
-  description_en: String(formData.get("description_en") ?? "").trim(),
-  description_ru: String(formData.get("description_ru") ?? "").trim(),
-  sort_order: String(formData.get("sort_order") ?? "").trim(),
-};
+    name_az: String(formData.get("name_az") ?? "").trim(),
+    name_en: String(formData.get("name_en") ?? "").trim(),
+    name_ru: String(formData.get("name_ru") ?? "").trim(),
+    slug: String(formData.get("slug") ?? "").trim(),
+    description_az: String(formData.get("description_az") ?? "").trim(),
+    description_en: String(formData.get("description_en") ?? "").trim(),
+    description_ru: String(formData.get("description_ru") ?? "").trim(),
+    sort_order: String(formData.get("sort_order") ?? "").trim(),
+  };
 
   const parsed = categorySchema.safeParse(rawData);
 
@@ -72,17 +91,17 @@ export async function createCategory(formData: FormData) {
     );
   }
 
-const { error } = await supabaseAdmin.from("categories").insert({
-  name_az: category.name_az,
-  name_en: category.name_en || null,
-  name_ru: category.name_ru || null,
-  slug,
-  description_az: category.description_az || null,
-  description_en: category.description_en || null,
-  description_ru: category.description_ru || null,
-  sort_order: sortOrder,
-  is_active: true,
-});
+  const { error } = await supabaseAdmin.from("categories").insert({
+    name_az: category.name_az,
+    name_en: getOptionalFormValue(formData, "name_en"),
+    name_ru: getOptionalFormValue(formData, "name_ru"),
+    slug,
+    description_az: getOptionalFormValue(formData, "description_az"),
+    description_en: getOptionalFormValue(formData, "description_en"),
+    description_ru: getOptionalFormValue(formData, "description_ru"),
+    sort_order: sortOrder,
+    is_active: true,
+  });
 
   if (error) {
     redirect(
@@ -92,10 +111,7 @@ const { error } = await supabaseAdmin.from("categories").insert({
     );
   }
 
-  revalidatePath("/");
-  revalidatePath("/products");
-  revalidatePath("/admin/categories");
-  revalidatePath("/admin/products/new");
+  revalidateCategoryPaths();
 
   redirect("/admin/categories");
 }
@@ -119,10 +135,7 @@ export async function toggleCategoryStatus(
     );
   }
 
-  revalidatePath("/");
-  revalidatePath("/products");
-  revalidatePath("/admin/categories");
-  revalidatePath("/admin/products/new");
+  revalidateCategoryPaths();
 
   redirect("/admin/categories");
 }
