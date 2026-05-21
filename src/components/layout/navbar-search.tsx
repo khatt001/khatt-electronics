@@ -246,7 +246,7 @@ export function NavbarSearch({
 
           <div className="border-t border-neutral-100 p-3">
             <Link
-              href={`${localizedPath("/products", locale)}?search=${encodeURIComponent(
+             href={`${localizedPath("/products", locale)}?search=${encodeURIComponent(
   cleanQuery
 )}`}
               onClick={() => {
