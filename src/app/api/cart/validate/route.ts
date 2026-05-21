@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { isLocale } from "@/lib/i18n";
 
 type CartValidateLocale = "az" | "en" | "ru";
 
@@ -11,6 +12,8 @@ type ValidateCartRequestItem = {
 type ProductForCartValidation = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   price: number | string | null;
   price_visible: boolean;
@@ -19,6 +22,8 @@ type ProductForCartValidation = {
   status: string;
   category: {
     name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
   } | null;
   brand: {
     name: string;
@@ -45,11 +50,35 @@ const cartValidateTranslations = {
 } as const;
 
 function getLocale(value: unknown): CartValidateLocale {
-  if (value === "en" || value === "ru") {
-    return value;
-  }
+  return typeof value === "string" && isLocale(value) ? value : "az";
+}
 
-  return "az";
+function getLocalizedName(
+  item: {
+    name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
+  },
+  locale: CartValidateLocale
+) {
+  if (locale === "en") return item.name_en || item.name_az;
+  if (locale === "ru") return item.name_ru || item.name_az;
+
+  return item.name_az;
+}
+
+function getLocalizedCategoryName(
+  category: {
+    name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
+  },
+  locale: CartValidateLocale
+) {
+  if (locale === "en") return category.name_en || category.name_az;
+  if (locale === "ru") return category.name_ru || category.name_az;
+
+  return category.name_az;
 }
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
@@ -96,6 +125,8 @@ export async function POST(request: Request) {
         `
         id,
         name_az,
+        name_en,
+        name_ru,
         slug,
         price,
         price_visible,
@@ -103,7 +134,9 @@ export async function POST(request: Request) {
         stock_quantity,
         status,
         category:categories (
-          name_az
+          name_az,
+          name_en,
+          name_ru
         ),
         brand:brands (
           name
@@ -147,12 +180,14 @@ export async function POST(request: Request) {
 
         return {
           id: product.id,
-          name: product.name_az,
+          name: getLocalizedName(product, locale),
           slug: product.slug,
           price,
           priceLabel: formatPrice(product.price_visible, product.price),
           imageUrl: getPrimaryImage(product.images ?? []),
-          category: product.category?.name_az ?? t.productFallback,
+          category: product.category
+            ? getLocalizedCategoryName(product.category, locale)
+            : t.productFallback,
           brand: product.brand?.name ?? null,
           maxQuantity: stockQuantity,
           quantity: Math.min(stockQuantity, requestedQuantity),

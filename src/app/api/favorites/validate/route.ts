@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { isLocale } from "@/lib/i18n";
 
 type FavoritesValidateLocale = "az" | "en" | "ru";
 
@@ -10,6 +11,8 @@ type ValidateFavoritesRequestItem = {
 type ProductForFavoritesValidation = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   price: number | string | null;
   price_visible: boolean;
@@ -18,6 +21,8 @@ type ProductForFavoritesValidation = {
   status: string;
   category: {
     name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
   } | null;
   brand: {
     name: string;
@@ -47,11 +52,35 @@ const favoritesValidateTranslations = {
 } as const;
 
 function getLocale(value: unknown): FavoritesValidateLocale {
-  if (value === "en" || value === "ru") {
-    return value;
-  }
+  return typeof value === "string" && isLocale(value) ? value : "az";
+}
 
-  return "az";
+function getLocalizedName(
+  item: {
+    name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
+  },
+  locale: FavoritesValidateLocale
+) {
+  if (locale === "en") return item.name_en || item.name_az;
+  if (locale === "ru") return item.name_ru || item.name_az;
+
+  return item.name_az;
+}
+
+function getLocalizedCategoryName(
+  category: {
+    name_az: string;
+    name_en: string | null;
+    name_ru: string | null;
+  },
+  locale: FavoritesValidateLocale
+) {
+  if (locale === "en") return category.name_en || category.name_az;
+  if (locale === "ru") return category.name_ru || category.name_az;
+
+  return category.name_az;
 }
 
 function formatPrice(
@@ -120,6 +149,8 @@ export async function POST(request: Request) {
         `
         id,
         name_az,
+        name_en,
+        name_ru,
         slug,
         price,
         price_visible,
@@ -127,7 +158,9 @@ export async function POST(request: Request) {
         stock_quantity,
         status,
         category:categories (
-          name_az
+          name_az,
+          name_en,
+          name_ru
         ),
         brand:brands (
           name
@@ -154,12 +187,14 @@ export async function POST(request: Request) {
       .filter((product) => product.status === "active")
       .map((product) => ({
         id: product.id,
-        name: product.name_az,
+        name: getLocalizedName(product, locale),
         slug: product.slug,
         price: formatPrice(product.price_visible, product.price, locale),
         priceAmount: getPriceAmount(product.price_visible, product.price),
         imageUrl: getPrimaryImage(product.images ?? []),
-        category: product.category?.name_az ?? t.productFallback,
+        category: product.category
+          ? getLocalizedCategoryName(product.category, locale)
+          : t.productFallback,
         brand: product.brand?.name ?? null,
         stockStatus: product.stock_status,
         stockQuantity: product.stock_quantity ?? 0,
