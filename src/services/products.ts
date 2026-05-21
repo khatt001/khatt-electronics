@@ -327,7 +327,10 @@ async function getBrandIdsBySlugs(slugs: string[]) {
   return data.map((brand) => brand.id);
 }
 
-async function getProductIdsBySpecs(specs: Record<string, string[]>) {
+async function getProductIdsBySpecs(
+  specs: Record<string, string[]>,
+  locale: ProductLocale = "az"
+) {
   const entries = Object.entries(specs).filter(
     ([key, values]) => key.trim() && values.length > 0
   );
@@ -339,12 +342,35 @@ async function getProductIdsBySpecs(specs: Record<string, string[]>) {
   let matchedIds: string[] | null = null;
 
   for (const [specKey, values] of entries) {
-    const { data, error } = await supabase
-      .from("product_specifications")
-      .select("product_id")
-      .eq("spec_key_az", specKey)
-      .in("spec_value_az", values)
-      .returns<{ product_id: string }[]>();
+    let query = supabase.from("product_specifications").select("product_id");
+
+    if (locale === "en") {
+      query = query
+        .or(`spec_key_en.eq.${specKey},spec_key_az.eq.${specKey}`)
+        .or(
+          values
+            .map(
+              (value) =>
+                `spec_value_en.eq.${value},spec_value_az.eq.${value}`
+            )
+            .join(",")
+        );
+    } else if (locale === "ru") {
+      query = query
+        .or(`spec_key_ru.eq.${specKey},spec_key_az.eq.${specKey}`)
+        .or(
+          values
+            .map(
+              (value) =>
+                `spec_value_ru.eq.${value},spec_value_az.eq.${value}`
+            )
+            .join(",")
+        );
+    } else {
+      query = query.eq("spec_key_az", specKey).in("spec_value_az", values);
+    }
+
+    const { data, error } = await query.returns<{ product_id: string }[]>();
 
     if (error || !data) {
       return [];
@@ -435,9 +461,9 @@ export async function getCatalogProducts(
     .map(normalizeStockValue)
     .filter((stock): stock is StockStatus => Boolean(stock));
 
-  const specProductIds = filters.specs
-    ? await getProductIdsBySpecs(filters.specs)
-    : null;
+const specProductIds = filters.specs
+  ? await getProductIdsBySpecs(filters.specs, locale)
+  : null;
 
   if (filters.category && !categoryId) return [];
   if (brandValues.length > 0 && brandIds.length === 0) return [];
