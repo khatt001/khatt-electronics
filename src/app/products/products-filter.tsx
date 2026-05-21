@@ -9,6 +9,7 @@ import {
   productsFilterTranslations,
   type ProductsFilterLocale,
 } from "@/data/translations/products-filter";
+import { localizedPath } from "@/lib/i18n";
 
 type FilterOption = {
   id: string;
@@ -60,9 +61,7 @@ function createParamsFromCurrent(searchParams: URLSearchParams) {
   return new URLSearchParams(searchParams.toString());
 }
 
-function getLocalePrefix(locale: ProductsFilterLocale) {
-  return locale === "az" ? "" : `/${locale}`;
-}
+
 
 function getStockValue(value: string) {
   if (value === "Stokda var" || value === "In stock" || value === "В наличии") {
@@ -183,7 +182,6 @@ export function ProductsFilter({
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
   const t = productsFilterTranslations[locale];
-  const localePrefix = getLocalePrefix(locale);
 
   const [search, setSearch] = useState(initialQuery.search ?? "");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -197,10 +195,10 @@ export function ProductsFilter({
 
   const currentSort = cleanValue(searchParams.get("sort"));
 
-  const clearHref =
-    categoryMode === "route" && currentCategory
-      ? `${localePrefix}/category/${currentCategory}`
-      : `${localePrefix}/products`;
+const clearHref =
+  categoryMode === "route" && currentCategory
+    ? localizedPath(`/category/${currentCategory}`, locale)
+    : localizedPath("/products", locale);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -244,14 +242,14 @@ export function ProductsFilter({
   function changeCategory(value: string) {
     if (categoryMode === "route") {
       startTransition(() => {
-        router.replace(
-          value
-            ? `${localePrefix}/category/${value}`
-            : `${localePrefix}/products`,
-          {
-            scroll: false,
-          }
-        );
+       router.replace(
+  value
+    ? localizedPath(`/category/${value}`, locale)
+    : localizedPath("/products", locale),
+  {
+    scroll: false,
+  }
+);
       });
 
       return;
