@@ -8,8 +8,6 @@ type ServicesSectionProps = {
   locale?: Locale;
 };
 
-
-
 export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
   const t = homeTranslations[locale];
 
@@ -17,7 +15,11 @@ export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
     <section className="bg-neutral-950 py-20 text-white lg:py-28">
       <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/40">
+          {/*
+            CONTRAST FIX: text-white/40 on bg-neutral-950 is ~2.3:1 — fails WCAG AA.
+            text-white/60 gives ~4.5:1 which passes for small text.
+          */}
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60">
             {t.servicesEyebrow}
           </p>
 
@@ -25,7 +27,7 @@ export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
             {t.servicesTitle}
           </h2>
 
-          <p className="mt-6 leading-8 text-white/60">
+          <p className="mt-6 leading-8 text-white/70">
             {t.servicesDescription}
           </p>
 
@@ -37,8 +39,15 @@ export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
               {t.servicesProductsButton}
             </Link>
 
+            {/*
+              IDENTICAL LINKS FIX: Both hero and services sections had
+              "Məsləhət al" linking to /contact with different ?source= params.
+              Lighthouse flags same visible text + different href as confusing.
+              Fix: use aria-label to distinguish the two links for screen readers.
+            */}
             <Link
               href={`${localizedPath("/contact", locale)}?source=services`}
+              aria-label={`${t.servicesConsultationButton} — ${t.servicesTitle}`}
               className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t.servicesConsultationButton}
@@ -53,7 +62,7 @@ export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
               className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5"
             >
               <CheckCircle2
-                className="size-5 text-emerald-300"
+                className="size-5 shrink-0 text-emerald-300"
                 aria-hidden="true"
               />
               <span>{service}</span>

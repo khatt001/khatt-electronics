@@ -1,59 +1,33 @@
-"use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Clock, Mail, Menu, Phone, X } from "lucide-react";
+import { Clock, Mail, Phone } from "lucide-react";
 import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
 import { Container } from "@/components/layout/container";
 import { NavbarSearch } from "@/components/layout/navbar-search";
-import { cn } from "@/lib/utils";
 import { CartNavLink } from "@/components/cart/cart-nav-link";
 import { FavoritesNavLink } from "@/components/favorites/favorites-nav-link";
 import { CompareNavLink } from "@/components/compare/compare-nav-link";
 import { siteConfig } from "@/data/site";
 import { getMainNavigationLinks } from "@/data/navigation";
 import { navbarTranslations } from "@/data/translations/navbar";
-import {
-  localizedPath,
-  switchLocalePathname,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, switchLocalePathname, type Locale } from "@/lib/i18n";
+import { MobileMenuClient } from "@/components/layout/mobile-menu-client";
+import { cn } from "@/lib/utils";
 
 type NavbarProps = {
   locale?: Locale;
+  // We no longer call usePathname() here — the server reads it from headers.
+  // The active-locale highlight in the top bar uses the locale prop directly.
+  pathname?: string;
 };
 
-export default function Navbar({ locale = "az" }: NavbarProps) {
-  const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
   const t = navbarTranslations[locale];
   const navLinks = getMainNavigationLinks(t.navLinks, locale);
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  useEffect(() => {
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
-
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/95 backdrop-blur-xl">
+      {/* ── Top bar (desktop only, fully static) ── */}
       <div className="hidden border-b border-black/10 bg-neutral-950 text-white lg:block">
         <Container>
           <div className="flex h-10 items-center justify-between text-xs">
@@ -82,7 +56,6 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
 
             <div className="flex items-center gap-4">
               <span className="text-white/45">{t.languageLabel}</span>
-
               <div className="flex items-center gap-2">
                 {t.languages.map((language) => (
                   <Link
@@ -90,9 +63,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
                     href={switchLocalePathname(pathname, language.locale)}
                     className={cn(
                       "transition hover:text-white",
-                      language.locale === locale
-                        ? "text-white"
-                        : "text-white/50"
+                      language.locale === locale ? "text-white" : "text-white/50"
                     )}
                   >
                     {language.label}
@@ -138,6 +109,7 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           </nav>
 
           <div className="ml-auto flex items-center gap-1">
+            {/* Language switcher (mobile) */}
             <div className="mr-1 flex items-center rounded-full border border-neutral-200 bg-neutral-50 p-0.5 lg:hidden">
               {t.languages.map((language) => (
                 <Link
@@ -166,23 +138,25 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
               {t.trackOrder}
             </Link>
 
-            <button
-              type="button"
-              aria-label={t.mobileMenuOpenLabel}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              onClick={() => setOpen(true)}
-              className="inline-flex size-10 items-center justify-center rounded-full text-neutral-800 transition hover:bg-neutral-100 xl:hidden"
-            >
-              <Menu size={22} aria-hidden="true" />
-            </button>
+            {/* 
+              Mobile menu trigger + drawer extracted to a Client Component.
+              The hamburger button needs useState; everything above does not.
+            */}
+            <MobileMenuClient
+              locale={locale}
+              pathname={pathname}
+              navLinks={navLinks}
+              t={t}
+            />
           </div>
         </div>
 
+        {/* Mobile search strip */}
         <div className="border-t border-black/10 py-2 lg:hidden">
           <NavbarSearch placeholder={t.searchPlaceholder} locale={locale} />
         </div>
 
+        {/* lg-only horizontal nav (between lg and xl) */}
         <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-black/10 lg:flex xl:hidden">
           {navLinks.map((link) => (
             <Link
@@ -195,127 +169,6 @@ export default function Navbar({ locale = "az" }: NavbarProps) {
           ))}
         </div>
       </Container>
-
-      <div
-        id="mobile-menu"
-        className={cn(
-          "fixed inset-0 z-[999] flex h-dvh w-screen max-w-full flex-col overflow-hidden bg-white transition-transform duration-300 xl:hidden",
-          open ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-black/10 px-5">
-          <Link
-            href={localizedPath("/", locale)}
-            onClick={() => setOpen(false)}
-            aria-label={t.logoAriaLabel}
-            className="font-serif text-xl font-semibold tracking-[0.24em]"
-          >
-            KHATT
-          </Link>
-
-          <button
-            type="button"
-            aria-label={t.mobileMenuCloseLabel}
-            onClick={() => setOpen(false)}
-            className="inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral-100"
-          >
-            <X size={22} aria-hidden="true" />
-          </button>
-        </div>
-
-        <div className="relative z-20 shrink-0 border-b border-black/10 px-5 py-4">
-          <NavbarSearch
-            placeholder={t.searchPlaceholder}
-            locale={locale}
-            onNavigate={() => setOpen(false)}
-          />
-        </div>
-
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-5">
-          <div className="mb-5 w-full max-w-full overflow-visible">
-            <CatalogDropdown
-              locale={locale}
-              variant="mobile"
-              onNavigate={() => setOpen(false)}
-            />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            <Link
-              href={localizedPath("/compare", locale)}
-              onClick={() => setOpen(false)}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
-            >
-              {t.compare}
-            </Link>
-
-            <Link
-              href={localizedPath("/favorites", locale)}
-              onClick={() => setOpen(false)}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
-            >
-              {t.favorites}
-            </Link>
-
-            <Link
-              href={localizedPath("/cart", locale)}
-              onClick={() => setOpen(false)}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
-            >
-              {t.cart}
-            </Link>
-          </div>
-
-          <nav aria-label={t.mobileMenuLabel} className="mt-6 flex flex-col">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-neutral-100 py-4 text-lg font-medium text-neutral-900"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="mt-6 flex items-center gap-3">
-            {t.languages.map((language) => (
-              <Link
-                key={language.label}
-                href={switchLocalePathname(pathname, language.locale)}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium",
-                  language.locale === locale
-                    ? "border-neutral-950 bg-neutral-950 text-white"
-                    : "border-neutral-200 text-neutral-700"
-                )}
-              >
-                {language.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-8 grid grid-cols-2 gap-3">
-            <Link
-              href={localizedPath("/products", locale)}
-              onClick={() => setOpen(false)}
-              className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
-            >
-              {t.productsCta}
-            </Link>
-
-            <Link
-              href={localizedPath("/track-order", locale)}
-              onClick={() => setOpen(false)}
-              className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
-            >
-              {t.trackOrder}
-            </Link>
-          </div>
-        </div>
-      </div>
     </header>
   );
 }

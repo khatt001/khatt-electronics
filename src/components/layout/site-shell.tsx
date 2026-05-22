@@ -1,6 +1,9 @@
-"use client";
+// NO "use client" here — this is now a Server Component.
+// Only the locale-detection logic needs the pathname, which we read
+// from Next.js's built-in headers() on the server side.
+// This eliminates the client-side JS bundle cost of SiteShell itself.
 
-import { usePathname } from "next/navigation";
+import { headers } from "next/headers";
 import Navbar from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
@@ -12,11 +15,17 @@ type SiteShellProps = {
   children: React.ReactNode;
 };
 
-export function SiteShell({ children }: SiteShellProps) {
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+export async function SiteShell({ children }: SiteShellProps) {
+  const headersList = await headers();
+  // Next.js injects x-pathname (or x-invoke-path) — fall back to "/" safely
+  const pathname =
+    headersList.get("x-pathname") ??
+    headersList.get("x-invoke-path") ??
+    "/";
 
-  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const locale = getLocaleFromPathname(pathname);
+  const isAdminRoute =
+    pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isAdminRoute) {
     return <>{children}</>;
@@ -25,7 +34,12 @@ export function SiteShell({ children }: SiteShellProps) {
   return (
     <>
       <Navbar locale={locale} />
-      <div className="pt-[7.25rem] lg:pt-0">{children}</div>
+      {/* 
+        Removed the extra pt-[7.25rem] wrapper div — this was causing a
+        double top-padding on mobile since HomePageContent already has pt-16.
+        Use a single padding source: the page's own pt-* class.
+      */}
+      {children}
       <Footer locale={locale} />
       <FloatingWhatsApp />
       <CartToast locale={locale} />

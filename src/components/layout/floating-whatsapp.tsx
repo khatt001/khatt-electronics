@@ -25,23 +25,15 @@ const floatingWhatsAppTranslations = {
 } as const;
 
 function getLocaleFromPathname(pathname: string): FloatingWhatsAppLocale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return "en";
-  }
-
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
-    return "ru";
-  }
-
+  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
+  if (pathname === "/ru" || pathname.startsWith("/ru/")) return "ru";
   return "az";
 }
 
 export function FloatingWhatsApp() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin")) {
-    return null;
-  }
+  if (pathname.startsWith("/admin")) return null;
 
   const locale = getLocaleFromPathname(pathname);
   const t = floatingWhatsAppTranslations[locale];
@@ -52,7 +44,14 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noreferrer"
       aria-label={t.ariaLabel}
-      className="fixed bottom-5 right-5 z-50 inline-flex size-14 items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-2xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+      /*
+        TOUCH TARGET FIX: Lighthouse flagged this button for insufficient touch
+        target size/spacing. size-14 = 56×56px which is above the 44×44px minimum,
+        but bottom-5 right-5 = 20px from edges. On some devices the OS gesture
+        zone overlaps. Moving to bottom-6 right-6 (24px) gives enough clearance.
+        Also added `touch-manipulation` to remove the 300ms tap delay on iOS.
+      */
+      className="fixed bottom-6 right-6 z-50 inline-flex size-14 touch-manipulation items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-2xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200"
     >
       <MessageCircle className="size-6" aria-hidden="true" />
     </a>

@@ -40,9 +40,14 @@ export async function FeaturedProducts({
 
         {products.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {products.map((product) => (
-             <ProductCard key={product.id} product={product} locale={locale} />
-            ))}
+           {products.map((product, index) => (
+  <ProductCard
+    key={product.id}
+    product={product}
+    locale={locale}
+    priority={index < 4}
+  />
+))}
           </div>
         ) : (
           <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-10 text-center">
