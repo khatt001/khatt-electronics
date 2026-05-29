@@ -14,6 +14,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { localizedPath } from "@/lib/i18n";
+
 type CatalogCategory = {
   id: string;
   name: string;
@@ -77,16 +78,17 @@ const catalogDropdownTranslations = {
   },
 } as const;
 
-
 export function CatalogDropdown({
   onNavigate,
   variant = "desktop",
   locale = "az",
 }: CatalogDropdownProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const requestedLocaleRef = useRef<CatalogDropdownLocale | null>(null);
+
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState<CatalogCategory[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const isMobile = variant === "mobile";
   const t = catalogDropdownTranslations[locale];
@@ -116,27 +118,48 @@ export function CatalogDropdown({
   }, [isMobile]);
 
   useEffect(() => {
-  if (!open) return;
+    const controller = new AbortController();
 
-  async function loadCategories() {
-    try {
-      setLoading(true);
+    async function preloadCategories() {
+      if (requestedLocaleRef.current === locale && categories.length > 0) {
+        return;
+      }
 
-      const response = await fetch(`/api/catalog/categories?locale=${locale}`);
-      const result = (await response.json()) as {
-        categories: CatalogCategory[];
-      };
+      try {
+        requestedLocaleRef.current = locale;
+        setLoading(true);
 
-      setCategories(result.categories ?? []);
-    } catch {
-      setCategories([]);
-    } finally {
-      setLoading(false);
+        const response = await fetch(`/api/catalog/categories?locale=${locale}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load catalog categories");
+        }
+
+        const result = (await response.json()) as {
+          categories?: CatalogCategory[];
+        };
+
+        setCategories(result.categories ?? []);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        setCategories([]);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
     }
-  }
 
-  void loadCategories();
-}, [open, locale]);
+    void preloadCategories();
+
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
 
   function closeDropdown() {
     setOpen(false);
@@ -198,8 +221,19 @@ export function CatalogDropdown({
               )}
             >
               {loading ? (
-                <div className="rounded-2xl bg-neutral-50 p-5 text-sm text-neutral-500">
-                  {t.loading}
+                <div className="grid gap-2">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex animate-pulse items-center gap-3 rounded-2xl border border-transparent p-3"
+                    >
+                      <div className="size-11 shrink-0 rounded-2xl bg-neutral-200" />
+                      <div className="min-w-0 flex-1">
+                        <div className="h-4 w-2/3 rounded bg-neutral-200" />
+                        <div className="mt-2 h-3 w-full rounded bg-neutral-100" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : categories.length > 0 ? (
                 <div className="grid gap-2">
@@ -240,9 +274,7 @@ export function CatalogDropdown({
             <div className="border-t border-neutral-100 bg-neutral-50 p-4 lg:border-l lg:border-t-0">
               <div className="rounded-3xl bg-neutral-950 p-5 text-white">
                 <ShieldCheck className="size-7" aria-hidden="true" />
-                <h4 className="mt-4 text-lg font-semibold">
-                  {t.ctaTitle}
-                </h4>
+                <h4 className="mt-4 text-lg font-semibold">{t.ctaTitle}</h4>
                 <p className="mt-2 text-sm leading-6 text-white/65">
                   {t.ctaDescription}
                 </p>
