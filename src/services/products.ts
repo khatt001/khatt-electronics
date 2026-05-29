@@ -1,6 +1,6 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-
+import { localizedPath } from "@/lib/i18n";
 export type ProductLocale = "az" | "en" | "ru";
 
 type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
@@ -78,6 +78,7 @@ export type ProductDetail = {
   stockQuantity: number;
   stockStatus: StockStatus;
   category: string;
+  categorySlug: string | null;
   brand: string | null;
   price: string;
   badge: string;
@@ -289,7 +290,7 @@ function formatProduct(
     stockStatus: product.stock_status,
     stockQuantity: product.stock_quantity ?? 0,
     badge: formatBadge(product.stock_status, locale),
-    href: `/products/${product.slug}`,
+    href: localizedPath(`/products/${product.slug}`, locale),
     imageUrl: getPrimaryImage(product.images ?? []),
   };
 }
@@ -651,9 +652,10 @@ export async function getProductBySlug(
     stockQuantity: data.stock_quantity ?? 0,
     stockStatus: data.stock_status,
     category: data.category
-      ? getLocalizedCategoryName(data.category, locale)
-      : t.productFallback,
-    brand: data.brand?.name ?? null,
+  ? getLocalizedCategoryName(data.category, locale)
+  : t.productFallback,
+categorySlug: data.category?.slug ?? null,
+brand: data.brand?.name ?? null,
     price: formatPrice(data.price_visible, data.price, locale),
     badge: formatBadge(data.stock_status, locale),
     shortDescription: getLocalizedText(

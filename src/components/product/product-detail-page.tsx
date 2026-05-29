@@ -144,8 +144,11 @@ export async function ProductDetailPageView({
   const priceAmount = getPriceAmount(product.price);
   const localizedPrice = getLocalizedPrice(product, locale);
   const localizedCategory = getCategoryName(product.category, locale);
+const backHref = product.categorySlug
+  ? localizedPath(`/category/${product.categorySlug}`, locale)
+  : localizedPath("/products", locale);
 
-  const canBuy =
+const canBuy =
     priceAmount !== null &&
     product.stockStatus === "in_stock" &&
     product.stockQuantity > 0;
@@ -195,12 +198,12 @@ export async function ProductDetailPageView({
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
           <Link
-            href={localizedPath("/products", locale)}
-            className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
-          >
-            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
-            {t.backToProducts}
-          </Link>
+  href={backHref}
+  className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
+>
+  <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
+  {t.backToProducts}
+</Link>
         </Container>
       </section>
 
