@@ -51,6 +51,12 @@ function getSpecsFromQuery(query: ProductsSearchParams) {
 
   return specs;
 }
+function getSpecChipLabel(key: string) {
+  return decodeURIComponent(key)
+    .replace(/^spec_/, "")
+    .replace(/_/g, " ")
+    .trim();
+}
 
 function buildFilterUrl(
   locale: ProductsLocale,
@@ -270,7 +276,7 @@ export async function ProductsPageView({
                           )}
                           className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
                         >
-                          {key}: {value} ×
+                          {getSpecChipLabel(key)}: {value} ×
                         </Link>
                       ))
                     )}

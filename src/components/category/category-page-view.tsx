@@ -59,6 +59,12 @@ function getSpecsFromQuery(query: CategorySearchParams) {
 
   return specs;
 }
+function getSpecChipLabel(key: string) {
+  return decodeURIComponent(key)
+    .replace(/^spec_/, "")
+    .replace(/_/g, " ")
+    .trim();
+}
 
 function buildCategoryFilterUrl(
   categorySlug: string,
@@ -320,7 +326,7 @@ export async function CategoryPageView({
                           )}
                           className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
                         >
-                          {t.specLabel}: {key} — {value} ×
+                          {t.specLabel}: {getSpecChipLabel(key)} — {value} ×
                         </Link>
                       ))
                     )}
