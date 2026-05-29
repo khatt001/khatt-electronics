@@ -621,6 +621,27 @@ export async function getRelatedProducts(
     .filter((product) => product.slug !== currentProductSlug)
     .slice(0, limit);
 }
+export async function searchCatalogProducts(
+  search: string,
+  locale: ProductLocale = "az",
+  limit = 6
+): Promise<ProductCardItem[]> {
+  const normalizedSearch = search.trim();
+
+  if (normalizedSearch.length < 2) return [];
+
+  const result = await getCatalogProducts(
+    {
+      search: normalizedSearch,
+      page: 1,
+      pageSize: limit,
+    },
+    locale
+  );
+
+  return result.products;
+}
+
 export async function getProductBySlug(
   slug: string,
   locale: ProductLocale = "az"
