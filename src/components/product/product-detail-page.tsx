@@ -9,7 +9,8 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { ProductGallery } from "@/components/product/product-gallery";
-import { getProductBySlug } from "@/services/products";
+import { ProductCard } from "@/components/product/product-card";
+import { getProductBySlug, getRelatedProducts } from "@/services/products";
 import { siteConfig } from "@/data/site";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { FavoriteButton } from "@/components/favorites/favorites-button";
@@ -140,15 +141,23 @@ export async function ProductDetailPageView({
     notFound();
   }
 
+  const relatedProducts = await getRelatedProducts(
+    product.categorySlug,
+    product.slug,
+    locale,
+    4
+  );
+
   const jsonLd = getProductDetailJsonLd(product, locale);
   const priceAmount = getPriceAmount(product.price);
   const localizedPrice = getLocalizedPrice(product, locale);
   const localizedCategory = getCategoryName(product.category, locale);
-const backHref = product.categorySlug
-  ? localizedPath(`/category/${product.categorySlug}`, locale)
-  : localizedPath("/products", locale);
 
-const canBuy =
+  const backHref = product.categorySlug
+    ? localizedPath(`/category/${product.categorySlug}`, locale)
+    : localizedPath("/products", locale);
+
+  const canBuy =
     priceAmount !== null &&
     product.stockStatus === "in_stock" &&
     product.stockQuantity > 0;
@@ -198,12 +207,12 @@ const canBuy =
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
           <Link
-  href={backHref}
-  className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
->
-  <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
-  {t.backToProducts}
-</Link>
+            href={backHref}
+            className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
+          >
+            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
+            {t.backToProducts}
+          </Link>
         </Container>
       </section>
 
@@ -400,6 +409,46 @@ const canBuy =
           </div>
         </Container>
       </section>
+
+      {relatedProducts.length > 0 ? (
+        <section className="pb-16 lg:pb-24">
+          <Container>
+            <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
+                  Oxşar məhsullar
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold text-neutral-950 md:text-4xl">
+                  Bu kateqoriyadan digər məhsullar
+                </h2>
+              </div>
+
+              {product.categorySlug ? (
+                <Link
+                  href={localizedPath(`/category/${product.categorySlug}`, locale)}
+                  className="inline-flex items-center text-sm font-semibold text-neutral-700 transition hover:text-neutral-950"
+                >
+                  Kateqoriyaya bax
+                  <ArrowLeft
+                    className="ml-2 size-4 rotate-180"
+                    aria-hidden="true"
+                  />
+                </Link>
+              ) : null}
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard
+                  key={relatedProduct.id}
+                  product={relatedProduct}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          </Container>
+        </section>
+      ) : null}
     </main>
   );
 }

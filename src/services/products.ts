@@ -600,7 +600,27 @@ export async function getCatalogProducts(
     totalPages: Math.ceil(total / pageSize),
   };
 }
+export async function getRelatedProducts(
+  categorySlug: string | null,
+  currentProductSlug: string,
+  locale: ProductLocale = "az",
+  limit = 4
+): Promise<ProductCardItem[]> {
+  if (!categorySlug) return [];
 
+  const result = await getCatalogProducts(
+    {
+      category: categorySlug,
+      page: 1,
+      pageSize: Math.max(limit + 1, 1),
+    },
+    locale
+  );
+
+  return result.products
+    .filter((product) => product.slug !== currentProductSlug)
+    .slice(0, limit);
+}
 export async function getProductBySlug(
   slug: string,
   locale: ProductLocale = "az"
