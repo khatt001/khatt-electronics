@@ -24,6 +24,7 @@ export type CategorySearchParams = {
   brand?: string | string[];
   stock?: string | string[];
   sort?: string | string[];
+  page?: string | string[];
   [key: string]: string | string[] | undefined;
 };
 
@@ -59,6 +60,7 @@ function getSpecsFromQuery(query: CategorySearchParams) {
 
   return specs;
 }
+
 function getSpecChipLabel(key: string) {
   return decodeURIComponent(key)
     .replace(/^spec_/, "")
@@ -82,10 +84,40 @@ function buildCategoryFilterUrl(
 
     values.forEach((value) => {
       if (!value) return;
+      if (key === "page") return;
       if (key === removeKey && (!removeValue || removeValue === value)) return;
       params.append(key, value);
     });
   });
+
+  const queryString = params.toString();
+  const basePath = localizedPath(`/category/${categorySlug}`, locale);
+
+  return queryString ? `${basePath}?${queryString}` : basePath;
+}
+
+function buildCategoryPageUrl(
+  categorySlug: string,
+  query: CategorySearchParams,
+  page: number,
+  locale: CategoryPageLocale
+) {
+  const params = new URLSearchParams();
+
+  Object.entries(query).forEach(([key, rawValue]) => {
+    if (!rawValue || key === "page") return;
+
+    const values = Array.isArray(rawValue) ? rawValue : [rawValue];
+
+    values.forEach((value) => {
+      if (!value) return;
+      params.append(key, value);
+    });
+  });
+
+  if (page > 1) {
+    params.set("page", String(page));
+  }
 
   const queryString = params.toString();
   const basePath = localizedPath(`/category/${categorySlug}`, locale);
@@ -136,11 +168,13 @@ export async function CategoryPageView({
 
   const search = getFirstValue(query.search);
   const sort = getFirstValue(query.sort);
+  const page = Math.max(1, Number(getFirstValue(query.page)) || 1);
+
   const brandValues = getValues(query.brand);
   const stockValues = getValues(query.stock);
   const specs = getSpecsFromQuery(query);
 
-  const [products, categories, brands] = await Promise.all([
+  const [productsResult, categories, brands] = await Promise.all([
     getCatalogProducts(
       {
         search,
@@ -149,12 +183,19 @@ export async function CategoryPageView({
         stock: stockValues,
         sort,
         specs,
+        page,
+        pageSize: 24,
       },
       locale
     ),
     getCatalogCategories(locale),
     getCatalogBrands(),
   ]);
+
+  const products = productsResult.products;
+  const totalProducts = productsResult.total;
+  const totalPages = productsResult.totalPages;
+  const currentPage = productsResult.page;
 
   const selectedBrands = brands.filter((brand) => brandValues.includes(brand.slug));
 
@@ -260,7 +301,7 @@ export async function CategoryPageView({
               <div className="mb-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-neutral-500">
                   <span className="font-semibold text-neutral-950">
-                    {products.length}
+                    {totalProducts}
                   </span>{" "}
                   {t.foundSuffix}
                 </p>
@@ -349,11 +390,78 @@ export async function CategoryPageView({
               </div>
 
               {products.length > 0 ? (
-                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {products.map((product) => (
-                    <ProductCard key={product.id} product={product} locale={locale} />
-                  ))}
-                </div>
+                <>
+                  <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {products.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        locale={locale}
+                      />
+                    ))}
+                  </div>
+
+                  {totalPages > 1 ? (
+                    <nav
+                      aria-label="Category product pagination"
+                      className="mt-10 flex flex-wrap items-center justify-center gap-2"
+                    >
+                      {currentPage > 1 ? (
+                        <Link
+                          href={buildCategoryPageUrl(
+                            category.slug,
+                            query,
+                            currentPage - 1,
+                            locale
+                          )}
+                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                        >
+                          Əvvəlki
+                        </Link>
+                      ) : null}
+
+                      {Array.from({ length: totalPages }).map((_, index) => {
+                        const pageNumber = index + 1;
+
+                        return (
+                          <Link
+                            key={pageNumber}
+                            href={buildCategoryPageUrl(
+                              category.slug,
+                              query,
+                              pageNumber,
+                              locale
+                            )}
+                            aria-current={
+                              pageNumber === currentPage ? "page" : undefined
+                            }
+                            className={
+                              pageNumber === currentPage
+                                ? "rounded-full bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
+                                : "rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                            }
+                          >
+                            {pageNumber}
+                          </Link>
+                        );
+                      })}
+
+                      {currentPage < totalPages ? (
+                        <Link
+                          href={buildCategoryPageUrl(
+                            category.slug,
+                            query,
+                            currentPage + 1,
+                            locale
+                          )}
+                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                        >
+                          Növbəti
+                        </Link>
+                      ) : null}
+                    </nav>
+                  ) : null}
+                </>
               ) : (
                 <div className="mx-auto max-w-3xl rounded-[2rem] border border-neutral-200 bg-white p-8 text-center shadow-sm lg:p-12">
                   <div className="mx-auto flex size-20 items-center justify-center rounded-[2rem] bg-neutral-950 text-white">

@@ -1,6 +1,7 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { localizedPath } from "@/lib/i18n";
+
 export type ProductLocale = "az" | "en" | "ru";
 
 type StockStatus = "in_stock" | "out_of_stock" | "pre_order";
@@ -30,6 +31,16 @@ export type CatalogProductFilters = {
   stock?: string | string[];
   sort?: string;
   specs?: Record<string, string[]>;
+  page?: number;
+  pageSize?: number;
+};
+
+export type CatalogProductsResult = {
+  products: CatalogProduct[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 };
 
 type LocalizedProductFields = {
@@ -192,12 +203,8 @@ function asArray(value?: string | string[]) {
 
 function normalizeStockValue(value: string): StockStatus | null {
   if (value === "in_stock" || value === "Stokda var") return "in_stock";
-  if (value === "out_of_stock" || value === "Stokda yoxdur") {
-    return "out_of_stock";
-  }
-  if (value === "pre_order" || value === "Öncədən sifariş") {
-    return "pre_order";
-  }
+  if (value === "out_of_stock" || value === "Stokda yoxdur") return "out_of_stock";
+  if (value === "pre_order" || value === "Öncədən sifariş") return "pre_order";
 
   return null;
 }
@@ -259,6 +266,7 @@ function sortImages<T extends { is_primary: boolean }>(images: T[]) {
   return [...images].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
     if (!a.is_primary && b.is_primary) return 1;
+
     return 0;
   });
 }
@@ -292,6 +300,19 @@ function formatProduct(
     badge: formatBadge(product.stock_status, locale),
     href: localizedPath(`/products/${product.slug}`, locale),
     imageUrl: getPrimaryImage(product.images ?? []),
+  };
+}
+
+function createEmptyCatalogResult(
+  page: number,
+  pageSize: number
+): CatalogProductsResult {
+  return {
+    products: [],
+    total: 0,
+    page,
+    pageSize,
+    totalPages: 0,
   };
 }
 
@@ -442,14 +463,19 @@ export async function getFeaturedProducts(
     return [];
   }
 
-  return data.map((product) => formatProduct(product, locale));
+  return (data ?? []).map((product) => formatProduct(product, locale));
 }
 
 export async function getCatalogProducts(
   filters: CatalogProductFilters = {},
   locale: ProductLocale = "az"
-): Promise<CatalogProduct[]> {
+): Promise<CatalogProductsResult> {
   const supabase = createServerSupabaseClient();
+
+  const page = Math.max(1, Number(filters.page) || 1);
+  const pageSize = Math.min(96, Math.max(1, Number(filters.pageSize) || 24));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
 
   const categoryId = filters.category
     ? await getCategoryIdBySlug(filters.category)
@@ -462,13 +488,15 @@ export async function getCatalogProducts(
     .map(normalizeStockValue)
     .filter((stock): stock is StockStatus => Boolean(stock));
 
-const specProductIds = filters.specs
-  ? await getProductIdsBySpecs(filters.specs, locale)
-  : null;
+  const specProductIds = filters.specs
+    ? await getProductIdsBySpecs(filters.specs, locale)
+    : null;
 
-  if (filters.category && !categoryId) return [];
-  if (brandValues.length > 0 && brandIds.length === 0) return [];
-  if (specProductIds && specProductIds.length === 0) return [];
+  const emptyResult = createEmptyCatalogResult(page, pageSize);
+
+  if (filters.category && !categoryId) return emptyResult;
+  if (brandValues.length > 0 && brandIds.length === 0) return emptyResult;
+  if (specProductIds && specProductIds.length === 0) return emptyResult;
 
   let query = supabase
     .from("products")
@@ -498,7 +526,8 @@ const specProductIds = filters.specs
         url,
         is_primary
       )
-    `
+    `,
+      { count: "exact" }
     )
     .eq("status", "active");
 
@@ -554,14 +583,22 @@ const specProductIds = filters.specs
     query = query.order("created_at", { ascending: false });
   }
 
-  const { data, error } = await query.limit(48).returns<ProductRow[]>();
+  const { data, error, count } = await query.range(from, to).returns<ProductRow[]>();
 
   if (error) {
     console.error("Failed to fetch catalog products:", error.message);
-    return [];
+    return emptyResult;
   }
 
-  return data.map((product) => formatProduct(product, locale));
+  const total = count ?? 0;
+
+  return {
+    products: (data ?? []).map((product) => formatProduct(product, locale)),
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize),
+  };
 }
 
 export async function getProductBySlug(
@@ -652,10 +689,10 @@ export async function getProductBySlug(
     stockQuantity: data.stock_quantity ?? 0,
     stockStatus: data.stock_status,
     category: data.category
-  ? getLocalizedCategoryName(data.category, locale)
-  : t.productFallback,
-categorySlug: data.category?.slug ?? null,
-brand: data.brand?.name ?? null,
+      ? getLocalizedCategoryName(data.category, locale)
+      : t.productFallback,
+    categorySlug: data.category?.slug ?? null,
+    brand: data.brand?.name ?? null,
     price: formatPrice(data.price_visible, data.price, locale),
     badge: formatBadge(data.stock_status, locale),
     shortDescription: getLocalizedText(
