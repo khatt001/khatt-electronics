@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product/product-card";
 import { Container } from "@/components/layout/container";
+import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { getCatalogBrands } from "@/services/brands";
 import { getCatalogCategories } from "@/services/categories";
 import { getCatalogProducts } from "@/services/products";
@@ -34,6 +35,13 @@ function getFirstValue(value?: string | string[]) {
 function getValues(value?: string | string[]) {
   if (!value) return [];
   return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
+}
+
+function getHomeLabel(locale: ProductsLocale) {
+  if (locale === "en") return "Home";
+  if (locale === "ru") return "Главная";
+
+  return "Ana səhifə";
 }
 
 function getSpecsFromQuery(query: ProductsSearchParams) {
@@ -220,6 +228,22 @@ export async function ProductsPageView({
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+      <section className="border-b border-black/10 bg-white">
+        <Container className="py-5">
+          <Breadcrumbs
+            items={[
+              {
+                label: getHomeLabel(locale),
+                href: localizedPath("/", locale),
+              },
+              {
+                label: t.title,
+              },
+            ]}
+          />
+        </Container>
+      </section>
+
       <section className="border-b border-black/10 bg-white">
         <Container className="py-12 lg:py-16">
           <div className="max-w-3xl">

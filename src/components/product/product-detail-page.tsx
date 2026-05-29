@@ -8,6 +8,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductCard } from "@/components/product/product-card";
 import { getProductBySlug, getRelatedProducts } from "@/services/products";
@@ -112,20 +113,33 @@ export function getProductDetailJsonLd(
         : undefined,
   };
 
-  const breadcrumbSchema = createBreadcrumbSchema([
-    {
-      name: t.homeBreadcrumb,
-      url: `${baseUrl}${localizedPath("/", locale)}`,
-    },
-    {
-      name: t.productsBreadcrumb,
-      url: `${baseUrl}${localizedPath("/products", locale)}`,
-    },
-    {
-      name: product.name,
-      url: productUrl,
-    },
-  ]);
+ const breadcrumbItems: { name: string; url: string }[] = [
+  {
+    name: t.homeBreadcrumb,
+    url: `${baseUrl}${localizedPath("/", locale)}`,
+  },
+  {
+    name: t.productsBreadcrumb,
+    url: `${baseUrl}${localizedPath("/products", locale)}`,
+  },
+];
+
+  if (product.categorySlug) {
+    breadcrumbItems.push({
+      name: localizedCategory,
+      url: `${baseUrl}${localizedPath(
+        `/category/${product.categorySlug}`,
+        locale
+      )}`,
+    });
+  }
+
+  breadcrumbItems.push({
+    name: product.name,
+    url: productUrl,
+  });
+
+  const breadcrumbSchema = createBreadcrumbSchema(breadcrumbItems);
 
   return [productSchema, breadcrumbSchema];
 }
@@ -203,6 +217,37 @@ export async function ProductDetailPageView({
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
       {jsonLd ? <JsonLd data={jsonLd} /> : null}
+
+      <section className="border-b border-black/10 bg-white">
+        <Container className="py-5">
+          <Breadcrumbs
+            items={[
+              {
+                label: t.homeBreadcrumb,
+                href: localizedPath("/", locale),
+              },
+              {
+                label: t.productsBreadcrumb,
+                href: localizedPath("/products", locale),
+              },
+              ...(product.categorySlug
+                ? [
+                    {
+                      label: localizedCategory,
+                      href: localizedPath(
+                        `/category/${product.categorySlug}`,
+                        locale
+                      ),
+                    },
+                  ]
+                : []),
+              {
+                label: product.name,
+              },
+            ]}
+          />
+        </Container>
+      </section>
 
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">

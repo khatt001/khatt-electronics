@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, PackageSearch } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { ProductCard } from "@/components/product/product-card";
 import {
   getCategoryBySlug,
@@ -229,6 +230,26 @@ export async function CategoryPageView({
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
       <JsonLd data={breadcrumbSchema} />
+
+      <section className="border-b border-black/10 bg-white">
+        <Container className="py-5">
+          <Breadcrumbs
+            items={[
+              {
+                label: t.homeBreadcrumb,
+                href: localizedPath("/", locale),
+              },
+              {
+                label: t.productsBreadcrumb,
+                href: localizedPath("/products", locale),
+              },
+              {
+                label: category.name,
+              },
+            ]}
+          />
+        </Container>
+      </section>
 
       <section className="border-b border-black/10 bg-white">
         <Container className="py-6">
