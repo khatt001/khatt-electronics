@@ -1,5 +1,6 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { localizedPath } from "@/lib/i18n";
 import type { ProductCardItem, ProductLocale } from "@/services/products";
 
 export type CatalogCategory = {
@@ -40,6 +41,8 @@ type CategoryDetailRow = {
 type CategoryProductRow = {
   id: string;
   name_az: string;
+  name_en: string | null;
+  name_ru: string | null;
   slug: string;
   price: number | string | null;
   price_visible: boolean;
@@ -92,6 +95,20 @@ const categoryServiceTranslations = {
   },
 } as const;
 
+function getLocalizedProductName(
+  product: {
+    name_az: string;
+    name_en?: string | null;
+    name_ru?: string | null;
+  },
+  locale: ProductLocale
+) {
+  if (locale === "en") return product.name_en || product.name_az;
+  if (locale === "ru") return product.name_ru || product.name_az;
+
+  return product.name_az;
+}
+
 function getLocalizedCategoryName(
   category: {
     name_az: string;
@@ -142,13 +159,8 @@ function getLocalizedCategorySeoDescription(
   },
   locale: ProductLocale
 ) {
-  if (locale === "en") {
-    return category.seo_description_en || category.seo_description;
-  }
-
-  if (locale === "ru") {
-    return category.seo_description_ru || category.seo_description;
-  }
+  if (locale === "en") return category.seo_description_en || category.seo_description;
+  if (locale === "ru") return category.seo_description_ru || category.seo_description;
 
   return category.seo_description;
 }
@@ -195,13 +207,11 @@ function formatProduct(
   const t = categoryServiceTranslations[locale];
 
   const priceAmount =
-    product.price_visible && product.price !== null
-      ? Number(product.price)
-      : null;
+    product.price_visible && product.price !== null ? Number(product.price) : null;
 
   return {
     id: product.id,
-    name: product.name_az,
+    name: getLocalizedProductName(product, locale),
     slug: product.slug,
     category: product.category
       ? getLocalizedCategoryName(product.category, locale)
@@ -212,7 +222,7 @@ function formatProduct(
     stockStatus: product.stock_status,
     stockQuantity: product.stock_quantity ?? 0,
     badge: formatBadge(product.stock_status, locale),
-    href: `/products/${product.slug}`,
+    href: localizedPath(`/products/${product.slug}`, locale),
     imageUrl: getPrimaryImage(product.images ?? []),
   };
 }
@@ -310,6 +320,8 @@ export async function getCategoryProducts(
       `
       id,
       name_az,
+      name_en,
+      name_ru,
       slug,
       price,
       price_visible,

@@ -91,12 +91,8 @@ function getStockLabel(stock: string | undefined, locale: CategoryPageLocale) {
   const t = categoryPageTranslations[locale];
 
   if (stock === "in_stock" || stock === "Stokda var") return t.stockIn;
-  if (stock === "out_of_stock" || stock === "Stokda yoxdur") {
-    return t.stockOut;
-  }
-  if (stock === "pre_order" || stock === "Öncədən sifariş") {
-    return t.stockPreOrder;
-  }
+  if (stock === "out_of_stock" || stock === "Stokda yoxdur") return t.stockOut;
+  if (stock === "pre_order" || stock === "Öncədən sifariş") return t.stockPreOrder;
 
   return stock ?? null;
 }
@@ -120,15 +116,13 @@ export async function getCategoryStaticParams() {
   }));
 }
 
-
-
 export async function CategoryPageView({
   slug,
   query,
   locale = "az",
 }: CategoryPageViewProps) {
   const t = categoryPageTranslations[locale];
-  const category = await getCategoryBySlug(slug,locale);
+  const category = await getCategoryBySlug(slug, locale);
 
   if (!category) {
     notFound();
@@ -156,9 +150,7 @@ export async function CategoryPageView({
     getCatalogBrands(),
   ]);
 
-  const selectedBrands = brands.filter((brand) =>
-    brandValues.includes(brand.slug)
-  );
+  const selectedBrands = brands.filter((brand) => brandValues.includes(brand.slug));
 
   const sortLabel = getSortLabel(sort, locale);
 
@@ -248,8 +240,8 @@ export async function CategoryPageView({
                 initialQuery={{
                   search,
                   category: category.slug,
-                  brand: brandValues[0],
-                  stock: stockValues[0],
+                  brand: brandValues,
+                  stock: stockValues,
                   sort,
                 }}
                 hasActiveFilters={Boolean(hasActiveFilters)}
@@ -353,11 +345,7 @@ export async function CategoryPageView({
               {products.length > 0 ? (
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      locale={locale}
-                    />
+                    <ProductCard key={product.id} product={product} locale={locale} />
                   ))}
                 </div>
               ) : (

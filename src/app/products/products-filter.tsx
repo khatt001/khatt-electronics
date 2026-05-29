@@ -36,8 +36,8 @@ type ProductsFilterProps = {
   initialQuery: {
     search?: string;
     category?: string;
-    brand?: string;
-    stock?: string;
+    brand?: string | string[];
+    stock?: string | string[];
     sort?: string;
   };
   hasActiveFilters: boolean;
@@ -60,8 +60,6 @@ function getSelectedValues(searchParams: URLSearchParams, key: string) {
 function createParamsFromCurrent(searchParams: URLSearchParams) {
   return new URLSearchParams(searchParams.toString());
 }
-
-
 
 function getStockValue(value: string) {
   if (value === "Stokda var" || value === "In stock" || value === "В наличии") {
@@ -128,9 +126,7 @@ function CheckboxRow({
     <label
       className={cn(
         "group flex cursor-pointer items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
-        checked
-          ? "bg-neutral-950 text-white"
-          : "text-neutral-700 hover:bg-neutral-100"
+        checked ? "bg-neutral-950 text-white" : "text-neutral-700 hover:bg-neutral-100"
       )}
     >
       <span
@@ -148,20 +144,13 @@ function CheckboxRow({
           className="sr-only"
         />
 
-        {checked ? (
-          <span className="size-2 rounded-sm bg-neutral-950" />
-        ) : null}
+        {checked ? <span className="size-2 rounded-sm bg-neutral-950" /> : null}
       </span>
 
       <span className="min-w-0 flex-1 truncate">{label}</span>
 
       {typeof count === "number" && count > 0 ? (
-        <span
-          className={cn(
-            "text-xs",
-            checked ? "text-white/60" : "text-neutral-400"
-          )}
-        >
+        <span className={cn("text-xs", checked ? "text-white/60" : "text-neutral-400")}>
           {count}
         </span>
       ) : null}
@@ -195,10 +184,10 @@ export function ProductsFilter({
 
   const currentSort = cleanValue(searchParams.get("sort"));
 
-const clearHref =
-  categoryMode === "route" && currentCategory
-    ? localizedPath(`/category/${currentCategory}`, locale)
-    : localizedPath("/products", locale);
+  const clearHref =
+    categoryMode === "route" && currentCategory
+      ? localizedPath(`/category/${currentCategory}`, locale)
+      : localizedPath("/products", locale);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -242,14 +231,14 @@ const clearHref =
   function changeCategory(value: string) {
     if (categoryMode === "route") {
       startTransition(() => {
-       router.replace(
-  value
-    ? localizedPath(`/category/${value}`, locale)
-    : localizedPath("/products", locale),
-  {
-    scroll: false,
-  }
-);
+        router.replace(
+          value
+            ? localizedPath(`/category/${value}`, locale)
+            : localizedPath("/products", locale),
+          {
+            scroll: false,
+          }
+        );
       });
 
       return;
@@ -380,13 +369,10 @@ const clearHref =
         <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
           {brands.map((brand) => {
             const dynamicBrand = brandGroup?.options.find(
-              (option) =>
-                option.label.toLowerCase() === brand.name.toLowerCase()
+              (option) => option.label.toLowerCase() === brand.name.toLowerCase()
             );
 
-            const selected = getSelectedValues(searchParams, "brand").includes(
-              brand.slug
-            );
+            const selected = getSelectedValues(searchParams, "brand").includes(brand.slug);
 
             return (
               <CheckboxRow
@@ -405,9 +391,7 @@ const clearHref =
         <div className="space-y-1">
           {stockOptions.map((option) => {
             const optionValue = getStockValue(option.value);
-            const selected = getSelectedValues(searchParams, "stock").includes(
-              optionValue
-            );
+            const selected = getSelectedValues(searchParams, "stock").includes(optionValue);
 
             return (
               <CheckboxRow
@@ -435,10 +419,9 @@ const clearHref =
           <FilterSection key={group.key} title={group.label}>
             <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
               {group.options.map((option) => {
-                const selected = getSelectedValues(
-                  searchParams,
-                  paramKey
-                ).includes(option.value);
+                const selected = getSelectedValues(searchParams, paramKey).includes(
+                  option.value
+                );
 
                 return (
                   <CheckboxRow
@@ -499,9 +482,7 @@ const clearHref =
               <h2 className="text-lg font-semibold text-neutral-950">
                 {t.filtersTitle}
               </h2>
-              <p className="text-sm text-neutral-500">
-                {t.filtersDescription}
-              </p>
+              <p className="text-sm text-neutral-500">{t.filtersDescription}</p>
             </div>
           </div>
 
@@ -550,32 +531,45 @@ const clearHref =
               <h2 className="text-lg font-semibold text-neutral-950">
                 {t.filtersTitle}
               </h2>
-              <p className="text-sm text-neutral-500">
-                {t.filtersDescription}
-              </p>
+              <p className="text-sm text-neutral-500">{t.filtersDescription}</p>
             </div>
 
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              aria-label={t.closeFilterAria}
-              className="inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral-100"
+              className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200"
             >
-              <X className="size-5" aria-hidden="true" />
+              <X className="size-4" aria-hidden="true" />
+              <span className="sr-only">Close filters</span>
             </button>
+          </div>
+
+          <div className="mb-4 rounded-3xl border border-neutral-200 bg-white p-4">
+            <select
+              name="sort"
+              value={currentSort}
+              onChange={(event) => setSingleParam("sort", event.target.value)}
+              className="h-12 w-full rounded-2xl border border-neutral-200 bg-neutral-50 px-4 text-sm outline-none"
+            >
+              <option value="">{t.sortNewest}</option>
+              <option value="oldest">{t.sortOldest}</option>
+              <option value="featured">{t.sortFeatured}</option>
+              <option value="price_asc">{t.sortPriceAsc}</option>
+              <option value="price_desc">{t.sortPriceDesc}</option>
+            </select>
+
+            {hasActiveFilters ? (
+              <Link
+                href={clearHref}
+                className="mt-3 inline-flex w-full justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-sm font-semibold text-neutral-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                {t.clearAll}
+              </Link>
+            ) : null}
           </div>
 
           {filterPanel}
-
-          <div className="sticky bottom-0 mt-5 border-t border-neutral-200 bg-[#f6f6f4] py-4">
-            <button
-              type="button"
-              onClick={() => setMobileOpen(false)}
-              className="h-12 w-full rounded-full bg-neutral-950 text-sm font-semibold text-white"
-            >
-              {t.showResults}
-            </button>
-          </div>
         </div>
       </div>
     </>

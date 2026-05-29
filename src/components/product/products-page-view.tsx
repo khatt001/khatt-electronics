@@ -10,6 +10,7 @@ import {
   type ProductsLocale,
 } from "@/data/translations/products";
 import { localizedPath } from "@/lib/i18n";
+
 export type ProductsSearchParams = {
   search?: string | string[];
   category?: string | string[];
@@ -50,7 +51,6 @@ function getSpecsFromQuery(query: ProductsSearchParams) {
 
   return specs;
 }
-
 
 function buildFilterUrl(
   locale: ProductsLocale,
@@ -160,9 +160,7 @@ export async function ProductsPageView({
     (categoryItem) => categoryItem.slug === category
   );
 
-  const selectedBrands = brands.filter((brand) =>
-    brandValues.includes(brand.slug)
-  );
+  const selectedBrands = brands.filter((brand) => brandValues.includes(brand.slug));
 
   const sortLabel = getSortLabel(sort, locale);
 
@@ -187,9 +185,7 @@ export async function ProductsPageView({
               {t.title}
             </h1>
 
-            <p className="mt-5 leading-8 text-neutral-600">
-              {t.description}
-            </p>
+            <p className="mt-5 leading-8 text-neutral-600">{t.description}</p>
           </div>
         </Container>
       </section>
@@ -204,8 +200,8 @@ export async function ProductsPageView({
                 initialQuery={{
                   search,
                   category,
-                  brand: brandValues[0],
-                  stock: stockValues[0],
+                  brand: brandValues,
+                  stock: stockValues,
                   sort,
                 }}
                 hasActiveFilters={Boolean(hasActiveFilters)}
@@ -294,11 +290,7 @@ export async function ProductsPageView({
               {products.length > 0 ? (
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      locale={locale}
-                    />
+                    <ProductCard key={product.id} product={product} locale={locale} />
                   ))}
                 </div>
               ) : (
