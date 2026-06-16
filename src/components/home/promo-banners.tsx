@@ -1,11 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Camera,
-  Flame,
-  Network,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { localizedPath, type Locale } from "@/lib/i18n";
@@ -16,99 +11,81 @@ type PromoBannersProps = {
 
 export function PromoBanners({ locale = "az" }: PromoBannersProps) {
   return (
-    <section className="bg-[#f5f6f8] py-7 md:py-10">
+    <section className="bg-[#f5f6f8] py-8 md:py-12">
       <Container>
         <div className="grid gap-5 lg:grid-cols-2">
           <Link
             href={`${localizedPath("/products", locale)}?category=video-nezaret`}
-            className="group relative min-h-[280px] overflow-hidden rounded-2xl bg-gradient-to-br from-[#163765] via-[#1d4f8c] to-[#2c7bc5] p-7 text-white shadow-sm md:p-9"
+            className="group relative min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"
           >
-            <div className="absolute -right-24 -top-24 size-72 rounded-full bg-cyan-300/20 blur-3xl" />
-            <div className="absolute -bottom-24 right-[20%] size-64 rounded-full bg-white/10 blur-3xl" />
+            <Image
+              src="/banners/promo-cctv.webp"
+              alt="Videomüşahidə sistemi"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover transition duration-700 group-hover:scale-[1.02]"
+            />
 
-            <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="max-w-[340px]">
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-100">
-                  Videomüşahidə
-                </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
 
-                <h2 className="mt-3 text-3xl font-semibold leading-tight md:text-4xl">
-                  Kamera sistemi üçün tam həll
-                </h2>
+            <div className="relative z-10 flex min-h-[320px] max-w-[60%] flex-col justify-center p-7 md:p-9">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                Tam CCTV həlli
+              </p>
 
-                <p className="mt-4 text-sm leading-6 text-white/75">
-                  Kamera, NVR, PoE switch, HDD və kabel avadanlıqlarını bir
-                  yerdən seçin.
-                </p>
-              </div>
+              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl">
+                Obyektiniz üçün videomüşahidə sistemi
+              </h2>
 
-              <div className="mt-8 flex items-end justify-between gap-6">
-                <span className="inline-flex items-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-neutral-950">
-                  Məhsullara bax
-                  <ArrowRight
-                    className="ml-2 size-4 transition group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </span>
+              <p className="mt-4 max-w-md text-sm leading-6 text-neutral-600">
+                Kamera, qeydiyyat cihazı, disk və şəbəkə avadanlıqlarını bir
+                yerdən seçin.
+              </p>
 
-                <div className="flex items-end gap-3">
-                  <div className="flex size-16 items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur">
-                    <Camera className="size-8" strokeWidth={1.35} />
-                  </div>
-
-                  <div className="flex size-20 items-center justify-center rounded-2xl border border-white/15 bg-white/15 backdrop-blur">
-                    <Network className="size-10" strokeWidth={1.35} />
-                  </div>
-                </div>
-              </div>
+              <span className="mt-6 inline-flex w-fit items-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-emerald-700">
+                Məhsullara bax
+                <ArrowRight
+                  className="ml-2 size-4 transition group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </span>
             </div>
           </Link>
 
           <Link
-            href={`${localizedPath("/contact", locale)}?source=fire-project`}
-            className="group relative min-h-[280px] overflow-hidden rounded-2xl bg-gradient-to-br from-[#f1f3f5] via-white to-[#e5e7eb] p-7 text-neutral-950 shadow-sm md:p-9"
+            href={localizedPath("/contact", locale)}
+            className="group relative min-h-[320px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"
           >
-            <div className="absolute -right-20 -top-20 size-72 rounded-full bg-emerald-200/45 blur-3xl" />
-            <div className="absolute -bottom-24 right-[18%] size-60 rounded-full bg-neutral-300/30 blur-3xl" />
+            <Image
+              src="/banners/promo-fire.webp"
+              alt="Yanğın təhlükəsizlik layihəsi"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover transition duration-700 group-hover:scale-[1.02]"
+            />
 
-            <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="max-w-[340px]">
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700">
-                  Yanğın təhlükəsizliyi
-                </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
 
-                <h2 className="mt-3 text-3xl font-semibold leading-tight md:text-4xl">
-                  Obyektiniz üçün layihə və avadanlıq seçimi
-                </h2>
+            <div className="relative z-10 flex min-h-[320px] max-w-[60%] flex-col justify-center p-7 md:p-9">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
+                Layihələndirmə və quraşdırma
+              </p>
 
-                <p className="mt-4 text-sm leading-6 text-neutral-600">
-                  Detektor, panel, sirena və digər yanğın sistemi avadanlıqları
-                  üçün uyğun təklif alın.
-                </p>
-              </div>
+              <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl">
+                Yanğın sistemi üçün qiymət təklifi
+              </h2>
 
-              <div className="mt-8 flex items-end justify-between gap-6">
-                <span className="inline-flex items-center rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white">
-                  Təklif al
-                  <ArrowRight
-                    className="ml-2 size-4 transition group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </span>
+              <p className="mt-4 max-w-md text-sm leading-6 text-neutral-600">
+                Obyektinizə uyğun avadanlıq siyahısı və texniki həll hazırlayaq.
+              </p>
 
-                <div className="flex items-end gap-3">
-                  <div className="flex size-16 items-center justify-center rounded-2xl border border-neutral-200 bg-white shadow-sm">
-                    <Flame
-                      className="size-8 text-emerald-600"
-                      strokeWidth={1.35}
-                    />
-                  </div>
-
-                  <div className="flex size-20 items-center justify-center rounded-2xl bg-neutral-950 text-white shadow-sm">
-                    <ShieldCheck className="size-10" strokeWidth={1.35} />
-                  </div>
-                </div>
-              </div>
+              <span className="mt-6 inline-flex w-fit items-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-red-700">
+                Sorğu göndər
+                <ArrowRight
+                  className="ml-2 size-4 transition group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </span>
             </div>
           </Link>
         </div>

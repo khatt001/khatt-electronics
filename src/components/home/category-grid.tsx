@@ -1,14 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Boxes,
-  Camera,
-  DoorOpen,
-  Flame,
-  Network,
-  ShieldCheck,
-  Siren,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { homeTranslations } from "@/data/translations/home";
@@ -19,15 +11,37 @@ type CategoryGridProps = {
   locale?: Locale;
 };
 
-const categoryIcons = [
-  Camera,
-  Flame,
-  DoorOpen,
-  Siren,
-  Network,
-  ShieldCheck,
-  Boxes,
-];
+const categoryImages: Record<string, string> = {
+  "video-nezaret":
+    "/categories/video-surveillance.webp",
+
+  "yangin-sistemleri":
+    "/categories/fire-systems.webp",
+
+  "girise-nezaret":
+    "/categories/access-control.webp",
+
+  domofoniya:
+    "/categories/intercom.webp",
+
+  siqnalizasiya:
+    "/categories/alarm.webp",
+
+  "sebeke-avadanliqlari":
+    "/categories/network.webp",
+
+  kabeller:
+    "/categories/cables.webp",
+
+  ups:
+    "/categories/ups.webp",
+
+  "smart-home":
+    "/categories/smart-home.webp",
+
+  aksesuarlar:
+    "/categories/accessories.webp",
+};
 
 export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
   const categories = await getCatalogCategories(locale);
@@ -61,37 +75,41 @@ export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
 
         <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-            {visibleCategories.map((category, index) => {
-              const Icon = categoryIcons[index % categoryIcons.length];
+            {visibleCategories.map((category) => {
+  const imageSrc =
+    categoryImages[category.slug] ??
+    "/categories/accessories.webp";
 
               return (
                 <Link
                   key={category.id}
-                  href={localizedPath(`/category/${category.slug}`, locale)}
+                  href={`${localizedPath("/products", locale)}?category=${category.slug}`}
                   aria-label={`${category.name} — ${t.categoryViewButton}`}
-                  className="group relative flex min-h-[190px] flex-col items-center justify-center border-b border-r border-neutral-200 px-4 py-6 text-center transition duration-300 hover:bg-neutral-50"
+                  className="group relative flex min-h-[230px] flex-col border-b border-r border-neutral-200 bg-white p-4 transition duration-300 hover:bg-neutral-50"
                 >
-                  <div className="relative flex h-24 w-full items-center justify-center">
-                    <div className="absolute size-20 rounded-full bg-neutral-100 transition duration-300 group-hover:scale-110 group-hover:bg-emerald-50" />
-
-                    <Icon
-                      className="relative size-12 text-neutral-700 transition duration-300 group-hover:scale-110 group-hover:text-emerald-600"
-                      strokeWidth={1.35}
-                      aria-hidden="true"
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-[#f7f8f8]">
+                    <Image
+                      src={imageSrc}
+                      alt={category.name}
+                      fill
+                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
                     />
                   </div>
 
-                  <h3 className="mt-4 line-clamp-2 min-h-10 text-sm font-medium leading-5 text-neutral-900">
-                    {category.name}
-                  </h3>
+                  <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
+                    <h3 className="line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-neutral-950">
+                      {category.name}
+                    </h3>
 
-                  <span className="mt-3 inline-flex items-center text-xs font-medium text-neutral-400 opacity-0 transition duration-300 group-hover:text-emerald-600 group-hover:opacity-100">
-                    {t.categoryViewButton}
-                    <ArrowRight
-                      className="ml-1 size-3.5 transition group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </span>
+                    <span className="mt-auto inline-flex items-center pt-3 text-xs font-medium text-neutral-500 transition group-hover:text-emerald-600">
+                      {t.categoryViewButton}
+                      <ArrowRight
+                        className="ml-1 size-3.5 transition group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
                 </Link>
               );
             })}

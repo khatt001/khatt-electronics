@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, PackageSearch } from "lucide-react";
+
+import { ProductsFilter } from "@/app/products/products-filter";
 import { Container } from "@/components/layout/container";
 import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { ProductCard } from "@/components/product/product-card";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  categoryPageTranslations,
+  type CategoryPageLocale,
+} from "@/data/translations/category-page";
+import { localizedPath } from "@/lib/i18n";
+import { createBreadcrumbSchema, getBaseUrl } from "@/lib/seo";
+import { getCatalogBrands } from "@/services/brands";
 import {
   getCategoryBySlug,
   getCategorySlugs,
   getCatalogCategories,
 } from "@/services/categories";
-import { getCatalogBrands } from "@/services/brands";
 import { getCatalogProducts } from "@/services/products";
-import { ProductsFilter } from "@/app/products/products-filter";
-import { JsonLd } from "@/components/seo/json-ld";
-import { createBreadcrumbSchema, getBaseUrl } from "@/lib/seo";
-import { localizedPath } from "@/lib/i18n";
-import {
-  categoryPageTranslations,
-  type CategoryPageLocale,
-} from "@/data/translations/category-page";
 
 export type CategorySearchParams = {
   search?: string | string[];
@@ -37,12 +38,16 @@ export type CategoryPageViewProps = {
 
 function getFirstValue(value?: string | string[]) {
   if (Array.isArray(value)) return value[0];
+
   return value;
 }
 
 function getValues(value?: string | string[]) {
   if (!value) return [];
-  return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
+
+  return Array.isArray(value)
+    ? value.filter(Boolean)
+    : [value].filter(Boolean);
 }
 
 function getSpecsFromQuery(query: CategorySearchParams) {
@@ -74,7 +79,7 @@ function buildCategoryFilterUrl(
   query: CategorySearchParams,
   removeKey: string,
   locale: CategoryPageLocale,
-  removeValue?: string
+  removeValue?: string,
 ) {
   const params = new URLSearchParams();
 
@@ -86,13 +91,23 @@ function buildCategoryFilterUrl(
     values.forEach((value) => {
       if (!value) return;
       if (key === "page") return;
-      if (key === removeKey && (!removeValue || removeValue === value)) return;
+
+      if (
+        key === removeKey &&
+        (!removeValue || removeValue === value)
+      ) {
+        return;
+      }
+
       params.append(key, value);
     });
   });
 
   const queryString = params.toString();
-  const basePath = localizedPath(`/category/${categorySlug}`, locale);
+  const basePath = localizedPath(
+    `/category/${categorySlug}`,
+    locale,
+  );
 
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
@@ -101,7 +116,7 @@ function buildCategoryPageUrl(
   categorySlug: string,
   query: CategorySearchParams,
   page: number,
-  locale: CategoryPageLocale
+  locale: CategoryPageLocale,
 ) {
   const params = new URLSearchParams();
 
@@ -112,6 +127,7 @@ function buildCategoryPageUrl(
 
     values.forEach((value) => {
       if (!value) return;
+
       params.append(key, value);
     });
   });
@@ -121,22 +137,45 @@ function buildCategoryPageUrl(
   }
 
   const queryString = params.toString();
-  const basePath = localizedPath(`/category/${categorySlug}`, locale);
+  const basePath = localizedPath(
+    `/category/${categorySlug}`,
+    locale,
+  );
 
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
 
-function getStockLabel(stock: string | undefined, locale: CategoryPageLocale) {
+function getStockLabel(
+  stock: string | undefined,
+  locale: CategoryPageLocale,
+) {
   const t = categoryPageTranslations[locale];
 
-  if (stock === "in_stock" || stock === "Stokda var") return t.stockIn;
-  if (stock === "out_of_stock" || stock === "Stokda yoxdur") return t.stockOut;
-  if (stock === "pre_order" || stock === "Öncədən sifariş") return t.stockPreOrder;
+  if (stock === "in_stock" || stock === "Stokda var") {
+    return t.stockIn;
+  }
+
+  if (
+    stock === "out_of_stock" ||
+    stock === "Stokda yoxdur"
+  ) {
+    return t.stockOut;
+  }
+
+  if (
+    stock === "pre_order" ||
+    stock === "Öncədən sifariş"
+  ) {
+    return t.stockPreOrder;
+  }
 
   return stock ?? null;
 }
 
-function getSortLabel(sort: string | undefined, locale: CategoryPageLocale) {
+function getSortLabel(
+  sort: string | undefined,
+  locale: CategoryPageLocale,
+) {
   const t = categoryPageTranslations[locale];
 
   if (sort === "oldest") return t.sortOldest;
@@ -169,7 +208,10 @@ export async function CategoryPageView({
 
   const search = getFirstValue(query.search);
   const sort = getFirstValue(query.sort);
-  const page = Math.max(1, Number(getFirstValue(query.page)) || 1);
+  const page = Math.max(
+    1,
+    Number(getFirstValue(query.page)) || 1,
+  );
 
   const brandValues = getValues(query.brand);
   const stockValues = getValues(query.stock);
@@ -187,7 +229,7 @@ export async function CategoryPageView({
         page,
         pageSize: 24,
       },
-      locale
+      locale,
     ),
     getCatalogCategories(locale),
     getCatalogBrands(),
@@ -198,7 +240,9 @@ export async function CategoryPageView({
   const totalPages = productsResult.totalPages;
   const currentPage = productsResult.page;
 
-  const selectedBrands = brands.filter((brand) => brandValues.includes(brand.slug));
+  const selectedBrands = brands.filter((brand) =>
+    brandValues.includes(brand.slug),
+  );
 
   const sortLabel = getSortLabel(sort, locale);
 
@@ -210,7 +254,10 @@ export async function CategoryPageView({
     Object.keys(specs).length > 0;
 
   const baseUrl = getBaseUrl();
-  const categoryPath = localizedPath(`/category/${category.slug}`, locale);
+  const categoryPath = localizedPath(
+    `/category/${category.slug}`,
+    locale,
+  );
 
   const breadcrumbSchema = createBreadcrumbSchema([
     {
@@ -227,12 +274,19 @@ export async function CategoryPageView({
     },
   ]);
 
+  const filterChipClassName =
+    "rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-500 hover:text-emerald-700";
+
+  const paginationLinkClassName =
+    "rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-500 hover:text-emerald-700";
+
   return (
-    <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+    <div className="min-h-screen bg-[#f5f6f8]">
       <JsonLd data={breadcrumbSchema} />
 
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-5">
+      {/* Compact category introduction */}
+      <section className="border-b border-neutral-200 bg-white">
+        <Container className="py-6 md:py-8">
           <Breadcrumbs
             items={[
               {
@@ -248,60 +302,61 @@ export async function CategoryPageView({
               },
             ]}
           />
-        </Container>
-      </section>
 
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-6">
-          <Link
-            href={localizedPath("/products", locale)}
-            className="inline-flex items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950"
-          >
-            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
-            {t.backToProducts}
-          </Link>
-        </Container>
-      </section>
-
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-12 lg:py-16">
-          <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
-            {t.eyebrow}
-          </p>
-
-          <h1 className="mt-3 max-w-4xl text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
-            {category.name}
-          </h1>
-
-          <p className="mt-5 max-w-3xl leading-8 text-neutral-600">
-            {category.description ??
-              `${category.name} ${t.fallbackDescriptionSuffix}`}
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={localizedPath("/products", locale)}
-              className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
-            >
-              {t.allProducts}
-            </Link>
-
-            {hasActiveFilters ? (
+          <div className="mt-5 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
               <Link
-                href={categoryPath}
-                className="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                href={localizedPath("/products", locale)}
+                className="inline-flex items-center text-sm font-medium text-neutral-500 transition hover:text-emerald-700"
               >
-                {t.clearFilters}
+                <ArrowLeft
+                  className="mr-2 size-4"
+                  aria-hidden="true"
+                />
+
+                {t.backToProducts}
               </Link>
-            ) : null}
+
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                {t.eyebrow}
+              </p>
+
+              <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl">
+                {category.name}
+              </h1>
+
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-neutral-600 md:text-base">
+                {category.description ??
+                  `${category.name} ${t.fallbackDescriptionSuffix}`}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={localizedPath("/products", locale)}
+                className="inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                {t.allProducts}
+              </Link>
+
+              {hasActiveFilters ? (
+                <Link
+                  href={categoryPath}
+                  className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                >
+                  {t.clearFilters}
+                </Link>
+              ) : null}
+            </div>
           </div>
         </Container>
       </section>
 
-      <section className="py-10 lg:py-14">
+      {/* Product catalogue */}
+      <section className="py-8 md:py-10 lg:py-12">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
-            <aside>
+          <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+            <aside className="min-w-0">
               <ProductsFilter
                 categories={categories}
                 brands={brands}
@@ -318,9 +373,10 @@ export async function CategoryPageView({
               />
             </aside>
 
-            <div>
-              <div className="mb-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-neutral-500">
+            <div className="min-w-0">
+              {/* Results and active filters */}
+              <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <p className="shrink-0 text-sm text-neutral-500">
                   <span className="font-semibold text-neutral-950">
                     {totalProducts}
                   </span>{" "}
@@ -335,9 +391,9 @@ export async function CategoryPageView({
                           category.slug,
                           query,
                           "search",
-                          locale
+                          locale,
                         )}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className={filterChipClassName}
                       >
                         {t.searchLabel}: {search} ×
                       </Link>
@@ -351,9 +407,9 @@ export async function CategoryPageView({
                           query,
                           "brand",
                           locale,
-                          brand.slug
+                          brand.slug,
                         )}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className={filterChipClassName}
                       >
                         {t.brandLabel}: {brand.name} ×
                       </Link>
@@ -367,30 +423,32 @@ export async function CategoryPageView({
                           query,
                           "stock",
                           locale,
-                          stock
+                          stock,
                         )}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className={filterChipClassName}
                       >
                         {getStockLabel(stock, locale)} ×
                       </Link>
                     ))}
 
-                    {Object.entries(specs).flatMap(([key, values]) =>
-                      values.map((value) => (
-                        <Link
-                          key={`${key}-${value}`}
-                          href={buildCategoryFilterUrl(
-                            category.slug,
-                            query,
-                            `spec_${key}`,
-                            locale,
-                            value
-                          )}
-                          className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
-                        >
-                          {t.specLabel}: {getSpecChipLabel(key)} — {value} ×
-                        </Link>
-                      ))
+                    {Object.entries(specs).flatMap(
+                      ([key, values]) =>
+                        values.map((value) => (
+                          <Link
+                            key={`${key}-${value}`}
+                            href={buildCategoryFilterUrl(
+                              category.slug,
+                              query,
+                              `spec_${key}`,
+                              locale,
+                              value,
+                            )}
+                            className={filterChipClassName}
+                          >
+                            {t.specLabel}: {getSpecChipLabel(key)} —{" "}
+                            {value} ×
+                          </Link>
+                        )),
                     )}
 
                     {sortLabel ? (
@@ -399,9 +457,9 @@ export async function CategoryPageView({
                           category.slug,
                           query,
                           "sort",
-                          locale
+                          locale,
                         )}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className={filterChipClassName}
                       >
                         {sortLabel} ×
                       </Link>
@@ -412,7 +470,7 @@ export async function CategoryPageView({
 
               {products.length > 0 ? (
                 <>
-                  <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {products.map((product) => (
                       <ProductCard
                         key={product.id}
@@ -433,15 +491,17 @@ export async function CategoryPageView({
                             category.slug,
                             query,
                             currentPage - 1,
-                            locale
+                            locale,
                           )}
-                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                          className={paginationLinkClassName}
                         >
                           Əvvəlki
                         </Link>
                       ) : null}
 
-                      {Array.from({ length: totalPages }).map((_, index) => {
+                      {Array.from({
+                        length: totalPages,
+                      }).map((_, index) => {
                         const pageNumber = index + 1;
 
                         return (
@@ -451,15 +511,17 @@ export async function CategoryPageView({
                               category.slug,
                               query,
                               pageNumber,
-                              locale
+                              locale,
                             )}
                             aria-current={
-                              pageNumber === currentPage ? "page" : undefined
+                              pageNumber === currentPage
+                                ? "page"
+                                : undefined
                             }
                             className={
                               pageNumber === currentPage
-                                ? "rounded-full bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
-                                : "rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                                ? "rounded-lg bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
+                                : paginationLinkClassName
                             }
                           >
                             {pageNumber}
@@ -473,9 +535,9 @@ export async function CategoryPageView({
                             category.slug,
                             query,
                             currentPage + 1,
-                            locale
+                            locale,
                           )}
-                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                          className={paginationLinkClassName}
                         >
                           Növbəti
                         </Link>
@@ -484,28 +546,35 @@ export async function CategoryPageView({
                   ) : null}
                 </>
               ) : (
-                <div className="mx-auto max-w-3xl rounded-[2rem] border border-neutral-200 bg-white p-8 text-center shadow-sm lg:p-12">
-                  <div className="mx-auto flex size-20 items-center justify-center rounded-[2rem] bg-neutral-950 text-white">
-                    <PackageSearch className="size-9" aria-hidden="true" />
+                <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
+                  <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+                    <PackageSearch
+                      className="size-8"
+                      aria-hidden="true"
+                    />
                   </div>
 
-                  <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-400">
+                  <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
                     {t.emptyEyebrow}
                   </p>
 
-                  <h2 className="mt-4 text-4xl font-semibold leading-tight text-neutral-950 md:text-5xl">
+                  <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-3xl">
                     {t.emptyTitle}
                   </h2>
 
-                  <p className="mx-auto mt-5 max-w-xl leading-8 text-neutral-600">
+                  <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-neutral-600 md:text-base">
                     {t.emptyDescription}
                   </p>
 
                   <Link
                     href={categoryPath}
-                    className="mt-8 inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
                   >
-                    <PackageSearch className="mr-2 size-4" aria-hidden="true" />
+                    <PackageSearch
+                      className="mr-2 size-4"
+                      aria-hidden="true"
+                    />
+
                     {t.clearFilters}
                   </Link>
                 </div>
@@ -514,6 +583,6 @@ export async function CategoryPageView({
           </div>
         </Container>
       </section>
-    </main>
+    </div>
   );
 }

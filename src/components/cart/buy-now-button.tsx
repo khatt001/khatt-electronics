@@ -2,7 +2,9 @@
 
 import { Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 import { useCart } from "@/components/cart/cart-provider";
+import { localizedPath } from "@/lib/i18n";
 import type { CartItem } from "@/types/cart";
 
 export type BuyNowLocale = "az" | "en" | "ru";
@@ -25,14 +27,6 @@ type BuyNowButtonProps = {
   locale?: BuyNowLocale;
 };
 
-function getCheckoutHref(locale: BuyNowLocale) {
-  if (locale === "az") {
-    return "/checkout";
-  }
-
-  return `/${locale}/checkout`;
-}
-
 export function BuyNowButton({
   item,
   disabled = false,
@@ -50,7 +44,7 @@ export function BuyNowButton({
       quantity: 1,
     });
 
-    router.push(getCheckoutHref(locale));
+    router.push(localizedPath("/checkout", locale));
   }
 
   return (
@@ -58,7 +52,7 @@ export function BuyNowButton({
       type="button"
       onClick={handleBuyNow}
       disabled={disabled}
-      className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
+      className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
     >
       <Zap className="mr-2 size-4" aria-hidden="true" />
       {t.buyNow}

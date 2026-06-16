@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+
 import { Container } from "@/components/layout/container";
 import { projectsTranslations } from "@/data/translations/projects";
 import { localizedPath, type Locale } from "@/lib/i18n";
@@ -8,7 +9,9 @@ type ProjectsPageViewProps = {
   locale?: Locale;
 };
 
-export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
+export function ProjectsPageView({
+  locale = "az",
+}: ProjectsPageViewProps) {
   const t = projectsTranslations[locale];
 
   const CtaIcon = t.ctaIcon;
@@ -19,69 +22,83 @@ export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
   const servicesHref = localizedPath("/services", locale);
 
   return (
-    <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-12 lg:py-16">
-          <div className="grid gap-10 lg:grid-cols-[1fr_360px] lg:items-center">
+    <div className="min-h-screen bg-[#f5f6f8]">
+      <section className="border-b border-neutral-200 bg-white">
+        <Container className="py-8 md:py-10 lg:py-12">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
                 {t.eyebrow}
               </p>
 
-              <h1 className="mt-3 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
+              <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl lg:text-5xl">
                 {t.title}
               </h1>
 
-              <p className="mt-5 max-w-3xl leading-8 text-neutral-600">
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-neutral-600 md:text-base">
                 {t.description}
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   href={contactHref}
-                  className="inline-flex items-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  className="group inline-flex items-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
                 >
                   {t.quoteButton}
-                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+
+                  <ArrowRight
+                    className="ml-2 size-4 transition group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
                 </Link>
 
                 <Link
                   href={servicesHref}
-                  className="inline-flex items-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
+                  className="inline-flex items-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
                 >
                   {t.servicesButton}
                 </Link>
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-neutral-200 bg-neutral-950 p-6 text-white shadow-sm">
-              <CtaIcon className="size-9 text-emerald-300" aria-hidden="true" />
+            <div className="relative overflow-hidden rounded-2xl bg-neutral-950 p-6 text-white shadow-sm md:p-7">
+              <div className="absolute -right-16 -top-16 size-48 rounded-full bg-emerald-500/20 blur-3xl" />
 
-              <h2 className="mt-5 text-2xl font-semibold">{t.ctaTitle}</h2>
-
-              <p className="mt-3 text-sm leading-7 text-white/65">
-                {t.ctaDescription}
-              </p>
-
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <CameraIcon
-                    className="size-5 text-emerald-300"
-                    aria-hidden="true"
-                  />
-                  <p className="mt-3 text-xs leading-5 text-white/60">
-                    {t.cameraPlanning}
-                  </p>
+              <div className="relative z-10">
+                <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-600 text-white">
+                  <CtaIcon className="size-5" aria-hidden="true" />
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <NetworkIcon
-                    className="size-5 text-emerald-300"
-                    aria-hidden="true"
-                  />
-                  <p className="mt-3 text-xs leading-5 text-white/60">
-                    {t.networkPlanning}
-                  </p>
+                <h2 className="mt-5 text-xl font-semibold md:text-2xl">
+                  {t.ctaTitle}
+                </h2>
+
+                <p className="mt-3 text-sm leading-7 text-white/65">
+                  {t.ctaDescription}
+                </p>
+
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <CameraIcon
+                      className="size-5 text-emerald-300"
+                      aria-hidden="true"
+                    />
+
+                    <p className="mt-3 text-xs leading-5 text-white/60">
+                      {t.cameraPlanning}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <NetworkIcon
+                      className="size-5 text-emerald-300"
+                      aria-hidden="true"
+                    />
+
+                    <p className="mt-3 text-xs leading-5 text-white/60">
+                      {t.networkPlanning}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,28 +106,40 @@ export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
         </Container>
       </section>
 
-      <section className="py-10 lg:py-14">
+      <section className="py-8 md:py-10 lg:py-12">
         <Container>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mb-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Layihə istiqamətləri
+            </p>
+
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+              Təklif etdiyimiz layihə həlləri
+            </h2>
+
+            <div className="mt-4 h-0.5 w-28 bg-emerald-500" />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {t.projects.map((project) => {
               const Icon = project.icon;
 
               return (
                 <article
                   key={project.title}
-                  className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                  className="group flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-md"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-neutral-950 text-white">
-                      <Icon className="size-6" aria-hidden="true" />
+                    <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
+                      <Icon className="size-5" aria-hidden="true" />
                     </div>
 
-                    <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
+                    <span className="rounded-lg bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600">
                       {project.type}
                     </span>
                   </div>
 
-                  <h2 className="mt-5 text-xl font-semibold text-neutral-950">
+                  <h2 className="mt-5 text-lg font-semibold text-neutral-950 md:text-xl">
                     {project.title}
                   </h2>
 
@@ -118,16 +147,17 @@ export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
                     {project.description}
                   </p>
 
-                  <div className="mt-5 space-y-3">
+                  <div className="mt-5 space-y-3 border-t border-neutral-100 pt-5">
                     {project.items.map((item) => (
                       <div
                         key={item}
-                        className="flex items-start gap-2 text-sm text-neutral-700"
+                        className="flex items-start gap-3 text-sm leading-6 text-neutral-700"
                       >
                         <CheckCircle2
                           className="mt-0.5 size-4 shrink-0 text-emerald-600"
                           aria-hidden="true"
                         />
+
                         <span>{item}</span>
                       </div>
                     ))}
@@ -139,57 +169,89 @@ export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
         </Container>
       </section>
 
-      <section className="pb-16 lg:pb-24">
+      <section className="pb-8 md:pb-12">
         <Container>
-          <div className="grid gap-8 rounded-[2rem] border border-neutral-200 bg-neutral-950 p-6 text-white shadow-sm lg:grid-cols-[0.8fr_1fr] lg:p-10">
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-white/40">
-                {t.processEyebrow}
-              </p>
+          <div className="relative overflow-hidden rounded-2xl bg-neutral-950 p-6 text-white shadow-sm md:p-8 lg:p-10">
+            <div className="absolute -right-20 -top-20 size-64 rounded-full bg-emerald-500/20 blur-3xl" />
+            <div className="absolute -bottom-24 -left-20 size-64 rounded-full bg-emerald-900/30 blur-3xl" />
 
-              <h2 className="mt-3 text-3xl font-semibold">
-                {t.processTitle}
-              </h2>
+            <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(320px,1fr)] lg:items-start">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
+                  {t.processEyebrow}
+                </p>
 
-              <p className="mt-4 leading-8 text-white/65">
-                {t.processDescription}
-              </p>
-            </div>
+                <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight md:text-3xl lg:text-4xl">
+                  {t.processTitle}
+                </h2>
 
-            <div className="space-y-3">
-              {t.processSteps.map((step, index) => (
-                <div
-                  key={step}
-                  className="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-4"
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65 md:text-base">
+                  {t.processDescription}
+                </p>
+
+                <Link
+                  href={contactHref}
+                  className="mt-6 inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-100"
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold text-neutral-950">
-                    {index + 1}
-                  </span>
+                  {t.quoteButton}
 
-                  <p className="text-sm leading-6 text-white/75">{step}</p>
-                </div>
-              ))}
+                  <ArrowRight
+                    className="ml-2 size-4"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </div>
+
+              <div className="space-y-3">
+                {t.processSteps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 p-4"
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-sm font-semibold text-white">
+                      {index + 1}
+                    </span>
+
+                    <p className="pt-1 text-sm leading-6 text-white/75">
+                      {step}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="mt-8 rounded-[2rem] border border-neutral-200 bg-white p-6 text-center shadow-sm lg:p-10">
-            <h2 className="text-3xl font-semibold text-neutral-950">
-              {t.ctaTitle}
-            </h2>
+          <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm md:p-8">
+            <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                  Layihənizi birlikdə planlayaq
+                </p>
 
-            <p className="mx-auto mt-4 max-w-2xl leading-8 text-neutral-600">
-              {t.ctaDescription}
-            </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+                  {t.ctaTitle}
+                </h2>
 
-            <Link
-              href={contactHref}
-              className="mt-6 inline-flex rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
-            >
-              {t.ctaButton}
-            </Link>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-neutral-600 md:text-base">
+                  {t.ctaDescription}
+                </p>
+              </div>
+
+              <Link
+                href={contactHref}
+                className="group inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                {t.ctaButton}
+
+                <ArrowRight
+                  className="ml-2 size-4 transition group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
           </div>
         </Container>
       </section>
-    </main>
+    </div>
   );
 }

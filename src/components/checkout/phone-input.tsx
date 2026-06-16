@@ -9,6 +9,7 @@ type PhoneInputProps = {
   required?: boolean;
   defaultValue?: string;
   locale?: PhoneInputLocale;
+  id?: string;
 };
 
 const phoneInputTranslations = {
@@ -70,32 +71,45 @@ export function PhoneInput({
   required = false,
   defaultValue = "",
   locale = "az",
+  id,
 }: PhoneInputProps) {
   const t = phoneInputTranslations[locale];
 
   const [displayValue, setDisplayValue] = useState(() =>
-    formatPhoneValue(defaultValue)
+    formatPhoneValue(defaultValue),
   );
 
   const normalizedValue = useMemo(
     () => normalizePhoneValue(displayValue),
-    [displayValue]
+    [displayValue],
   );
+
+  const inputId = id ?? `${name}-display`;
 
   return (
     <>
-      <input type="hidden" name={name} value={normalizedValue} />
+      <input
+        type="hidden"
+        name={name}
+        value={normalizedValue}
+      />
 
       <input
+        id={inputId}
         type="tel"
         required={required}
         value={displayValue}
         onChange={(event) => {
-          setDisplayValue(formatPhoneValue(event.target.value));
+          setDisplayValue(
+            formatPhoneValue(event.target.value),
+          );
         }}
         placeholder={t.placeholder}
         aria-label={t.ariaLabel}
-        className="h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm outline-none transition focus:border-neutral-950"
+        autoComplete="tel"
+        inputMode="tel"
+        maxLength={17}
+        className="h-12 w-full rounded-lg border border-neutral-300 bg-white px-4 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10"
       />
     </>
   );

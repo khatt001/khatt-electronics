@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product/product-card";
 import { Container } from "@/components/layout/container";
-import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { getCatalogBrands } from "@/services/brands";
 import { getCatalogCategories } from "@/services/categories";
 import { getCatalogProducts } from "@/services/products";
@@ -37,12 +36,7 @@ function getValues(value?: string | string[]) {
   return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
 }
 
-function getHomeLabel(locale: ProductsLocale) {
-  if (locale === "en") return "Home";
-  if (locale === "ru") return "Главная";
 
-  return "Ana səhifə";
-}
 
 function getSpecsFromQuery(query: ProductsSearchParams) {
   const specs: Record<string, string[]> = {};
@@ -228,39 +222,9 @@ export async function ProductsPageView({
 
   return (
     <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-5">
-          <Breadcrumbs
-            items={[
-              {
-                label: getHomeLabel(locale),
-                href: localizedPath("/", locale),
-              },
-              {
-                label: t.title,
-              },
-            ]}
-          />
-        </Container>
-      </section>
+     
 
-      <section className="border-b border-black/10 bg-white">
-        <Container className="py-12 lg:py-16">
-          <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">
-              {t.eyebrow}
-            </p>
-
-            <h1 className="mt-3 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
-              {t.title}
-            </h1>
-
-            <p className="mt-5 leading-8 text-neutral-600">{t.description}</p>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-10 lg:py-14">
+      <section className="py-6 lg:py-8">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
             <aside>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Heart } from "lucide-react";
+
 import { useFavorites } from "@/components/favorites/favorites-provider";
 import { cn } from "@/lib/utils";
 import type { FavoriteItem } from "@/types/favorites";
@@ -27,11 +28,17 @@ type FavoriteButtonProps = {
   locale?: FavoriteButtonLocale;
 };
 
-export function FavoriteButton({ item, locale = "az" }: FavoriteButtonProps) {
+export function FavoriteButton({
+  item,
+  locale = "az",
+}: FavoriteButtonProps) {
   const { items, toggleFavorite } = useFavorites();
   const t = favoriteButtonTranslations[locale];
 
-  const isFavorite = items.some((favoriteItem) => favoriteItem.id === item.id);
+  const isFavorite = items.some(
+    (favoriteItem) => favoriteItem.id === item.id,
+  );
+
   const label = isFavorite ? t.remove : t.add;
 
   return (
@@ -39,14 +46,20 @@ export function FavoriteButton({ item, locale = "az" }: FavoriteButtonProps) {
       type="button"
       onClick={() => toggleFavorite(item)}
       aria-label={label}
+      aria-pressed={isFavorite}
       title={label}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border border-white/70 bg-white/90 text-neutral-800 shadow-sm backdrop-blur transition hover:bg-white",
-        isFavorite ? "text-red-600" : "hover:text-red-600"
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-lg border bg-white text-neutral-700 shadow-sm transition",
+        isFavorite
+          ? "border-red-200 bg-red-50 text-red-600 hover:border-red-300 hover:bg-red-100"
+          : "border-neutral-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600",
       )}
     >
       <Heart
-        className={cn("size-5", isFavorite ? "fill-current" : "")}
+        className={cn(
+          "size-5 transition",
+          isFavorite ? "fill-current" : "",
+        )}
         aria-hidden="true"
       />
     </button>

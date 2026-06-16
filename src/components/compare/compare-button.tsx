@@ -1,6 +1,7 @@
 "use client";
 
 import { BarChart3 } from "lucide-react";
+
 import { useCompare } from "@/components/compare/compare-provider";
 import { cn } from "@/lib/utils";
 import type { CompareItem } from "@/types/compare";
@@ -30,28 +31,57 @@ type CompareButtonProps = {
   locale?: CompareButtonLocale;
 };
 
-export function CompareButton({ item, locale = "az" }: CompareButtonProps) {
+export function CompareButton({
+  item,
+  locale = "az",
+}: CompareButtonProps) {
   const { items, toggleCompare, limit } = useCompare();
   const t = compareButtonTranslations[locale];
 
-  const isCompared = items.some((compareItem) => compareItem.id === item.id);
-  const limitReached = !isCompared && items.length >= limit;
-  const label = limitReached ? t.limit : isCompared ? t.remove : t.add;
+  const isCompared = items.some(
+    (compareItem) => compareItem.id === item.id,
+  );
+
+  const limitReached =
+    !isCompared && items.length >= limit;
+
+  const label = limitReached
+    ? t.limit
+    : isCompared
+      ? t.remove
+      : t.add;
+
+  function handleToggle() {
+    if (limitReached) return;
+
+    toggleCompare(item);
+  }
 
   return (
     <button
       type="button"
-      onClick={() => toggleCompare(item)}
+      onClick={handleToggle}
       disabled={limitReached}
       aria-label={label}
+      aria-pressed={isCompared}
       title={label}
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border border-white/70 bg-white/90 text-neutral-800 shadow-sm backdrop-blur transition hover:bg-white",
-        isCompared ? "text-emerald-600" : "hover:text-emerald-600",
-        limitReached ? "cursor-not-allowed opacity-50" : ""
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-lg border bg-white text-neutral-700 shadow-sm transition",
+        isCompared
+          ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100"
+          : "border-neutral-200 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700",
+        limitReached
+          ? "cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-400 opacity-60"
+          : "",
       )}
     >
-      <BarChart3 className="size-5" aria-hidden="true" />
+      <BarChart3
+        className={cn(
+          "size-5 transition",
+          isCompared ? "scale-105" : "",
+        )}
+        aria-hidden="true"
+      />
     </button>
   );
 }
