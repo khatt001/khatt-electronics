@@ -10,15 +10,17 @@ type HomePageContentProps = {
   locale: Locale;
 };
 
-export function HomePageContent({ locale }: HomePageContentProps) {
+export function HomePageContent({
+  locale,
+}: HomePageContentProps) {
   return (
-    <main className="min-h-screen bg-[#f5f6f8] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+    <div className="min-h-screen bg-[#f5f6f8]">
       <HomeHero locale={locale} />
       <CategoryGrid locale={locale} />
       <FeaturedProducts locale={locale} />
       <PromoBanners locale={locale} />
       <BrandsSection locale={locale} />
       <ServicesSection locale={locale} />
-    </main>
+    </div>
   );
 }

@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import {
+  AlertTriangle,
+  RefreshCw,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+
 import {
   getLocaleFromPathname,
   localizedPath,
@@ -46,54 +50,70 @@ const translations: Record<
 };
 
 type ErrorPageProps = {
-  error: Error & { digest?: string };
+  error: Error & {
+    digest?: string;
+  };
   reset: () => void;
 };
 
-export default function ErrorPage({ reset }: ErrorPageProps) {
+export default function ErrorPage({
+  reset,
+}: ErrorPageProps) {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+  const locale =
+    getLocaleFromPathname(pathname);
+
   const t = translations[locale];
 
   return (
-    <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
-      <section className="px-5 py-20">
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-neutral-200 bg-white p-8 text-center shadow-sm lg:p-12">
-          <div className="mx-auto flex size-20 items-center justify-center rounded-[2rem] bg-red-50 text-red-700">
-            <AlertTriangle className="size-9" aria-hidden="true" />
+    <div className="min-h-screen bg-[#f5f6f8]">
+      <section className="px-5 py-12 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10 lg:p-12">
+          <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-red-50 text-red-700 md:size-20">
+            <AlertTriangle
+              className="size-8 md:size-9"
+              aria-hidden="true"
+            />
           </div>
 
-          <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-400">
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-red-600">
             {t.eyebrow}
           </p>
 
-          <h1 className="mt-4 text-4xl font-semibold leading-tight text-neutral-950 md:text-6xl">
+          <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl lg:text-5xl">
             {t.title}
           </h1>
 
-          <p className="mx-auto mt-5 max-w-xl leading-8 text-neutral-600">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-neutral-600 md:text-base">
             {t.description}
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
-              <RefreshCw className="mr-2 size-4" aria-hidden="true" />
+              <RefreshCw
+                className="mr-2 size-4"
+                aria-hidden="true"
+              />
+
               {t.retry}
             </button>
 
             <Link
-              href={localizedPath("/", locale)}
-              className="inline-flex items-center justify-center rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-950 transition hover:border-neutral-950"
+              href={localizedPath(
+                "/",
+                locale,
+              )}
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.home}
             </Link>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

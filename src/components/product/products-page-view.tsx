@@ -221,7 +221,7 @@ export async function ProductsPageView({
     Object.keys(specs).length > 0;
 
   return (
-    <main className="min-h-screen bg-[#f6f6f4] pt-16 lg:pt-[8.25rem] xl:pt-[7.5rem]">
+    <div className="min-h-screen bg-[#f5f6f8]">
      
 
       <section className="py-6 lg:py-8">
@@ -244,7 +244,7 @@ export async function ProductsPageView({
             </aside>
 
             <div>
-              <div className="mb-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-neutral-500">
                   <span className="font-semibold text-neutral-950">
                     {totalProducts}
@@ -257,7 +257,7 @@ export async function ProductsPageView({
                     {search ? (
                       <Link
                         href={buildFilterUrl(locale, query, "search")}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {t.searchLabel}: {search} ×
                       </Link>
@@ -266,7 +266,7 @@ export async function ProductsPageView({
                     {selectedCategory ? (
                       <Link
                         href={buildFilterUrl(locale, query, "category")}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {t.categoryLabel}: {selectedCategory.name} ×
                       </Link>
@@ -276,7 +276,7 @@ export async function ProductsPageView({
                       <Link
                         key={brand.id}
                         href={buildFilterUrl(locale, query, "brand", brand.slug)}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {t.brandLabel}: {brand.name} ×
                       </Link>
@@ -286,7 +286,7 @@ export async function ProductsPageView({
                       <Link
                         key={stock}
                         href={buildFilterUrl(locale, query, "stock", stock)}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {getStockLabel(stock, locale)} ×
                       </Link>
@@ -302,7 +302,7 @@ export async function ProductsPageView({
                             `spec_${key}`,
                             value
                           )}
-                          className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                          className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                         >
                           {getSpecChipLabel(key)}: {value} ×
                         </Link>
@@ -312,7 +312,7 @@ export async function ProductsPageView({
                     {sortLabel ? (
                       <Link
                         href={buildFilterUrl(locale, query, "sort")}
-                        className="rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700 transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {sortLabel} ×
                       </Link>
@@ -341,7 +341,7 @@ export async function ProductsPageView({
                       {currentPage > 1 ? (
                         <Link
                           href={buildPageUrl(locale, query, currentPage - 1)}
-                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                          className="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                         >
                           Əvvəlki
                         </Link>
@@ -359,8 +359,8 @@ export async function ProductsPageView({
                             }
                             className={
                               pageNumber === currentPage
-                                ? "rounded-full bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
-                                : "rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                                ? "rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
+                                : "rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                             }
                           >
                             {pageNumber}
@@ -371,7 +371,7 @@ export async function ProductsPageView({
                       {currentPage < totalPages ? (
                         <Link
                           href={buildPageUrl(locale, query, currentPage + 1)}
-                          className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                          className="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                         >
                           Növbəti
                         </Link>
@@ -380,7 +380,7 @@ export async function ProductsPageView({
                   ) : null}
                 </>
               ) : (
-                <div className="rounded-3xl border border-dashed border-neutral-300 bg-white p-10 text-center">
+                <div className="rounded-2xl border border-dashed border-neutral-300 bg-white p-8 text-center shadow-sm md:p-10">
                   <h2 className="text-xl font-semibold text-neutral-950">
                     {t.emptyTitle}
                   </h2>
@@ -391,7 +391,7 @@ export async function ProductsPageView({
 
                   <Link
                     href={localizedPath("/products", locale)}
-                    className="mt-5 inline-flex rounded-full bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                    className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
                   >
                     {t.clearAll}
                   </Link>
@@ -401,6 +401,6 @@ export async function ProductsPageView({
           </div>
         </Container>
       </section>
-    </main>
+    </div>
   );
 }

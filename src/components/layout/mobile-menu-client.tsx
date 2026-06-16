@@ -1,24 +1,23 @@
 "use client";
 
-// This is the ONLY part of the Navbar that needs "use client".
-// Isolating it here means the rest of the Navbar renders as static HTML,
-// reducing the JavaScript bundle that must be parsed and executed on load.
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { CatalogDropdown } from "@/components/layout/catalog-dropdown";
 import { NavbarSearch } from "@/components/layout/navbar-search";
+import {
+  localizedPath,
+  switchLocalePathname,
+  type Locale,
+} from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { localizedPath, switchLocalePathname, type Locale } from "@/lib/i18n";
 
 type NavLink = {
   href: string;
   name: string;
 };
 
-// Accept the translated strings as a prop so this component doesn't import
-// translation data itself (keeps its bundle small).
 type MobileMenuTranslations = {
   mobileMenuOpenLabel: string;
   mobileMenuCloseLabel: string;
@@ -30,7 +29,10 @@ type MobileMenuTranslations = {
   cart: string;
   productsCta: string;
   trackOrder: string;
-  languages: { label: string; locale: Locale }[];
+  languages: {
+    label: string;
+    locale: Locale;
+  }[];
 };
 
 type MobileMenuClientProps = {
@@ -49,19 +51,44 @@ export function MobileMenuClient({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+
+    const originalOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow =
+        originalOverflow;
     };
   }, [open]);
 
   useEffect(() => {
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+    function handleEscape(
+      event: KeyboardEvent,
+    ) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
     }
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+
+    window.addEventListener(
+      "keydown",
+      handleEscape,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleEscape,
+      );
+    };
   }, []);
+
+  function closeMenu() {
+    setOpen(false);
+  }
 
   return (
     <>
@@ -71,9 +98,12 @@ export function MobileMenuClient({
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen(true)}
-        className="inline-flex size-10 items-center justify-center rounded-full text-neutral-800 transition hover:bg-neutral-100 xl:hidden"
+        className="inline-flex size-10 items-center justify-center rounded-lg text-neutral-800 transition hover:bg-emerald-50 hover:text-emerald-700 xl:hidden"
       >
-        <Menu size={22} aria-hidden="true" />
+        <Menu
+          className="size-[22px]"
+          aria-hidden="true"
+        />
       </button>
 
       <div
@@ -81,17 +111,20 @@ export function MobileMenuClient({
         role="dialog"
         aria-modal="true"
         aria-label={t.mobileMenuLabel}
+        aria-hidden={!open}
         className={cn(
-          "fixed inset-0 z-[999] flex h-dvh w-screen max-w-full flex-col overflow-hidden bg-white transition-transform duration-300 xl:hidden",
-          open ? "translate-x-0" : "translate-x-full"
+          "fixed inset-0 z-[999] flex h-dvh w-screen max-w-full flex-col overflow-hidden bg-[#f5f6f8] transition-transform duration-300 xl:hidden",
+          open
+            ? "translate-x-0"
+            : "pointer-events-none translate-x-full",
         )}
       >
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-black/10 px-5">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-neutral-200 bg-white px-5">
           <Link
             href={localizedPath("/", locale)}
-            onClick={() => setOpen(false)}
+            onClick={closeMenu}
             aria-label={t.logoAriaLabel}
-            className="font-serif text-xl font-semibold tracking-[0.24em]"
+            className="font-serif text-xl font-semibold tracking-[0.24em] text-neutral-950 transition hover:text-emerald-700"
           >
             KHATT
           </Link>
@@ -99,18 +132,21 @@ export function MobileMenuClient({
           <button
             type="button"
             aria-label={t.mobileMenuCloseLabel}
-            onClick={() => setOpen(false)}
-            className="inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral-100"
+            onClick={closeMenu}
+            className="inline-flex size-10 items-center justify-center rounded-lg border border-neutral-200 text-neutral-700 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
           >
-            <X size={22} aria-hidden="true" />
+            <X
+              className="size-[22px]"
+              aria-hidden="true"
+            />
           </button>
         </div>
 
-        <div className="relative z-20 shrink-0 border-b border-black/10 px-5 py-4">
+        <div className="relative z-20 shrink-0 border-b border-neutral-200 bg-white px-5 py-4">
           <NavbarSearch
             placeholder={t.searchPlaceholder}
             locale={locale}
-            onNavigate={() => setOpen(false)}
+            onNavigate={closeMenu}
           />
         </div>
 
@@ -119,88 +155,106 @@ export function MobileMenuClient({
             <CatalogDropdown
               locale={locale}
               variant="mobile"
-              onNavigate={() => setOpen(false)}
+              onNavigate={closeMenu}
             />
           </div>
 
-          {/* 
-            ACCESSIBILITY FIX: These three links had no accessible name
-            (Lighthouse: "Links do not have a discernible name").
-            The link text is now explicit; aria-label added as backup.
-          */}
           <div className="grid grid-cols-3 gap-2">
             <Link
-              href={localizedPath("/compare", locale)}
-              onClick={() => setOpen(false)}
+              href={localizedPath(
+                "/compare",
+                locale,
+              )}
+              onClick={closeMenu}
               aria-label={t.compare}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
+              className="rounded-xl border border-neutral-200 bg-white p-3 text-center text-xs font-medium text-neutral-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.compare}
             </Link>
 
             <Link
-              href={localizedPath("/favorites", locale)}
-              onClick={() => setOpen(false)}
+              href={localizedPath(
+                "/favorites",
+                locale,
+              )}
+              onClick={closeMenu}
               aria-label={t.favorites}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
+              className="rounded-xl border border-neutral-200 bg-white p-3 text-center text-xs font-medium text-neutral-700 shadow-sm transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             >
               {t.favorites}
             </Link>
 
             <Link
-              href={localizedPath("/cart", locale)}
-              onClick={() => setOpen(false)}
+              href={localizedPath(
+                "/cart",
+                locale,
+              )}
+              onClick={closeMenu}
               aria-label={t.cart}
-              className="rounded-2xl border border-neutral-200 p-3 text-center text-xs font-medium transition hover:border-neutral-950"
+              className="rounded-xl border border-neutral-200 bg-white p-3 text-center text-xs font-medium text-neutral-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.cart}
             </Link>
           </div>
 
-          <nav aria-label={t.mobileMenuLabel} className="mt-6 flex flex-col">
+          <nav
+            aria-label={t.mobileMenuLabel}
+            className="mt-6 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-neutral-100 py-4 text-lg font-medium text-neutral-900"
+                onClick={closeMenu}
+                className="block border-b border-neutral-100 px-4 py-4 text-base font-medium text-neutral-900 transition last:border-b-0 hover:bg-emerald-50 hover:text-emerald-700"
               >
                 {link.name}
               </Link>
             ))}
           </nav>
 
-          <div className="mt-6 flex items-center gap-3">
-            {t.languages.map((language) => (
-              <Link
-                key={language.label}
-                href={switchLocalePathname(pathname, language.locale)}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium",
-                  language.locale === locale
-                    ? "border-neutral-950 bg-neutral-950 text-white"
-                    : "border-neutral-200 text-neutral-700"
-                )}
-              >
-                {language.label}
-              </Link>
-            ))}
+          <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+            <div className="flex flex-wrap items-center gap-2">
+              {t.languages.map((language) => (
+                <Link
+                  key={language.label}
+                  href={switchLocalePathname(
+                    pathname,
+                    language.locale,
+                  )}
+                  onClick={closeMenu}
+                  className={cn(
+                    "rounded-lg border px-4 py-2 text-sm font-medium transition",
+                    language.locale === locale
+                      ? "border-neutral-950 bg-neutral-950 text-white"
+                      : "border-neutral-200 text-neutral-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700",
+                  )}
+                >
+                  {language.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-3">
+          <div className="mt-6 grid grid-cols-2 gap-3">
             <Link
-              href={localizedPath("/products", locale)}
-              onClick={() => setOpen(false)}
-              className="inline-flex justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white"
+              href={localizedPath(
+                "/products",
+                locale,
+              )}
+              onClick={closeMenu}
+              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
               {t.productsCta}
             </Link>
 
             <Link
-              href={localizedPath("/track-order", locale)}
-              onClick={() => setOpen(false)}
-              className="inline-flex justify-center rounded-full border border-neutral-950 px-6 py-3 text-sm font-medium"
+              href={localizedPath(
+                "/track-order",
+                locale,
+              )}
+              onClick={closeMenu}
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 py-3 text-center text-sm font-semibold text-neutral-800 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.trackOrder}
             </Link>

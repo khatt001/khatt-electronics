@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { Heart } from "lucide-react";
-import { useFavorites } from "@/components/favorites/favorites-provider";
 
-type FavoritesNavLocale = "az" | "en" | "ru";
+import { useFavorites } from "@/components/favorites/favorites-provider";
+import { localizedPath } from "@/lib/i18n";
+
+type FavoritesNavLocale =
+  | "az"
+  | "en"
+  | "ru";
 
 const favoritesNavTranslations = {
   az: {
@@ -22,29 +27,32 @@ type FavoritesNavLinkProps = {
   locale?: FavoritesNavLocale;
 };
 
-function getFavoritesHref(locale: FavoritesNavLocale) {
-  if (locale === "az") {
-    return "/favorites";
-  }
-
-  return `/${locale}/favorites`;
-}
-
-export function FavoritesNavLink({ locale = "az" }: FavoritesNavLinkProps) {
+export function FavoritesNavLink({
+  locale = "az",
+}: FavoritesNavLinkProps) {
   const { items } = useFavorites();
   const t = favoritesNavTranslations[locale];
 
+  const visibleCount =
+    items.length > 99 ? "99+" : items.length;
+
   return (
     <Link
-      href={getFavoritesHref(locale)}
+      href={localizedPath(
+        "/favorites",
+        locale,
+      )}
       aria-label={t.ariaLabel}
-      className="relative inline-flex size-10 items-center justify-center rounded-full text-neutral-800 transition hover:bg-neutral-100"
+      className="relative inline-flex size-10 shrink-0 items-center justify-center rounded-lg text-neutral-800 transition hover:bg-red-50 hover:text-red-600"
     >
-      <Heart size={21} aria-hidden="true" />
+      <Heart
+        className="size-[21px]"
+        aria-hidden="true"
+      />
 
       {items.length > 0 ? (
-        <span className="absolute -right-1 -top-1 flex min-w-5 items-center justify-center rounded-full bg-neutral-950 px-1.5 text-[11px] font-semibold text-white">
-          {items.length}
+        <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-md bg-red-600 px-1 text-[10px] font-semibold leading-none text-white shadow-sm">
+          {visibleCount}
         </span>
       ) : null}
     </Link>
