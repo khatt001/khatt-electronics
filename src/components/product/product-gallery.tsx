@@ -7,7 +7,7 @@ import {
   Images,
   ShoppingBag,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 type ProductGalleryImage = {
   id: string;
@@ -32,34 +32,44 @@ export function ProductGallery({
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
 
-  useEffect(() => {
-    if (images.length === 0) {
-      setActiveIndex(0);
-      return;
-    }
 
-    if (activeIndex >= images.length) {
-      setActiveIndex(0);
-    }
-  }, [activeIndex, images.length]);
 
-  const activeImage = images[activeIndex];
+ const safeActiveIndex =
+  images.length === 0
+    ? 0
+    : Math.min(activeIndex, images.length - 1);
 
-  function goPrevious() {
-    if (images.length <= 1) return;
+const activeImage = images[safeActiveIndex];
 
-    setActiveIndex((current) =>
-      current === 0 ? images.length - 1 : current - 1,
+function goPrevious() {
+  if (images.length <= 1) return;
+
+  setActiveIndex((current) => {
+    const safeCurrent = Math.min(
+      current,
+      images.length - 1,
     );
-  }
 
-  function goNext() {
-    if (images.length <= 1) return;
+    return safeCurrent === 0
+      ? images.length - 1
+      : safeCurrent - 1;
+  });
+}
 
-    setActiveIndex((current) =>
-      current === images.length - 1 ? 0 : current + 1,
+function goNext() {
+  if (images.length <= 1) return;
+
+  setActiveIndex((current) => {
+    const safeCurrent = Math.min(
+      current,
+      images.length - 1,
     );
-  }
+
+    return safeCurrent === images.length - 1
+      ? 0
+      : safeCurrent + 1;
+  });
+}
 
   return (
     <div className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-5">
@@ -110,7 +120,7 @@ export function ProductGallery({
 
             <div className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white/95 px-3 py-2 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">
               <Images className="size-4" aria-hidden="true" />
-              {activeIndex + 1}/{images.length}
+              {safeActiveIndex + 1}/{images.length}
             </div>
           </>
         ) : null}
@@ -119,7 +129,7 @@ export function ProductGallery({
       {images.length > 1 ? (
         <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
           {images.map((image, index) => {
-            const isActive = index === activeIndex;
+            const isActive = index === safeActiveIndex;
 
             return (
               <button
