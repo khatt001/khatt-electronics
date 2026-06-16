@@ -1,73 +1,134 @@
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Headphones,
+  PackageCheck,
+  ShieldCheck,
+  Truck,
+  Wrench,
+} from "lucide-react";
+
 import { Container } from "@/components/layout/container";
-import { homeTranslations } from "@/data/translations/home";
 import { localizedPath, type Locale } from "@/lib/i18n";
 
 type ServicesSectionProps = {
   locale?: Locale;
 };
 
+const services = [
+  {
+    title: "Rəsmi zəmanət",
+    description: "Məhsullara etibarlı zəmanət və satış sonrası dəstək.",
+    icon: BadgeCheck,
+  },
+  {
+    title: "Texniki məsləhət",
+    description: "Layihənizə uyğun avadanlıq seçimi üçün mütəxəssis dəstəyi.",
+    icon: Headphones,
+  },
+  {
+    title: "Sürətli təchizat",
+    description: "Stokda olan məhsulların operativ hazırlanması və çatdırılması.",
+    icon: Truck,
+  },
+  {
+    title: "Quraşdırma dəstəyi",
+    description: "Quraşdırma və sazlama üzrə texniki istiqamətləndirmə.",
+    icon: Wrench,
+  },
+];
+
 export function ServicesSection({ locale = "az" }: ServicesSectionProps) {
-  const t = homeTranslations[locale];
-
   return (
-    <section className="bg-neutral-950 py-20 text-white lg:py-28">
-      <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-        <div>
-          {/*
-            CONTRAST FIX: text-white/40 on bg-neutral-950 is ~2.3:1 — fails WCAG AA.
-            text-white/60 gives ~4.5:1 which passes for small text.
-          */}
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60">
-            {t.servicesEyebrow}
-          </p>
+    <section className="bg-[#f5f6f8] pb-12 pt-7 md:pb-16 md:pt-10">
+      <Container>
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+          <div className="grid lg:grid-cols-[1.1fr_1.9fr]">
+            <div className="relative overflow-hidden bg-neutral-950 p-8 text-white md:p-10">
+              <div className="absolute -right-20 -top-20 size-60 rounded-full bg-emerald-400/15 blur-3xl" />
 
-          <h2 className="text-4xl font-semibold md:text-5xl">
-            {t.servicesTitle}
-          </h2>
+              <div className="relative z-10">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                  KHATT Electronics
+                </span>
 
-          <p className="mt-6 leading-8 text-white/70">
-            {t.servicesDescription}
-          </p>
+                <h2 className="mt-4 text-3xl font-semibold leading-tight">
+                  Məhsul seçimindən texniki dəstəyə qədər yanınızdayıq
+                </h2>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={localizedPath("/products", locale)}
-              className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200"
-            >
-              {t.servicesProductsButton}
-            </Link>
+                <p className="mt-4 text-sm leading-7 text-white/65">
+                  Təhlükəsizlik və elektronika sistemləri üçün uyğun məhsul
+                  seçimi, qiymət təklifi və texniki məsləhət təqdim edirik.
+                </p>
 
-            {/*
-              IDENTICAL LINKS FIX: Both hero and services sections had
-              "Məsləhət al" linking to /contact with different ?source= params.
-              Lighthouse flags same visible text + different href as confusing.
-              Fix: use aria-label to distinguish the two links for screen readers.
-            */}
-            <Link
-              href={`${localizedPath("/contact", locale)}?source=services`}
-              aria-label={`${t.servicesConsultationButton} — ${t.servicesTitle}`}
-              className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-            >
-              {t.servicesConsultationButton}
-            </Link>
+                <Link
+                  href={`${localizedPath("/contact", locale)}?source=services`}
+                  className="mt-7 inline-flex items-center rounded-lg bg-emerald-400 px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-emerald-300"
+                >
+                  Bizimlə əlaqə
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2">
+              {services.map((service) => {
+                const Icon = service.icon;
+
+                return (
+                  <div
+                    key={service.title}
+                    className="border-b border-r border-neutral-200 p-7 transition hover:bg-neutral-50"
+                  >
+                    <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </div>
+
+                    <h3 className="mt-5 text-base font-semibold text-neutral-950">
+                      {service.title}
+                    </h3>
+
+                    <p className="mt-2 text-sm leading-6 text-neutral-600">
+                      {service.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {t.services.map((service) => (
-            <div
-              key={service}
-              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5"
-            >
-              <CheckCircle2
-                className="size-5 shrink-0 text-emerald-300"
-                aria-hidden="true"
-              />
-              <span>{service}</span>
-            </div>
-          ))}
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
+            <PackageCheck
+              className="size-5 text-emerald-600"
+              aria-hidden="true"
+            />
+            <span className="text-sm font-medium text-neutral-800">
+              Stok məlumatı
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
+            <ShieldCheck
+              className="size-5 text-emerald-600"
+              aria-hidden="true"
+            />
+            <span className="text-sm font-medium text-neutral-800">
+              Təhlükəsiz sifariş
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
+            <Headphones
+              className="size-5 text-emerald-600"
+              aria-hidden="true"
+            />
+            <span className="text-sm font-medium text-neutral-800">
+              Satış sonrası dəstək
+            </span>
+          </div>
         </div>
       </Container>
     </section>

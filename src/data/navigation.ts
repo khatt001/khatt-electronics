@@ -50,23 +50,23 @@ export const footerNavigationItems = [
 export const footerCategoryItems = [
   {
     key: "videoSurveillance",
-    path: "/category/video-nezaret",
+    path: "/products?category=video-nezaret",
   },
   {
     key: "accessControl",
-    path: "/category/girise-nezaret",
+    path: "/products?category=girise-nezaret",
   },
   {
     key: "intercom",
-    path: "/category/domofoniya",
+    path: "/products?category=domofoniya",
   },
   {
     key: "alarm",
-    path: "/category/siqnalizasiya",
+    path: "/products?category=siqnalizasiya",
   },
   {
     key: "network",
-    path: "/category/sebeke",
+    path: "/products?category=sebeke",
   },
 ] as const;
 
@@ -104,8 +104,17 @@ export function getFooterCategoryLinks(
   labels: Record<FooterCategoryKey, string>,
   locale: Locale
 ): NavigationLink[] {
-  return footerCategoryItems.map((item) => ({
-    name: labels[item.key],
-    href: localizedPath(item.path, locale),
-  }));
+  return footerCategoryItems.map((item) => {
+    const url = new URL(item.path, "https://khatt.local");
+    const category = url.searchParams.get("category");
+
+    const productsPath = localizedPath("/products", locale);
+
+    return {
+      name: labels[item.key],
+      href: category
+        ? `${productsPath}?category=${category}`
+        : productsPath,
+    };
+  });
 }

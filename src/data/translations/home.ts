@@ -53,13 +53,17 @@ export type HomeTranslation = {
 
 export const homeTranslations: Record<Locale, HomeTranslation> = {
   az: {
-    heroEyebrow: "KHATT Electronics",
-    heroTitle: "Təhlükəsizlik və smart elektronika məhsulları",
-    heroDescription:
-      "Kamera sistemləri, keçidə nəzarət, domofon, siqnalizasiya və şəbəkə avadanlıqlarını onlayn seçin, səbətə əlavə edin və sifarişinizi tamamlayın.",
-    heroPoints: ["Stok və qiymət", "Sürətli sifariş", "Texniki dəstək"],
-    productsButton: "Məhsullara bax",
-    consultationButton: "Məsləhət al",
+    heroEyebrow: "Təhlükəsizlik və smart sistemlər",
+heroTitle: "Obyektiniz üçün etibarlı təhlükəsizlik həlləri",
+heroDescription:
+  "Videomüşahidə, yanğın siqnalizasiya, keçidə nəzarət və şəbəkə sistemlərini layihənizə uyğun seçir, təchiz edir və texniki dəstək göstəririk.",
+heroPoints: [
+  "Rəsmi zəmanət",
+  "Layihəyə uyğun seçim",
+  "Texniki dəstək",
+],
+productsButton: "Məhsullara bax",
+consultationButton: "Layihə üçün təklif al",
     quickStats: [
       { value: "24/7", label: "Texniki dəstək" },
       { value: "100+", label: "Məhsul seçimi" },

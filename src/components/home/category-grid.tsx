@@ -4,24 +4,34 @@ import {
   Boxes,
   Camera,
   DoorOpen,
+  Flame,
   Network,
   ShieldCheck,
   Siren,
 } from "lucide-react";
+
 import { Container } from "@/components/layout/container";
-import { getCatalogCategories } from "@/services/categories";
 import { homeTranslations } from "@/data/translations/home";
 import { localizedPath, type Locale } from "@/lib/i18n";
-
-const categoryIcons = [Camera, Network, DoorOpen, Siren, ShieldCheck, Boxes];
+import { getCatalogCategories } from "@/services/categories";
 
 type CategoryGridProps = {
   locale?: Locale;
 };
 
+const categoryIcons = [
+  Camera,
+  Flame,
+  DoorOpen,
+  Siren,
+  Network,
+  ShieldCheck,
+  Boxes,
+];
+
 export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
   const categories = await getCatalogCategories(locale);
-  const visibleCategories = categories.slice(0, 6);
+  const visibleCategories = categories.slice(0, 10);
   const t = homeTranslations[locale];
 
   if (visibleCategories.length === 0) {
@@ -29,87 +39,73 @@ export async function CategoryGrid({ locale = "az" }: CategoryGridProps) {
   }
 
   return (
-    <section className="bg-white py-16 lg:py-24">
+    <section className="bg-[#f5f6f8] py-7 md:py-10">
       <Container>
-        <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            {/* 
-              CONTRAST FIX: text-neutral-500 on bg-white fails WCAG AA for
-              uppercase tracking text (~3.9:1, needs 4.5:1 for small text).
-              text-neutral-600 passes at ~5.9:1.
-            */}
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-600">
-              {t.categoriesEyebrow}
-            </p>
-
-            <h2 className="text-3xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-              {t.categoriesTitle}
+        <div className="mb-5 flex items-end justify-between gap-5">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+              Populyar kateqoriyalar
             </h2>
 
-            <p className="mt-4 leading-8 text-neutral-600">
-              {t.categoriesDescription}
-            </p>
+            <div className="mt-4 h-0.5 w-32 bg-emerald-500" />
           </div>
 
           <Link
             href={localizedPath("/products", locale)}
-            className="inline-flex w-fit items-center rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+            className="hidden items-center text-sm font-medium text-neutral-600 transition hover:text-neutral-950 sm:inline-flex"
           >
             {t.categoriesViewAll}
             <ArrowRight className="ml-2 size-4" aria-hidden="true" />
           </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visibleCategories.map((category, index) => {
-            const Icon = categoryIcons[index % categoryIcons.length];
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            {visibleCategories.map((category, index) => {
+              const Icon = categoryIcons[index % categoryIcons.length];
 
-            return (
-              <Link
-                key={category.id}
-                href={localizedPath(`/category/${category.slug}`, locale)}
-                // ACCESSIBILITY FIX: Lighthouse "Links do not have a discernible name"
-                // The link contains visible text (category.name) but Lighthouse was
-                // flagging it because the icon-only variant (sm screens hiding <span>)
-                // had no fallback. aria-label makes the purpose unambiguous for all
-                // screen readers regardless of icon visibility.
-                aria-label={`${category.name} — ${t.categoryViewButton}`}
-                className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-neutral-950 hover:shadow-xl"
-              >
-                <div className="absolute -right-10 -top-10 size-32 rounded-full bg-neutral-100 transition duration-300 group-hover:scale-125" />
+              return (
+                <Link
+                  key={category.id}
+                  href={localizedPath(`/category/${category.slug}`, locale)}
+                  aria-label={`${category.name} — ${t.categoryViewButton}`}
+                  className="group relative flex min-h-[190px] flex-col items-center justify-center border-b border-r border-neutral-200 px-4 py-6 text-center transition duration-300 hover:bg-neutral-50"
+                >
+                  <div className="relative flex h-24 w-full items-center justify-center">
+                    <div className="absolute size-20 rounded-full bg-neutral-100 transition duration-300 group-hover:scale-110 group-hover:bg-emerald-50" />
 
-                <div className="relative">
-                  <div className="mb-10 flex size-12 items-center justify-center rounded-2xl bg-neutral-950 text-white">
-                    <Icon className="size-6" aria-hidden="true" />
+                    <Icon
+                      className="relative size-12 text-neutral-700 transition duration-300 group-hover:scale-110 group-hover:text-emerald-600"
+                      strokeWidth={1.35}
+                      aria-hidden="true"
+                    />
                   </div>
 
-                  {/* 
-                    HEADING ORDER FIX: Was h3 with no h2 parent in this section.
-                    The section already has an h2 above (categoriesTitle), so h3
-                    is correct here — but only if the h2 is present in the DOM.
-                    Since both render in the same <section>, this is now valid.
-                  */}
-                  <h3 className="text-2xl font-semibold text-neutral-950">
+                  <h3 className="mt-4 line-clamp-2 min-h-10 text-sm font-medium leading-5 text-neutral-900">
                     {category.name}
                   </h3>
 
-                  <p className="mt-3 line-clamp-2 leading-7 text-neutral-600">
-                    {category.description ?? t.categoryFallbackDescription}
-                  </p>
-
-                  <span className="mt-8 inline-flex items-center text-sm font-medium text-neutral-950">
+                  <span className="mt-3 inline-flex items-center text-xs font-medium text-neutral-400 opacity-0 transition duration-300 group-hover:text-emerald-600 group-hover:opacity-100">
                     {t.categoryViewButton}
                     <ArrowRight
-                      className="ml-2 size-4 transition group-hover:translate-x-1"
+                      className="ml-1 size-3.5 transition group-hover:translate-x-1"
                       aria-hidden="true"
                     />
                   </span>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
+          </div>
         </div>
+
+        <Link
+          href={localizedPath("/products", locale)}
+          className="mt-4 inline-flex items-center text-sm font-medium text-neutral-700 sm:hidden"
+        >
+          {t.categoriesViewAll}
+          <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+        </Link>
       </Container>
     </section>
   );
-} 
+}
