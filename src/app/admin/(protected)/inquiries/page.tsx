@@ -18,8 +18,14 @@ function formatDate(value: string) {
 }
 
 function getStatusLabel(status: string) {
-  if (status === "contacted") return "Əlaqə saxlanılıb";
-  if (status === "closed") return "Bağlanıb";
+  if (status === "contacted") {
+    return "Əlaqə saxlanılıb";
+  }
+
+  if (status === "closed") {
+    return "Bağlanıb";
+  }
+
   return "Yeni";
 }
 
@@ -44,17 +50,21 @@ export default async function AdminInquiriesPage({
   return (
     <div>
       <div className="mb-8">
-        <p className="text-xs uppercase tracking-[0.24em] text-neutral-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
           Sorğular
         </p>
-        <h2 className="mt-2 text-3xl font-semibold">Müştəri sorğuları</h2>
+
+        <h2 className="mt-2 text-3xl font-semibold text-neutral-950">
+          Müştəri sorğuları
+        </h2>
+
         <p className="mt-2 text-sm text-neutral-500">
           Son {inquiries.length} sorğu göstərilir
         </p>
       </div>
 
       {query.error ? (
-        <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {decodeURIComponent(query.error)}
         </div>
       ) : null}
@@ -64,7 +74,7 @@ export default async function AdminInquiriesPage({
           inquiries.map((inquiry) => (
             <article
               key={inquiry.id}
-              className="rounded-3xl border border-neutral-200 p-5"
+              className="rounded-2xl border border-neutral-200 bg-white p-5"
             >
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div>
@@ -74,15 +84,15 @@ export default async function AdminInquiriesPage({
                     </h3>
 
                     <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusClassName(
-                        inquiry.status
+                      className={`rounded-md px-3 py-1 text-xs font-medium ${getStatusClassName(
+                        inquiry.status,
                       )}`}
                     >
                       {getStatusLabel(inquiry.status)}
                     </span>
 
                     {inquiry.source ? (
-                      <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
+                      <span className="rounded-md bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
                         {inquiry.source}
                       </span>
                     ) : null}
@@ -97,9 +107,10 @@ export default async function AdminInquiriesPage({
                   {inquiry.status !== "contacted" ? (
                     <form action={updateInquiryStatus.bind(null, inquiry.id)}>
                       <input type="hidden" name="status" value="contacted" />
+
                       <button
                         type="submit"
-                        className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-medium transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 px-4 py-2 text-xs font-medium text-neutral-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                       >
                         Əlaqə saxlanıldı
                       </button>
@@ -109,9 +120,10 @@ export default async function AdminInquiriesPage({
                   {inquiry.status !== "closed" ? (
                     <form action={updateInquiryStatus.bind(null, inquiry.id)}>
                       <input type="hidden" name="status" value="closed" />
+
                       <button
                         type="submit"
-                        className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-medium transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 px-4 py-2 text-xs font-medium text-neutral-700 transition hover:border-neutral-400 hover:bg-neutral-100"
                       >
                         Bağla
                       </button>
@@ -121,9 +133,10 @@ export default async function AdminInquiriesPage({
                   {inquiry.status !== "new" ? (
                     <form action={updateInquiryStatus.bind(null, inquiry.id)}>
                       <input type="hidden" name="status" value="new" />
+
                       <button
                         type="submit"
-                        className="rounded-full border border-neutral-200 px-4 py-2 text-xs font-medium transition hover:border-neutral-950"
+                        className="rounded-lg border border-neutral-200 px-4 py-2 text-xs font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         Yeniyə qaytar
                       </button>
@@ -133,7 +146,7 @@ export default async function AdminInquiriesPage({
                   <form action={deleteInquiry.bind(null, inquiry.id)}>
                     <button
                       type="submit"
-                      className="rounded-full border border-red-200 px-4 py-2 text-xs font-medium text-red-600 transition hover:border-red-600"
+                      className="rounded-lg border border-red-200 px-4 py-2 text-xs font-medium text-red-600 transition hover:border-red-500 hover:bg-red-50"
                     >
                       Sil
                     </button>
@@ -142,14 +155,15 @@ export default async function AdminInquiriesPage({
               </div>
 
               <div className="mt-5 grid gap-3 text-sm text-neutral-600 md:grid-cols-3">
-                <div className="rounded-2xl bg-neutral-50 p-4">
-                  <p className="mb-1 text-xs uppercase tracking-[0.16em] text-neutral-400">
+                <div className="rounded-xl bg-neutral-50 p-4">
+                  <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
                     Telefon
                   </p>
+
                   {inquiry.phone ? (
                     <a
                       href={`tel:${inquiry.phone}`}
-                      className="underline underline-offset-4"
+                      className="transition hover:text-emerald-700"
                     >
                       {inquiry.phone}
                     </a>
@@ -158,14 +172,15 @@ export default async function AdminInquiriesPage({
                   )}
                 </div>
 
-                <div className="rounded-2xl bg-neutral-50 p-4">
-                  <p className="mb-1 text-xs uppercase tracking-[0.16em] text-neutral-400">
+                <div className="rounded-xl bg-neutral-50 p-4">
+                  <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
                     Email
                   </p>
+
                   {inquiry.email ? (
                     <a
                       href={`mailto:${inquiry.email}`}
-                      className="underline underline-offset-4"
+                      className="break-all transition hover:text-emerald-700"
                     >
                       {inquiry.email}
                     </a>
@@ -174,18 +189,20 @@ export default async function AdminInquiriesPage({
                   )}
                 </div>
 
-                <div className="rounded-2xl bg-neutral-50 p-4">
-                  <p className="mb-1 text-xs uppercase tracking-[0.16em] text-neutral-400">
+                <div className="rounded-xl bg-neutral-50 p-4">
+                  <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
                     Şirkət
                   </p>
+
                   <p>{inquiry.company_name || "Yoxdur"}</p>
                 </div>
               </div>
 
-              <div className="mt-4 rounded-2xl bg-neutral-50 p-4">
-                <p className="mb-2 text-xs uppercase tracking-[0.16em] text-neutral-400">
+              <div className="mt-4 rounded-xl bg-neutral-50 p-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">
                   Mesaj
                 </p>
+
                 <p className="whitespace-pre-line leading-7 text-neutral-700">
                   {inquiry.message}
                 </p>
@@ -193,7 +210,7 @@ export default async function AdminInquiriesPage({
             </article>
           ))
         ) : (
-          <div className="rounded-3xl border border-dashed border-neutral-300 p-10 text-center text-sm text-neutral-500">
+          <div className="rounded-2xl border border-dashed border-neutral-300 p-10 text-center text-sm text-neutral-500">
             Hələ sorğu yoxdur.
           </div>
         )}

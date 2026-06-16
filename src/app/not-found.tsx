@@ -4,11 +4,7 @@ import Link from "next/link";
 import { Home, PackageSearch } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-import {
-  getLocaleFromPathname,
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { getLocaleFromPathname, localizedPath, type Locale } from "@/lib/i18n";
 
 const translations: Record<
   Locale,
@@ -56,10 +52,7 @@ export default function NotFound() {
       <section className="px-5 py-12 md:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10 lg:p-12">
           <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-neutral-950 text-white md:size-20">
-            <PackageSearch
-              className="size-8 md:size-9"
-              aria-hidden="true"
-            />
+            <PackageSearch className="size-8 md:size-9" aria-hidden="true" />
           </div>
 
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
@@ -79,18 +72,12 @@ export default function NotFound() {
               href={localizedPath("/", locale)}
               className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
-              <Home
-                className="mr-2 size-4"
-                aria-hidden="true"
-              />
+              <Home className="mr-2 size-4" aria-hidden="true" />
               {t.home}
             </Link>
 
             <Link
-              href={localizedPath(
-                "/products",
-                locale,
-              )}
+              href={localizedPath("/products", locale)}
               className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.products}

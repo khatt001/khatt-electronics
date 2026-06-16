@@ -162,8 +162,7 @@ export function Footer({ locale = "az" }: FooterProps) {
 
         <div className="mt-12 grid gap-3 border-t border-white/10 pt-6 text-xs text-white/45 md:grid-cols-2 md:items-center">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}.{" "}
-            {t.copyrightSuffix}
+            © {new Date().getFullYear()} {siteConfig.name}. {t.copyrightSuffix}
           </p>
 
           <p className="md:text-right">{t.tagline}</p>

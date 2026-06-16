@@ -52,7 +52,10 @@ type AdminOrderRow = {
   created_at: string;
 };
 
-type AdminOrderDetailRow = Omit<AdminOrderDetail, "subtotal" | "delivery_fee" | "total" | "items"> & {
+type AdminOrderDetailRow = Omit<
+  AdminOrderDetail,
+  "subtotal" | "delivery_fee" | "total" | "items"
+> & {
   subtotal: number | string;
   delivery_fee: number | string;
   total: number | string;
@@ -71,12 +74,10 @@ export type AdminOrderFilters = {
   status?: string;
 };
 export async function getAdminOrders(
-  filters: AdminOrderFilters = {}
+  filters: AdminOrderFilters = {},
 ): Promise<AdminOrderListItem[]> {
-  let query = supabaseAdmin
-    .from("orders")
-    .select(
-      `
+  let query = supabaseAdmin.from("orders").select(
+    `
       id,
       order_number,
       customer_name,
@@ -86,8 +87,8 @@ export async function getAdminOrders(
       order_status,
       total,
       created_at
-    `
-    );
+    `,
+  );
 
   if (filters.status && filters.status !== "all") {
     query = query.eq("order_status", filters.status);
@@ -97,7 +98,7 @@ export async function getAdminOrders(
     const search = filters.search.trim();
 
     query = query.or(
-      `order_number.ilike.%${search}%,customer_name.ilike.%${search}%,phone.ilike.%${search}%`
+      `order_number.ilike.%${search}%,customer_name.ilike.%${search}%,phone.ilike.%${search}%`,
     );
   }
 
@@ -125,7 +126,7 @@ export async function getAdminOrders(
 }
 
 export async function getAdminOrderById(
-  id: string
+  id: string,
 ): Promise<AdminOrderDetail | null> {
   const { data, error } = await supabaseAdmin
     .from("orders")
@@ -155,7 +156,7 @@ export async function getAdminOrderById(
         quantity,
         line_total
       )
-    `
+    `,
     )
     .eq("id", id)
     .maybeSingle()

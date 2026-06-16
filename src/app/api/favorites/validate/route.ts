@@ -61,7 +61,7 @@ function getLocalizedName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: FavoritesValidateLocale
+  locale: FavoritesValidateLocale,
 ) {
   if (locale === "en") return item.name_en || item.name_az;
   if (locale === "ru") return item.name_ru || item.name_az;
@@ -75,7 +75,7 @@ function getLocalizedCategoryName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: FavoritesValidateLocale
+  locale: FavoritesValidateLocale,
 ) {
   if (locale === "en") return category.name_en || category.name_az;
   if (locale === "ru") return category.name_ru || category.name_az;
@@ -86,7 +86,7 @@ function getLocalizedCategoryName(
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
-  locale: FavoritesValidateLocale
+  locale: FavoritesValidateLocale,
 ) {
   const t = favoritesValidateTranslations[locale];
 
@@ -133,8 +133,10 @@ export async function POST(request: Request) {
       new Set(
         items
           .map((item) => item.id)
-          .filter((id): id is string => typeof id === "string" && id.length > 0)
-      )
+          .filter(
+            (id): id is string => typeof id === "string" && id.length > 0,
+          ),
+      ),
     );
 
     if (productIds.length === 0) {
@@ -169,7 +171,7 @@ export async function POST(request: Request) {
           url,
           is_primary
         )
-      `
+      `,
       )
       .in("id", productIds)
       .returns<ProductForFavoritesValidation[]>();
@@ -179,7 +181,7 @@ export async function POST(request: Request) {
         {
           error: error.message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -210,7 +212,7 @@ export async function POST(request: Request) {
       {
         error: t.invalidFavorites,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

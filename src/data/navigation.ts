@@ -71,8 +71,7 @@ export const footerCategoryItems = [
 ] as const;
 
 export type MainNavigationKey = (typeof mainNavigationItems)[number]["key"];
-export type FooterNavigationKey =
-  (typeof footerNavigationItems)[number]["key"];
+export type FooterNavigationKey = (typeof footerNavigationItems)[number]["key"];
 export type FooterCategoryKey = (typeof footerCategoryItems)[number]["key"];
 
 export type NavigationLink = {
@@ -82,7 +81,7 @@ export type NavigationLink = {
 
 export function getMainNavigationLinks(
   labels: Record<MainNavigationKey, string>,
-  locale: Locale
+  locale: Locale,
 ): NavigationLink[] {
   return mainNavigationItems.map((item) => ({
     name: labels[item.key],
@@ -92,7 +91,7 @@ export function getMainNavigationLinks(
 
 export function getFooterNavigationLinks(
   labels: Record<FooterNavigationKey, string>,
-  locale: Locale
+  locale: Locale,
 ): NavigationLink[] {
   return footerNavigationItems.map((item) => ({
     name: labels[item.key],
@@ -102,7 +101,7 @@ export function getFooterNavigationLinks(
 
 export function getFooterCategoryLinks(
   labels: Record<FooterCategoryKey, string>,
-  locale: Locale
+  locale: Locale,
 ): NavigationLink[] {
   return footerCategoryItems.map((item) => {
     const url = new URL(item.path, "https://khatt.local");
@@ -112,9 +111,7 @@ export function getFooterCategoryLinks(
 
     return {
       name: labels[item.key],
-      href: category
-        ? `${productsPath}?category=${category}`
-        : productsPath,
+      href: category ? `${productsPath}?category=${category}` : productsPath,
     };
   });
 }

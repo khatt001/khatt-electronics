@@ -1,13 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Images,
-  ShoppingBag,
-} from "lucide-react";
-import {  useState } from "react";
+import { ChevronLeft, ChevronRight, Images, ShoppingBag } from "lucide-react";
+import { useState } from "react";
 
 type ProductGalleryImage = {
   id: string;
@@ -21,10 +16,7 @@ type ProductGalleryProps = {
   productName: string;
 };
 
-export function ProductGallery({
-  images,
-  productName,
-}: ProductGalleryProps) {
+export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const initialIndex = Math.max(
     0,
     images.findIndex((image) => image.isPrimary),
@@ -32,44 +24,30 @@ export function ProductGallery({
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
 
+  const safeActiveIndex =
+    images.length === 0 ? 0 : Math.min(activeIndex, images.length - 1);
 
+  const activeImage = images[safeActiveIndex];
 
- const safeActiveIndex =
-  images.length === 0
-    ? 0
-    : Math.min(activeIndex, images.length - 1);
+  function goPrevious() {
+    if (images.length <= 1) return;
 
-const activeImage = images[safeActiveIndex];
+    setActiveIndex((current) => {
+      const safeCurrent = Math.min(current, images.length - 1);
 
-function goPrevious() {
-  if (images.length <= 1) return;
+      return safeCurrent === 0 ? images.length - 1 : safeCurrent - 1;
+    });
+  }
 
-  setActiveIndex((current) => {
-    const safeCurrent = Math.min(
-      current,
-      images.length - 1,
-    );
+  function goNext() {
+    if (images.length <= 1) return;
 
-    return safeCurrent === 0
-      ? images.length - 1
-      : safeCurrent - 1;
-  });
-}
+    setActiveIndex((current) => {
+      const safeCurrent = Math.min(current, images.length - 1);
 
-function goNext() {
-  if (images.length <= 1) return;
-
-  setActiveIndex((current) => {
-    const safeCurrent = Math.min(
-      current,
-      images.length - 1,
-    );
-
-    return safeCurrent === images.length - 1
-      ? 0
-      : safeCurrent + 1;
-  });
-}
+      return safeCurrent === images.length - 1 ? 0 : safeCurrent + 1;
+    });
+  }
 
   return (
     <div className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-5">
@@ -85,10 +63,7 @@ function goNext() {
           />
         ) : (
           <div className="flex size-32 items-center justify-center rounded-2xl border border-neutral-200 bg-white text-neutral-400 shadow-sm md:size-40">
-            <ShoppingBag
-              className="size-12 md:size-16"
-              aria-hidden="true"
-            />
+            <ShoppingBag className="size-12 md:size-16" aria-hidden="true" />
           </div>
         )}
 
@@ -100,10 +75,7 @@ function goNext() {
               className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-neutral-200 bg-white/95 text-neutral-800 shadow-sm backdrop-blur transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 md:left-4"
               aria-label="Əvvəlki şəkil"
             >
-              <ChevronLeft
-                className="size-5"
-                aria-hidden="true"
-              />
+              <ChevronLeft className="size-5" aria-hidden="true" />
             </button>
 
             <button
@@ -112,10 +84,7 @@ function goNext() {
               className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-neutral-200 bg-white/95 text-neutral-800 shadow-sm backdrop-blur transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 md:right-4"
               aria-label="Növbəti şəkil"
             >
-              <ChevronRight
-                className="size-5"
-                aria-hidden="true"
-              />
+              <ChevronRight className="size-5" aria-hidden="true" />
             </button>
 
             <div className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white/95 px-3 py-2 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">

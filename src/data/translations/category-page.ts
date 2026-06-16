@@ -4,8 +4,7 @@ export const categoryPageTranslations = {
   az: {
     notFoundTitle: "Kateqoriya tapılmadı",
     metadataProductsSuffix: "məhsulları",
-    metadataFallbackSuffix:
-      "kateqoriyasına aid məhsullar — KHATT Electronics.",
+    metadataFallbackSuffix: "kateqoriyasına aid məhsullar — KHATT Electronics.",
 
     homeBreadcrumb: "Ana səhifə",
     productsBreadcrumb: "Məhsullar",

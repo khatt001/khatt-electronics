@@ -55,13 +55,7 @@ function formatPhoneValue(value: string) {
   const second = digits.slice(8, 10);
   const third = digits.slice(10, 12);
 
-  return [
-    country ? `+${country}` : "",
-    operator,
-    first,
-    second,
-    third,
-  ]
+  return [country ? `+${country}` : "", operator, first, second, third]
     .filter(Boolean)
     .join(" ");
 }
@@ -88,11 +82,7 @@ export function PhoneInput({
 
   return (
     <>
-      <input
-        type="hidden"
-        name={name}
-        value={normalizedValue}
-      />
+      <input type="hidden" name={name} value={normalizedValue} />
 
       <input
         id={inputId}
@@ -100,9 +90,7 @@ export function PhoneInput({
         required={required}
         value={displayValue}
         onChange={(event) => {
-          setDisplayValue(
-            formatPhoneValue(event.target.value),
-          );
+          setDisplayValue(formatPhoneValue(event.target.value));
         }}
         placeholder={t.placeholder}
         aria-label={t.ariaLabel}

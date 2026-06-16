@@ -34,6 +34,6 @@ export async function createAuthServerClient() {
           }
         },
       },
-    }
+    },
   );
 }

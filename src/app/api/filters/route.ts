@@ -73,7 +73,7 @@ function getLocalizedText(
   locale: FilterLocale,
   az: string | null,
   en?: string | null,
-  ru?: string | null
+  ru?: string | null,
 ) {
   if (locale === "en") return normalizeValue(en) || normalizeValue(az);
   if (locale === "ru") return normalizeValue(ru) || normalizeValue(az);
@@ -83,25 +83,25 @@ function getLocalizedText(
 
 function getLocalizedSpecKey(
   spec: ProductFilterRow["specifications"][number],
-  locale: FilterLocale
+  locale: FilterLocale,
 ) {
   return getLocalizedText(
     locale,
     spec.spec_key_az,
     spec.spec_key_en,
-    spec.spec_key_ru
+    spec.spec_key_ru,
   );
 }
 
 function getLocalizedSpecValue(
   spec: ProductFilterRow["specifications"][number],
-  locale: FilterLocale
+  locale: FilterLocale,
 ) {
   return getLocalizedText(
     locale,
     spec.spec_value_az,
     spec.spec_value_en,
-    spec.spec_value_ru
+    spec.spec_value_ru,
   );
 }
 
@@ -115,7 +115,7 @@ function incrementOption(map: Map<string, number>, value: string) {
 
 function mapToOptions(
   map: Map<string, number>,
-  locale: FilterLocale
+  locale: FilterLocale,
 ): FilterOption[] {
   const t = filterApiTranslations[locale];
 
@@ -139,7 +139,7 @@ function mapToOptions(
 
 function getStockLabel(
   stockStatus: ProductFilterRow["stock_status"],
-  locale: FilterLocale
+  locale: FilterLocale,
 ) {
   const t = filterApiTranslations[locale];
 
@@ -214,7 +214,7 @@ export async function GET(request: Request) {
         spec_value_en,
         spec_value_ru
       )
-    `
+    `,
     )
     .eq("status", "active");
 

@@ -28,10 +28,7 @@ type ContactPageViewProps = {
   query: ContactSearchParams;
 };
 
-function getSourceLabel(
-  source: string | undefined,
-  locale: Locale,
-) {
+function getSourceLabel(source: string | undefined, locale: Locale) {
   const t = contactTranslations[locale];
 
   if (source === "estimate") return t.sourceEstimate;
@@ -127,9 +124,7 @@ export function ContactPageView({
                 <input
                   type="hidden"
                   name="source"
-                  value={
-                    query.source ?? getDefaultSource(locale)
-                  }
+                  value={query.source ?? getDefaultSource(locale)}
                 />
 
                 <div className="grid gap-5 md:grid-cols-2">
@@ -253,10 +248,7 @@ export function ContactPageView({
                     className="group flex items-center gap-4 rounded-xl border border-neutral-200 p-4 text-sm transition hover:border-emerald-500 hover:bg-emerald-50/40"
                   >
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
-                      <Phone
-                        className="size-5"
-                        aria-hidden="true"
-                      />
+                      <Phone className="size-5" aria-hidden="true" />
                     </span>
 
                     <span className="min-w-0">
@@ -275,10 +267,7 @@ export function ContactPageView({
                     className="group flex items-center gap-4 rounded-xl border border-neutral-200 p-4 text-sm transition hover:border-emerald-500 hover:bg-emerald-50/40"
                   >
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
-                      <Mail
-                        className="size-5"
-                        aria-hidden="true"
-                      />
+                      <Mail className="size-5" aria-hidden="true" />
                     </span>
 
                     <span className="min-w-0">
@@ -294,10 +283,7 @@ export function ContactPageView({
 
                   <div className="flex items-start gap-4 rounded-xl border border-neutral-200 p-4 text-sm">
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                      <MapPin
-                        className="size-5"
-                        aria-hidden="true"
-                      />
+                      <MapPin className="size-5" aria-hidden="true" />
                     </span>
 
                     <span className="min-w-0">
@@ -318,10 +304,7 @@ export function ContactPageView({
 
                 <div className="relative z-10">
                   <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-600">
-                    <ShieldCheck
-                      className="size-5"
-                      aria-hidden="true"
-                    />
+                    <ShieldCheck className="size-5" aria-hidden="true" />
                   </div>
 
                   <h3 className="mt-5 text-xl font-semibold">
@@ -369,10 +352,7 @@ export function ContactPageView({
                 className="group flex items-center justify-between rounded-2xl bg-emerald-600 p-5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
               >
                 <span className="flex items-center gap-3">
-                  <MessageCircle
-                    className="size-5"
-                    aria-hidden="true"
-                  />
+                  <MessageCircle className="size-5" aria-hidden="true" />
 
                   {t.contactInfoTitle}
                 </span>

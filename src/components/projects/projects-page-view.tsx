@@ -9,9 +9,7 @@ type ProjectsPageViewProps = {
   locale?: Locale;
 };
 
-export function ProjectsPageView({
-  locale = "az",
-}: ProjectsPageViewProps) {
+export function ProjectsPageView({ locale = "az" }: ProjectsPageViewProps) {
   const t = projectsTranslations[locale];
 
   const CtaIcon = t.ctaIcon;
@@ -195,10 +193,7 @@ export function ProjectsPageView({
                 >
                   {t.quoteButton}
 
-                  <ArrowRight
-                    className="ml-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>
 

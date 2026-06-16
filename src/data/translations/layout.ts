@@ -1,8 +1,5 @@
 import type { Locale } from "@/lib/i18n";
-import type {
-  FooterCategoryKey,
-  FooterNavigationKey,
-} from "@/data/navigation";
+import type { FooterCategoryKey, FooterNavigationKey } from "@/data/navigation";
 
 export type FooterTranslation = {
   description: string;

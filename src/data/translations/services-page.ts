@@ -15,15 +15,13 @@ export const servicesPageTranslations = {
     metadataDescription:
       "KHATT Electronics təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və şəbəkə infrastrukturu üzrə peşəkar xidmətlər təqdim edir.",
     eyebrow: "Xidmətlər",
-    title:
-      "Təhlükəsizlik və elektronika layihələri üçün tam texniki dəstək",
+    title: "Təhlükəsizlik və elektronika layihələri üçün tam texniki dəstək",
     description:
       "Məhsul seçimi, sistem planlaması, quraşdırma və texniki dəstək mərhələlərində biznes və fərdi obyektlər üçün peşəkar həllər təqdim edirik.",
     quoteButton: "Qiymət təklifi al",
     productsButton: "Məhsullara bax",
     processEyebrow: "İş prosesi",
-    processTitle:
-      "Layihəni səliqəli və ölçülə bilən mərhələlərlə aparırıq",
+    processTitle: "Layihəni səliqəli və ölçülə bilən mərhələlərlə aparırıq",
     processDescription:
       "Məqsəd sadəcə avadanlıq satmaq deyil, obyektə uyğun və stabil işləyən sistem qurmaqdır.",
     services: [
@@ -209,7 +207,8 @@ export const servicesPageTranslations = {
     metadataDescription:
       "KHATT Electronics предоставляет профессиональные услуги по системам безопасности, видеонаблюдению, контролю доступа, домофонам, сигнализации и сетевой инфраструктуре.",
     eyebrow: "Услуги",
-    title: "Полная техническая поддержка для проектов безопасности и электроники",
+    title:
+      "Полная техническая поддержка для проектов безопасности и электроники",
     description:
       "Мы предлагаем профессиональные решения для бизнеса и частных объектов на этапах подбора товаров, планирования системы, установки и технической поддержки.",
     quoteButton: "Получить предложение",

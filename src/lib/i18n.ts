@@ -56,7 +56,7 @@ export function removeLocaleFromPathname(pathname: string): string {
 
 export function switchLocalePathname(
   pathname: string,
-  targetLocale: Locale
+  targetLocale: Locale,
 ): string {
   const pathnameWithoutLocale = removeLocaleFromPathname(pathname);
 

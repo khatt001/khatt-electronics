@@ -90,7 +90,7 @@ export async function trackOrder({
         quantity,
         line_total
       )
-    `
+    `,
     )
     .eq("order_number", cleanOrderNumber)
     .maybeSingle()
@@ -100,11 +100,11 @@ export async function trackOrder({
     return null;
   }
 
-const dbPhone = normalizePhone(data.phone);
+  const dbPhone = normalizePhone(data.phone);
 
-if (dbPhone !== cleanPhone) {
-  return null;
-}
+  if (dbPhone !== cleanPhone) {
+    return null;
+  }
   return {
     ...data,
     total: Number(data.total),

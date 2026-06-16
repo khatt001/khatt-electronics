@@ -12,8 +12,7 @@ export const checkoutTranslations = {
       "Əlaqə və çatdırılma məlumatlarını daxil edin, sifarişinizi tamamlayın.",
 
     customerInfoTitle: "Müştəri məlumatları",
-    syncingMessage:
-      "Səbət məlumatları yenilənir. Zəhmət olmasa gözləyin...",
+    syncingMessage: "Səbət məlumatları yenilənir. Zəhmət olmasa gözləyin...",
 
     fullNameLabel: "Ad və soyad",
     fullNamePlaceholder: "Ad Soyad",
@@ -30,8 +29,7 @@ export const checkoutTranslations = {
 
     paymentTitle: "Ödəniş üsulu",
     cashPaymentTitle: "Nağd ödəniş",
-    cashPaymentDescription:
-      "Sifariş təsdiqləndikdən sonra nağd ödəniş.",
+    cashPaymentDescription: "Sifariş təsdiqləndikdən sonra nağd ödəniş.",
     cardPaymentTitle: "Kartla ödəniş",
     cardPaymentDescription: "Tezliklə aktiv olacaq.",
 

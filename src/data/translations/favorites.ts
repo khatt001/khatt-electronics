@@ -25,8 +25,7 @@ export const favoritesTranslations = {
 
     emptyEyebrow: "Boş siyahı",
     emptyTitle: "Hələ sevimli məhsul yoxdur",
-    emptyDescription:
-      "Məhsulları bəyənərək bu siyahıya əlavə edə bilərsiniz.",
+    emptyDescription: "Məhsulları bəyənərək bu siyahıya əlavə edə bilərsiniz.",
     emptyButton: "Məhsullara bax",
   },
 

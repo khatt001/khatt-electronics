@@ -2,21 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Search,
-  ShoppingBag,
-  X,
-} from "lucide-react";
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Search, ShoppingBag, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-import {
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type NavbarSearchProduct = {
   id: string;
@@ -36,36 +25,30 @@ type NavbarSearchProps = {
 
 const navbarSearchTranslations = {
   az: {
-    placeholder:
-      "Məhsul, model və ya kateqoriya axtar...",
+    placeholder: "Məhsul, model və ya kateqoriya axtar...",
     srLabel: "Məhsul axtarışı",
     clearAria: "Axtarışı təmizlə",
     resultsTitle: "Axtarış nəticələri",
     loading: "Axtarılır...",
-    empty:
-      "Bu axtarışa uyğun məhsul tapılmadı.",
+    empty: "Bu axtarışa uyğun məhsul tapılmadı.",
     viewAll: "Bütün nəticələrə bax",
   },
   en: {
-    placeholder:
-      "Search product, model or category...",
+    placeholder: "Search product, model or category...",
     srLabel: "Product search",
     clearAria: "Clear search",
     resultsTitle: "Search results",
     loading: "Searching...",
-    empty:
-      "No products found for this search.",
+    empty: "No products found for this search.",
     viewAll: "View all results",
   },
   ru: {
-    placeholder:
-      "Поиск товара, модели или категории...",
+    placeholder: "Поиск товара, модели или категории...",
     srLabel: "Поиск товара",
     clearAria: "Очистить поиск",
     resultsTitle: "Результаты поиска",
     loading: "Поиск...",
-    empty:
-      "По этому запросу товары не найдены.",
+    empty: "По этому запросу товары не найдены.",
     viewAll: "Смотреть все результаты",
   },
 } as const;
@@ -75,43 +58,27 @@ export function NavbarSearch({
   onNavigate,
   locale = "az",
 }: NavbarSearchProps) {
-  const wrapperRef =
-    useRef<HTMLDivElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const [query, setQuery] = useState("");
-  const [products, setProducts] = useState<
-    NavbarSearchProduct[]
-  >([]);
+  const [products, setProducts] = useState<NavbarSearchProduct[]>([]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] =
-    useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const t = navbarSearchTranslations[locale];
 
   useEffect(() => {
-    function handleClickOutside(
-      event: MouseEvent,
-    ) {
-      if (
-        !wrapperRef.current?.contains(
-          event.target as Node,
-        )
-      ) {
+    function handleClickOutside(event: MouseEvent) {
+      if (!wrapperRef.current?.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
 
-    window.addEventListener(
-      "mousedown",
-      handleClickOutside,
-    );
+    window.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      window.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      window.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -119,63 +86,53 @@ export function NavbarSearch({
     const cleanQuery = query.trim();
 
     if (cleanQuery.length < 2) {
-  const timeoutId = window.setTimeout(() => {
-    setProducts([]);
-    setIsLoading(false);
-    setIsOpen(false);
-  }, 0);
+      const timeoutId = window.setTimeout(() => {
+        setProducts([]);
+        setIsLoading(false);
+        setIsOpen(false);
+      }, 0);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}
+      return () => {
+        window.clearTimeout(timeoutId);
+      };
+    }
 
-    const controller =
-      new AbortController();
+    const controller = new AbortController();
 
-    const timeout = window.setTimeout(
-      async () => {
-        try {
-          setIsLoading(true);
+    const timeout = window.setTimeout(async () => {
+      try {
+        setIsLoading(true);
 
-          const response = await fetch(
-            `/api/search/products?q=${encodeURIComponent(
-              cleanQuery,
-            )}&locale=${locale}`,
-            {
-              signal: controller.signal,
-            },
-          );
+        const response = await fetch(
+          `/api/search/products?q=${encodeURIComponent(
+            cleanQuery,
+          )}&locale=${locale}`,
+          {
+            signal: controller.signal,
+          },
+        );
 
-          if (!response.ok) {
-            throw new Error(
-              "Search request failed",
-            );
-          }
-
-          const result =
-            (await response.json()) as {
-              products?: NavbarSearchProduct[];
-            };
-
-          setProducts(result.products ?? []);
-          setIsOpen(true);
-        } catch (error) {
-          if (
-            error instanceof DOMException &&
-            error.name === "AbortError"
-          ) {
-            return;
-          }
-
-          setProducts([]);
-          setIsOpen(true);
-        } finally {
-          setIsLoading(false);
+        if (!response.ok) {
+          throw new Error("Search request failed");
         }
-      },
-      250,
-    );
+
+        const result = (await response.json()) as {
+          products?: NavbarSearchProduct[];
+        };
+
+        setProducts(result.products ?? []);
+        setIsOpen(true);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        setProducts([]);
+        setIsOpen(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 250);
 
     return () => {
       controller.abort();
@@ -191,18 +148,12 @@ export function NavbarSearch({
 
   const cleanQuery = query.trim();
 
-  const effectivePlaceholder =
-    placeholder ?? t.placeholder;
+  const effectivePlaceholder = placeholder ?? t.placeholder;
 
   return (
-    <div
-      ref={wrapperRef}
-      className="relative"
-    >
+    <div ref={wrapperRef} className="relative">
       <label className="relative block">
-        <span className="sr-only">
-          {t.srLabel}
-        </span>
+        <span className="sr-only">{t.srLabel}</span>
 
         <Search
           className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
@@ -233,16 +184,12 @@ export function NavbarSearch({
             aria-label={t.clearAria}
             className="absolute right-3 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-950"
           >
-            <X
-              className="size-4"
-              aria-hidden="true"
-            />
+            <X className="size-4" aria-hidden="true" />
           </button>
         ) : null}
       </label>
 
-      {isOpen &&
-      cleanQuery.length >= 2 ? (
+      {isOpen && cleanQuery.length >= 2 ? (
         <div className="absolute left-0 right-0 top-[calc(100%+0.75rem)] z-50 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl shadow-black/10">
           <div className="border-b border-neutral-100 px-4 py-3">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
@@ -251,18 +198,13 @@ export function NavbarSearch({
           </div>
 
           {isLoading ? (
-            <div className="p-4 text-sm text-neutral-500">
-              {t.loading}
-            </div>
+            <div className="p-4 text-sm text-neutral-500">{t.loading}</div>
           ) : products.length > 0 ? (
             <div className="max-h-[420px] overflow-y-auto p-2">
               {products.map((product) => (
                 <Link
                   key={product.id}
-                  href={localizedPath(
-                    product.href,
-                    locale,
-                  )}
+                  href={localizedPath(product.href, locale)}
                   onClick={() => {
                     closeSearch();
                     onNavigate?.();
@@ -311,9 +253,7 @@ export function NavbarSearch({
               ))}
             </div>
           ) : (
-            <div className="p-5 text-sm text-neutral-500">
-              {t.empty}
-            </div>
+            <div className="p-5 text-sm text-neutral-500">{t.empty}</div>
           )}
 
           <div className="border-t border-neutral-100 p-3">
@@ -321,9 +261,7 @@ export function NavbarSearch({
               href={`${localizedPath(
                 "/products",
                 locale,
-              )}?search=${encodeURIComponent(
-                cleanQuery,
-              )}`}
+              )}?search=${encodeURIComponent(cleanQuery)}`}
               onClick={() => {
                 closeSearch();
                 onNavigate?.();

@@ -59,7 +59,7 @@ function getLocalizedName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: CartValidateLocale
+  locale: CartValidateLocale,
 ) {
   if (locale === "en") return item.name_en || item.name_az;
   if (locale === "ru") return item.name_ru || item.name_az;
@@ -73,7 +73,7 @@ function getLocalizedCategoryName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: CartValidateLocale
+  locale: CartValidateLocale,
 ) {
   if (locale === "en") return category.name_en || category.name_az;
   if (locale === "ru") return category.name_ru || category.name_az;
@@ -145,7 +145,7 @@ export async function POST(request: Request) {
           url,
           is_primary
         )
-      `
+      `,
       )
       .in("id", productIds)
       .returns<ProductForCartValidation[]>();
@@ -155,12 +155,15 @@ export async function POST(request: Request) {
         {
           error: error.message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const quantityByProductId = new Map(
-      items.map((item) => [item.id, Math.max(1, Math.floor(item.quantity || 1))])
+      items.map((item) => [
+        item.id,
+        Math.max(1, Math.floor(item.quantity || 1)),
+      ]),
     );
 
     const validItems = data
@@ -205,7 +208,7 @@ export async function POST(request: Request) {
       {
         error: t.invalidCart,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

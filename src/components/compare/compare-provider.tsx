@@ -55,7 +55,7 @@ function writeCompareToStorage(items: CompareItem[]) {
 
   window.localStorage.setItem(
     COMPARE_STORAGE_KEY,
-    JSON.stringify(items.slice(0, MAX_COMPARE_ITEMS))
+    JSON.stringify(items.slice(0, MAX_COMPARE_ITEMS)),
   );
 }
 
@@ -64,16 +64,16 @@ export function CompareProvider({ children }: { children: ReactNode }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
- useEffect(() => {
-  const timeoutId = window.setTimeout(() => {
-    setItems(readCompareFromStorage());
-    setMounted(true);
-  }, 0);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setItems(readCompareFromStorage());
+      setMounted(true);
+    }, 0);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}, []);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
@@ -103,7 +103,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
 
   const removeCompare = useCallback((productId: string) => {
     setItems((currentItems) =>
-      currentItems.filter((item) => item.id !== productId)
+      currentItems.filter((item) => item.id !== productId),
     );
   }, []);
 
@@ -112,7 +112,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
 
     setItems((currentItems) => {
       const exists = currentItems.some(
-        (compareItem) => compareItem.id === item.id
+        (compareItem) => compareItem.id === item.id,
       );
 
       if (exists) {
@@ -178,7 +178,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
 
   const isCompared = useCallback(
     (productId: string) => items.some((item) => item.id === productId),
-    [items]
+    [items],
   );
 
   const value = useMemo<CompareContextValue>(
@@ -203,7 +203,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
       clearCompare,
       isCompared,
       syncCompare,
-    ]
+    ],
   );
 
   return (

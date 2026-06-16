@@ -1,22 +1,12 @@
 "use client";
 
-import {
-  CheckCircle2,
-  ShoppingCart,
-} from "lucide-react";
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { CheckCircle2, ShoppingCart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { useCart } from "@/components/cart/cart-provider";
 import type { CartItem } from "@/types/cart";
 
-export type QuickAddToCartLocale =
-  | "az"
-  | "en"
-  | "ru";
+export type QuickAddToCartLocale = "az" | "en" | "ru";
 
 const quickAddTranslations = {
   az: {
@@ -50,27 +40,16 @@ export function QuickAddToCartButton({
   const { addItem, items } = useCart();
   const [added, setAdded] = useState(false);
 
-  const timeoutRef =
-    useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const t = quickAddTranslations[locale];
 
   const currentQuantity =
-    items.find(
-      (cartItem) => cartItem.id === item.id,
-    )?.quantity ?? 0;
+    items.find((cartItem) => cartItem.id === item.id)?.quantity ?? 0;
 
-  const remainingQuantity = Math.max(
-    0,
-    item.maxQuantity - currentQuantity,
-  );
+  const remainingQuantity = Math.max(0, item.maxQuantity - currentQuantity);
 
-  const canAdd =
-    !disabled &&
-    item.maxQuantity > 0 &&
-    remainingQuantity > 0;
+  const canAdd = !disabled && item.maxQuantity > 0 && remainingQuantity > 0;
 
   useEffect(() => {
     return () => {
@@ -113,21 +92,13 @@ export function QuickAddToCartButton({
       aria-label={label}
       aria-live="polite"
       className={`inline-flex min-h-10 items-center justify-center rounded-lg px-4 py-2 text-xs font-semibold text-white transition ${
-        added
-          ? "bg-emerald-600"
-          : "bg-neutral-950 hover:bg-emerald-700"
+        added ? "bg-emerald-600" : "bg-neutral-950 hover:bg-emerald-700"
       } disabled:cursor-not-allowed disabled:bg-neutral-300`}
     >
       {added ? (
-        <CheckCircle2
-          className="mr-2 size-4"
-          aria-hidden="true"
-        />
+        <CheckCircle2 className="mr-2 size-4" aria-hidden="true" />
       ) : (
-        <ShoppingCart
-          className="mr-2 size-4"
-          aria-hidden="true"
-        />
+        <ShoppingCart className="mr-2 size-4" aria-hidden="true" />
       )}
 
       {label}

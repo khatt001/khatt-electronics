@@ -31,25 +31,15 @@ type CompareButtonProps = {
   locale?: CompareButtonLocale;
 };
 
-export function CompareButton({
-  item,
-  locale = "az",
-}: CompareButtonProps) {
+export function CompareButton({ item, locale = "az" }: CompareButtonProps) {
   const { items, toggleCompare, limit } = useCompare();
   const t = compareButtonTranslations[locale];
 
-  const isCompared = items.some(
-    (compareItem) => compareItem.id === item.id,
-  );
+  const isCompared = items.some((compareItem) => compareItem.id === item.id);
 
-  const limitReached =
-    !isCompared && items.length >= limit;
+  const limitReached = !isCompared && items.length >= limit;
 
-  const label = limitReached
-    ? t.limit
-    : isCompared
-      ? t.remove
-      : t.add;
+  const label = limitReached ? t.limit : isCompared ? t.remove : t.add;
 
   function handleToggle() {
     if (limitReached) return;
@@ -76,10 +66,7 @@ export function CompareButton({
       )}
     >
       <BarChart3
-        className={cn(
-          "size-5 transition",
-          isCompared ? "scale-105" : "",
-        )}
+        className={cn("size-5 transition", isCompared ? "scale-105" : "")}
         aria-hidden="true"
       />
     </button>

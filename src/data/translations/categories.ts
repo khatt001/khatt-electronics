@@ -1,8 +1,11 @@
 import type { Locale } from "@/lib/i18n";
 
-export const categoryNameTranslations: Record<Locale, Record<string, string>> = {
+export const categoryNameTranslations: Record<
+  Locale,
+  Record<string, string>
+> = {
   az: {
-    "Videomüşahidə": "Videomüşahidə",
+    Videomüşahidə: "Videomüşahidə",
     "Video Nəzarət Sistemi": "Video Nəzarət Sistemi",
     "Video Nazarət Sistemi": "Video Nəzarət Sistemi",
     "Keçidə nəzarət": "Keçidə nəzarət",
@@ -12,7 +15,7 @@ export const categoryNameTranslations: Record<Locale, Record<string, string>> = 
     "Şəbəkə avadanlıqları": "Şəbəkə avadanlıqları",
   },
   en: {
-    "Videomüşahidə": "Video surveillance",
+    Videomüşahidə: "Video surveillance",
     "Video Nəzarət Sistemi": "Video surveillance systems",
     "Video Nazarət Sistemi": "Video surveillance systems",
     "Keçidə nəzarət": "Access control",
@@ -22,7 +25,7 @@ export const categoryNameTranslations: Record<Locale, Record<string, string>> = 
     "Şəbəkə avadanlıqları": "Network equipment",
   },
   ru: {
-    "Videomüşahidə": "Видеонаблюдение",
+    Videomüşahidə: "Видеонаблюдение",
     "Video Nəzarət Sistemi": "Системы видеонаблюдения",
     "Video Nazarət Sistemi": "Системы видеонаблюдения",
     "Keçidə nəzarət": "Контроль доступа",

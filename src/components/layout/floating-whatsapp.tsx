@@ -5,10 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/data/site";
 
-type FloatingWhatsAppLocale =
-  | "az"
-  | "en"
-  | "ru";
+type FloatingWhatsAppLocale = "az" | "en" | "ru";
 
 const floatingWhatsAppTranslations = {
   az: {
@@ -28,20 +25,12 @@ const floatingWhatsAppTranslations = {
   },
 } as const;
 
-function getLocaleFromPathname(
-  pathname: string,
-): FloatingWhatsAppLocale {
-  if (
-    pathname === "/en" ||
-    pathname.startsWith("/en/")
-  ) {
+function getLocaleFromPathname(pathname: string): FloatingWhatsAppLocale {
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
     return "en";
   }
 
-  if (
-    pathname === "/ru" ||
-    pathname.startsWith("/ru/")
-  ) {
+  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
     return "ru";
   }
 
@@ -55,26 +44,19 @@ export function FloatingWhatsApp() {
     return null;
   }
 
-  const locale =
-    getLocaleFromPathname(pathname);
+  const locale = getLocaleFromPathname(pathname);
 
-  const t =
-    floatingWhatsAppTranslations[locale];
+  const t = floatingWhatsAppTranslations[locale];
 
   return (
     <a
-      href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(
-        t.message,
-      )}`}
+      href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(t.message)}`}
       target="_blank"
       rel="noreferrer"
       aria-label={t.ariaLabel}
       className="fixed bottom-24 right-4 z-40 inline-flex size-14 touch-manipulation items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-2xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200 lg:bottom-6 lg:right-6 lg:z-50"
     >
-      <MessageCircle
-        className="size-6"
-        aria-hidden="true"
-      />
+      <MessageCircle className="size-6" aria-hidden="true" />
     </a>
   );
 }

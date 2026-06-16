@@ -69,7 +69,7 @@ function getLocalizedText(
   locale: CompareValidateLocale,
   az: string | null,
   en?: string | null,
-  ru?: string | null
+  ru?: string | null,
 ) {
   if (locale === "en") return en || az;
   if (locale === "ru") return ru || az;
@@ -83,7 +83,7 @@ function getLocalizedName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: CompareValidateLocale
+  locale: CompareValidateLocale,
 ) {
   return getLocalizedText(locale, item.name_az, item.name_en, item.name_ru);
 }
@@ -94,20 +94,20 @@ function getLocalizedCategoryName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: CompareValidateLocale
+  locale: CompareValidateLocale,
 ) {
   return getLocalizedText(
     locale,
     category.name_az,
     category.name_en,
-    category.name_ru
+    category.name_ru,
   );
 }
 
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
-  locale: CompareValidateLocale
+  locale: CompareValidateLocale,
 ) {
   const t = compareValidateTranslations[locale];
 
@@ -155,8 +155,10 @@ export async function POST(request: Request) {
       new Set(
         items
           .map((item) => item.id)
-          .filter((id): id is string => typeof id === "string" && id.length > 0)
-      )
+          .filter(
+            (id): id is string => typeof id === "string" && id.length > 0,
+          ),
+      ),
     ).slice(0, MAX_COMPARE_ITEMS);
 
     if (productIds.length === 0) {
@@ -200,7 +202,7 @@ export async function POST(request: Request) {
           spec_value_ru,
           sort_order
         )
-      `
+      `,
       )
       .in("id", productIds)
       .returns<ProductForCompareValidation[]>();
@@ -210,7 +212,7 @@ export async function POST(request: Request) {
         {
           error: error.message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -220,7 +222,7 @@ export async function POST(request: Request) {
       .filter((product) => product.status === "active")
       .sort(
         (a, b) =>
-          (positionById.get(a.id) ?? 999) - (positionById.get(b.id) ?? 999)
+          (positionById.get(a.id) ?? 999) - (positionById.get(b.id) ?? 999),
       )
       .map((product) => ({
         id: product.id,
@@ -230,8 +232,8 @@ export async function POST(request: Request) {
         priceAmount: getPriceAmount(product.price_visible, product.price),
         imageUrl: getPrimaryImage(product.images ?? []),
         category: product.category
-          ? getLocalizedCategoryName(product.category, locale) ??
-            product.category.name_az
+          ? (getLocalizedCategoryName(product.category, locale) ??
+            product.category.name_az)
           : t.productFallback,
         brand: product.brand?.name ?? null,
         stockStatus: product.stock_status,
@@ -244,14 +246,14 @@ export async function POST(request: Request) {
                 locale,
                 spec.spec_key_az,
                 spec.spec_key_en,
-                spec.spec_key_ru
+                spec.spec_key_ru,
               ) ?? spec.spec_key_az,
             value:
               getLocalizedText(
                 locale,
                 spec.spec_value_az,
                 spec.spec_value_en,
-                spec.spec_value_ru
+                spec.spec_value_ru,
               ) ?? spec.spec_value_az,
           })),
       }));
@@ -266,7 +268,7 @@ export async function POST(request: Request) {
       {
         error: t.invalidCompare,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

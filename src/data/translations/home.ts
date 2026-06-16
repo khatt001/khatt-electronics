@@ -54,16 +54,12 @@ export type HomeTranslation = {
 export const homeTranslations: Record<Locale, HomeTranslation> = {
   az: {
     heroEyebrow: "Təhlükəsizlik və smart sistemlər",
-heroTitle: "Obyektiniz üçün etibarlı təhlükəsizlik həlləri",
-heroDescription:
-  "Videomüşahidə, yanğın siqnalizasiya, keçidə nəzarət və şəbəkə sistemlərini layihənizə uyğun seçir, təchiz edir və texniki dəstək göstəririk.",
-heroPoints: [
-  "Rəsmi zəmanət",
-  "Layihəyə uyğun seçim",
-  "Texniki dəstək",
-],
-productsButton: "Məhsullara bax",
-consultationButton: "Layihə üçün təklif al",
+    heroTitle: "Obyektiniz üçün etibarlı təhlükəsizlik həlləri",
+    heroDescription:
+      "Videomüşahidə, yanğın siqnalizasiya, keçidə nəzarət və şəbəkə sistemlərini layihənizə uyğun seçir, təchiz edir və texniki dəstək göstəririk.",
+    heroPoints: ["Rəsmi zəmanət", "Layihəyə uyğun seçim", "Texniki dəstək"],
+    productsButton: "Məhsullara bax",
+    consultationButton: "Layihə üçün təklif al",
     quickStats: [
       { value: "24/7", label: "Texniki dəstək" },
       { value: "100+", label: "Məhsul seçimi" },
@@ -132,8 +128,7 @@ consultationButton: "Layihə üçün təklif al",
       "Təhlükəsizlik, videomüşahidə, şəbəkə və ağıllı sistemlər üzrə məhsulları kateqoriyalara görə kəşf edin.",
     categoriesViewAll: "Bütün məhsullar",
     categoryViewButton: "Kateqoriyaya bax",
-    categoryFallbackDescription:
-      "Bu kateqoriyaya aid məhsullara baxın.",
+    categoryFallbackDescription: "Bu kateqoriyaya aid məhsullara baxın.",
 
     servicesEyebrow: "Dəstək və xidmət",
     servicesTitle: "Məhsul seçimi və quraşdırılmada yanınızdayıq",
@@ -225,8 +220,7 @@ consultationButton: "Layihə üçün təklif al",
       "Discover products by category across security, video surveillance, networking and smart systems.",
     categoriesViewAll: "All products",
     categoryViewButton: "View category",
-    categoryFallbackDescription:
-      "Explore products available in this category.",
+    categoryFallbackDescription: "Explore products available in this category.",
 
     servicesEyebrow: "Support and service",
     servicesTitle: "We help you choose and install the right products",

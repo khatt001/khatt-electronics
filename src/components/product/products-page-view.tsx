@@ -36,8 +36,6 @@ function getValues(value?: string | string[]) {
   return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
 }
 
-
-
 function getSpecsFromQuery(query: ProductsSearchParams) {
   const specs: Record<string, string[]> = {};
 
@@ -66,7 +64,7 @@ function buildFilterUrl(
   locale: ProductsLocale,
   query: ProductsSearchParams,
   removeKey: string,
-  removeValue?: string
+  removeValue?: string,
 ) {
   const params = new URLSearchParams();
 
@@ -92,7 +90,7 @@ function buildFilterUrl(
 function buildPageUrl(
   locale: ProductsLocale,
   query: ProductsSearchParams,
-  page: number
+  page: number,
 ) {
   const params = new URLSearchParams();
 
@@ -193,7 +191,7 @@ export async function ProductsPageView({
         page,
         pageSize: 24,
       },
-      locale
+      locale,
     ),
     getCatalogCategories(locale),
     getCatalogBrands(),
@@ -205,10 +203,12 @@ export async function ProductsPageView({
   const currentPage = productsResult.page;
 
   const selectedCategory = categories.find(
-    (categoryItem) => categoryItem.slug === category
+    (categoryItem) => categoryItem.slug === category,
   );
 
-  const selectedBrands = brands.filter((brand) => brandValues.includes(brand.slug));
+  const selectedBrands = brands.filter((brand) =>
+    brandValues.includes(brand.slug),
+  );
 
   const sortLabel = getSortLabel(sort, locale);
 
@@ -222,8 +222,6 @@ export async function ProductsPageView({
 
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
-     
-
       <section className="py-6 lg:py-8">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
@@ -275,7 +273,12 @@ export async function ProductsPageView({
                     {selectedBrands.map((brand) => (
                       <Link
                         key={brand.id}
-                        href={buildFilterUrl(locale, query, "brand", brand.slug)}
+                        href={buildFilterUrl(
+                          locale,
+                          query,
+                          "brand",
+                          brand.slug,
+                        )}
                         className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         {t.brandLabel}: {brand.name} ×
@@ -300,13 +303,13 @@ export async function ProductsPageView({
                             locale,
                             query,
                             `spec_${key}`,
-                            value
+                            value,
                           )}
                           className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                         >
                           {getSpecChipLabel(key)}: {value} ×
                         </Link>
-                      ))
+                      )),
                     )}
 
                     {sortLabel ? (

@@ -45,17 +45,9 @@ function getStockLabel(
   return t.outOfStock;
 }
 
-export function ComparePageClient({
-  locale = "az",
-}: ComparePageClientProps) {
-  const {
-    items,
-    removeCompare,
-    clearCompare,
-    syncCompare,
-    isSyncing,
-    limit,
-  } = useCompare();
+export function ComparePageClient({ locale = "az" }: ComparePageClientProps) {
+  const { items, removeCompare, clearCompare, syncCompare, isSyncing, limit } =
+    useCompare();
 
   const { addItem } = useCart();
   const t = compareTranslations[locale];
@@ -409,10 +401,7 @@ export function ComparePageClient({
                 href={localizedPath("/products", locale)}
                 className="group mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
-                <PackageSearch
-                  className="mr-2 size-4"
-                  aria-hidden="true"
-                />
+                <PackageSearch className="mr-2 size-4" aria-hidden="true" />
 
                 {t.emptyButton}
 

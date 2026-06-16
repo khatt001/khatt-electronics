@@ -18,14 +18,11 @@ export async function SiteShell({ children }: SiteShellProps) {
   const headersList = await headers();
 
   const pathname =
-    headersList.get("x-pathname") ??
-    headersList.get("x-invoke-path") ??
-    "/";
+    headersList.get("x-pathname") ?? headersList.get("x-invoke-path") ?? "/";
 
   const locale = getLocaleFromPathname(pathname);
 
-  const isAdminRoute =
-    pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isAdminRoute) {
     return <>{children}</>;

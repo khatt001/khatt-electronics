@@ -3,10 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
-import {
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 import { getCatalogProducts } from "@/services/products";
 
 type FeaturedProductsProps = {
@@ -66,10 +63,7 @@ export async function FeaturedProducts({
           </div>
 
           <Link
-            href={localizedPath(
-              "/products",
-              locale,
-            )}
+            href={localizedPath("/products", locale)}
             className="group hidden items-center text-sm font-medium text-neutral-600 transition hover:text-emerald-700 sm:inline-flex"
           >
             {t.viewAll}
@@ -88,22 +82,14 @@ export async function FeaturedProducts({
                 key={product.id}
                 className="border-b border-r border-neutral-200"
               >
-                <ProductCard
-                  product={product}
-                  locale={locale}
-                  compact
-                  isNew
-                />
+                <ProductCard product={product} locale={locale} compact isNew />
               </div>
             ))}
           </div>
         </div>
 
         <Link
-          href={localizedPath(
-            "/products",
-            locale,
-          )}
+          href={localizedPath("/products", locale)}
           className="group mt-5 inline-flex items-center text-sm font-medium text-neutral-700 transition hover:text-emerald-700 sm:hidden"
         >
           {t.viewAll}

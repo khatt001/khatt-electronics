@@ -40,7 +40,7 @@ export async function createBrand(formData: FormData) {
 
   if (!parsed.success) {
     const message = encodeURIComponent(
-      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
 
     redirect(`/admin/brands?error=${message}`);
@@ -59,8 +59,8 @@ export async function createBrand(formData: FormData) {
   if (error) {
     redirect(
       `/admin/brands?error=${encodeURIComponent(
-        "Brend əlavə edilmədi. Slug təkrarlana bilər."
-      )}`
+        "Brend əlavə edilmədi. Slug təkrarlana bilər.",
+      )}`,
     );
   }
 
@@ -81,8 +81,8 @@ export async function toggleBrandStatus(brandId: string, isActive: boolean) {
   if (error) {
     redirect(
       `/admin/brands?error=${encodeURIComponent(
-        "Brend statusu dəyişdirilə bilmədi."
-      )}`
+        "Brend statusu dəyişdirilə bilmədi.",
+      )}`,
     );
   }
 

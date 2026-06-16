@@ -29,8 +29,7 @@ export const productsTranslations = {
     sortPriceDesc: "Qiymət: bahadan ucuza",
 
     emptyTitle: "Məhsul tapılmadı",
-    emptyDescription:
-      "Axtarış və filterləri dəyişərək yenidən yoxlayın.",
+    emptyDescription: "Axtarış və filterləri dəyişərək yenidən yoxlayın.",
   },
 
   en: {
@@ -63,8 +62,7 @@ export const productsTranslations = {
     sortPriceDesc: "Price: high to low",
 
     emptyTitle: "No products found",
-    emptyDescription:
-      "Try changing your search query or selected filters.",
+    emptyDescription: "Try changing your search query or selected filters.",
   },
 
   ru: {

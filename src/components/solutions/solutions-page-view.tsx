@@ -12,9 +12,7 @@ type SolutionsPageViewProps = {
   locale?: SolutionsPageLocale;
 };
 
-export function SolutionsPageView({
-  locale = "az",
-}: SolutionsPageViewProps) {
+export function SolutionsPageView({ locale = "az" }: SolutionsPageViewProps) {
   const t = solutionsPageTranslations[locale];
 
   return (
@@ -136,10 +134,7 @@ export function SolutionsPageView({
                 >
                   {t.quoteButton}
 
-                  <ArrowRight
-                    className="ml-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>
 

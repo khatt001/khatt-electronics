@@ -266,7 +266,7 @@ export async function getRecentAdminOrders(): Promise<RecentAdminOrder[]> {
       payment_status,
       total,
       created_at
-    `
+    `,
     )
     .order("created_at", { ascending: false })
     .limit(5)

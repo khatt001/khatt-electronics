@@ -3,10 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import {
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type BrandsSectionProps = {
   locale?: Locale;
@@ -76,9 +73,7 @@ const brandsTranslations = {
   },
 } as const;
 
-export function BrandsSection({
-  locale = "az",
-}: BrandsSectionProps) {
+export function BrandsSection({ locale = "az" }: BrandsSectionProps) {
   const t = brandsTranslations[locale];
 
   return (
@@ -98,10 +93,7 @@ export function BrandsSection({
           </div>
 
           <Link
-            href={localizedPath(
-              "/products",
-              locale,
-            )}
+            href={localizedPath("/products", locale)}
             className="group hidden items-center text-sm font-medium text-neutral-600 transition hover:text-emerald-700 sm:inline-flex"
           >
             {t.viewAll}
@@ -140,10 +132,7 @@ export function BrandsSection({
         </div>
 
         <Link
-          href={localizedPath(
-            "/products",
-            locale,
-          )}
+          href={localizedPath("/products", locale)}
           className="group mt-5 inline-flex items-center text-sm font-medium text-neutral-700 transition hover:text-emerald-700 sm:hidden"
         >
           {t.viewAll}

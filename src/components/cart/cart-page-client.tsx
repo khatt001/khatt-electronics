@@ -15,10 +15,7 @@ import {
 import { useCart } from "@/components/cart/cart-provider";
 import { Container } from "@/components/layout/container";
 import { getCategoryName } from "@/data/translations/categories";
-import {
-  cartTranslations,
-  type CartLocale,
-} from "@/data/translations/cart";
+import { cartTranslations, type CartLocale } from "@/data/translations/cart";
 import { formatPrice } from "@/lib/cart";
 import { localizedPath } from "@/lib/i18n";
 
@@ -26,9 +23,7 @@ type CartPageClientProps = {
   locale?: CartLocale;
 };
 
-export function CartPageClient({
-  locale = "az",
-}: CartPageClientProps) {
+export function CartPageClient({ locale = "az" }: CartPageClientProps) {
   const {
     items,
     subtotal,
@@ -96,10 +91,7 @@ export function CartPageClient({
                       className="grid gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:grid-cols-[120px_minmax(0,1fr)] lg:p-5"
                     >
                       <Link
-                        href={localizedPath(
-                          `/products/${item.slug}`,
-                          locale,
-                        )}
+                        href={localizedPath(`/products/${item.slug}`, locale)}
                         className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-neutral-100"
                       >
                         {item.imageUrl ? (
@@ -144,8 +136,7 @@ export function CartPageClient({
                             </Link>
 
                             <p className="mt-2 text-sm font-medium text-neutral-500">
-                              {t.stockLimit}: {item.maxQuantity}{" "}
-                              {t.stockUnit}
+                              {t.stockLimit}: {item.maxQuantity} {t.stockUnit}
                             </p>
                           </div>
 
@@ -155,10 +146,7 @@ export function CartPageClient({
                             aria-label={t.removeProductAria}
                             className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-red-100 text-red-600 transition hover:border-red-200 hover:bg-red-50"
                           >
-                            <Trash2
-                              className="size-5"
-                              aria-hidden="true"
-                            />
+                            <Trash2 className="size-5" aria-hidden="true" />
                           </button>
                         </div>
 
@@ -167,21 +155,13 @@ export function CartPageClient({
                             <button
                               type="button"
                               onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  item.quantity - 1,
-                                )
+                                updateQuantity(item.id, item.quantity - 1)
                               }
-                              disabled={
-                                item.quantity <= 1 || isSyncing
-                              }
+                              disabled={item.quantity <= 1 || isSyncing}
                               aria-label={t.decreaseQuantityAria}
                               className="inline-flex size-9 items-center justify-center rounded-md transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                             >
-                              <Minus
-                                className="size-4"
-                                aria-hidden="true"
-                              />
+                              <Minus className="size-4" aria-hidden="true" />
                             </button>
 
                             <span className="min-w-12 text-center text-sm font-semibold text-neutral-950">
@@ -191,22 +171,15 @@ export function CartPageClient({
                             <button
                               type="button"
                               onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  item.quantity + 1,
-                                )
+                                updateQuantity(item.id, item.quantity + 1)
                               }
                               disabled={
-                                item.quantity >=
-                                  item.maxQuantity || isSyncing
+                                item.quantity >= item.maxQuantity || isSyncing
                               }
                               aria-label={t.increaseQuantityAria}
                               className="inline-flex size-9 items-center justify-center rounded-md transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
                             >
-                              <Plus
-                                className="size-4"
-                                aria-hidden="true"
-                              />
+                              <Plus className="size-4" aria-hidden="true" />
                             </button>
                           </div>
 
@@ -216,9 +189,7 @@ export function CartPageClient({
                             </p>
 
                             <p className="mt-1 text-xl font-semibold text-neutral-950">
-                              {formatPrice(
-                                item.price * item.quantity,
-                              )}
+                              {formatPrice(item.price * item.quantity)}
                             </p>
                           </div>
                         </div>
@@ -241,9 +212,7 @@ export function CartPageClient({
 
                 <div className="mt-5 space-y-3 border-b border-neutral-100 pb-5">
                   <div className="flex items-center justify-between gap-4 text-sm">
-                    <span className="text-neutral-500">
-                      {t.productCount}
-                    </span>
+                    <span className="text-neutral-500">{t.productCount}</span>
 
                     <span className="font-medium text-neutral-950">
                       {totalItemCount} {t.stockUnit}
@@ -251,9 +220,7 @@ export function CartPageClient({
                   </div>
 
                   <div className="flex items-center justify-between gap-4 text-sm">
-                    <span className="text-neutral-500">
-                      {t.subtotal}
-                    </span>
+                    <span className="text-neutral-500">{t.subtotal}</span>
 
                     <span className="font-medium text-neutral-950">
                       {formatPrice(subtotal)}
@@ -261,9 +228,7 @@ export function CartPageClient({
                   </div>
 
                   <div className="flex items-center justify-between gap-4 text-sm">
-                    <span className="text-neutral-500">
-                      {t.delivery}
-                    </span>
+                    <span className="text-neutral-500">{t.delivery}</span>
 
                     <span className="text-right font-medium text-neutral-950">
                       {t.deliveryDescription}
@@ -272,9 +237,7 @@ export function CartPageClient({
                 </div>
 
                 <div className="mt-5 flex items-end justify-between gap-4">
-                  <span className="text-sm text-neutral-500">
-                    {t.total}
-                  </span>
+                  <span className="text-sm text-neutral-500">{t.total}</span>
 
                   <strong className="text-2xl font-semibold text-neutral-950">
                     {formatPrice(subtotal)}
@@ -298,10 +261,7 @@ export function CartPageClient({
                 >
                   {t.checkoutButton}
 
-                  <ArrowRight
-                    className="ml-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
 
                 <button
@@ -317,10 +277,7 @@ export function CartPageClient({
           ) : (
             <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
               <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-                <ShoppingCart
-                  className="size-8"
-                  aria-hidden="true"
-                />
+                <ShoppingCart className="size-8" aria-hidden="true" />
               </div>
 
               <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
@@ -339,10 +296,7 @@ export function CartPageClient({
                 href={localizedPath("/products", locale)}
                 className="mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
-                <PackageSearch
-                  className="mr-2 size-4"
-                  aria-hidden="true"
-                />
+                <PackageSearch className="mr-2 size-4" aria-hidden="true" />
 
                 {t.emptyButton}
               </Link>

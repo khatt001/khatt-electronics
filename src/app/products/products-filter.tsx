@@ -2,17 +2,8 @@
 
 import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
 import Link from "next/link";
-import {
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import {
-  useEffect,
-  useMemo,
-  useState,
-  useTransition,
-} from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState, useTransition } from "react";
 
 import {
   productsFilterTranslations,
@@ -55,9 +46,7 @@ type ProductsFilterProps = {
   locale?: ProductsFilterLocale;
 };
 
-function cleanValue(
-  value: string | null | undefined,
-) {
+function cleanValue(value: string | null | undefined) {
   return value?.trim() || "";
 }
 
@@ -65,25 +54,16 @@ function getSpecParamKey(key: string) {
   return `spec_${key}`;
 }
 
-function getSelectedValues(
-  searchParams: URLSearchParams,
-  key: string,
-) {
+function getSelectedValues(searchParams: URLSearchParams, key: string) {
   return searchParams.getAll(key).filter(Boolean);
 }
 
-function createParamsFromCurrent(
-  searchParams: URLSearchParams,
-) {
+function createParamsFromCurrent(searchParams: URLSearchParams) {
   return new URLSearchParams(searchParams.toString());
 }
 
 function getStockValue(value: string) {
-  if (
-    value === "Stokda var" ||
-    value === "In stock" ||
-    value === "В наличии"
-  ) {
+  if (value === "Stokda var" || value === "In stock" || value === "В наличии") {
     return "in_stock";
   }
 
@@ -106,10 +86,7 @@ function getStockValue(value: string) {
   return value;
 }
 
-function translateStockLabel(
-  label: string,
-  locale: ProductsFilterLocale,
-) {
+function translateStockLabel(label: string, locale: ProductsFilterLocale) {
   const t = productsFilterTranslations[locale];
   const value = getStockValue(label);
 
@@ -129,9 +106,7 @@ function FilterSection({
 }) {
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-3 text-sm font-semibold text-neutral-950">
-        {title}
-      </h3>
+      <h3 className="mb-3 text-sm font-semibold text-neutral-950">{title}</h3>
 
       {children}
     </section>
@@ -173,22 +148,16 @@ function CheckboxRow({
           className="sr-only"
         />
 
-        {checked ? (
-          <span className="size-2 rounded-sm bg-emerald-600" />
-        ) : null}
+        {checked ? <span className="size-2 rounded-sm bg-emerald-600" /> : null}
       </span>
 
-      <span className="min-w-0 flex-1 truncate">
-        {label}
-      </span>
+      <span className="min-w-0 flex-1 truncate">{label}</span>
 
       {typeof count === "number" && count > 0 ? (
         <span
           className={cn(
             "text-xs",
-            checked
-              ? "text-white/70"
-              : "text-neutral-400",
+            checked ? "text-white/70" : "text-neutral-400",
           )}
         >
           {count}
@@ -212,34 +181,24 @@ export function ProductsFilter({
   const [, startTransition] = useTransition();
   const t = productsFilterTranslations[locale];
 
-  const [search, setSearch] = useState(
-    initialQuery.search ?? "",
-  );
+  const [search, setSearch] = useState(initialQuery.search ?? "");
 
-  const [mobileOpen, setMobileOpen] =
-    useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [dynamicGroups, setDynamicGroups] =
-    useState<DynamicFilterGroup[]>([]);
+  const [dynamicGroups, setDynamicGroups] = useState<DynamicFilterGroup[]>([]);
 
-  const [loadingFilters, setLoadingFilters] =
-    useState(false);
+  const [loadingFilters, setLoadingFilters] = useState(false);
 
   const currentCategory =
     categoryMode === "route"
       ? cleanValue(initialQuery.category)
       : cleanValue(searchParams.get("category"));
 
-  const currentSort = cleanValue(
-    searchParams.get("sort"),
-  );
+  const currentSort = cleanValue(searchParams.get("sort"));
 
   const clearHref =
     categoryMode === "route" && currentCategory
-      ? localizedPath(
-          `/category/${currentCategory}`,
-          locale,
-        )
+      ? localizedPath(`/category/${currentCategory}`, locale)
       : localizedPath("/products", locale);
 
   const activeFilterCount = useMemo(() => {
@@ -249,10 +208,7 @@ export function ProductsFilter({
       if (!value) return;
       if (key === "sort") return;
 
-      if (
-        categoryMode === "route" &&
-        key === "category"
-      ) {
+      if (categoryMode === "route" && key === "category") {
         return;
       }
 
@@ -262,9 +218,7 @@ export function ProductsFilter({
     return count;
   }, [searchParams, categoryMode]);
 
-  function replaceWithParams(
-    params: URLSearchParams,
-  ) {
+  function replaceWithParams(params: URLSearchParams) {
     if (categoryMode === "route") {
       params.delete("category");
     }
@@ -272,23 +226,14 @@ export function ProductsFilter({
     const queryString = params.toString();
 
     startTransition(() => {
-      router.replace(
-        queryString
-          ? `${pathname}?${queryString}`
-          : pathname,
-        {
-          scroll: false,
-        },
-      );
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+        scroll: false,
+      });
     });
   }
 
-  function setSingleParam(
-    key: string,
-    value: string,
-  ) {
-    const params =
-      createParamsFromCurrent(searchParams);
+  function setSingleParam(key: string, value: string) {
+    const params = createParamsFromCurrent(searchParams);
 
     if (value) {
       params.set(key, value);
@@ -305,10 +250,7 @@ export function ProductsFilter({
       startTransition(() => {
         router.replace(
           value
-            ? localizedPath(
-                `/category/${value}`,
-                locale,
-              )
+            ? localizedPath(`/category/${value}`, locale)
             : localizedPath("/products", locale),
           {
             scroll: false,
@@ -322,33 +264,21 @@ export function ProductsFilter({
     setSingleParam("category", value);
   }
 
-  function toggleMultiParam(
-    key: string,
-    value: string,
-  ) {
-    const params =
-      createParamsFromCurrent(searchParams);
+  function toggleMultiParam(key: string, value: string) {
+    const params = createParamsFromCurrent(searchParams);
 
-    const cleanOptionValue =
-      key === "stock"
-        ? getStockValue(value)
-        : value;
+    const cleanOptionValue = key === "stock" ? getStockValue(value) : value;
 
     const values = params.getAll(key);
-    const exists =
-      values.includes(cleanOptionValue);
+    const exists = values.includes(cleanOptionValue);
 
     params.delete(key);
 
     const nextValues = exists
-      ? values.filter(
-          (item) => item !== cleanOptionValue,
-        )
+      ? values.filter((item) => item !== cleanOptionValue)
       : [...values, cleanOptionValue];
 
-    nextValues.forEach((item) =>
-      params.append(key, item),
-    );
+    nextValues.forEach((item) => params.append(key, item));
 
     params.delete("page");
     replaceWithParams(params);
@@ -356,8 +286,7 @@ export function ProductsFilter({
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const params =
-        createParamsFromCurrent(searchParams);
+      const params = createParamsFromCurrent(searchParams);
 
       const cleanSearch = search.trim();
 
@@ -385,20 +314,14 @@ export function ProductsFilter({
         params.set("locale", locale);
 
         if (currentCategory) {
-          params.set(
-            "category",
-            currentCategory,
-          );
+          params.set("category", currentCategory);
         }
 
-        const response = await fetch(
-          `/api/filters?${params.toString()}`,
-        );
+        const response = await fetch(`/api/filters?${params.toString()}`);
 
-        const result =
-          (await response.json()) as {
-            groups?: DynamicFilterGroup[];
-          };
+        const result = (await response.json()) as {
+          groups?: DynamicFilterGroup[];
+        };
 
         setDynamicGroups(result.groups ?? []);
       } catch {
@@ -414,14 +337,12 @@ export function ProductsFilter({
   useEffect(() => {
     if (!mobileOpen) return;
 
-    const originalOverflow =
-      document.body.style.overflow;
+    const originalOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow =
-        originalOverflow;
+      document.body.style.overflow = originalOverflow;
     };
   }, [mobileOpen]);
 
@@ -434,16 +355,10 @@ export function ProductsFilter({
       }
     }
 
-    window.addEventListener(
-      "keydown",
-      handleEscape,
-    );
+    window.addEventListener("keydown", handleEscape);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleEscape,
-      );
+      window.removeEventListener("keydown", handleEscape);
     };
   }, [mobileOpen]);
 
@@ -456,32 +371,27 @@ export function ProductsFilter({
     });
   }, [dynamicGroups]);
 
-  const brandGroup = dynamicGroups.find(
-    (group) => group.type === "brand",
-  );
+  const brandGroup = dynamicGroups.find((group) => group.type === "brand");
 
-  const stockGroup = dynamicGroups.find(
-    (group) => group.type === "stock",
-  );
+  const stockGroup = dynamicGroups.find((group) => group.type === "stock");
 
-  const stockOptions =
-    stockGroup?.options ?? [
-      {
-        value: "in_stock",
-        label: t.stockIn,
-        count: 0,
-      },
-      {
-        value: "out_of_stock",
-        label: t.stockOut,
-        count: 0,
-      },
-      {
-        value: "pre_order",
-        label: t.stockPreOrder,
-        count: 0,
-      },
-    ];
+  const stockOptions = stockGroup?.options ?? [
+    {
+      value: "in_stock",
+      label: t.stockIn,
+      count: 0,
+    },
+    {
+      value: "out_of_stock",
+      label: t.stockOut,
+      count: 0,
+    },
+    {
+      value: "pre_order",
+      label: t.stockPreOrder,
+      count: 0,
+    },
+  ];
 
   const inputClassName =
     "h-12 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-950 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10";
@@ -490,9 +400,7 @@ export function ProductsFilter({
     <div className="space-y-4">
       <FilterSection title={t.searchTitle}>
         <label className="relative block">
-          <span className="sr-only">
-            {t.searchSrLabel}
-          </span>
+          <span className="sr-only">{t.searchSrLabel}</span>
 
           <Search
             className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
@@ -503,9 +411,7 @@ export function ProductsFilter({
             type="search"
             name="search"
             value={search}
-            onChange={(event) =>
-              setSearch(event.target.value)
-            }
+            onChange={(event) => setSearch(event.target.value)}
             placeholder={t.searchPlaceholder}
             className={`${inputClassName} pl-11`}
           />
@@ -516,20 +422,13 @@ export function ProductsFilter({
         <select
           name="category"
           value={currentCategory}
-          onChange={(event) =>
-            changeCategory(event.target.value)
-          }
+          onChange={(event) => changeCategory(event.target.value)}
           className={inputClassName}
         >
-          <option value="">
-            {t.allCategories}
-          </option>
+          <option value="">{t.allCategories}</option>
 
           {categories.map((category) => (
-            <option
-              key={category.id}
-              value={category.slug}
-            >
+            <option key={category.id} value={category.slug}>
               {category.name}
             </option>
           ))}
@@ -539,18 +438,14 @@ export function ProductsFilter({
       <FilterSection title={t.brandTitle}>
         <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
           {brands.map((brand) => {
-            const dynamicBrand =
-              brandGroup?.options.find(
-                (option) =>
-                  option.label.toLowerCase() ===
-                  brand.name.toLowerCase(),
-              );
+            const dynamicBrand = brandGroup?.options.find(
+              (option) =>
+                option.label.toLowerCase() === brand.name.toLowerCase(),
+            );
 
-            const selected =
-              getSelectedValues(
-                searchParams,
-                "brand",
-              ).includes(brand.slug);
+            const selected = getSelectedValues(searchParams, "brand").includes(
+              brand.slug,
+            );
 
             return (
               <CheckboxRow
@@ -558,12 +453,7 @@ export function ProductsFilter({
                 label={brand.name}
                 count={dynamicBrand?.count}
                 checked={selected}
-                onChange={() =>
-                  toggleMultiParam(
-                    "brand",
-                    brand.slug,
-                  )
-                }
+                onChange={() => toggleMultiParam("brand", brand.slug)}
               />
             );
           })}
@@ -573,30 +463,19 @@ export function ProductsFilter({
       <FilterSection title={t.stockTitle}>
         <div className="space-y-1">
           {stockOptions.map((option) => {
-            const optionValue =
-              getStockValue(option.value);
+            const optionValue = getStockValue(option.value);
 
-            const selected =
-              getSelectedValues(
-                searchParams,
-                "stock",
-              ).includes(optionValue);
+            const selected = getSelectedValues(searchParams, "stock").includes(
+              optionValue,
+            );
 
             return (
               <CheckboxRow
                 key={optionValue}
-                label={translateStockLabel(
-                  option.label,
-                  locale,
-                )}
+                label={translateStockLabel(option.label, locale)}
                 count={option.count}
                 checked={selected}
-                onChange={() =>
-                  toggleMultiParam(
-                    "stock",
-                    optionValue,
-                  )
-                }
+                onChange={() => toggleMultiParam("stock", optionValue)}
               />
             );
           })}
@@ -610,22 +489,16 @@ export function ProductsFilter({
       ) : null}
 
       {visibleDynamicGroups.map((group) => {
-        const paramKey = getSpecParamKey(
-          group.key,
-        );
+        const paramKey = getSpecParamKey(group.key);
 
         return (
-          <FilterSection
-            key={group.key}
-            title={group.label}
-          >
+          <FilterSection key={group.key} title={group.label}>
             <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
               {group.options.map((option) => {
-                const selected =
-                  getSelectedValues(
-                    searchParams,
-                    paramKey,
-                  ).includes(option.value);
+                const selected = getSelectedValues(
+                  searchParams,
+                  paramKey,
+                ).includes(option.value);
 
                 return (
                   <CheckboxRow
@@ -633,12 +506,7 @@ export function ProductsFilter({
                     label={option.label}
                     count={option.count}
                     checked={selected}
-                    onChange={() =>
-                      toggleMultiParam(
-                        paramKey,
-                        option.value,
-                      )
-                    }
+                    onChange={() => toggleMultiParam(paramKey, option.value)}
                   />
                 );
               })}
@@ -658,10 +526,7 @@ export function ProductsFilter({
           onClick={() => setMobileOpen(true)}
           className="inline-flex min-h-11 items-center rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
         >
-          <SlidersHorizontal
-            className="mr-2 size-4"
-            aria-hidden="true"
-          />
+          <SlidersHorizontal className="mr-2 size-4" aria-hidden="true" />
 
           {t.mobileFilterButton}
 
@@ -675,29 +540,14 @@ export function ProductsFilter({
         <select
           name="sort"
           value={currentSort}
-          onChange={(event) =>
-            setSingleParam(
-              "sort",
-              event.target.value,
-            )
-          }
+          onChange={(event) => setSingleParam("sort", event.target.value)}
           className="h-11 min-w-0 flex-1 rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10"
         >
-          <option value="">
-            {t.sortNewest}
-          </option>
-          <option value="oldest">
-            {t.sortOldest}
-          </option>
-          <option value="featured">
-            {t.sortFeatured}
-          </option>
-          <option value="price_asc">
-            {t.sortPriceAsc}
-          </option>
-          <option value="price_desc">
-            {t.sortPriceDesc}
-          </option>
+          <option value="">{t.sortNewest}</option>
+          <option value="oldest">{t.sortOldest}</option>
+          <option value="featured">{t.sortFeatured}</option>
+          <option value="price_asc">{t.sortPriceAsc}</option>
+          <option value="price_desc">{t.sortPriceDesc}</option>
         </select>
       </div>
 
@@ -706,10 +556,7 @@ export function ProductsFilter({
         <div className="mb-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center gap-3 border-b border-neutral-100 pb-5">
             <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white">
-              <Filter
-                className="size-4"
-                aria-hidden="true"
-              />
+              <Filter className="size-4" aria-hidden="true" />
             </span>
 
             <div>
@@ -727,29 +574,14 @@ export function ProductsFilter({
             <select
               name="sort"
               value={currentSort}
-              onChange={(event) =>
-                setSingleParam(
-                  "sort",
-                  event.target.value,
-                )
-              }
+              onChange={(event) => setSingleParam("sort", event.target.value)}
               className="h-11 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10"
             >
-              <option value="">
-                {t.sortNewest}
-              </option>
-              <option value="oldest">
-                {t.sortOldest}
-              </option>
-              <option value="featured">
-                {t.sortFeatured}
-              </option>
-              <option value="price_asc">
-                {t.sortPriceAsc}
-              </option>
-              <option value="price_desc">
-                {t.sortPriceDesc}
-              </option>
+              <option value="">{t.sortNewest}</option>
+              <option value="oldest">{t.sortOldest}</option>
+              <option value="featured">{t.sortFeatured}</option>
+              <option value="price_asc">{t.sortPriceAsc}</option>
+              <option value="price_desc">{t.sortPriceDesc}</option>
             </select>
 
             {hasActiveFilters ? (
@@ -770,9 +602,7 @@ export function ProductsFilter({
       <div
         className={cn(
           "fixed inset-0 z-[100] bg-black/45 transition lg:hidden",
-          mobileOpen
-            ? "opacity-100"
-            : "pointer-events-none opacity-0",
+          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={() => setMobileOpen(false)}
         aria-hidden={!mobileOpen}
@@ -780,13 +610,9 @@ export function ProductsFilter({
         <div
           className={cn(
             "absolute right-0 top-0 h-full w-[min(92vw,430px)] overflow-y-auto bg-[#f5f6f8] p-4 shadow-2xl transition-transform md:p-5",
-            mobileOpen
-              ? "translate-x-0"
-              : "translate-x-full",
+            mobileOpen ? "translate-x-0" : "translate-x-full",
           )}
-          onClick={(event) =>
-            event.stopPropagation()
-          }
+          onClick={(event) => event.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-label={t.filtersTitle}
@@ -804,19 +630,12 @@ export function ProductsFilter({
 
             <button
               type="button"
-              onClick={() =>
-                setMobileOpen(false)
-              }
+              onClick={() => setMobileOpen(false)}
               className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 text-neutral-700 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             >
-              <X
-                className="size-4"
-                aria-hidden="true"
-              />
+              <X className="size-4" aria-hidden="true" />
 
-              <span className="sr-only">
-                Close filters
-              </span>
+              <span className="sr-only">Close filters</span>
             </button>
           </div>
 
@@ -824,38 +643,21 @@ export function ProductsFilter({
             <select
               name="sort"
               value={currentSort}
-              onChange={(event) =>
-                setSingleParam(
-                  "sort",
-                  event.target.value,
-                )
-              }
+              onChange={(event) => setSingleParam("sort", event.target.value)}
               className="h-12 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10"
             >
-              <option value="">
-                {t.sortNewest}
-              </option>
-              <option value="oldest">
-                {t.sortOldest}
-              </option>
-              <option value="featured">
-                {t.sortFeatured}
-              </option>
-              <option value="price_asc">
-                {t.sortPriceAsc}
-              </option>
-              <option value="price_desc">
-                {t.sortPriceDesc}
-              </option>
+              <option value="">{t.sortNewest}</option>
+              <option value="oldest">{t.sortOldest}</option>
+              <option value="featured">{t.sortFeatured}</option>
+              <option value="price_asc">{t.sortPriceAsc}</option>
+              <option value="price_desc">{t.sortPriceDesc}</option>
             </select>
 
             {hasActiveFilters ? (
               <Link
                 href={clearHref}
                 className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
-                onClick={() =>
-                  setMobileOpen(false)
-                }
+                onClick={() => setMobileOpen(false)}
               >
                 {t.clearAll}
               </Link>

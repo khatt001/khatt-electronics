@@ -36,10 +36,7 @@ function formatDate(value: string, localeCode: string) {
   }).format(new Date(value));
 }
 
-function getOrderStatusLabel(
-  status: string,
-  locale: TrackOrderLocale,
-) {
+function getOrderStatusLabel(status: string, locale: TrackOrderLocale) {
   const t = trackOrderTranslations[locale];
 
   if (status === "new") return t.statusNew;
@@ -51,10 +48,7 @@ function getOrderStatusLabel(
   return status;
 }
 
-function getPaymentStatusLabel(
-  status: string,
-  locale: TrackOrderLocale,
-) {
+function getPaymentStatusLabel(status: string, locale: TrackOrderLocale) {
   const t = trackOrderTranslations[locale];
 
   if (status === "pending") return t.paymentPending;
@@ -64,10 +58,7 @@ function getPaymentStatusLabel(
   return status;
 }
 
-function getPaymentMethodLabel(
-  method: string,
-  locale: TrackOrderLocale,
-) {
+function getPaymentMethodLabel(method: string, locale: TrackOrderLocale) {
   const t = trackOrderTranslations[locale];
 
   if (method === "cash") return t.paymentCash;
@@ -227,9 +218,7 @@ export async function TrackOrderPage({
                       </div>
 
                       <div className="rounded-xl bg-neutral-950 px-5 py-4 text-white">
-                        <p className="text-xs text-white/60">
-                          {t.total}
-                        </p>
+                        <p className="text-xs text-white/60">{t.total}</p>
 
                         <strong className="mt-1 block text-xl font-semibold">
                           {formatPrice(order.total)}
@@ -252,10 +241,7 @@ export async function TrackOrderPage({
                           >
                             <div className="flex items-center gap-3">
                               <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/70">
-                                <Icon
-                                  className="size-4"
-                                  aria-hidden="true"
-                                />
+                                <Icon className="size-4" aria-hidden="true" />
                               </span>
 
                               <div>
@@ -281,55 +267,37 @@ export async function TrackOrderPage({
                     <div className="mt-6 grid gap-3 md:grid-cols-3">
                       <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
                         <div className="flex items-center gap-2 text-neutral-500">
-                          <PackageCheck
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <PackageCheck className="size-4" aria-hidden="true" />
 
                           <p className="text-xs">{t.orderStatus}</p>
                         </div>
 
                         <p className="mt-2 font-semibold text-neutral-950">
-                          {getOrderStatusLabel(
-                            order.order_status,
-                            locale,
-                          )}
+                          {getOrderStatusLabel(order.order_status, locale)}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
                         <div className="flex items-center gap-2 text-neutral-500">
-                          <CreditCard
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <CreditCard className="size-4" aria-hidden="true" />
 
                           <p className="text-xs">{t.paymentMethod}</p>
                         </div>
 
                         <p className="mt-2 font-semibold text-neutral-950">
-                          {getPaymentMethodLabel(
-                            order.payment_method,
-                            locale,
-                          )}
+                          {getPaymentMethodLabel(order.payment_method, locale)}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
                         <div className="flex items-center gap-2 text-neutral-500">
-                          <CheckCircle2
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <CheckCircle2 className="size-4" aria-hidden="true" />
 
                           <p className="text-xs">{t.paymentStatus}</p>
                         </div>
 
                         <p className="mt-2 font-semibold text-neutral-950">
-                          {getPaymentStatusLabel(
-                            order.payment_status,
-                            locale,
-                          )}
+                          {getPaymentStatusLabel(order.payment_status, locale)}
                         </p>
                       </div>
                     </div>
@@ -365,8 +333,7 @@ export async function TrackOrderPage({
                             </Link>
 
                             <p className="mt-1 text-sm text-neutral-500">
-                              {item.quantity} ×{" "}
-                              {formatPrice(item.unit_price)}
+                              {item.quantity} × {formatPrice(item.unit_price)}
                             </p>
                           </div>
 
@@ -392,10 +359,7 @@ export async function TrackOrderPage({
                 /* Not found */
                 <div className="rounded-2xl border border-red-200 bg-red-50 p-7 text-center md:p-10">
                   <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-white text-red-600">
-                    <PackageSearch
-                      className="size-8"
-                      aria-hidden="true"
-                    />
+                    <PackageSearch className="size-8" aria-hidden="true" />
                   </div>
 
                   <h2 className="mt-5 text-2xl font-semibold text-red-800">
@@ -422,10 +386,7 @@ export async function TrackOrderPage({
                 /* Initial empty state */
                 <div className="rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
                   <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-                    <PackageSearch
-                      className="size-8"
-                      aria-hidden="true"
-                    />
+                    <PackageSearch className="size-8" aria-hidden="true" />
                   </div>
 
                   <h2 className="mt-5 text-2xl font-semibold text-neutral-950">

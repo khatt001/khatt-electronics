@@ -12,9 +12,7 @@ type ServicesPageViewProps = {
   locale?: ServicesPageLocale;
 };
 
-export function ServicesPageView({
-  locale = "az",
-}: ServicesPageViewProps) {
+export function ServicesPageView({ locale = "az" }: ServicesPageViewProps) {
   const t = servicesPageTranslations[locale];
 
   return (
@@ -132,10 +130,7 @@ export function ServicesPageView({
                 >
                   {t.quoteButton}
 
-                  <ArrowRight
-                    className="ml-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </div>
 

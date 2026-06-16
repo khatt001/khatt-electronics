@@ -203,7 +203,8 @@ function asArray(value?: string | string[]) {
 
 function normalizeStockValue(value: string): StockStatus | null {
   if (value === "in_stock" || value === "Stokda var") return "in_stock";
-  if (value === "out_of_stock" || value === "Stokda yoxdur") return "out_of_stock";
+  if (value === "out_of_stock" || value === "Stokda yoxdur")
+    return "out_of_stock";
   if (value === "pre_order" || value === "Öncədən sifariş") return "pre_order";
 
   return null;
@@ -211,7 +212,7 @@ function normalizeStockValue(value: string): StockStatus | null {
 
 function getLocalizedProductName(
   product: LocalizedProductFields,
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
   if (locale === "en") return product.name_en || product.name_az;
   if (locale === "ru") return product.name_ru || product.name_az;
@@ -221,7 +222,7 @@ function getLocalizedProductName(
 
 function getLocalizedCategoryName(
   category: LocalizedCategoryFields,
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
   if (locale === "en") return category.name_en || category.name_az;
   if (locale === "ru") return category.name_ru || category.name_az;
@@ -233,7 +234,7 @@ function getLocalizedText(
   locale: ProductLocale,
   az: string | null,
   en?: string | null,
-  ru?: string | null
+  ru?: string | null,
 ) {
   if (locale === "en") return en || az;
   if (locale === "ru") return ru || az;
@@ -244,7 +245,7 @@ function getLocalizedText(
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ) {
   const t = productServiceTranslations[locale];
 
@@ -278,12 +279,14 @@ function getPrimaryImage(images: ProductRow["images"]) {
 
 function formatProduct(
   product: ProductRow,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): ProductCardItem {
   const t = productServiceTranslations[locale];
 
   const priceAmount =
-    product.price_visible && product.price !== null ? Number(product.price) : null;
+    product.price_visible && product.price !== null
+      ? Number(product.price)
+      : null;
 
   return {
     id: product.id,
@@ -305,7 +308,7 @@ function formatProduct(
 
 function createEmptyCatalogResult(
   page: number,
-  pageSize: number
+  pageSize: number,
 ): CatalogProductsResult {
   return {
     products: [],
@@ -351,10 +354,10 @@ async function getBrandIdsBySlugs(slugs: string[]) {
 
 async function getProductIdsBySpecs(
   specs: Record<string, string[]>,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ) {
   const entries = Object.entries(specs).filter(
-    ([key, values]) => key.trim() && values.length > 0
+    ([key, values]) => key.trim() && values.length > 0,
   );
 
   if (entries.length === 0) return null;
@@ -372,10 +375,9 @@ async function getProductIdsBySpecs(
         .or(
           values
             .map(
-              (value) =>
-                `spec_value_en.eq.${value},spec_value_az.eq.${value}`
+              (value) => `spec_value_en.eq.${value},spec_value_az.eq.${value}`,
             )
-            .join(",")
+            .join(","),
         );
     } else if (locale === "ru") {
       query = query
@@ -383,10 +385,9 @@ async function getProductIdsBySpecs(
         .or(
           values
             .map(
-              (value) =>
-                `spec_value_ru.eq.${value},spec_value_az.eq.${value}`
+              (value) => `spec_value_ru.eq.${value},spec_value_az.eq.${value}`,
             )
-            .join(",")
+            .join(","),
         );
     } else {
       query = query.eq("spec_key_az", specKey).in("spec_value_az", values);
@@ -405,7 +406,7 @@ async function getProductIdsBySpecs(
     } else {
       const idsForSpecSet = new Set<string>(idsForSpec);
       matchedIds = matchedIds.filter((productId: string) =>
-        idsForSpecSet.has(productId)
+        idsForSpecSet.has(productId),
       );
     }
 
@@ -418,7 +419,7 @@ async function getProductIdsBySpecs(
 }
 
 export async function getFeaturedProducts(
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<FeaturedProduct[]> {
   const supabase = createServerSupabaseClient();
 
@@ -450,7 +451,7 @@ export async function getFeaturedProducts(
         url,
         is_primary
       )
-    `
+    `,
     )
     .eq("status", "active")
     .eq("is_featured", true)
@@ -468,7 +469,7 @@ export async function getFeaturedProducts(
 
 export async function getCatalogProducts(
   filters: CatalogProductFilters = {},
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<CatalogProductsResult> {
   const supabase = createServerSupabaseClient();
 
@@ -527,18 +528,18 @@ export async function getCatalogProducts(
         is_primary
       )
     `,
-      { count: "exact" }
+      { count: "exact" },
     )
     .eq("status", "active");
 
   if (filters.search) {
     if (locale === "en") {
       query = query.or(
-        `name_en.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`
+        `name_en.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`,
       );
     } else if (locale === "ru") {
       query = query.or(
-        `name_ru.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`
+        `name_ru.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`,
       );
     } else {
       query = query.ilike("name_az", `%${filters.search}%`);
@@ -583,7 +584,9 @@ export async function getCatalogProducts(
     query = query.order("created_at", { ascending: false });
   }
 
-  const { data, error, count } = await query.range(from, to).returns<ProductRow[]>();
+  const { data, error, count } = await query
+    .range(from, to)
+    .returns<ProductRow[]>();
 
   if (error) {
     console.error("Failed to fetch catalog products:", error.message);
@@ -604,7 +607,7 @@ export async function getRelatedProducts(
   categorySlug: string | null,
   currentProductSlug: string,
   locale: ProductLocale = "az",
-  limit = 4
+  limit = 4,
 ): Promise<ProductCardItem[]> {
   if (!categorySlug) return [];
 
@@ -614,7 +617,7 @@ export async function getRelatedProducts(
       page: 1,
       pageSize: Math.max(limit + 1, 1),
     },
-    locale
+    locale,
   );
 
   return result.products
@@ -624,7 +627,7 @@ export async function getRelatedProducts(
 export async function searchCatalogProducts(
   search: string,
   locale: ProductLocale = "az",
-  limit = 6
+  limit = 6,
 ): Promise<ProductCardItem[]> {
   const normalizedSearch = search.trim();
 
@@ -636,7 +639,7 @@ export async function searchCatalogProducts(
       page: 1,
       pageSize: limit,
     },
-    locale
+    locale,
   );
 
   return result.products;
@@ -644,7 +647,7 @@ export async function searchCatalogProducts(
 
 export async function getProductBySlug(
   slug: string,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<ProductDetail | null> {
   const supabase = createServerSupabaseClient();
   const t = productServiceTranslations[locale];
@@ -706,7 +709,7 @@ export async function getProductBySlug(
         file_type,
         sort_order
       )
-    `
+    `,
     )
     .eq("status", "active")
     .eq("slug", slug)
@@ -740,25 +743,25 @@ export async function getProductBySlug(
       locale,
       data.short_description_az,
       data.short_description_en,
-      data.short_description_ru
+      data.short_description_ru,
     ),
     description: getLocalizedText(
       locale,
       data.description_az,
       data.description_en,
-      data.description_ru
+      data.description_ru,
     ),
     seoTitle: getLocalizedText(
       locale,
       data.seo_title_az,
       data.seo_title_en,
-      data.seo_title_ru
+      data.seo_title_ru,
     ),
     seoDescription: getLocalizedText(
       locale,
       data.seo_description_az,
       data.seo_description_en,
-      data.seo_description_ru
+      data.seo_description_ru,
     ),
     images: sortImages(data.images ?? []).map((image) => ({
       id: image.id,
@@ -775,14 +778,14 @@ export async function getProductBySlug(
             locale,
             spec.spec_key_az,
             spec.spec_key_en,
-            spec.spec_key_ru
+            spec.spec_key_ru,
           ) ?? spec.spec_key_az,
         value:
           getLocalizedText(
             locale,
             spec.spec_value_az,
             spec.spec_value_en,
-            spec.spec_value_ru
+            spec.spec_value_ru,
           ) ?? spec.spec_value_az,
       })),
     downloads: [...(data.downloads ?? [])]

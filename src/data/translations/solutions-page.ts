@@ -31,56 +31,96 @@ export const solutionsPageTranslations = {
         description:
           "Ofis sahələri üçün kamera sistemi, keçidə nəzarət, işçi giriş-çıxış nəzarəti və stabil şəbəkə infrastrukturu.",
         icon: Building2,
-        items: ["IP kamera sistemi", "Access control", "Wi-Fi və LAN", "Server/rack avadanlığı"],
+        items: [
+          "IP kamera sistemi",
+          "Access control",
+          "Wi-Fi və LAN",
+          "Server/rack avadanlığı",
+        ],
       },
       {
         title: "Mağaza və satış nöqtələri",
         description:
           "Satış sahələrində müştəri axını, kassalar, giriş-çıxış və anbar zonalarının izlənməsi üçün həllər.",
         icon: Store,
-        items: ["Kassa nəzarəti", "Giriş zonası kameraları", "Anbar izləmə", "Uzaqdan baxış"],
+        items: [
+          "Kassa nəzarəti",
+          "Giriş zonası kameraları",
+          "Anbar izləmə",
+          "Uzaqdan baxış",
+        ],
       },
       {
         title: "Anbar və logistika",
         description:
           "Böyük sahələr üçün geniş bucaqlı kameralar, PoE switch-lər, NVR yaddaş planlaması və şəbəkə xəritəsi.",
         icon: Warehouse,
-        items: ["Perimetr nəzarəti", "Geniş sahə kameraları", "PoE infrastruktur", "Yaddaş hesablanması"],
+        items: [
+          "Perimetr nəzarəti",
+          "Geniş sahə kameraları",
+          "PoE infrastruktur",
+          "Yaddaş hesablanması",
+        ],
       },
       {
         title: "Zavod və istehsalat",
         description:
           "İstehsal xətləri, təhlükəli zonalar, giriş-çıxış nöqtələri və iş təhlükəsizliyi üçün texniki həllər.",
         icon: Factory,
-        items: ["İstehsal zonası nəzarəti", "Giriş-çıxış sistemi", "Alarm inteqrasiyası", "Texniki monitorinq"],
+        items: [
+          "İstehsal zonası nəzarəti",
+          "Giriş-çıxış sistemi",
+          "Alarm inteqrasiyası",
+          "Texniki monitorinq",
+        ],
       },
       {
         title: "Yaşayış binaları və villalar",
         description:
           "Giriş blokları, həyət, qaraj, domofon, siqnalizasiya və smart təhlükəsizlik həlləri.",
         icon: Home,
-        items: ["Domofon sistemi", "Həyət kameraları", "Siqnalizasiya", "Mobil izləmə"],
+        items: [
+          "Domofon sistemi",
+          "Həyət kameraları",
+          "Siqnalizasiya",
+          "Mobil izləmə",
+        ],
       },
       {
         title: "Hotel və obyektlər",
         description:
           "Qonaq zonaları, reception, koridorlar, giriş-çıxış və servis sahələri üçün təhlükəsizlik planlaması.",
         icon: Hotel,
-        items: ["Reception nəzarəti", "Koridor kameraları", "Access zonalar", "Şəbəkə planlaması"],
+        items: [
+          "Reception nəzarəti",
+          "Koridor kameraları",
+          "Access zonalar",
+          "Şəbəkə planlaması",
+        ],
       },
       {
         title: "Təhsil müəssisələri",
         description:
           "Məktəb, kurs və tədris mərkəzləri üçün giriş nəzarəti, kamera sistemi və təhlükəsiz şəbəkə həlləri.",
         icon: School,
-        items: ["Giriş nəzarəti", "Sinif/koridor kameraları", "Wi-Fi coverage", "Uzaqdan monitorinq"],
+        items: [
+          "Giriş nəzarəti",
+          "Sinif/koridor kameraları",
+          "Wi-Fi coverage",
+          "Uzaqdan monitorinq",
+        ],
       },
       {
         title: "Dövlət və inzibati obyektlər",
         description:
           "Daha ciddi təhlükəsizlik tələbləri olan obyektlər üçün strukturlaşdırılmış və etibarlı sistem yanaşması.",
         icon: Landmark,
-        items: ["Çoxzonallı nəzarət", "Access control", "Perimetr təhlükəsizliyi", "Texniki sənədləşmə"],
+        items: [
+          "Çoxzonallı nəzarət",
+          "Access control",
+          "Perimetr təhlükəsizliyi",
+          "Texniki sənədləşmə",
+        ],
       },
     ],
     steps: [
@@ -110,56 +150,96 @@ export const solutionsPageTranslations = {
         description:
           "Camera systems, access control, employee entry-exit control and stable network infrastructure for office spaces.",
         icon: Building2,
-        items: ["IP camera system", "Access control", "Wi-Fi and LAN", "Server/rack equipment"],
+        items: [
+          "IP camera system",
+          "Access control",
+          "Wi-Fi and LAN",
+          "Server/rack equipment",
+        ],
       },
       {
         title: "Stores and retail points",
         description:
           "Solutions for monitoring customer flow, cash desks, entrances and warehouse areas in retail spaces.",
         icon: Store,
-        items: ["Cash desk monitoring", "Entrance zone cameras", "Warehouse monitoring", "Remote view"],
+        items: [
+          "Cash desk monitoring",
+          "Entrance zone cameras",
+          "Warehouse monitoring",
+          "Remote view",
+        ],
       },
       {
         title: "Warehouses and logistics",
         description:
           "Wide-angle cameras, PoE switches, NVR storage planning and network mapping for large areas.",
         icon: Warehouse,
-        items: ["Perimeter monitoring", "Wide-area cameras", "PoE infrastructure", "Storage calculation"],
+        items: [
+          "Perimeter monitoring",
+          "Wide-area cameras",
+          "PoE infrastructure",
+          "Storage calculation",
+        ],
       },
       {
         title: "Factories and production",
         description:
           "Technical solutions for production lines, dangerous zones, entry-exit points and workplace safety.",
         icon: Factory,
-        items: ["Production zone monitoring", "Entry-exit system", "Alarm integration", "Technical monitoring"],
+        items: [
+          "Production zone monitoring",
+          "Entry-exit system",
+          "Alarm integration",
+          "Technical monitoring",
+        ],
       },
       {
         title: "Residential buildings and villas",
         description:
           "Entrance blocks, yard, garage, intercom, alarm and smart security solutions.",
         icon: Home,
-        items: ["Intercom system", "Yard cameras", "Alarm system", "Mobile monitoring"],
+        items: [
+          "Intercom system",
+          "Yard cameras",
+          "Alarm system",
+          "Mobile monitoring",
+        ],
       },
       {
         title: "Hotels and facilities",
         description:
           "Security planning for guest areas, reception, corridors, entry-exit and service areas.",
         icon: Hotel,
-        items: ["Reception monitoring", "Corridor cameras", "Access zones", "Network planning"],
+        items: [
+          "Reception monitoring",
+          "Corridor cameras",
+          "Access zones",
+          "Network planning",
+        ],
       },
       {
         title: "Educational institutions",
         description:
           "Access control, camera systems and secure network solutions for schools, courses and training centers.",
         icon: School,
-        items: ["Access control", "Classroom/corridor cameras", "Wi-Fi coverage", "Remote monitoring"],
+        items: [
+          "Access control",
+          "Classroom/corridor cameras",
+          "Wi-Fi coverage",
+          "Remote monitoring",
+        ],
       },
       {
         title: "Government and administrative facilities",
         description:
           "Structured and reliable system approach for facilities with stricter security requirements.",
         icon: Landmark,
-        items: ["Multi-zone monitoring", "Access control", "Perimeter security", "Technical documentation"],
+        items: [
+          "Multi-zone monitoring",
+          "Access control",
+          "Perimeter security",
+          "Technical documentation",
+        ],
       },
     ],
     steps: [
@@ -189,56 +269,96 @@ export const solutionsPageTranslations = {
         description:
           "Камеры, контроль доступа, учет входа-выхода сотрудников и стабильная сетевая инфраструктура для офисов.",
         icon: Building2,
-        items: ["IP камеры", "Access control", "Wi-Fi и LAN", "Server/rack оборудование"],
+        items: [
+          "IP камеры",
+          "Access control",
+          "Wi-Fi и LAN",
+          "Server/rack оборудование",
+        ],
       },
       {
         title: "Магазины и точки продаж",
         description:
           "Решения для контроля потока клиентов, касс, входов-выходов и складских зон.",
         icon: Store,
-        items: ["Контроль кассы", "Камеры входной зоны", "Контроль склада", "Удаленный просмотр"],
+        items: [
+          "Контроль кассы",
+          "Камеры входной зоны",
+          "Контроль склада",
+          "Удаленный просмотр",
+        ],
       },
       {
         title: "Склады и логистика",
         description:
           "Широкоугольные камеры, PoE switch, планирование NVR хранения и карта сети для больших площадей.",
         icon: Warehouse,
-        items: ["Контроль периметра", "Камеры для больших зон", "PoE инфраструктура", "Расчет хранения"],
+        items: [
+          "Контроль периметра",
+          "Камеры для больших зон",
+          "PoE инфраструктура",
+          "Расчет хранения",
+        ],
       },
       {
         title: "Заводы и производство",
         description:
           "Технические решения для производственных линий, опасных зон, входов-выходов и безопасности труда.",
         icon: Factory,
-        items: ["Контроль производственной зоны", "Система входа-выхода", "Интеграция alarm", "Технический мониторинг"],
+        items: [
+          "Контроль производственной зоны",
+          "Система входа-выхода",
+          "Интеграция alarm",
+          "Технический мониторинг",
+        ],
       },
       {
         title: "Жилые здания и виллы",
         description:
           "Подъезды, двор, гараж, домофон, сигнализация и smart решения безопасности.",
         icon: Home,
-        items: ["Домофонная система", "Камеры двора", "Сигнализация", "Мобильный просмотр"],
+        items: [
+          "Домофонная система",
+          "Камеры двора",
+          "Сигнализация",
+          "Мобильный просмотр",
+        ],
       },
       {
         title: "Отели и объекты",
         description:
           "Планирование безопасности для guest зон, reception, коридоров, входов-выходов и сервисных зон.",
         icon: Hotel,
-        items: ["Контроль reception", "Камеры коридоров", "Access зоны", "Планирование сети"],
+        items: [
+          "Контроль reception",
+          "Камеры коридоров",
+          "Access зоны",
+          "Планирование сети",
+        ],
       },
       {
         title: "Учебные заведения",
         description:
           "Контроль доступа, камеры и безопасные сетевые решения для школ, курсов и учебных центров.",
         icon: School,
-        items: ["Контроль доступа", "Камеры классов/коридоров", "Wi-Fi coverage", "Удаленный мониторинг"],
+        items: [
+          "Контроль доступа",
+          "Камеры классов/коридоров",
+          "Wi-Fi coverage",
+          "Удаленный мониторинг",
+        ],
       },
       {
         title: "Государственные и административные объекты",
         description:
           "Структурированный и надежный системный подход для объектов с более строгими требованиями безопасности.",
         icon: Landmark,
-        items: ["Многозонный контроль", "Access control", "Безопасность периметра", "Техническая документация"],
+        items: [
+          "Многозонный контроль",
+          "Access control",
+          "Безопасность периметра",
+          "Техническая документация",
+        ],
       },
     ],
     steps: [

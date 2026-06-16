@@ -103,7 +103,7 @@ const checkoutItemSchema = z.object({
 
 function getLocalizedProductName(
   product: ProductForCheckout,
-  locale: CheckoutLocale
+  locale: CheckoutLocale,
 ) {
   if (locale === "en") return product.name_en || product.name_az;
   if (locale === "ru") return product.name_ru || product.name_az;
@@ -137,14 +137,14 @@ function createOrderNumber() {
 
 function getErrorUrl(message: string, locale: CheckoutLocale = "az") {
   return `${localizedPath("/checkout", locale)}?error=${encodeURIComponent(
-    message
+    message,
   )}`;
 }
 
 function getSuccessUrl(orderNumber: string, locale: CheckoutLocale) {
   return `${localizedPath(
     "/checkout/success",
-    locale
+    locale,
   )}?order=${encodeURIComponent(orderNumber)}`;
 }
 
@@ -167,7 +167,7 @@ function productMessage(productName: string, message: string) {
 function stockLimitMessage(
   productName: string,
   stockQuantity: number,
-  locale: CheckoutLocale
+  locale: CheckoutLocale,
 ) {
   const t = checkoutActionTranslations[locale];
 
@@ -229,7 +229,7 @@ export async function createOrder(formData: FormData) {
 
   if (!parsed.success) {
     redirect(
-      getErrorUrl(parsed.error.issues[0]?.message ?? t.invalidData, locale)
+      getErrorUrl(parsed.error.issues[0]?.message ?? t.invalidData, locale),
     );
   }
 
@@ -255,7 +255,7 @@ export async function createOrder(formData: FormData) {
       stock_status,
       stock_quantity,
       status
-    `
+    `,
     )
     .in("id", productIds)
     .returns<ProductForCheckout[]>();
@@ -268,7 +268,9 @@ export async function createOrder(formData: FormData) {
     redirect(getErrorUrl(t.productNotFound, locale));
   }
 
-  const productsById = new Map(products.map((product) => [product.id, product]));
+  const productsById = new Map(
+    products.map((product) => [product.id, product]),
+  );
 
   const verifiedItems = data.items.map((item) => {
     const product = productsById.get(item.id);
@@ -281,13 +283,13 @@ export async function createOrder(formData: FormData) {
 
     if (product.status !== "active") {
       redirect(
-        getErrorUrl(productMessage(productName, t.productInactive), locale)
+        getErrorUrl(productMessage(productName, t.productInactive), locale),
       );
     }
 
     if (product.stock_status !== "in_stock") {
       redirect(
-        getErrorUrl(productMessage(productName, t.productNotInStock), locale)
+        getErrorUrl(productMessage(productName, t.productNotInStock), locale),
       );
     }
 
@@ -295,26 +297,31 @@ export async function createOrder(formData: FormData) {
 
     if (stockQuantity <= 0) {
       redirect(
-        getErrorUrl(productMessage(productName, t.productOutOfStock), locale)
+        getErrorUrl(productMessage(productName, t.productOutOfStock), locale),
       );
     }
 
     if (item.quantity > stockQuantity) {
       redirect(
-        getErrorUrl(stockLimitMessage(productName, stockQuantity, locale), locale)
+        getErrorUrl(
+          stockLimitMessage(productName, stockQuantity, locale),
+          locale,
+        ),
       );
     }
 
     if (!product.price_visible) {
       redirect(
-        getErrorUrl(productMessage(productName, t.priceNotActive), locale)
+        getErrorUrl(productMessage(productName, t.priceNotActive), locale),
       );
     }
 
     const unitPrice = normalizePrice(product.price);
 
     if (unitPrice === null) {
-      redirect(getErrorUrl(productMessage(productName, t.priceInvalid), locale));
+      redirect(
+        getErrorUrl(productMessage(productName, t.priceInvalid), locale),
+      );
     }
 
     return {
@@ -330,7 +337,7 @@ export async function createOrder(formData: FormData) {
 
   const subtotal = verifiedItems.reduce(
     (total, item) => total + item.lineTotal,
-    0
+    0,
   );
   const deliveryFee = 0;
   const total = subtotal + deliveryFee;
@@ -396,8 +403,8 @@ export async function createOrder(formData: FormData) {
       redirect(
         getErrorUrl(
           `${item.productName} ${t.stockUpdateFailed} ${stockError.message}`,
-          locale
-        )
+          locale,
+        ),
       );
     }
 

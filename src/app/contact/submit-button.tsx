@@ -22,15 +22,9 @@ export function ContactSubmitButton({
       className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-white"
     >
       {pending ? (
-        <LoaderCircle
-          className="mr-2 size-4 animate-spin"
-          aria-hidden="true"
-        />
+        <LoaderCircle className="mr-2 size-4 animate-spin" aria-hidden="true" />
       ) : (
-        <Send
-          className="mr-2 size-4"
-          aria-hidden="true"
-        />
+        <Send className="mr-2 size-4" aria-hidden="true" />
       )}
 
       {pending ? pendingLabel : label}

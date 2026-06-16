@@ -46,13 +46,8 @@ function getStockLabel(
 export function FavoritesPageClient({
   locale = "az",
 }: FavoritesPageClientProps) {
-  const {
-    items,
-    removeFavorite,
-    clearFavorites,
-    syncFavorites,
-    isSyncing,
-  } = useFavorites();
+  const { items, removeFavorite, clearFavorites, syncFavorites, isSyncing } =
+    useFavorites();
 
   const { addItem } = useCart();
   const t = favoritesTranslations[locale];
@@ -98,9 +93,7 @@ export function FavoritesPageClient({
               {/* Section controls */}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-neutral-500">
-                  {isSyncing
-                    ? t.syncing
-                    : `${items.length} ${t.countSuffix}`}
+                  {isSyncing ? t.syncing : `${items.length} ${t.countSuffix}`}
                 </p>
 
                 <button
@@ -109,10 +102,7 @@ export function FavoritesPageClient({
                   disabled={isSyncing}
                   className="inline-flex w-fit items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Trash2
-                    className="mr-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <Trash2 className="mr-2 size-4" aria-hidden="true" />
                   {t.clearAll}
                 </button>
               </div>
@@ -177,10 +167,7 @@ export function FavoritesPageClient({
                           aria-label={t.removeAria}
                           className="absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-lg border border-neutral-200 bg-white/95 text-red-600 shadow-sm backdrop-blur transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          <Trash2
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <Trash2 className="size-4" aria-hidden="true" />
                         </button>
                       </Link>
 
@@ -230,10 +217,7 @@ export function FavoritesPageClient({
                           <button
                             type="button"
                             onClick={() => {
-                              if (
-                                !canAddToCart ||
-                                item.priceAmount === null
-                              ) {
+                              if (!canAddToCart || item.priceAmount === null) {
                                 return;
                               }
 
@@ -290,10 +274,7 @@ export function FavoritesPageClient({
                 href={localizedPath("/products", locale)}
                 className="group mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
-                <PackageSearch
-                  className="mr-2 size-4"
-                  aria-hidden="true"
-                />
+                <PackageSearch className="mr-2 size-4" aria-hidden="true" />
 
                 {t.emptyButton}
 

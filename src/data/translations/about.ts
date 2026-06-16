@@ -16,8 +16,7 @@ export const aboutTranslations = {
       "KHATT Electronics təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri üzrə peşəkar xidmət göstərir.",
 
     eyebrow: "Haqqımızda",
-    title:
-      "Təhlükəsizlik və elektronika həllərində etibarlı texniki tərəfdaş",
+    title: "Təhlükəsizlik və elektronika həllərində etibarlı texniki tərəfdaş",
     description:
       "KHATT Electronics olaraq məqsədimiz obyektlər üçün stabil, ölçülə bilən və uzunmüddətli işləyən təhlükəsizlik və elektronika həlləri təqdim etməkdir.",
     contactButton: "Bizimlə əlaqə",
@@ -68,8 +67,7 @@ export const aboutTranslations = {
     ],
 
     collaborationEyebrow: "Əməkdaşlıq",
-    collaborationTitle:
-      "Layihəniz üçün uyğun məhsul və texniki həll seçək",
+    collaborationTitle: "Layihəniz üçün uyğun məhsul və texniki həll seçək",
     collaborationDescription:
       "Obyektiniz barədə məlumat göndərin, sizə uyğun avadanlıq siyahısı və ilkin texniki yanaşma hazırlayaq.",
     quoteButton: "Qiymət təklifi al",
@@ -83,7 +81,8 @@ export const aboutTranslations = {
       "KHATT Electronics provides professional solutions for security systems, video surveillance, access control, intercoms, alarm systems and smart technologies.",
 
     eyebrow: "About us",
-    title: "A reliable technical partner for security and electronics solutions",
+    title:
+      "A reliable technical partner for security and electronics solutions",
     description:
       "At KHATT Electronics, our goal is to provide stable, scalable and long-lasting security and electronics solutions for different types of facilities.",
     contactButton: "Contact us",
@@ -149,8 +148,7 @@ export const aboutTranslations = {
       "KHATT Electronics предоставляет профессиональные решения в сфере систем безопасности, видеонаблюдения, контроля доступа, домофонов, сигнализации и умных технологий.",
 
     eyebrow: "О нас",
-    title:
-      "Надежный технический партнер в сфере безопасности и электроники",
+    title: "Надежный технический партнер в сфере безопасности и электроники",
     description:
       "Цель KHATT Electronics — предлагать стабильные, масштабируемые и долгосрочные решения в сфере безопасности и электроники для различных объектов.",
     contactButton: "Связаться с нами",

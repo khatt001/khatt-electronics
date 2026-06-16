@@ -10,7 +10,7 @@ const statusSchema = z.enum(["new", "contacted", "closed"]);
 
 export async function updateInquiryStatus(
   inquiryId: string,
-  formData: FormData
+  formData: FormData,
 ) {
   await requireAdmin();
 
@@ -20,8 +20,8 @@ export async function updateInquiryStatus(
   if (!parsed.success) {
     redirect(
       `/admin/inquiries?error=${encodeURIComponent(
-        "Sorğu statusu düzgün deyil."
-      )}`
+        "Sorğu statusu düzgün deyil.",
+      )}`,
     );
   }
 
@@ -36,8 +36,8 @@ export async function updateInquiryStatus(
   if (error) {
     redirect(
       `/admin/inquiries?error=${encodeURIComponent(
-        "Sorğu statusu dəyişdirilə bilmədi."
-      )}`
+        "Sorğu statusu dəyişdirilə bilmədi.",
+      )}`,
     );
   }
 
@@ -55,7 +55,7 @@ export async function deleteInquiry(inquiryId: string) {
 
   if (error) {
     redirect(
-      `/admin/inquiries?error=${encodeURIComponent("Sorğu silinə bilmədi.")}`
+      `/admin/inquiries?error=${encodeURIComponent("Sorğu silinə bilmədi.")}`,
     );
   }
 

@@ -28,8 +28,8 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
   if (!parsed.success) {
     redirect(
       `/admin/orders/${orderId}?error=${encodeURIComponent(
-        parsed.error.issues[0]?.message ?? "Status məlumatı düzgün deyil."
-      )}`
+        parsed.error.issues[0]?.message ?? "Status məlumatı düzgün deyil.",
+      )}`,
     );
   }
 
@@ -45,8 +45,8 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
   if (error) {
     redirect(
       `/admin/orders/${orderId}?error=${encodeURIComponent(
-        "Status yenilənmədi."
-      )}`
+        "Status yenilənmədi.",
+      )}`,
     );
   }
 

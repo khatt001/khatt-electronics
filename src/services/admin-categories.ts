@@ -23,7 +23,7 @@ export async function getAdminCategories(): Promise<AdminCategory[]> {
       is_active,
       sort_order,
       created_at
-    `
+    `,
     )
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })

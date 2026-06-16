@@ -25,7 +25,7 @@ export const STANDARD_SPEC_KEYS = [
 
 export function getSpecSortIndex(label: string) {
   const index = STANDARD_SPEC_KEYS.findIndex(
-    (item) => item.toLowerCase() === label.toLowerCase()
+    (item) => item.toLowerCase() === label.toLowerCase(),
   );
 
   return index === -1 ? 999 : index;

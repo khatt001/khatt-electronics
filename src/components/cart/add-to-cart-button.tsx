@@ -41,23 +41,16 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const { addItem, items } = useCart();
   const [added, setAdded] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const t = addToCartTranslations[locale];
 
   const currentQuantity =
-    items.find((cartItem) => cartItem.id === item.id)?.quantity ??
-    0;
+    items.find((cartItem) => cartItem.id === item.id)?.quantity ?? 0;
 
-  const remainingQuantity = Math.max(
-    0,
-    maxQuantity - currentQuantity,
-  );
+  const remainingQuantity = Math.max(0, maxQuantity - currentQuantity);
 
-  const canAdd =
-    !disabled && maxQuantity > 0 && remainingQuantity > 0;
+  const canAdd = !disabled && maxQuantity > 0 && remainingQuantity > 0;
 
   useEffect(() => {
     return () => {
@@ -99,21 +92,13 @@ export function AddToCartButton({
       disabled={!canAdd}
       aria-live="polite"
       className={`inline-flex min-h-12 w-full items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-white transition ${
-        added
-          ? "bg-emerald-600"
-          : "bg-neutral-950 hover:bg-emerald-700"
+        added ? "bg-emerald-600" : "bg-neutral-950 hover:bg-emerald-700"
       } disabled:cursor-not-allowed disabled:bg-neutral-300`}
     >
       {added ? (
-        <CheckCircle2
-          className="mr-2 size-4"
-          aria-hidden="true"
-        />
+        <CheckCircle2 className="mr-2 size-4" aria-hidden="true" />
       ) : (
-        <ShoppingCart
-          className="mr-2 size-4"
-          aria-hidden="true"
-        />
+        <ShoppingCart className="mr-2 size-4" aria-hidden="true" />
       )}
 
       {buttonLabel}

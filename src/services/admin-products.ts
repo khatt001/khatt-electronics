@@ -35,7 +35,9 @@ type AdminProductRow = {
 };
 
 function formatPrice(priceVisible: boolean, price: number | string | null) {
-  return priceVisible && price ? `${Number(price).toFixed(2)} AZN` : "Sorğu ilə";
+  return priceVisible && price
+    ? `${Number(price).toFixed(2)} AZN`
+    : "Sorğu ilə";
 }
 
 export async function getAdminProducts(): Promise<AdminProductListItem[]> {
@@ -59,7 +61,7 @@ export async function getAdminProducts(): Promise<AdminProductListItem[]> {
       brand:brands (
         name
       )
-    `
+    `,
     )
     .order("created_at", { ascending: false })
     .limit(100)
@@ -133,7 +135,7 @@ export type AdminProductDetail = {
 type AdminProductDetailRow = AdminProductDetail;
 
 export async function getAdminProductById(
-  id: string
+  id: string,
 ): Promise<AdminProductDetail | null> {
   const { data, error } = await supabaseAdmin
     .from("products")
@@ -181,7 +183,7 @@ export async function getAdminProductById(
         spec_value_ru,
         sort_order
       )
-    `
+    `,
     )
     .eq("id", id)
     .maybeSingle()

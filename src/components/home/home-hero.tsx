@@ -3,10 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import {
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type HomeHeroProps = {
   locale?: Locale;
@@ -14,42 +11,34 @@ type HomeHeroProps = {
 
 const heroTranslations = {
   az: {
-    mainAlt:
-      "Videomüşahidə və təhlükəsizlik sistemləri",
+    mainAlt: "Videomüşahidə və təhlükəsizlik sistemləri",
     eyebrow: "Yeni nəsil təhlükəsizlik",
-    title:
-      "Obyektiniz üçün tam təhlükəsizlik həlləri",
+    title: "Obyektiniz üçün tam təhlükəsizlik həlləri",
     description:
       "Videomüşahidə, yanğın siqnalizasiya, keçidə nəzarət və şəbəkə avadanlıqlarını bir ünvandan seçin.",
     productsButton: "Məhsullara bax",
-    fireAlt:
-      "Yanğın siqnalizasiya sistemləri",
+    fireAlt: "Yanğın siqnalizasiya sistemləri",
     fireEyebrow: "Yanğın təhlükəsizliyi",
     fireTitle: "Yanğın sistemləri",
-    fireDescription:
-      "Detektor, panel və xəbərdarlıq avadanlıqları.",
+    fireDescription: "Detektor, panel və xəbərdarlıq avadanlıqları.",
     fireButton: "Kataloqa keç",
     networkAlt: "Şəbəkə avadanlıqları",
     networkEyebrow: "Professional şəbəkə",
     networkTitle: "Şəbəkə avadanlıqları",
-    networkDescription:
-      "Router, switch, access point və kabel həlləri.",
+    networkDescription: "Router, switch, access point və kabel həlləri.",
     networkButton: "Məhsullara bax",
   },
   en: {
-    mainAlt:
-      "Video surveillance and security systems",
+    mainAlt: "Video surveillance and security systems",
     eyebrow: "Next-generation security",
-    title:
-      "Complete security solutions for your property",
+    title: "Complete security solutions for your property",
     description:
       "Choose video surveillance, fire alarms, access control and networking equipment from one place.",
     productsButton: "View products",
     fireAlt: "Fire alarm systems",
     fireEyebrow: "Fire safety",
     fireTitle: "Fire systems",
-    fireDescription:
-      "Detectors, control panels and alarm equipment.",
+    fireDescription: "Detectors, control panels and alarm equipment.",
     fireButton: "View catalog",
     networkAlt: "Network equipment",
     networkEyebrow: "Professional networking",
@@ -59,19 +48,16 @@ const heroTranslations = {
     networkButton: "View products",
   },
   ru: {
-    mainAlt:
-      "Системы видеонаблюдения и безопасности",
+    mainAlt: "Системы видеонаблюдения и безопасности",
     eyebrow: "Безопасность нового поколения",
-    title:
-      "Комплексные решения безопасности для вашего объекта",
+    title: "Комплексные решения безопасности для вашего объекта",
     description:
       "Выбирайте видеонаблюдение, пожарную сигнализацию, контроль доступа и сетевое оборудование в одном месте.",
     productsButton: "Смотреть товары",
     fireAlt: "Системы пожарной сигнализации",
     fireEyebrow: "Пожарная безопасность",
     fireTitle: "Пожарные системы",
-    fireDescription:
-      "Датчики, панели управления и оборудование оповещения.",
+    fireDescription: "Датчики, панели управления и оборудование оповещения.",
     fireButton: "Перейти в каталог",
     networkAlt: "Сетевое оборудование",
     networkEyebrow: "Профессиональная сеть",
@@ -82,9 +68,7 @@ const heroTranslations = {
   },
 } as const;
 
-export function HomeHero({
-  locale = "az",
-}: HomeHeroProps) {
+export function HomeHero({ locale = "az" }: HomeHeroProps) {
   const t = heroTranslations[locale];
 
   return (
@@ -92,10 +76,7 @@ export function HomeHero({
       <Container className="py-5 md:py-7">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2.2fr)_minmax(300px,0.8fr)]">
           <Link
-            href={localizedPath(
-              "/products",
-              locale,
-            )}
+            href={localizedPath("/products", locale)}
             className="group relative min-h-[420px] overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm md:min-h-[470px]"
           >
             <Image
@@ -184,10 +165,7 @@ export function HomeHero({
             </Link>
 
             <Link
-              href={`${localizedPath(
-                "/products",
-                locale,
-              )}?category=sebeke`}
+              href={`${localizedPath("/products", locale)}?category=sebeke`}
               className="group relative min-h-[225px] overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm"
             >
               <Image

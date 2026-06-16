@@ -1,17 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import {
-  AlertTriangle,
-  RefreshCw,
-} from "lucide-react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-import {
-  getLocaleFromPathname,
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { getLocaleFromPathname, localizedPath, type Locale } from "@/lib/i18n";
 
 const translations: Record<
   Locale,
@@ -56,12 +49,9 @@ type ErrorPageProps = {
   reset: () => void;
 };
 
-export default function ErrorPage({
-  reset,
-}: ErrorPageProps) {
+export default function ErrorPage({ reset }: ErrorPageProps) {
   const pathname = usePathname();
-  const locale =
-    getLocaleFromPathname(pathname);
+  const locale = getLocaleFromPathname(pathname);
 
   const t = translations[locale];
 
@@ -70,10 +60,7 @@ export default function ErrorPage({
       <section className="px-5 py-12 md:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10 lg:p-12">
           <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-red-50 text-red-700 md:size-20">
-            <AlertTriangle
-              className="size-8 md:size-9"
-              aria-hidden="true"
-            />
+            <AlertTriangle className="size-8 md:size-9" aria-hidden="true" />
           </div>
 
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-red-600">
@@ -94,19 +81,13 @@ export default function ErrorPage({
               onClick={reset}
               className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
-              <RefreshCw
-                className="mr-2 size-4"
-                aria-hidden="true"
-              />
+              <RefreshCw className="mr-2 size-4" aria-hidden="true" />
 
               {t.retry}
             </button>
 
             <Link
-              href={localizedPath(
-                "/",
-                locale,
-              )}
+              href={localizedPath("/", locale)}
               className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
             >
               {t.home}

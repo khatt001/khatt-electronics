@@ -110,8 +110,7 @@ export const compareTranslations = {
 
     emptyEyebrow: "Пустое сравнение",
     emptyTitle: "Нет товаров для сравнения",
-    emptyDescription:
-      "Добавьте товары в сравнение, чтобы упростить выбор.",
+    emptyDescription: "Добавьте товары в сравнение, чтобы упростить выбор.",
     emptyButton: "Смотреть товары",
   },
 } as const;

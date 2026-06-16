@@ -3,10 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import {
-  localizedPath,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, type Locale } from "@/lib/i18n";
 
 type PromoBannersProps = {
   locale?: Locale;
@@ -16,17 +13,13 @@ const promoTranslations = {
   az: {
     cctvAlt: "Videomüşahidə sistemi",
     cctvEyebrow: "Tam CCTV həlli",
-    cctvTitle:
-      "Obyektiniz üçün videomüşahidə sistemi",
+    cctvTitle: "Obyektiniz üçün videomüşahidə sistemi",
     cctvDescription:
       "Kamera, qeydiyyat cihazı, disk və şəbəkə avadanlıqlarını bir yerdən seçin.",
     cctvButton: "Məhsullara bax",
-    fireAlt:
-      "Yanğın təhlükəsizlik layihəsi",
-    fireEyebrow:
-      "Layihələndirmə və quraşdırma",
-    fireTitle:
-      "Yanğın sistemi üçün qiymət təklifi",
+    fireAlt: "Yanğın təhlükəsizlik layihəsi",
+    fireEyebrow: "Layihələndirmə və quraşdırma",
+    fireTitle: "Yanğın sistemi üçün qiymət təklifi",
     fireDescription:
       "Obyektinizə uyğun avadanlıq siyahısı və texniki həll hazırlayaq.",
     fireButton: "Sorğu göndər",
@@ -34,16 +27,13 @@ const promoTranslations = {
   en: {
     cctvAlt: "Video surveillance system",
     cctvEyebrow: "Complete CCTV solution",
-    cctvTitle:
-      "Video surveillance system for your property",
+    cctvTitle: "Video surveillance system for your property",
     cctvDescription:
       "Choose cameras, recorders, storage and network equipment in one place.",
     cctvButton: "View products",
     fireAlt: "Fire safety project",
-    fireEyebrow:
-      "Design and installation",
-    fireTitle:
-      "Get a quote for a fire system",
+    fireEyebrow: "Design and installation",
+    fireTitle: "Get a quote for a fire system",
     fireDescription:
       "Let us prepare an equipment list and technical solution for your property.",
     fireButton: "Send inquiry",
@@ -51,26 +41,20 @@ const promoTranslations = {
   ru: {
     cctvAlt: "Система видеонаблюдения",
     cctvEyebrow: "Полное CCTV-решение",
-    cctvTitle:
-      "Система видеонаблюдения для вашего объекта",
+    cctvTitle: "Система видеонаблюдения для вашего объекта",
     cctvDescription:
       "Выбирайте камеры, регистраторы, накопители и сетевое оборудование в одном месте.",
     cctvButton: "Смотреть товары",
-    fireAlt:
-      "Проект пожарной безопасности",
-    fireEyebrow:
-      "Проектирование и монтаж",
-    fireTitle:
-      "Получите предложение на пожарную систему",
+    fireAlt: "Проект пожарной безопасности",
+    fireEyebrow: "Проектирование и монтаж",
+    fireTitle: "Получите предложение на пожарную систему",
     fireDescription:
       "Подготовим перечень оборудования и техническое решение для вашего объекта.",
     fireButton: "Отправить заявку",
   },
 } as const;
 
-export function PromoBanners({
-  locale = "az",
-}: PromoBannersProps) {
+export function PromoBanners({ locale = "az" }: PromoBannersProps) {
   const t = promoTranslations[locale];
 
   return (
@@ -119,10 +103,7 @@ export function PromoBanners({
           </Link>
 
           <Link
-            href={localizedPath(
-              "/contact",
-              locale,
-            )}
+            href={localizedPath("/contact", locale)}
             className="group relative min-h-[340px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"
           >
             <Image

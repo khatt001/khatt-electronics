@@ -50,7 +50,8 @@ export const productDetailTranslations = {
     preOrderAvailable: "Pre-order is available",
     outOfStock: "Out of stock",
 
-    whatsappTextPrefix: "Hello. I would like to get information about this product:",
+    whatsappTextPrefix:
+      "Hello. I would like to get information about this product:",
     whatsappButton: "Get consultation via WhatsApp",
 
     trustItems: ["Warranty", "Installation", "Technical support"],
@@ -85,7 +86,8 @@ export const productDetailTranslations = {
     preOrderAvailable: "Предзаказ доступен",
     outOfStock: "Нет в наличии",
 
-    whatsappTextPrefix: "Здравствуйте. Я хочу получить информацию об этом товаре:",
+    whatsappTextPrefix:
+      "Здравствуйте. Я хочу получить информацию об этом товаре:",
     whatsappButton: "Получить консультацию в WhatsApp",
 
     trustItems: ["Гарантия", "Установка", "Техническая поддержка"],

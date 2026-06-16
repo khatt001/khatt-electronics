@@ -57,10 +57,7 @@ function getLocalizedStock(
 ) {
   const t = productCardTranslations[locale];
 
-  if (
-    product.stockStatus === "in_stock" &&
-    product.stockQuantity > 0
-  ) {
+  if (product.stockStatus === "in_stock" && product.stockQuantity > 0) {
     return `${t.inStockPrefix} ${product.stockQuantity} ${t.inStockSuffix}`;
   }
 
@@ -92,30 +89,15 @@ export function ProductCard({
     product.stockStatus === "in_stock" &&
     product.stockQuantity > 0;
 
-  const localizedHref = localizedPath(
-    product.href,
-    locale,
-  );
+  const localizedHref = localizedPath(product.href, locale);
 
-  const localizedBadge = getLocalizedBadge(
-    product,
-    locale,
-  );
+  const localizedBadge = getLocalizedBadge(product, locale);
 
-  const localizedPrice = getLocalizedPrice(
-    product,
-    locale,
-  );
+  const localizedPrice = getLocalizedPrice(product, locale);
 
-  const localizedStock = getLocalizedStock(
-    product,
-    locale,
-  );
+  const localizedStock = getLocalizedStock(product, locale);
 
-  const localizedCategory = getCategoryName(
-    product.category,
-    locale,
-  );
+  const localizedCategory = getCategoryName(product.category, locale);
 
   const sharedItem = {
     id: product.id,
@@ -176,10 +158,7 @@ export function ProductCard({
             />
           ) : (
             <div className="flex size-24 items-center justify-center rounded-2xl border border-neutral-200 bg-white text-neutral-500 shadow-sm">
-              <ShoppingBag
-                className="size-9"
-                aria-hidden="true"
-              />
+              <ShoppingBag className="size-9" aria-hidden="true" />
             </div>
           )}
         </Link>
@@ -196,15 +175,9 @@ export function ProductCard({
 
         {!compact ? (
           <div className="absolute right-4 top-4 z-30 flex flex-col gap-2">
-            <FavoriteButton
-              item={sharedItem}
-              locale={locale}
-            />
+            <FavoriteButton item={sharedItem} locale={locale} />
 
-            <CompareButton
-              item={sharedItem}
-              locale={locale}
-            />
+            <CompareButton item={sharedItem} locale={locale} />
           </div>
         ) : null}
       </div>
@@ -273,9 +246,7 @@ export function ProductCard({
           <div className="flex items-end justify-between gap-3">
             <div className="min-w-0">
               {!compact ? (
-                <p className="text-xs text-neutral-500">
-                  {t.priceLabel}
-                </p>
+                <p className="text-xs text-neutral-500">{t.priceLabel}</p>
               ) : null}
 
               <p
@@ -311,10 +282,7 @@ export function ProductCard({
                 aria-label={`${product.name} ${t.viewProductAria}`}
                 className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-700 transition hover:border-emerald-600 hover:bg-emerald-600 hover:text-white"
               >
-                <ArrowUpRight
-                  className="size-4"
-                  aria-hidden="true"
-                />
+                <ArrowUpRight className="size-4" aria-hidden="true" />
               </Link>
             )}
           </div>

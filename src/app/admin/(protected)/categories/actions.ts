@@ -69,7 +69,7 @@ export async function createCategory(formData: FormData) {
 
   if (!parsed.success) {
     const message = encodeURIComponent(
-      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
 
     redirect(`/admin/categories?error=${message}`);
@@ -86,8 +86,8 @@ export async function createCategory(formData: FormData) {
   if (Number.isNaN(sortOrder)) {
     redirect(
       `/admin/categories?error=${encodeURIComponent(
-        "Sıralama düzgün rəqəm olmalıdır."
-      )}`
+        "Sıralama düzgün rəqəm olmalıdır.",
+      )}`,
     );
   }
 
@@ -106,8 +106,8 @@ export async function createCategory(formData: FormData) {
   if (error) {
     redirect(
       `/admin/categories?error=${encodeURIComponent(
-        "Kateqoriya əlavə edilmədi. Slug təkrarlana bilər."
-      )}`
+        "Kateqoriya əlavə edilmədi. Slug təkrarlana bilər.",
+      )}`,
     );
   }
 
@@ -118,7 +118,7 @@ export async function createCategory(formData: FormData) {
 
 export async function toggleCategoryStatus(
   categoryId: string,
-  isActive: boolean
+  isActive: boolean,
 ) {
   await requireAdmin();
 
@@ -130,8 +130,8 @@ export async function toggleCategoryStatus(
   if (error) {
     redirect(
       `/admin/categories?error=${encodeURIComponent(
-        "Kateqoriya statusu dəyişdirilə bilmədi."
-      )}`
+        "Kateqoriya statusu dəyişdirilə bilmədi.",
+      )}`,
     );
   }
 

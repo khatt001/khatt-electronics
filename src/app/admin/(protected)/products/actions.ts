@@ -65,7 +65,10 @@ function createSeoTitle(name: string, brand?: string | null) {
   const cleanName = name.trim();
   const cleanBrand = brand?.trim();
 
-  if (cleanBrand && !cleanName.toLowerCase().includes(cleanBrand.toLowerCase())) {
+  if (
+    cleanBrand &&
+    !cleanName.toLowerCase().includes(cleanBrand.toLowerCase())
+  ) {
     return `${cleanName} | ${cleanBrand} | KHATT Electronics`;
   }
 
@@ -90,7 +93,7 @@ function createSeoDescription({
   const parts = [brand?.trim(), name.trim(), category?.trim()].filter(Boolean);
 
   return `${parts.join(
-    " "
+    " ",
   )} üçün KHATT Electronics-də peşəkar seçim, texniki məsləhət və qiymət təklifi imkanı.`;
 }
 
@@ -169,7 +172,7 @@ async function uploadProductImage(
   productId: string,
   slug: string,
   image: File,
-  sortOrder: number
+  sortOrder: number,
 ) {
   if (image.size === 0) return null;
 
@@ -273,8 +276,14 @@ function getProductPayload({
     category_id: product.category_id,
     brand_id: product.brand_id || null,
     short_description_az: autoShortDescription,
-    short_description_en: getOptionalFormValue(formData, "short_description_en"),
-    short_description_ru: getOptionalFormValue(formData, "short_description_ru"),
+    short_description_en: getOptionalFormValue(
+      formData,
+      "short_description_en",
+    ),
+    short_description_ru: getOptionalFormValue(
+      formData,
+      "short_description_ru",
+    ),
     description_az: autoDescription,
     description_en: getOptionalFormValue(formData, "description_en"),
     description_ru: getOptionalFormValue(formData, "description_ru"),
@@ -324,7 +333,7 @@ async function parseProductForm({
 
   if (!parsed.success) {
     const message = encodeURIComponent(
-      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
 
     redirect(`${errorPath}?error=${message}`);
@@ -371,8 +380,8 @@ async function parseProductForm({
   if (price !== null && Number.isNaN(price)) {
     redirect(
       `${errorPath}?error=${encodeURIComponent(
-        "Qiymət düzgün formatda deyil."
-      )}`
+        "Qiymət düzgün formatda deyil.",
+      )}`,
     );
   }
 
@@ -407,16 +416,16 @@ async function uploadProductImagesFromForm({
   if (images.length > 8) {
     redirect(
       `${errorPath}?error=${encodeURIComponent(
-        "Bir dəfəyə maksimum 8 şəkil əlavə etmək olar."
-      )}`
+        "Bir dəfəyə maksimum 8 şəkil əlavə etmək olar.",
+      )}`,
     );
   }
 
   if (currentImageCount + images.length > 8) {
     redirect(
       `${errorPath}?error=${encodeURIComponent(
-        "Bir məhsul üçün maksimum 8 şəkil ola bilər."
-      )}`
+        "Bir məhsul üçün maksimum 8 şəkil ola bilər.",
+      )}`,
     );
   }
 
@@ -425,12 +434,14 @@ async function uploadProductImagesFromForm({
   try {
     await Promise.all(
       images.map((image, index) =>
-        uploadProductImage(productId, slug, image, currentImageCount + index)
-      )
+        uploadProductImage(productId, slug, image, currentImageCount + index),
+      ),
     );
   } catch (uploadError) {
     const message =
-      uploadError instanceof Error ? uploadError.message : "Şəkillər yüklənmədi.";
+      uploadError instanceof Error
+        ? uploadError.message
+        : "Şəkillər yüklənmədi.";
 
     redirect(`${errorPath}?error=${encodeURIComponent(message)}`);
   }
@@ -448,7 +459,7 @@ export async function createProduct(formData: FormData) {
       getProductPayload({
         formData,
         ...parsedForm,
-      })
+      }),
     )
     .select("id")
     .single();
@@ -482,7 +493,7 @@ export async function updateProduct(productId: string, formData: FormData) {
       getProductPayload({
         formData,
         ...parsedForm,
-      })
+      }),
     )
     .eq("id", productId);
 
@@ -534,8 +545,8 @@ export async function archiveProduct(productId: string) {
   if (error) {
     redirect(
       `/admin/products?error=${encodeURIComponent(
-        "Məhsul arxiv edilə bilmədi."
-      )}`
+        "Məhsul arxiv edilə bilmədi.",
+      )}`,
     );
   }
 
@@ -572,8 +583,8 @@ export async function deleteProductImage(productId: string, imageId: string) {
   if (fetchError || !image) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Şəkil tapılmadı."
-      )}`
+        "Şəkil tapılmadı.",
+      )}`,
     );
   }
 
@@ -592,8 +603,8 @@ export async function deleteProductImage(productId: string, imageId: string) {
   if (deleteError) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Şəkil silinə bilmədi."
-      )}`
+        "Şəkil silinə bilmədi.",
+      )}`,
     );
   }
 
@@ -626,7 +637,10 @@ export async function deleteProductImage(productId: string, imageId: string) {
   redirect(`/admin/products/${productId}/edit`);
 }
 
-export async function setPrimaryProductImage(productId: string, imageId: string) {
+export async function setPrimaryProductImage(
+  productId: string,
+  imageId: string,
+) {
   await requireAdmin();
 
   const { data: selectedImage, error: selectedImageError } = await supabaseAdmin
@@ -639,8 +653,8 @@ export async function setPrimaryProductImage(productId: string, imageId: string)
   if (selectedImageError || !selectedImage) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Şəkil tapılmadı."
-      )}`
+        "Şəkil tapılmadı.",
+      )}`,
     );
   }
 
@@ -664,8 +678,8 @@ export async function setPrimaryProductImage(productId: string, imageId: string)
   if (error) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Əsas şəkil dəyişdirilə bilmədi."
-      )}`
+        "Əsas şəkil dəyişdirilə bilmədi.",
+      )}`,
     );
   }
 
@@ -677,7 +691,7 @@ export async function setPrimaryProductImage(productId: string, imageId: string)
 
 export async function addProductSpecification(
   productId: string,
-  formData: FormData
+  formData: FormData,
 ) {
   await requireAdmin();
 
@@ -692,8 +706,8 @@ export async function addProductSpecification(
   if (!specKeyAz || !specValueAz) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Texniki göstərici üçün AZ açar və AZ dəyər yazılmalıdır."
-      )}`
+        "Texniki göstərici üçün AZ açar və AZ dəyər yazılmalıdır.",
+      )}`,
     );
   }
 
@@ -724,8 +738,8 @@ export async function addProductSpecification(
   if (error) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Texniki göstərici əlavə edilmədi."
-      )}`
+        "Texniki göstərici əlavə edilmədi.",
+      )}`,
     );
   }
 
@@ -737,7 +751,7 @@ export async function addProductSpecification(
 
 export async function deleteProductSpecification(
   productId: string,
-  specificationId: string
+  specificationId: string,
 ) {
   await requireAdmin();
 
@@ -756,8 +770,8 @@ export async function deleteProductSpecification(
   if (error) {
     redirect(
       `/admin/products/${productId}/edit?error=${encodeURIComponent(
-        "Texniki göstərici silinə bilmədi."
-      )}`
+        "Texniki göstərici silinə bilmədi.",
+      )}`,
     );
   }
 

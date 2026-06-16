@@ -128,7 +128,8 @@ export function generateProductsListingMetadata({
       type: "website",
     },
   };
-}export async function generateCategoryPageMetadata({
+}
+export async function generateCategoryPageMetadata({
   slug,
   query,
   locale,

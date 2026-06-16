@@ -14,20 +14,20 @@ const inquirySchema = z.object({
 });
 
 export async function createInquiry(formData: FormData) {
- const rawData = {
-  full_name: String(formData.get("full_name") ?? "").trim(),
-  phone: String(formData.get("phone") ?? "").trim(),
-  email: String(formData.get("email") ?? "").trim(),
-  company_name: String(formData.get("company_name") ?? "").trim(),
-  message: String(formData.get("message") ?? "").trim(),
-  source: String(formData.get("source") ?? "contact_page").trim(),
-};
+  const rawData = {
+    full_name: String(formData.get("full_name") ?? "").trim(),
+    phone: String(formData.get("phone") ?? "").trim(),
+    email: String(formData.get("email") ?? "").trim(),
+    company_name: String(formData.get("company_name") ?? "").trim(),
+    message: String(formData.get("message") ?? "").trim(),
+    source: String(formData.get("source") ?? "contact_page").trim(),
+  };
 
   const parsed = inquirySchema.safeParse(rawData);
 
   if (!parsed.success) {
     const message = encodeURIComponent(
-      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil."
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
 
     redirect(`/contact?error=${message}`);
@@ -64,8 +64,8 @@ export async function createInquiry(formData: FormData) {
   if (error) {
     redirect(
       `/contact?error=${encodeURIComponent(
-        "Sorğu göndərilmədi. Zəhmət olmasa bir az sonra yenidən cəhd edin."
-      )}`
+        "Sorğu göndərilmədi. Zəhmət olmasa bir az sonra yenidən cəhd edin.",
+      )}`,
     );
   }
 

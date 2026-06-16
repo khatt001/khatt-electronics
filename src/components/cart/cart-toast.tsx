@@ -1,18 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import {
-  CheckCircle2,
-  X,
-} from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
 import { localizedPath } from "@/lib/i18n";
 
-type CartToastLocale =
-  | "az"
-  | "en"
-  | "ru";
+type CartToastLocale = "az" | "en" | "ru";
 
 type CartToastProps = {
   locale?: CartToastLocale;
@@ -39,9 +33,7 @@ const cartToastTranslations = {
   },
 } as const;
 
-export function CartToast({
-  locale = "az",
-}: CartToastProps) {
+export function CartToast({ locale = "az" }: CartToastProps) {
   const { toast, hideToast } = useCart();
   const t = cartToastTranslations[locale];
 
@@ -55,16 +47,11 @@ export function CartToast({
     >
       <div className="flex gap-3">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-          <CheckCircle2
-            className="size-5"
-            aria-hidden="true"
-          />
+          <CheckCircle2 className="size-5" aria-hidden="true" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-neutral-950">
-            {t.title}
-          </p>
+          <p className="font-semibold text-neutral-950">{t.title}</p>
 
           <p className="mt-1 line-clamp-1 text-sm text-neutral-500">
             {toast.productName}
@@ -72,10 +59,7 @@ export function CartToast({
 
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
-              href={localizedPath(
-                "/cart",
-                locale,
-              )}
+              href={localizedPath("/cart", locale)}
               onClick={hideToast}
               className="inline-flex min-h-9 items-center justify-center rounded-lg bg-neutral-950 px-4 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700"
             >
@@ -98,10 +82,7 @@ export function CartToast({
           aria-label={t.closeAria}
           className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-neutral-400 transition hover:bg-red-50 hover:text-red-600"
         >
-          <X
-            className="size-4"
-            aria-hidden="true"
-          />
+          <X className="size-4" aria-hidden="true" />
         </button>
       </div>
     </div>

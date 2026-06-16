@@ -2,10 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import {
-  aboutTranslations,
-  type AboutLocale,
-} from "@/data/translations/about";
+import { aboutTranslations, type AboutLocale } from "@/data/translations/about";
 import { localizedPath } from "@/lib/i18n";
 
 type AboutPageViewProps = {
@@ -45,10 +42,7 @@ export function AboutPageView({ locale = "az" }: AboutPageViewProps) {
                 >
                   {t.contactButton}
 
-                  <ArrowRight
-                    className="ml-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
 
                 <Link

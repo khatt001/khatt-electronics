@@ -20,7 +20,9 @@ export async function generateMetadata({
   });
 }
 
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+export default async function ProductsPage({
+  searchParams,
+}: ProductsPageProps) {
   const query = await searchParams;
 
   return <ProductsPageView query={query} locale="az" />;

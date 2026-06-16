@@ -52,7 +52,7 @@ function getLocalizedProductName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: SearchLocale
+  locale: SearchLocale,
 ) {
   if (locale === "en") return product.name_en || product.name_az;
   if (locale === "ru") return product.name_ru || product.name_az;
@@ -66,7 +66,7 @@ function getLocalizedCategoryName(
     name_en: string | null;
     name_ru: string | null;
   },
-  locale: SearchLocale
+  locale: SearchLocale,
 ) {
   if (locale === "en") return category.name_en || category.name_az;
   if (locale === "ru") return category.name_ru || category.name_az;
@@ -77,7 +77,7 @@ function getLocalizedCategoryName(
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
-  locale: SearchLocale
+  locale: SearchLocale,
 ) {
   const t = searchApiTranslations[locale];
 
@@ -127,11 +127,11 @@ export async function GET(request: Request) {
         url,
         is_primary
       )
-    `
+    `,
     )
     .eq("status", "active")
     .or(
-      `name_az.ilike.%${cleanQuery}%,name_en.ilike.%${cleanQuery}%,name_ru.ilike.%${cleanQuery}%`
+      `name_az.ilike.%${cleanQuery}%,name_en.ilike.%${cleanQuery}%,name_ru.ilike.%${cleanQuery}%`,
     )
     .order("created_at", { ascending: false })
     .limit(6)

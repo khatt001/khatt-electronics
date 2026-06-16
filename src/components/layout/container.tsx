@@ -7,9 +7,5 @@ export function Container({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div className={cn("container-custom", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("container-custom", className)}>{children}</div>;
 }

@@ -28,16 +28,11 @@ type FavoriteButtonProps = {
   locale?: FavoriteButtonLocale;
 };
 
-export function FavoriteButton({
-  item,
-  locale = "az",
-}: FavoriteButtonProps) {
+export function FavoriteButton({ item, locale = "az" }: FavoriteButtonProps) {
   const { items, toggleFavorite } = useFavorites();
   const t = favoriteButtonTranslations[locale];
 
-  const isFavorite = items.some(
-    (favoriteItem) => favoriteItem.id === item.id,
-  );
+  const isFavorite = items.some((favoriteItem) => favoriteItem.id === item.id);
 
   const label = isFavorite ? t.remove : t.add;
 
@@ -56,10 +51,7 @@ export function FavoriteButton({
       )}
     >
       <Heart
-        className={cn(
-          "size-5 transition",
-          isFavorite ? "fill-current" : "",
-        )}
+        className={cn("size-5 transition", isFavorite ? "fill-current" : "")}
         aria-hidden="true"
       />
     </button>

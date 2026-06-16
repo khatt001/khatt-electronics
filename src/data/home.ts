@@ -18,37 +18,73 @@ export const catalogCategories = {
     {
       title: "Video Nəzarət Sistemi",
       href: "/category/video-nezaret",
-      subcategories: ["IP kameralar", "Analog kameralar", "NVR", "DVR", "PTZ kameralar"],
+      subcategories: [
+        "IP kameralar",
+        "Analog kameralar",
+        "NVR",
+        "DVR",
+        "PTZ kameralar",
+      ],
     },
     {
       title: "Girişə Nəzarət",
       href: "/category/girise-nezaret",
-      subcategories: ["Biometrik terminallar", "Kart oxuyucular", "Turniketlər", "Elektron kilidlər"],
+      subcategories: [
+        "Biometrik terminallar",
+        "Kart oxuyucular",
+        "Turniketlər",
+        "Elektron kilidlər",
+      ],
     },
     {
       title: "Domofoniya",
       href: "/category/domofoniya",
-      subcategories: ["IP domofonlar", "Analog domofonlar", "Monitorlar", "Çağırış panelləri"],
+      subcategories: [
+        "IP domofonlar",
+        "Analog domofonlar",
+        "Monitorlar",
+        "Çağırış panelləri",
+      ],
     },
     {
       title: "Ağıllı Ev Sistemləri",
       href: "/category/agilli-ev",
-      subcategories: ["Smart hub", "Sensorlar", "İşıqlandırma", "Avtomatlaşdırma"],
+      subcategories: [
+        "Smart hub",
+        "Sensorlar",
+        "İşıqlandırma",
+        "Avtomatlaşdırma",
+      ],
     },
     {
       title: "Yanğın Sistemləri",
       href: "/category/yangin-sistemleri",
-      subcategories: ["Detektorlar", "İdarəetmə panelləri", "Sirena", "Yanğın kabeli"],
+      subcategories: [
+        "Detektorlar",
+        "İdarəetmə panelləri",
+        "Sirena",
+        "Yanğın kabeli",
+      ],
     },
     {
       title: "Təhlükəsizlik Siqnalizasiyası",
       href: "/category/siqnalizasiya",
-      subcategories: ["Simli sistemlər", "Simsiz sistemlər", "Sensorlar", "Sirenalar"],
+      subcategories: [
+        "Simli sistemlər",
+        "Simsiz sistemlər",
+        "Sensorlar",
+        "Sirenalar",
+      ],
     },
     {
       title: "Şəbəkə Avadanlıqları",
       href: "/category/sebeke",
-      subcategories: ["PoE switch", "Routerlər", "Access point", "SFP modullar"],
+      subcategories: [
+        "PoE switch",
+        "Routerlər",
+        "Access point",
+        "SFP modullar",
+      ],
     },
     {
       title: "Kabellər və Aksessuarlar",
@@ -61,17 +97,33 @@ export const catalogCategories = {
     {
       title: "Video Surveillance System",
       href: "/en/category/video-nezaret",
-      subcategories: ["IP cameras", "Analog cameras", "NVR", "DVR", "PTZ cameras"],
+      subcategories: [
+        "IP cameras",
+        "Analog cameras",
+        "NVR",
+        "DVR",
+        "PTZ cameras",
+      ],
     },
     {
       title: "Access Control",
       href: "/en/category/girise-nezaret",
-      subcategories: ["Biometric terminals", "Card readers", "Turnstiles", "Electronic locks"],
+      subcategories: [
+        "Biometric terminals",
+        "Card readers",
+        "Turnstiles",
+        "Electronic locks",
+      ],
     },
     {
       title: "Intercom",
       href: "/en/category/domofoniya",
-      subcategories: ["IP intercoms", "Analog intercoms", "Monitors", "Call panels"],
+      subcategories: [
+        "IP intercoms",
+        "Analog intercoms",
+        "Monitors",
+        "Call panels",
+      ],
     },
     {
       title: "Smart Home Systems",
@@ -104,17 +156,33 @@ export const catalogCategories = {
     {
       title: "Система видеонаблюдения",
       href: "/ru/category/video-nezaret",
-      subcategories: ["IP камеры", "Аналоговые камеры", "NVR", "DVR", "PTZ камеры"],
+      subcategories: [
+        "IP камеры",
+        "Аналоговые камеры",
+        "NVR",
+        "DVR",
+        "PTZ камеры",
+      ],
     },
     {
       title: "Контроль доступа",
       href: "/ru/category/girise-nezaret",
-      subcategories: ["Биометрические терминалы", "Считыватели карт", "Турникеты", "Электронные замки"],
+      subcategories: [
+        "Биометрические терминалы",
+        "Считыватели карт",
+        "Турникеты",
+        "Электронные замки",
+      ],
     },
     {
       title: "Домофония",
       href: "/ru/category/domofoniya",
-      subcategories: ["IP домофоны", "Аналоговые домофоны", "Мониторы", "Вызывные панели"],
+      subcategories: [
+        "IP домофоны",
+        "Аналоговые домофоны",
+        "Мониторы",
+        "Вызывные панели",
+      ],
     },
     {
       title: "Системы умного дома",
@@ -124,12 +192,22 @@ export const catalogCategories = {
     {
       title: "Пожарные системы",
       href: "/ru/category/yangin-sistemleri",
-      subcategories: ["Детекторы", "Панели управления", "Сирена", "Пожарный кабель"],
+      subcategories: [
+        "Детекторы",
+        "Панели управления",
+        "Сирена",
+        "Пожарный кабель",
+      ],
     },
     {
       title: "Охранная сигнализация",
       href: "/ru/category/siqnalizasiya",
-      subcategories: ["Проводные системы", "Беспроводные системы", "Датчики", "Сирены"],
+      subcategories: [
+        "Проводные системы",
+        "Беспроводные системы",
+        "Датчики",
+        "Сирены",
+      ],
     },
     {
       title: "Сетевое оборудование",
@@ -142,11 +220,14 @@ export const catalogCategories = {
       subcategories: ["UTP кабель", "Коаксиальный кабель", "BNC", "Адаптеры"],
     },
   ],
-} satisfies Record<Locale, readonly {
-  title: string;
-  href: string;
-  subcategories: readonly string[];
-}[]>;
+} satisfies Record<
+  Locale,
+  readonly {
+    title: string;
+    href: string;
+    subcategories: readonly string[];
+  }[]
+>;
 
 export const categoryCards = {
   az: [
@@ -215,7 +296,8 @@ export const categoryCards = {
     },
     {
       title: "Network",
-      description: "PoE switches, routers, access points and optical equipment.",
+      description:
+        "PoE switches, routers, access points and optical equipment.",
       href: "/en/category/sebeke",
       icon: Network,
     },
@@ -254,7 +336,8 @@ export const categoryCards = {
     },
     {
       title: "Сеть",
-      description: "PoE switch, router, access point и оптическое оборудование.",
+      description:
+        "PoE switch, router, access point и оптическое оборудование.",
       href: "/ru/category/sebeke",
       icon: Network,
     },
@@ -265,12 +348,15 @@ export const categoryCards = {
       icon: Home,
     },
   ],
-} satisfies Record<Locale, readonly {
-  title: string;
-  description: string;
-  href: string;
-  icon: typeof Camera;
-}[]>;
+} satisfies Record<
+  Locale,
+  readonly {
+    title: string;
+    description: string;
+    href: string;
+    icon: typeof Camera;
+  }[]
+>;
 
 export const featuredProducts = {
   az: [
@@ -365,13 +451,16 @@ export const featuredProducts = {
       href: "/ru/products",
     },
   ],
-} satisfies Record<Locale, readonly {
-  name: string;
-  category: string;
-  price: string;
-  badge: string;
-  href: string;
-}[]>;
+} satisfies Record<
+  Locale,
+  readonly {
+    name: string;
+    category: string;
+    price: string;
+    badge: string;
+    href: string;
+  }[]
+>;
 
 export const quickStats = {
   az: [
@@ -463,40 +552,57 @@ export const promoItems = {
     },
     {
       title: "Сетевое и PoE оборудование",
-      description:
-        "Выберите PoE switch, router и access point под ваш проект.",
+      description: "Выберите PoE switch, router и access point под ваш проект.",
       href: "/ru/category/sebeke",
       icon: Router,
     },
   ],
-} satisfies Record<Locale, readonly {
-  title: string;
-  description: string;
-  href: string;
-  icon: typeof Monitor;
-}[]>;
+} satisfies Record<
+  Locale,
+  readonly {
+    title: string;
+    description: string;
+    href: string;
+    icon: typeof Monitor;
+  }[]
+>;
 
 export const miniCategories = {
   az: [
     { title: "Enerji təminatı", href: "/products", icon: Zap },
-    { title: "Yanğın sistemi", href: "/category/yangin-sistemleri", icon: Flame },
+    {
+      title: "Yanğın sistemi",
+      href: "/category/yangin-sistemleri",
+      icon: Flame,
+    },
     { title: "Kabellər", href: "/category/kabeller", icon: Cable },
   ],
   en: [
     { title: "Power supply", href: "/en/products", icon: Zap },
-    { title: "Fire system", href: "/en/category/yangin-sistemleri", icon: Flame },
+    {
+      title: "Fire system",
+      href: "/en/category/yangin-sistemleri",
+      icon: Flame,
+    },
     { title: "Cables", href: "/en/category/kabeller", icon: Cable },
   ],
   ru: [
     { title: "Питание", href: "/ru/products", icon: Zap },
-    { title: "Пожарная система", href: "/ru/category/yangin-sistemleri", icon: Flame },
+    {
+      title: "Пожарная система",
+      href: "/ru/category/yangin-sistemleri",
+      icon: Flame,
+    },
     { title: "Кабели", href: "/ru/category/kabeller", icon: Cable },
   ],
-} satisfies Record<Locale, readonly {
-  title: string;
-  href: string;
-  icon: typeof Zap;
-}[]>;
+} satisfies Record<
+  Locale,
+  readonly {
+    title: string;
+    href: string;
+    icon: typeof Zap;
+  }[]
+>;
 
 export const defaultHomeData = {
   catalogCategories: catalogCategories.az,

@@ -11,11 +11,7 @@ import { NavbarSearch } from "@/components/layout/navbar-search";
 import { getMainNavigationLinks } from "@/data/navigation";
 import { siteConfig } from "@/data/site";
 import { navbarTranslations } from "@/data/translations/navbar";
-import {
-  localizedPath,
-  switchLocalePathname,
-  type Locale,
-} from "@/lib/i18n";
+import { localizedPath, switchLocalePathname, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type NavbarProps = {
@@ -23,15 +19,9 @@ type NavbarProps = {
   pathname?: string;
 };
 
-export default function Navbar({
-  locale = "az",
-  pathname = "/",
-}: NavbarProps) {
+export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
   const t = navbarTranslations[locale];
-  const navLinks = getMainNavigationLinks(
-    t.navLinks,
-    locale,
-  );
+  const navLinks = getMainNavigationLinks(t.navLinks, locale);
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-neutral-200 bg-white/95 backdrop-blur-xl">
@@ -43,10 +33,7 @@ export default function Navbar({
                 href={siteConfig.phoneHref}
                 className="inline-flex items-center gap-2 transition hover:text-white"
               >
-                <Phone
-                  className="size-3.5"
-                  aria-hidden="true"
-                />
+                <Phone className="size-3.5" aria-hidden="true" />
                 {siteConfig.phone}
               </a>
 
@@ -54,35 +41,24 @@ export default function Navbar({
                 href={siteConfig.emailHref}
                 className="inline-flex items-center gap-2 transition hover:text-white"
               >
-                <Mail
-                  className="size-3.5"
-                  aria-hidden="true"
-                />
+                <Mail className="size-3.5" aria-hidden="true" />
                 {siteConfig.email}
               </a>
 
               <span className="inline-flex items-center gap-2">
-                <Clock
-                  className="size-3.5"
-                  aria-hidden="true"
-                />
+                <Clock className="size-3.5" aria-hidden="true" />
                 {t.workingHours}
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-white/45">
-                {t.languageLabel}
-              </span>
+              <span className="text-white/45">{t.languageLabel}</span>
 
               <div className="flex items-center gap-2">
                 {t.languages.map((language) => (
                   <Link
                     key={language.label}
-                    href={switchLocalePathname(
-                      pathname,
-                      language.locale,
-                    )}
+                    href={switchLocalePathname(pathname, language.locale)}
                     className={cn(
                       "transition hover:text-white",
                       language.locale === locale
@@ -114,10 +90,7 @@ export default function Navbar({
           </div>
 
           <div className="hidden flex-1 lg:block">
-            <NavbarSearch
-              placeholder={t.searchPlaceholder}
-              locale={locale}
-            />
+            <NavbarSearch placeholder={t.searchPlaceholder} locale={locale} />
           </div>
 
           <nav
@@ -140,10 +113,7 @@ export default function Navbar({
               {t.languages.map((language) => (
                 <Link
                   key={language.label}
-                  href={switchLocalePathname(
-                    pathname,
-                    language.locale,
-                  )}
+                  href={switchLocalePathname(pathname, language.locale)}
                   className={cn(
                     "rounded-md px-2 py-1 text-[11px] font-semibold transition",
                     language.locale === locale
@@ -161,10 +131,7 @@ export default function Navbar({
             <CartNavLink locale={locale} />
 
             <Link
-              href={localizedPath(
-                "/track-order",
-                locale,
-              )}
+              href={localizedPath("/track-order", locale)}
               className="hidden min-h-10 items-center rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:border-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 lg:inline-flex"
             >
               {t.trackOrder}
@@ -180,10 +147,7 @@ export default function Navbar({
         </div>
 
         <div className="border-t border-neutral-200 py-2 lg:hidden">
-          <NavbarSearch
-            placeholder={t.searchPlaceholder}
-            locale={locale}
-          />
+          <NavbarSearch placeholder={t.searchPlaceholder} locale={locale} />
         </div>
 
         <div className="hidden h-12 items-center gap-8 overflow-x-auto border-t border-neutral-200 lg:flex xl:hidden">

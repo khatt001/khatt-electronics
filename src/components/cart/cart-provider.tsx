@@ -19,7 +19,6 @@ import {
 } from "@/lib/cart";
 import { getClientLocaleFromPathname } from "@/lib/client-locale";
 
-
 type AddToCartInput = Omit<CartItem, "quantity"> & {
   quantity?: number;
 };
@@ -49,8 +48,6 @@ function normalizeMaxQuantity(value: number) {
   if (!Number.isFinite(value)) return 1;
   return Math.max(0, Math.floor(value));
 }
-
-
 
 function readCartFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
@@ -87,7 +84,7 @@ function readCartFromStorage(): CartItem[] {
         const maxQuantity = normalizeMaxQuantity(item.maxQuantity);
         const quantity = Math.min(
           maxQuantity,
-          normalizeQuantity(item.quantity)
+          normalizeQuantity(item.quantity),
         );
 
         return {
@@ -138,15 +135,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-  const timeoutId = window.setTimeout(() => {
-    setItems(readCartFromStorage());
-    setMounted(true);
-  }, 0);
+    const timeoutId = window.setTimeout(() => {
+      setItems(readCartFromStorage());
+      setMounted(true);
+    }, 0);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}, []);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
@@ -162,11 +159,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setItems((currentItems) => {
         const quantityToAdd = Math.min(
           maxQuantity,
-          normalizeQuantity(item.quantity ?? 1)
+          normalizeQuantity(item.quantity ?? 1),
         );
 
         const existingItem = currentItems.find(
-          (cartItem) => cartItem.id === item.id
+          (cartItem) => cartItem.id === item.id,
         );
 
         if (existingItem) {
@@ -179,7 +176,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               maxQuantity,
               quantity: Math.min(
                 maxQuantity,
-                normalizeQuantity(cartItem.quantity + quantityToAdd)
+                normalizeQuantity(cartItem.quantity + quantityToAdd),
               ),
             };
           });
@@ -197,12 +194,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       showToast(item.name);
     },
-    [showToast]
+    [showToast],
   );
 
   const removeItem = useCallback((productId: string) => {
     setItems((currentItems) =>
-      currentItems.filter((item) => item.id !== productId)
+      currentItems.filter((item) => item.id !== productId),
     );
   }, []);
 
@@ -215,7 +212,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const maxQuantity = normalizeMaxQuantity(item.maxQuantity);
           const nextQuantity = Math.min(
             maxQuantity,
-            normalizeQuantity(quantity)
+            normalizeQuantity(quantity),
           );
 
           return {
@@ -224,7 +221,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             quantity: nextQuantity,
           };
         })
-        .filter((item) => item.maxQuantity > 0 && item.quantity > 0)
+        .filter((item) => item.maxQuantity > 0 && item.quantity > 0),
     );
   }, []);
 
@@ -276,7 +273,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const isInCart = useCallback(
     (productId: string) => items.some((item) => item.id === productId),
-    [items]
+    [items],
   );
 
   const value = useMemo<CartContextValue>(
@@ -305,7 +302,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isInCart,
       hideToast,
       syncCart,
-    ]
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

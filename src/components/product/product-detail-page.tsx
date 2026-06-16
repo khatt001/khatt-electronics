@@ -27,14 +27,9 @@ import {
 } from "@/data/translations/product-detail";
 import { localizedPath } from "@/lib/i18n";
 import { createBreadcrumbSchema, getBaseUrl } from "@/lib/seo";
-import {
-  getProductBySlug,
-  getRelatedProducts,
-} from "@/services/products";
+import { getProductBySlug, getRelatedProducts } from "@/services/products";
 
-type ProductDetailData = Awaited<
-  ReturnType<typeof getProductBySlug>
->;
+type ProductDetailData = Awaited<ReturnType<typeof getProductBySlug>>;
 
 type ProductDetailPageViewProps = {
   slug: string;
@@ -46,9 +41,7 @@ export function getPriceAmount(price: string) {
   if (price === "Price on request") return null;
   if (price === "Цена по запросу") return null;
 
-  const normalizedPrice = Number(
-    String(price).replace("AZN", "").trim(),
-  );
+  const normalizedPrice = Number(String(price).replace("AZN", "").trim());
 
   if (!Number.isFinite(normalizedPrice)) {
     return null;
@@ -80,15 +73,9 @@ export function getProductDetailJsonLd(
   const t = productDetailTranslations[locale];
   const baseUrl = getBaseUrl();
   const priceNumber = getPriceAmount(product.price);
-  const localizedCategory = getCategoryName(
-    product.category,
-    locale,
-  );
+  const localizedCategory = getCategoryName(product.category, locale);
 
-  const productPath = localizedPath(
-    `/products/${product.slug}`,
-    locale,
-  );
+  const productPath = localizedPath(`/products/${product.slug}`, locale);
 
   const productUrl = `${baseUrl}${productPath}`;
 
@@ -118,14 +105,12 @@ export function getProductDetailJsonLd(
             price: priceNumber,
             priceCurrency: "AZN",
             availability:
-              product.stockStatus === "in_stock" &&
-              product.stockQuantity > 0
+              product.stockStatus === "in_stock" && product.stockQuantity > 0
                 ? "https://schema.org/InStock"
                 : product.stockStatus === "pre_order"
                   ? "https://schema.org/PreOrder"
                   : "https://schema.org/OutOfStock",
-            itemCondition:
-              "https://schema.org/NewCondition",
+            itemCondition: "https://schema.org/NewCondition",
             url: productUrl,
             seller: {
               "@type": "Organization",
@@ -145,10 +130,7 @@ export function getProductDetailJsonLd(
     },
     {
       name: t.productsBreadcrumb,
-      url: `${baseUrl}${localizedPath(
-        "/products",
-        locale,
-      )}`,
+      url: `${baseUrl}${localizedPath("/products", locale)}`,
     },
   ];
 
@@ -167,8 +149,7 @@ export function getProductDetailJsonLd(
     url: productUrl,
   });
 
-  const breadcrumbSchema =
-    createBreadcrumbSchema(breadcrumbItems);
+  const breadcrumbSchema = createBreadcrumbSchema(breadcrumbItems);
 
   return [productSchema, breadcrumbSchema];
 }
@@ -194,16 +175,10 @@ export async function ProductDetailPageView({
   const jsonLd = getProductDetailJsonLd(product, locale);
   const priceAmount = getPriceAmount(product.price);
   const localizedPrice = getLocalizedPrice(product, locale);
-  const localizedCategory = getCategoryName(
-    product.category,
-    locale,
-  );
+  const localizedCategory = getCategoryName(product.category, locale);
 
   const backHref = product.categorySlug
-    ? localizedPath(
-        `/category/${product.categorySlug}`,
-        locale,
-      )
+    ? localizedPath(`/category/${product.categorySlug}`, locale)
     : localizedPath("/products", locale);
 
   const canBuy =
@@ -264,10 +239,7 @@ export async function ProductDetailPageView({
               },
               {
                 label: t.productsBreadcrumb,
-                href: localizedPath(
-                  "/products",
-                  locale,
-                ),
+                href: localizedPath("/products", locale),
               },
               ...(product.categorySlug
                 ? [
@@ -290,10 +262,7 @@ export async function ProductDetailPageView({
             href={backHref}
             className="mt-4 inline-flex items-center text-sm font-medium text-neutral-500 transition hover:text-emerald-700"
           >
-            <ArrowLeft
-              className="mr-2 size-4"
-              aria-hidden="true"
-            />
+            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
 
             {t.backToProducts}
           </Link>
@@ -328,15 +297,9 @@ export async function ProductDetailPageView({
                 ) : null}
 
                 <div className="ml-auto flex gap-2">
-                  <FavoriteButton
-                    item={favoriteItem}
-                    locale={locale}
-                  />
+                  <FavoriteButton item={favoriteItem} locale={locale} />
 
-                  <CompareButton
-                    item={compareItem}
-                    locale={locale}
-                  />
+                  <CompareButton item={compareItem} locale={locale} />
                 </div>
               </div>
 
@@ -377,12 +340,10 @@ export async function ProductDetailPageView({
                   {product.stockStatus === "in_stock" &&
                   product.stockQuantity > 0 ? (
                     <strong className="mt-2 block text-base font-semibold text-emerald-700 md:text-lg">
-                      {t.inStockPrefix}{" "}
-                      {product.stockQuantity}{" "}
+                      {t.inStockPrefix} {product.stockQuantity}{" "}
                       {t.inStockSuffix}
                     </strong>
-                  ) : product.stockStatus ===
-                    "pre_order" ? (
+                  ) : product.stockStatus === "pre_order" ? (
                     <strong className="mt-2 block text-base font-semibold text-amber-700 md:text-lg">
                       {t.preOrderAvailable}
                     </strong>
@@ -404,10 +365,7 @@ export async function ProductDetailPageView({
                 />
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <BuyNowButton
-                    item={cartItem}
-                    disabled={!canBuy}
-                  />
+                  <BuyNowButton item={cartItem} disabled={!canBuy} />
 
                   <Link
                     href={localizedPath("/cart", locale)}
@@ -425,10 +383,7 @@ export async function ProductDetailPageView({
                   rel="noreferrer"
                   className="inline-flex min-h-12 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-600 hover:bg-emerald-100"
                 >
-                  <MessageCircle
-                    className="mr-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <MessageCircle className="mr-2 size-4" aria-hidden="true" />
 
                   {t.whatsappButton}
                 </a>
@@ -462,10 +417,7 @@ export async function ProductDetailPageView({
             <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7 lg:p-8">
               <div className="mb-5 flex items-center gap-3 border-b border-neutral-100 pb-5">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                  <FileText
-                    className="size-5"
-                    aria-hidden="true"
-                  />
+                  <FileText className="size-5" aria-hidden="true" />
                 </span>
 
                 <h2 className="text-xl font-semibold text-neutral-950 md:text-2xl">
@@ -474,8 +426,7 @@ export async function ProductDetailPageView({
               </div>
 
               <p className="text-sm leading-7 text-neutral-600 md:text-base">
-                {product.description ??
-                  t.fallbackDescription}
+                {product.description ?? t.fallbackDescription}
               </p>
 
               <div className="mt-8">
@@ -485,27 +436,24 @@ export async function ProductDetailPageView({
 
                 {product.specifications.length > 0 ? (
                   <div className="overflow-hidden rounded-xl border border-neutral-200">
-                    {product.specifications.map(
-                      (spec, index) => (
-                        <div
-                          key={spec.id}
-                          className={`grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] ${
-                            index <
-                            product.specifications.length - 1
-                              ? "border-b border-neutral-200"
-                              : ""
-                          }`}
-                        >
-                          <div className="bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-700">
-                            {spec.key}
-                          </div>
-
-                          <div className="px-4 py-3 text-sm leading-6 text-neutral-600">
-                            {spec.value}
-                          </div>
+                    {product.specifications.map((spec, index) => (
+                      <div
+                        key={spec.id}
+                        className={`grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] ${
+                          index < product.specifications.length - 1
+                            ? "border-b border-neutral-200"
+                            : ""
+                        }`}
+                      >
+                        <div className="bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-700">
+                          {spec.key}
                         </div>
-                      ),
-                    )}
+
+                        <div className="px-4 py-3 text-sm leading-6 text-neutral-600">
+                          {spec.value}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-sm leading-6 text-neutral-600">
@@ -519,10 +467,7 @@ export async function ProductDetailPageView({
             <aside className="h-fit rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:sticky lg:top-[11rem]">
               <div className="mb-5 flex items-center gap-3">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                  <ShieldCheck
-                    className="size-5"
-                    aria-hidden="true"
-                  />
+                  <ShieldCheck className="size-5" aria-hidden="true" />
                 </span>
 
                 <h2 className="text-xl font-semibold text-neutral-950">
@@ -540,9 +485,7 @@ export async function ProductDetailPageView({
                       rel="noreferrer"
                       className="group flex items-center justify-between gap-4 rounded-xl border border-neutral-200 p-4 text-sm font-medium text-neutral-800 transition hover:border-emerald-500 hover:bg-emerald-50/40 hover:text-emerald-700"
                     >
-                      <span className="min-w-0 truncate">
-                        {download.title}
-                      </span>
+                      <span className="min-w-0 truncate">{download.title}</span>
 
                       <Download
                         className="size-4 shrink-0 transition group-hover:translate-y-0.5"
@@ -585,7 +528,6 @@ export async function ProductDetailPageView({
                   className="group inline-flex items-center text-sm font-semibold text-neutral-700 transition hover:text-emerald-700"
                 >
                   Kateqoriyaya bax
-
                   <ArrowRight
                     className="ml-2 size-4 transition group-hover:translate-x-1"
                     aria-hidden="true"
@@ -595,15 +537,13 @@ export async function ProductDetailPageView({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedProducts.map(
-                (relatedProduct) => (
-                  <ProductCard
-                    key={relatedProduct.id}
-                    product={relatedProduct}
-                    locale={locale}
-                  />
-                ),
-              )}
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard
+                  key={relatedProduct.id}
+                  product={relatedProduct}
+                  locale={locale}
+                />
+              ))}
             </div>
           </Container>
         </section>

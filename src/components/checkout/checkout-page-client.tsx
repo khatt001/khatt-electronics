@@ -30,9 +30,7 @@ type CheckoutPageClientProps = {
 const inputClassName =
   "h-12 w-full rounded-lg border border-neutral-300 bg-white px-4 text-sm text-neutral-950 outline-none transition placeholder:text-neutral-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10";
 
-export function CheckoutPageClient({
-  locale = "az",
-}: CheckoutPageClientProps) {
+export function CheckoutPageClient({ locale = "az" }: CheckoutPageClientProps) {
   const searchParams = useSearchParams();
   const { items, subtotal, syncCart, isSyncing } = useCart();
   const t = checkoutTranslations[locale];
@@ -154,11 +152,7 @@ export function CheckoutPageClient({
                       {t.phoneLabel}
                     </label>
 
-                    <PhoneInput
-                      name="phone"
-                      required
-                      locale={locale}
-                    />
+                    <PhoneInput name="phone" required locale={locale} />
                   </div>
 
                   <div>
@@ -253,10 +247,7 @@ export function CheckoutPageClient({
 
                       <span>
                         <span className="flex items-center gap-2 font-semibold">
-                          <WalletCards
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <WalletCards className="size-4" aria-hidden="true" />
                           {t.cashPaymentTitle}
                         </span>
 
@@ -277,10 +268,7 @@ export function CheckoutPageClient({
 
                       <span>
                         <span className="flex items-center gap-2 font-semibold">
-                          <CreditCard
-                            className="size-4"
-                            aria-hidden="true"
-                          />
+                          <CreditCard className="size-4" aria-hidden="true" />
                           {t.cardPaymentTitle}
                         </span>
 
@@ -313,10 +301,7 @@ export function CheckoutPageClient({
 
                 <div className="mt-5 max-h-[320px] space-y-4 overflow-y-auto border-b border-neutral-100 pb-5 pr-1">
                   {items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex justify-between gap-4"
-                    >
+                    <div key={item.id} className="flex justify-between gap-4">
                       <div className="min-w-0">
                         <p className="line-clamp-2 text-sm font-medium leading-6 text-neutral-950">
                           {item.name}
@@ -336,9 +321,7 @@ export function CheckoutPageClient({
 
                 <div className="mt-5 space-y-3">
                   <div className="flex justify-between gap-4 text-sm">
-                    <span className="text-neutral-500">
-                      {t.subtotal}
-                    </span>
+                    <span className="text-neutral-500">{t.subtotal}</span>
 
                     <span className="font-medium text-neutral-950">
                       {formatPrice(subtotal)}
@@ -346,9 +329,7 @@ export function CheckoutPageClient({
                   </div>
 
                   <div className="flex justify-between gap-4 text-sm">
-                    <span className="text-neutral-500">
-                      {t.delivery}
-                    </span>
+                    <span className="text-neutral-500">{t.delivery}</span>
 
                     <span className="font-medium text-neutral-950">
                       0.00 AZN
@@ -356,9 +337,7 @@ export function CheckoutPageClient({
                   </div>
 
                   <div className="flex items-end justify-between gap-4 border-t border-neutral-100 pt-4">
-                    <span className="text-sm text-neutral-500">
-                      {t.total}
-                    </span>
+                    <span className="text-sm text-neutral-500">{t.total}</span>
 
                     <strong className="text-2xl font-semibold text-neutral-950">
                       {formatPrice(subtotal)}
@@ -390,10 +369,7 @@ export function CheckoutPageClient({
                   href={localizedPath("/cart", locale)}
                   className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-neutral-300 px-5 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
                 >
-                  <ArrowLeft
-                    className="mr-2 size-4"
-                    aria-hidden="true"
-                  />
+                  <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
 
                   {t.backToCart}
                 </Link>
@@ -403,10 +379,7 @@ export function CheckoutPageClient({
             /* Empty checkout */
             <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
               <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-                <PackageSearch
-                  className="size-8"
-                  aria-hidden="true"
-                />
+                <PackageSearch className="size-8" aria-hidden="true" />
               </div>
 
               <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">

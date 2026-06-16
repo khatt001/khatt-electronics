@@ -54,7 +54,12 @@ export const projectsTranslations = {
         description:
           "Böyük anbar və logistika sahələrində perimetr, yükləmə zonası və giriş nöqtələri üçün təhlükəsizlik planı.",
         icon: Warehouse,
-        items: ["Perimetr kamera", "PoE switch", "Geniş bucaq", "Yaddaş hesabı"],
+        items: [
+          "Perimetr kamera",
+          "PoE switch",
+          "Geniş bucaq",
+          "Yaddaş hesabı",
+        ],
       },
       {
         title: "Villa və fərdi ev sistemi",
@@ -70,7 +75,12 @@ export const projectsTranslations = {
         description:
           "Reception, koridorlar, giriş-çıxış və servis sahələri üçün stabil kamera və şəbəkə infrastrukturu.",
         icon: Hotel,
-        items: ["Reception kamera", "Koridor nəzarəti", "Wi-Fi planlama", "NVR"],
+        items: [
+          "Reception kamera",
+          "Koridor nəzarəti",
+          "Wi-Fi planlama",
+          "NVR",
+        ],
       },
       {
         title: "İstehsalat zonası monitorinqi",
@@ -149,7 +159,12 @@ export const projectsTranslations = {
         description:
           "Security planning for perimeters, loading areas and entrance points in large warehouses and logistics facilities.",
         icon: Warehouse,
-        items: ["Perimeter camera", "PoE switch", "Wide angle", "Storage calculation"],
+        items: [
+          "Perimeter camera",
+          "PoE switch",
+          "Wide angle",
+          "Storage calculation",
+        ],
       },
       {
         title: "Villa and private house system",
@@ -165,7 +180,12 @@ export const projectsTranslations = {
         description:
           "Stable camera and network infrastructure for reception, corridors, entrances/exits and service areas.",
         icon: Hotel,
-        items: ["Reception camera", "Corridor monitoring", "Wi-Fi planning", "NVR"],
+        items: [
+          "Reception camera",
+          "Corridor monitoring",
+          "Wi-Fi planning",
+          "NVR",
+        ],
       },
       {
         title: "Production zone monitoring",
@@ -245,7 +265,12 @@ export const projectsTranslations = {
         description:
           "План безопасности для периметра, зоны загрузки и входных точек на больших складах и логистических объектах.",
         icon: Warehouse,
-        items: ["Камера периметра", "PoE switch", "Широкий угол", "Расчет хранения"],
+        items: [
+          "Камера периметра",
+          "PoE switch",
+          "Широкий угол",
+          "Расчет хранения",
+        ],
       },
       {
         title: "Система для виллы и частного дома",
@@ -253,7 +278,12 @@ export const projectsTranslations = {
         description:
           "Интегрированное smart-решение для двора, входных ворот, гаража, домофона и сигнализации.",
         icon: Home,
-        items: ["Домофон", "Камера двора", "Сигнализация", "Мобильные уведомления"],
+        items: [
+          "Домофон",
+          "Камера двора",
+          "Сигнализация",
+          "Мобильные уведомления",
+        ],
       },
       {
         title: "Планирование безопасности отеля",
@@ -261,7 +291,12 @@ export const projectsTranslations = {
         description:
           "Стабильная камера и сетевая инфраструктура для reception, коридоров, входов-выходов и сервисных зон.",
         icon: Hotel,
-        items: ["Камера reception", "Контроль коридоров", "Wi-Fi планирование", "NVR"],
+        items: [
+          "Камера reception",
+          "Контроль коридоров",
+          "Wi-Fi планирование",
+          "NVR",
+        ],
       },
       {
         title: "Мониторинг производственной зоны",

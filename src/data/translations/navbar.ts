@@ -48,7 +48,7 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
     languages: [
       { label: "AZ", locale: "az" },
       { label: "EN", locale: "en" },
-      { label: "RU",  locale: "ru" },
+      { label: "RU", locale: "ru" },
     ],
   },
 
@@ -75,9 +75,9 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
       contact: "Contact",
     },
     languages: [
-      { label: "AZ",  locale: "az" },
-      { label: "EN",  locale: "en" },
-      { label: "RU",  locale: "ru" },
+      { label: "AZ", locale: "az" },
+      { label: "EN", locale: "en" },
+      { label: "RU", locale: "ru" },
     ],
   },
 
@@ -104,9 +104,9 @@ export const navbarTranslations: Record<Locale, NavbarTranslation> = {
       contact: "Контакты",
     },
     languages: [
-      { label: "AZ",  locale: "az" },
-      { label: "EN",  locale: "en" },
-      { label: "RU",  locale: "ru" },
+      { label: "AZ", locale: "az" },
+      { label: "EN", locale: "en" },
+      { label: "RU", locale: "ru" },
     ],
   },
 };

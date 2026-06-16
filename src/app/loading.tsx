@@ -1,14 +1,8 @@
 import { Container } from "@/components/layout/container";
 
-function SkeletonLine({
-  className = "",
-}: {
-  className?: string;
-}) {
+function SkeletonLine({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`animate-pulse rounded-md bg-neutral-100 ${className}`}
-    />
+    <div className={`animate-pulse rounded-md bg-neutral-100 ${className}`} />
   );
 }
 

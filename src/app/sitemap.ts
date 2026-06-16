@@ -86,11 +86,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-  url: createUrl(`/category/${category.slug}`),
-  lastModified: category.updated_at ? new Date(category.updated_at) : now,
-  changeFrequency: "weekly",
-  priority: 0.8,
-}));
+    url: createUrl(`/category/${category.slug}`),
+    lastModified: category.updated_at ? new Date(category.updated_at) : now,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
   return [...staticPages, ...categoryPages, ...productPages];
 }

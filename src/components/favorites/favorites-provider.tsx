@@ -58,16 +58,16 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-useEffect(() => {
-  const timeoutId = window.setTimeout(() => {
-    setItems(readFavoritesFromStorage());
-    setMounted(true);
-  }, 0);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setItems(readFavoritesFromStorage());
+      setMounted(true);
+    }, 0);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}, []);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
@@ -86,7 +86,7 @@ useEffect(() => {
 
   const removeFavorite = useCallback((productId: string) => {
     setItems((currentItems) =>
-      currentItems.filter((item) => item.id !== productId)
+      currentItems.filter((item) => item.id !== productId),
     );
   }, []);
 
@@ -125,7 +125,7 @@ useEffect(() => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-         locale: getClientLocaleFromPathname(),
+          locale: getClientLocaleFromPathname(),
           items: currentItems.map((item) => ({
             id: item.id,
           })),
@@ -148,7 +148,7 @@ useEffect(() => {
 
   const isFavorite = useCallback(
     (productId: string) => items.some((item) => item.id === productId),
-    [items]
+    [items],
   );
 
   const value = useMemo<FavoritesContextValue>(
@@ -172,7 +172,7 @@ useEffect(() => {
       clearFavorites,
       isFavorite,
       syncFavorites,
-    ]
+    ],
   );
 
   return (

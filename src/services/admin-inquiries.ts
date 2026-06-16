@@ -29,7 +29,7 @@ export async function getAdminInquiries(): Promise<AdminInquiry[]> {
       status,
       created_at,
       updated_at
-    `
+    `,
     )
     .order("created_at", { ascending: false })
     .limit(100)

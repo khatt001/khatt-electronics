@@ -45,9 +45,7 @@ function getFirstValue(value?: string | string[]) {
 function getValues(value?: string | string[]) {
   if (!value) return [];
 
-  return Array.isArray(value)
-    ? value.filter(Boolean)
-    : [value].filter(Boolean);
+  return Array.isArray(value) ? value.filter(Boolean) : [value].filter(Boolean);
 }
 
 function getSpecsFromQuery(query: CategorySearchParams) {
@@ -92,10 +90,7 @@ function buildCategoryFilterUrl(
       if (!value) return;
       if (key === "page") return;
 
-      if (
-        key === removeKey &&
-        (!removeValue || removeValue === value)
-      ) {
+      if (key === removeKey && (!removeValue || removeValue === value)) {
         return;
       }
 
@@ -104,10 +99,7 @@ function buildCategoryFilterUrl(
   });
 
   const queryString = params.toString();
-  const basePath = localizedPath(
-    `/category/${categorySlug}`,
-    locale,
-  );
+  const basePath = localizedPath(`/category/${categorySlug}`, locale);
 
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
@@ -137,45 +129,30 @@ function buildCategoryPageUrl(
   }
 
   const queryString = params.toString();
-  const basePath = localizedPath(
-    `/category/${categorySlug}`,
-    locale,
-  );
+  const basePath = localizedPath(`/category/${categorySlug}`, locale);
 
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
 
-function getStockLabel(
-  stock: string | undefined,
-  locale: CategoryPageLocale,
-) {
+function getStockLabel(stock: string | undefined, locale: CategoryPageLocale) {
   const t = categoryPageTranslations[locale];
 
   if (stock === "in_stock" || stock === "Stokda var") {
     return t.stockIn;
   }
 
-  if (
-    stock === "out_of_stock" ||
-    stock === "Stokda yoxdur"
-  ) {
+  if (stock === "out_of_stock" || stock === "Stokda yoxdur") {
     return t.stockOut;
   }
 
-  if (
-    stock === "pre_order" ||
-    stock === "Öncədən sifariş"
-  ) {
+  if (stock === "pre_order" || stock === "Öncədən sifariş") {
     return t.stockPreOrder;
   }
 
   return stock ?? null;
 }
 
-function getSortLabel(
-  sort: string | undefined,
-  locale: CategoryPageLocale,
-) {
+function getSortLabel(sort: string | undefined, locale: CategoryPageLocale) {
   const t = categoryPageTranslations[locale];
 
   if (sort === "oldest") return t.sortOldest;
@@ -208,10 +185,7 @@ export async function CategoryPageView({
 
   const search = getFirstValue(query.search);
   const sort = getFirstValue(query.sort);
-  const page = Math.max(
-    1,
-    Number(getFirstValue(query.page)) || 1,
-  );
+  const page = Math.max(1, Number(getFirstValue(query.page)) || 1);
 
   const brandValues = getValues(query.brand);
   const stockValues = getValues(query.stock);
@@ -254,10 +228,7 @@ export async function CategoryPageView({
     Object.keys(specs).length > 0;
 
   const baseUrl = getBaseUrl();
-  const categoryPath = localizedPath(
-    `/category/${category.slug}`,
-    locale,
-  );
+  const categoryPath = localizedPath(`/category/${category.slug}`, locale);
 
   const breadcrumbSchema = createBreadcrumbSchema([
     {
@@ -309,10 +280,7 @@ export async function CategoryPageView({
                 href={localizedPath("/products", locale)}
                 className="inline-flex items-center text-sm font-medium text-neutral-500 transition hover:text-emerald-700"
               >
-                <ArrowLeft
-                  className="mr-2 size-4"
-                  aria-hidden="true"
-                />
+                <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
 
                 {t.backToProducts}
               </Link>
@@ -431,24 +399,22 @@ export async function CategoryPageView({
                       </Link>
                     ))}
 
-                    {Object.entries(specs).flatMap(
-                      ([key, values]) =>
-                        values.map((value) => (
-                          <Link
-                            key={`${key}-${value}`}
-                            href={buildCategoryFilterUrl(
-                              category.slug,
-                              query,
-                              `spec_${key}`,
-                              locale,
-                              value,
-                            )}
-                            className={filterChipClassName}
-                          >
-                            {t.specLabel}: {getSpecChipLabel(key)} —{" "}
-                            {value} ×
-                          </Link>
-                        )),
+                    {Object.entries(specs).flatMap(([key, values]) =>
+                      values.map((value) => (
+                        <Link
+                          key={`${key}-${value}`}
+                          href={buildCategoryFilterUrl(
+                            category.slug,
+                            query,
+                            `spec_${key}`,
+                            locale,
+                            value,
+                          )}
+                          className={filterChipClassName}
+                        >
+                          {t.specLabel}: {getSpecChipLabel(key)} — {value} ×
+                        </Link>
+                      )),
                     )}
 
                     {sortLabel ? (
@@ -514,9 +480,7 @@ export async function CategoryPageView({
                               locale,
                             )}
                             aria-current={
-                              pageNumber === currentPage
-                                ? "page"
-                                : undefined
+                              pageNumber === currentPage ? "page" : undefined
                             }
                             className={
                               pageNumber === currentPage
@@ -548,10 +512,7 @@ export async function CategoryPageView({
               ) : (
                 <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
                   <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-                    <PackageSearch
-                      className="size-8"
-                      aria-hidden="true"
-                    />
+                    <PackageSearch className="size-8" aria-hidden="true" />
                   </div>
 
                   <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
@@ -570,10 +531,7 @@ export async function CategoryPageView({
                     href={categoryPath}
                     className="mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
                   >
-                    <PackageSearch
-                      className="mr-2 size-4"
-                      aria-hidden="true"
-                    />
+                    <PackageSearch className="mr-2 size-4" aria-hidden="true" />
 
                     {t.clearFilters}
                   </Link>

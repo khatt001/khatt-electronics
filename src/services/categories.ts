@@ -101,7 +101,7 @@ function getLocalizedProductName(
     name_en?: string | null;
     name_ru?: string | null;
   },
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
   if (locale === "en") return product.name_en || product.name_az;
   if (locale === "ru") return product.name_ru || product.name_az;
@@ -115,7 +115,7 @@ function getLocalizedCategoryName(
     name_en?: string | null;
     name_ru?: string | null;
   },
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
   if (locale === "en") return category.name_en || category.name_az;
   if (locale === "ru") return category.name_ru || category.name_az;
@@ -129,10 +129,12 @@ function getLocalizedCategoryDescription(
     description_en?: string | null;
     description_ru?: string | null;
   },
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
-  if (locale === "en") return category.description_en || category.description_az;
-  if (locale === "ru") return category.description_ru || category.description_az;
+  if (locale === "en")
+    return category.description_en || category.description_az;
+  if (locale === "ru")
+    return category.description_ru || category.description_az;
 
   return category.description_az;
 }
@@ -143,7 +145,7 @@ function getLocalizedCategorySeoTitle(
     seo_title_en?: string | null;
     seo_title_ru?: string | null;
   },
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
   if (locale === "en") return category.seo_title_en || category.seo_title;
   if (locale === "ru") return category.seo_title_ru || category.seo_title;
@@ -157,10 +159,12 @@ function getLocalizedCategorySeoDescription(
     seo_description_en?: string | null;
     seo_description_ru?: string | null;
   },
-  locale: ProductLocale
+  locale: ProductLocale,
 ) {
-  if (locale === "en") return category.seo_description_en || category.seo_description;
-  if (locale === "ru") return category.seo_description_ru || category.seo_description;
+  if (locale === "en")
+    return category.seo_description_en || category.seo_description;
+  if (locale === "ru")
+    return category.seo_description_ru || category.seo_description;
 
   return category.seo_description;
 }
@@ -168,7 +172,7 @@ function getLocalizedCategorySeoDescription(
 function formatPrice(
   priceVisible: boolean,
   price: number | string | null,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ) {
   const t = categoryServiceTranslations[locale];
 
@@ -179,7 +183,7 @@ function formatPrice(
 
 function formatBadge(
   stockStatus: CategoryProductRow["stock_status"],
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ) {
   const t = categoryServiceTranslations[locale];
 
@@ -202,12 +206,14 @@ function getPrimaryImage(images: CategoryProductRow["images"]) {
 
 function formatProduct(
   product: CategoryProductRow,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): ProductCardItem {
   const t = categoryServiceTranslations[locale];
 
   const priceAmount =
-    product.price_visible && product.price !== null ? Number(product.price) : null;
+    product.price_visible && product.price !== null
+      ? Number(product.price)
+      : null;
 
   return {
     id: product.id,
@@ -228,7 +234,7 @@ function formatProduct(
 }
 
 export async function getCatalogCategories(
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<CatalogCategory[]> {
   const supabase = createServerSupabaseClient();
 
@@ -244,7 +250,7 @@ export async function getCatalogCategories(
       description_az,
       description_en,
       description_ru
-    `
+    `,
     )
     .eq("is_active", true)
     .order("sort_order", { ascending: true })
@@ -265,7 +271,7 @@ export async function getCatalogCategories(
 
 export async function getCategoryBySlug(
   slug: string,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<CategoryDetail | null> {
   const supabase = createServerSupabaseClient();
 
@@ -287,7 +293,7 @@ export async function getCategoryBySlug(
       seo_description,
       seo_description_en,
       seo_description_ru
-    `
+    `,
     )
     .eq("slug", slug)
     .eq("is_active", true)
@@ -310,7 +316,7 @@ export async function getCategoryBySlug(
 
 export async function getCategoryProducts(
   categoryId: string,
-  locale: ProductLocale = "az"
+  locale: ProductLocale = "az",
 ): Promise<ProductCardItem[]> {
   const supabase = createServerSupabaseClient();
 
@@ -339,7 +345,7 @@ export async function getCategoryProducts(
         url,
         is_primary
       )
-    `
+    `,
     )
     .eq("category_id", categoryId)
     .eq("status", "active")

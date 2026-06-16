@@ -50,7 +50,7 @@ export function createBreadcrumbSchema(
   items: {
     name: string;
     url: string;
-  }[]
+  }[],
 ) {
   return {
     "@context": "https://schema.org",
