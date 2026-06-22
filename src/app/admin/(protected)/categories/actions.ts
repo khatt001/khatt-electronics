@@ -3,11 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/services/admin";
 
 const categorySchema = z.object({
-  name_az: z.string().min(2, "Kateqoriya adı minimum 2 simvol olmalıdır."),
+  name_az: z
+    .string()
+    .min(2, "Kateqoriya adı minimum 2 simvol olmalıdır."),
   name_en: z.string().optional(),
   name_ru: z.string().optional(),
   slug: z.string().min(2, "Slug minimum 2 simvol olmalıdır."),
@@ -32,10 +35,33 @@ function normalizeSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function getOptionalFormValue(formData: FormData, key: string) {
+function getOptionalValue(formData: FormData, key: string) {
   const value = String(formData.get(key) ?? "").trim();
 
   return value || null;
+}
+
+function getCategoryFormData(formData: FormData) {
+  return {
+    name_az: String(formData.get("name_az") ?? "").trim(),
+    name_en: String(formData.get("name_en") ?? "").trim(),
+    name_ru: String(formData.get("name_ru") ?? "").trim(),
+    slug: String(formData.get("slug") ?? "").trim(),
+    description_az: String(
+      formData.get("description_az") ?? "",
+    ).trim(),
+    description_en: String(
+      formData.get("description_en") ?? "",
+    ).trim(),
+    description_ru: String(
+      formData.get("description_ru") ?? "",
+    ).trim(),
+    sort_order: String(formData.get("sort_order") ?? "").trim(),
+  };
+}
+
+function redirectWithCategoryError(message: string): never {
+  redirect(`/admin/categories?error=${encodeURIComponent(message)}`);
 }
 
 function revalidateCategoryPaths() {
@@ -48,71 +74,157 @@ function revalidateCategoryPaths() {
   revalidatePath("/ru/products");
 
   revalidatePath("/admin/categories");
+  revalidatePath("/admin/products");
   revalidatePath("/admin/products/new");
+}
+
+function getSortOrder(value?: string) {
+  if (!value) return 0;
+
+  const number = Number(value);
+
+  if (!Number.isInteger(number) || number < 0) {
+    redirectWithCategoryError(
+      "Sıralama sıfır və ya müsbət tam rəqəm olmalıdır.",
+    );
+  }
+
+  return number;
 }
 
 export async function createCategory(formData: FormData) {
   await requireAdmin();
 
-  const rawData = {
-    name_az: String(formData.get("name_az") ?? "").trim(),
-    name_en: String(formData.get("name_en") ?? "").trim(),
-    name_ru: String(formData.get("name_ru") ?? "").trim(),
-    slug: String(formData.get("slug") ?? "").trim(),
-    description_az: String(formData.get("description_az") ?? "").trim(),
-    description_en: String(formData.get("description_en") ?? "").trim(),
-    description_ru: String(formData.get("description_ru") ?? "").trim(),
-    sort_order: String(formData.get("sort_order") ?? "").trim(),
-  };
-
-  const parsed = categorySchema.safeParse(rawData);
+  const parsed = categorySchema.safeParse(
+    getCategoryFormData(formData),
+  );
 
   if (!parsed.success) {
-    const message = encodeURIComponent(
+    redirectWithCategoryError(
       parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
-
-    redirect(`/admin/categories?error=${message}`);
   }
 
   const category = parsed.data;
-  const slug = normalizeSlug(category.slug || category.name_az);
-
-  const sortOrder =
-    category.sort_order && category.sort_order !== ""
-      ? Number(category.sort_order)
-      : 0;
-
-  if (Number.isNaN(sortOrder)) {
-    redirect(
-      `/admin/categories?error=${encodeURIComponent(
-        "Sıralama düzgün rəqəm olmalıdır.",
-      )}`,
-    );
-  }
 
   const { error } = await supabaseAdmin.from("categories").insert({
     name_az: category.name_az,
-    name_en: getOptionalFormValue(formData, "name_en"),
-    name_ru: getOptionalFormValue(formData, "name_ru"),
-    slug,
-    description_az: getOptionalFormValue(formData, "description_az"),
-    description_en: getOptionalFormValue(formData, "description_en"),
-    description_ru: getOptionalFormValue(formData, "description_ru"),
-    sort_order: sortOrder,
+    name_en: getOptionalValue(formData, "name_en"),
+    name_ru: getOptionalValue(formData, "name_ru"),
+    slug: normalizeSlug(category.slug || category.name_az),
+    description_az: getOptionalValue(formData, "description_az"),
+    description_en: getOptionalValue(formData, "description_en"),
+    description_ru: getOptionalValue(formData, "description_ru"),
+    sort_order: getSortOrder(category.sort_order),
     is_active: true,
   });
 
   if (error) {
-    redirect(
-      `/admin/categories?error=${encodeURIComponent(
-        "Kateqoriya əlavə edilmədi. Slug təkrarlana bilər.",
-      )}`,
+    redirectWithCategoryError(
+      error.code === "23505"
+        ? "Bu slug ilə kateqoriya artıq mövcuddur."
+        : "Kateqoriya əlavə edilə bilmədi.",
     );
   }
 
   revalidateCategoryPaths();
+  redirect("/admin/categories");
+}
 
+export async function updateCategory(
+  categoryId: string,
+  formData: FormData,
+) {
+  await requireAdmin();
+
+  if (!categoryId) {
+    redirectWithCategoryError("Kateqoriya ID tapılmadı.");
+  }
+
+  const parsed = categorySchema.safeParse(
+    getCategoryFormData(formData),
+  );
+
+  if (!parsed.success) {
+    redirectWithCategoryError(
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
+    );
+  }
+
+  const category = parsed.data;
+
+  const { error } = await supabaseAdmin
+    .from("categories")
+    .update({
+      name_az: category.name_az,
+      name_en: getOptionalValue(formData, "name_en"),
+      name_ru: getOptionalValue(formData, "name_ru"),
+      slug: normalizeSlug(category.slug || category.name_az),
+      description_az: getOptionalValue(
+        formData,
+        "description_az",
+      ),
+      description_en: getOptionalValue(
+        formData,
+        "description_en",
+      ),
+      description_ru: getOptionalValue(
+        formData,
+        "description_ru",
+      ),
+      sort_order: getSortOrder(category.sort_order),
+    })
+    .eq("id", categoryId);
+
+  if (error) {
+    redirectWithCategoryError(
+      error.code === "23505"
+        ? "Bu slug başqa kateqoriya tərəfindən istifadə olunur."
+        : "Kateqoriya yenilənə bilmədi.",
+    );
+  }
+
+  revalidateCategoryPaths();
+  redirect("/admin/categories");
+}
+
+export async function deleteCategory(categoryId: string) {
+  await requireAdmin();
+
+  if (!categoryId) {
+    redirectWithCategoryError("Kateqoriya ID tapılmadı.");
+  }
+
+  const { count, error: productError } = await supabaseAdmin
+    .from("products")
+    .select("id", {
+      count: "exact",
+      head: true,
+    })
+    .eq("category_id", categoryId);
+
+  if (productError) {
+    redirectWithCategoryError(
+      "Kateqoriyaya bağlı məhsullar yoxlanıla bilmədi.",
+    );
+  }
+
+  if ((count ?? 0) > 0) {
+    redirectWithCategoryError(
+      `Bu kateqoriyaya bağlı ${count} məhsul var. Əvvəlcə həmin məhsulların kateqoriyasını dəyişin.`,
+    );
+  }
+
+  const { error } = await supabaseAdmin
+    .from("categories")
+    .delete()
+    .eq("id", categoryId);
+
+  if (error) {
+    redirectWithCategoryError("Kateqoriya silinə bilmədi.");
+  }
+
+  revalidateCategoryPaths();
   redirect("/admin/categories");
 }
 
@@ -124,18 +236,17 @@ export async function toggleCategoryStatus(
 
   const { error } = await supabaseAdmin
     .from("categories")
-    .update({ is_active: !isActive })
+    .update({
+      is_active: !isActive,
+    })
     .eq("id", categoryId);
 
   if (error) {
-    redirect(
-      `/admin/categories?error=${encodeURIComponent(
-        "Kateqoriya statusu dəyişdirilə bilmədi.",
-      )}`,
+    redirectWithCategoryError(
+      "Kateqoriya statusu dəyişdirilə bilmədi.",
     );
   }
 
   revalidateCategoryPaths();
-
   redirect("/admin/categories");
 }

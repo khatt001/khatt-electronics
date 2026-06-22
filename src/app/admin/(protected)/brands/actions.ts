@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/services/admin";
 
@@ -27,23 +28,41 @@ function normalizeSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-export async function createBrand(formData: FormData) {
-  await requireAdmin();
-
-  const rawData = {
+function getBrandFormData(formData: FormData) {
+  return {
     name: String(formData.get("name") ?? "").trim(),
     slug: String(formData.get("slug") ?? "").trim(),
     website_url: String(formData.get("website_url") ?? "").trim(),
   };
+}
 
-  const parsed = brandSchema.safeParse(rawData);
+function redirectWithBrandError(message: string): never {
+  redirect(`/admin/brands?error=${encodeURIComponent(message)}`);
+}
+
+function revalidateBrandPaths() {
+  revalidatePath("/");
+  revalidatePath("/en");
+  revalidatePath("/ru");
+
+  revalidatePath("/products");
+  revalidatePath("/en/products");
+  revalidatePath("/ru/products");
+
+  revalidatePath("/admin/brands");
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/products/new");
+}
+
+export async function createBrand(formData: FormData) {
+  await requireAdmin();
+
+  const parsed = brandSchema.safeParse(getBrandFormData(formData));
 
   if (!parsed.success) {
-    const message = encodeURIComponent(
+    redirectWithBrandError(
       parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
-
-    redirect(`/admin/brands?error=${message}`);
   }
 
   const brand = parsed.data;
@@ -57,37 +76,118 @@ export async function createBrand(formData: FormData) {
   });
 
   if (error) {
-    redirect(
-      `/admin/brands?error=${encodeURIComponent(
-        "Brend əlavə edilmədi. Slug təkrarlana bilər.",
-      )}`,
+    redirectWithBrandError(
+      error.code === "23505"
+        ? "Bu slug ilə brend artıq mövcuddur."
+        : "Brend əlavə edilə bilmədi.",
     );
   }
 
-  revalidatePath("/admin/brands");
-  revalidatePath("/admin/products/new");
-
+  revalidateBrandPaths();
   redirect("/admin/brands");
 }
 
-export async function toggleBrandStatus(brandId: string, isActive: boolean) {
+export async function updateBrand(
+  brandId: string,
+  formData: FormData,
+) {
+  await requireAdmin();
+
+  if (!brandId) {
+    redirectWithBrandError("Brend ID tapılmadı.");
+  }
+
+  const parsed = brandSchema.safeParse(getBrandFormData(formData));
+
+  if (!parsed.success) {
+    redirectWithBrandError(
+      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
+    );
+  }
+
+  const brand = parsed.data;
+  const slug = normalizeSlug(brand.slug || brand.name);
+
+  const { error } = await supabaseAdmin
+    .from("brands")
+    .update({
+      name: brand.name,
+      slug,
+      website_url: brand.website_url || null,
+    })
+    .eq("id", brandId);
+
+  if (error) {
+    redirectWithBrandError(
+      error.code === "23505"
+        ? "Bu slug başqa brend tərəfindən istifadə olunur."
+        : "Brend yenilənə bilmədi.",
+    );
+  }
+
+  revalidateBrandPaths();
+  redirect("/admin/brands");
+}
+
+export async function deleteBrand(brandId: string) {
+  await requireAdmin();
+
+  if (!brandId) {
+    redirectWithBrandError("Brend ID tapılmadı.");
+  }
+
+  const { count, error: productError } = await supabaseAdmin
+    .from("products")
+    .select("id", {
+      count: "exact",
+      head: true,
+    })
+    .eq("brand_id", brandId);
+
+  if (productError) {
+    redirectWithBrandError(
+      "Brendə bağlı məhsullar yoxlanıla bilmədi.",
+    );
+  }
+
+  if ((count ?? 0) > 0) {
+    redirectWithBrandError(
+      `Bu brendə bağlı ${count} məhsul var. Əvvəlcə məhsulların brendini dəyişin.`,
+    );
+  }
+
+  const { error } = await supabaseAdmin
+    .from("brands")
+    .delete()
+    .eq("id", brandId);
+
+  if (error) {
+    redirectWithBrandError("Brend silinə bilmədi.");
+  }
+
+  revalidateBrandPaths();
+  redirect("/admin/brands");
+}
+
+export async function toggleBrandStatus(
+  brandId: string,
+  isActive: boolean,
+) {
   await requireAdmin();
 
   const { error } = await supabaseAdmin
     .from("brands")
-    .update({ is_active: !isActive })
+    .update({
+      is_active: !isActive,
+    })
     .eq("id", brandId);
 
   if (error) {
-    redirect(
-      `/admin/brands?error=${encodeURIComponent(
-        "Brend statusu dəyişdirilə bilmədi.",
-      )}`,
+    redirectWithBrandError(
+      "Brend statusu dəyişdirilə bilmədi.",
     );
   }
 
-  revalidatePath("/admin/brands");
-  revalidatePath("/admin/products/new");
-
+  revalidateBrandPaths();
   redirect("/admin/brands");
 }

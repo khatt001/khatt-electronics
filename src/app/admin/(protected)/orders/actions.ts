@@ -55,3 +55,44 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
 
   redirect(`/admin/orders/${orderId}`);
 }
+export async function deleteOrder(orderId: string) {
+  await requireAdmin();
+
+  if (!orderId) {
+    redirect(
+      `/admin/orders?error=${encodeURIComponent(
+        "Sifariş ID tapılmadı.",
+      )}`,
+    );
+  }
+
+  const { error: itemsError } = await supabaseAdmin
+    .from("order_items")
+    .delete()
+    .eq("order_id", orderId);
+
+  if (itemsError) {
+    redirect(
+      `/admin/orders/${orderId}?error=${encodeURIComponent(
+        "Sifariş məhsulları silinə bilmədi.",
+      )}`,
+    );
+  }
+
+  const { error } = await supabaseAdmin
+    .from("orders")
+    .delete()
+    .eq("id", orderId);
+
+  if (error) {
+    redirect(
+      `/admin/orders/${orderId}?error=${encodeURIComponent(
+        "Sifariş silinə bilmədi.",
+      )}`,
+    );
+  }
+
+  revalidatePath("/admin/orders");
+
+  redirect("/admin/orders");
+}
