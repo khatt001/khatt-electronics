@@ -76,7 +76,7 @@ export function PromoBanners({ locale = "az" }: PromoBannersProps) {
               className="object-cover transition duration-700 group-hover:scale-[1.02]"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/15" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
 
             <div className="relative z-10 flex min-h-[340px] max-w-[78%] flex-col justify-center p-6 sm:max-w-[65%] md:p-9">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700">
@@ -114,7 +114,7 @@ export function PromoBanners({ locale = "az" }: PromoBannersProps) {
               className="object-cover transition duration-700 group-hover:scale-[1.02]"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/15" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
 
             <div className="relative z-10 flex min-h-[340px] max-w-[78%] flex-col justify-center p-6 sm:max-w-[65%] md:p-9">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-red-600">

@@ -172,9 +172,9 @@ export function FireServicesSection({
               {t.description}
             </p>
 
-            <Link
+           <Link
               href={localizedPath("/contact", locale)}
-              className="mt-7 inline-flex items-center rounded-xl bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
+              className="mt-7 inline-flex items-center rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500"
             >
               {t.button}
 
@@ -185,7 +185,7 @@ export function FireServicesSection({
             </Link>
           </div>
 
-          <div className="grid overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid overflow-hidden rounded-3xl border border-neutral-200 bg-white sm:grid-cols-2 xl:grid-cols-3">
             {t.services.map((service, index) => {
               const Icon = icons[index];
 

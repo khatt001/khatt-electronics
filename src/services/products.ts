@@ -1,5 +1,6 @@
 import "server-only";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { escapeOrFilterValue } from "@/lib/supabase/query-utils";
 import { localizedPath } from "@/lib/i18n";
 
 export type ProductLocale = "az" | "en" | "ru";
@@ -364,42 +365,57 @@ async function getProductIdsBySpecs(
 
   const supabase = createServerSupabaseClient();
 
+  const results = await Promise.all(
+    entries.map(async ([specKey, values]) => {
+      const safeSpecKey = escapeOrFilterValue(specKey);
+      const safeValues = values.map(escapeOrFilterValue);
+
+      let query = supabase.from("product_specifications").select("product_id");
+
+      if (locale === "en") {
+        query = query
+          .or(`spec_key_en.eq.${safeSpecKey},spec_key_az.eq.${safeSpecKey}`)
+          .or(
+            safeValues
+              .map(
+                (value) =>
+                  `spec_value_en.eq.${value},spec_value_az.eq.${value}`,
+              )
+              .join(","),
+          );
+      } else if (locale === "ru") {
+        query = query
+          .or(`spec_key_ru.eq.${safeSpecKey},spec_key_az.eq.${safeSpecKey}`)
+          .or(
+            safeValues
+              .map(
+                (value) =>
+                  `spec_value_ru.eq.${value},spec_value_az.eq.${value}`,
+              )
+              .join(","),
+          );
+      } else {
+        query = query.eq("spec_key_az", specKey).in("spec_value_az", values);
+      }
+
+      const { data, error } = await query.returns<{ product_id: string }[]>();
+
+      if (error || !data) {
+        return null;
+      }
+
+      return Array.from(new Set(data.map((row) => row.product_id)));
+    }),
+  );
+
   let matchedIds: string[] | null = null;
 
-  for (const [specKey, values] of entries) {
-    let query = supabase.from("product_specifications").select("product_id");
-
-    if (locale === "en") {
-      query = query
-        .or(`spec_key_en.eq.${specKey},spec_key_az.eq.${specKey}`)
-        .or(
-          values
-            .map(
-              (value) => `spec_value_en.eq.${value},spec_value_az.eq.${value}`,
-            )
-            .join(","),
-        );
-    } else if (locale === "ru") {
-      query = query
-        .or(`spec_key_ru.eq.${specKey},spec_key_az.eq.${specKey}`)
-        .or(
-          values
-            .map(
-              (value) => `spec_value_ru.eq.${value},spec_value_az.eq.${value}`,
-            )
-            .join(","),
-        );
-    } else {
-      query = query.eq("spec_key_az", specKey).in("spec_value_az", values);
-    }
-
-    const { data, error } = await query.returns<{ product_id: string }[]>();
-
-    if (error || !data) {
+  for (const idsForSpec of results) {
+    if (idsForSpec === null) {
+      // A query for one of the specs failed — fail closed rather than
+      // silently ignoring that filter.
       return [];
     }
-
-    const idsForSpec = Array.from(new Set(data.map((row) => row.product_id)));
 
     if (matchedIds === null) {
       matchedIds = idsForSpec;
@@ -533,13 +549,15 @@ export async function getCatalogProducts(
     .eq("status", "active");
 
   if (filters.search) {
+    const safeSearch = escapeOrFilterValue(filters.search);
+
     if (locale === "en") {
       query = query.or(
-        `name_en.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`,
+        `name_en.ilike.%${safeSearch}%,name_az.ilike.%${safeSearch}%`,
       );
     } else if (locale === "ru") {
       query = query.or(
-        `name_ru.ilike.%${filters.search}%,name_az.ilike.%${filters.search}%`,
+        `name_ru.ilike.%${safeSearch}%,name_az.ilike.%${safeSearch}%`,
       );
     } else {
       query = query.ilike("name_az", `%${filters.search}%`);

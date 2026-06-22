@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isLocale } from "@/lib/i18n";
-
+import { escapeOrFilterValue } from "@/lib/supabase/query-utils";
 type SearchLocale = "az" | "en" | "ru";
 
 type SearchProductRow = {
@@ -86,9 +86,7 @@ function formatPrice(
     : t.priceOnRequest;
 }
 
-function escapeSupabaseOrValue(value: string) {
-  return value.replace(/[%_]/g, "\\$&").replace(/,/g, "\\,");
-}
+
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -101,7 +99,7 @@ export async function GET(request: Request) {
   }
 
   const supabase = createServerSupabaseClient();
-  const cleanQuery = escapeSupabaseOrValue(query);
+  const cleanQuery = escapeOrFilterValue(query);
 
   const { data, error } = await supabase
     .from("products")

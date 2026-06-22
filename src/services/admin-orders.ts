@@ -1,6 +1,6 @@
 import "server-only";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-
+import { escapeOrFilterValue } from "@/lib/supabase/query-utils";
 export type AdminOrderListItem = {
   id: string;
   orderNumber: string;
@@ -94,8 +94,8 @@ export async function getAdminOrders(
     query = query.eq("order_status", filters.status);
   }
 
-  if (filters.search && filters.search.trim()) {
-    const search = filters.search.trim();
+ if (filters.search && filters.search.trim()) {
+    const search = escapeOrFilterValue(filters.search.trim());
 
     query = query.or(
       `order_number.ilike.%${search}%,customer_name.ilike.%${search}%,phone.ilike.%${search}%`,

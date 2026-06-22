@@ -129,10 +129,10 @@ export function WorkProcessSection({
   const t = translations[locale];
 
   return (
-    <section className="bg-neutral-950 py-12 text-white md:py-16">
+    <section className="bg-[#14171a] py-12 text-white md:py-16">
       <Container>
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-500">
             {t.eyebrow}
           </p>
 
@@ -162,7 +162,7 @@ export function WorkProcessSection({
                   <Icon className="size-5" aria-hidden="true" />
                 </div>
 
-                <p className="mt-6 text-xs font-semibold tracking-[0.16em] text-red-400">
+                <p className="mt-6 text-xs font-semibold tracking-[0.16em] text-red-500">
                   {step.number}
                 </p>
 

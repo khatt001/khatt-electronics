@@ -5,7 +5,6 @@ import {
   Building2,
   Camera,
   CheckCircle2,
-  ShieldCheck,
 } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
@@ -17,7 +16,7 @@ type HomeHeroProps = {
 
 const translations = {
   az: {
-    eyebrow: "Yanğın təhlükəsizliyi və zəif axın sistemləri",
+    zoneStatus: "Bütün zonalar aktiv",
     title: "Obyektiniz üçün etibarlı yanğın təhlükəsizliyi həlləri",
     description:
       "Yanğın siqnalizasiya sistemlərinin layihələndirilməsi, avadanlıq təchizatı, peşəkar quraşdırılması və texniki xidmətini bir ünvandan əldə edin.",
@@ -42,7 +41,7 @@ const translations = {
   },
 
   en: {
-    eyebrow: "Fire safety and low-current systems",
+    zoneStatus: "All zones active",
     title: "Reliable fire safety solutions for your property",
     description:
       "Get fire alarm system design, equipment supply, professional installation and technical maintenance from one provider.",
@@ -67,7 +66,7 @@ const translations = {
   },
 
   ru: {
-    eyebrow: "Пожарная безопасность и слаботочные системы",
+    zoneStatus: "Все зоны активны",
     title: "Надёжные решения пожарной безопасности для вашего объекта",
     description:
       "Проектирование пожарной сигнализации, поставка оборудования, профессиональный монтаж и техническое обслуживание в одном месте.",
@@ -94,43 +93,53 @@ const translations = {
 
 export function HomeHero({ locale = "az" }: HomeHeroProps) {
   const t = translations[locale];
+  const zoneCount = 6;
 
   return (
     <section className="border-b border-black/5 bg-[#f5f6f8]">
       <Container className="py-5 md:py-7">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2.1fr)_minmax(310px,0.9fr)]">
-          <div className="relative min-h-[500px] overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm md:min-h-[560px]">
+          <div className="relative min-h-[500px] overflow-hidden rounded-3xl border border-black/5 bg-[#14171a] shadow-sm md:min-h-[560px]">
             <Image
               src="/banners/side-fire.webp"
               alt={t.title}
               fill
               priority
               sizes="(min-width: 1024px) 72vw, 100vw"
-              className="object-cover object-right"
+              className="object-cover object-right opacity-90"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/25" />
-
-            <div className="absolute inset-y-0 left-0 w-full bg-[radial-gradient(circle_at_20%_30%,rgba(220,38,38,0.08),transparent_40%)]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#14171a] via-[#14171a]/88 to-[#14171a]/15" />
 
             <div className="relative z-10 flex min-h-[500px] max-w-[760px] flex-col justify-center p-6 sm:p-8 md:min-h-[560px] md:p-12 lg:p-14">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-red-700">
-                <ShieldCheck className="size-4" aria-hidden="true" />
-                {t.eyebrow}
+              <div className="inline-flex w-fit items-center gap-3 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2.5">
+                <span className="flex items-center gap-[3px]" aria-hidden="true">
+                  {Array.from({ length: zoneCount }).map((_, index) => (
+                    <span
+                      key={index}
+                      className="khatt-zone-dot block size-[5px] rounded-full bg-emerald-500"
+                      style={{ animationDelay: `${index * 0.18}s` }}
+                    />
+                  ))}
+                </span>
+
+                <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-white/60">
+                  {t.zoneStatus}
+                </span>
               </div>
 
-              <h1 className="mt-6 max-w-3xl text-3xl font-semibold leading-[1.08] tracking-[-0.04em] text-neutral-950 sm:text-4xl md:text-5xl lg:text-[58px]">
+              <h1 className="mt-6 max-w-3xl text-3xl font-semibold leading-[1.08] tracking-[-0.01em] text-white sm:text-4xl md:text-5xl lg:text-[56px]">
                 {t.title}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-neutral-600 md:text-base md:leading-8">
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/60 md:text-base md:leading-8">
                 {t.description}
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={localizedPath("/contact", locale)}
-                  className="inline-flex items-center justify-center rounded-xl bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-700"
+                  className="inline-flex items-center justify-center rounded-xl bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-500"
                 >
                   {t.quoteButton}
 
@@ -145,25 +154,25 @@ export function HomeHero({ locale = "az" }: HomeHeroProps) {
                     "/products",
                     locale,
                   )}?category=yangin-sistemleri`}
-                  className="inline-flex items-center justify-center rounded-xl border border-neutral-300 bg-white px-6 py-3.5 text-sm font-semibold text-neutral-900 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/5"
                 >
                   {t.productsButton}
                 </Link>
               </div>
 
-              <div className="mt-8 grid gap-3 text-sm text-neutral-700 sm:grid-cols-3">
+              <div className="mt-8 grid gap-3 border-t border-white/10 pt-6 text-sm text-white/70 sm:grid-cols-3">
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-red-600" />
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                   <span>{t.benefitOne}</span>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-red-600" />
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                   <span>{t.benefitTwo}</span>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-red-600" />
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                   <span>{t.benefitThree}</span>
                 </div>
               </div>
@@ -221,29 +230,29 @@ export function HomeHero({ locale = "az" }: HomeHeroProps) {
                 "/products",
                 locale,
               )}?category=girise-nezaret`}
-              className="group relative min-h-[270px] overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm"
+              className="group relative min-h-[270px] overflow-hidden rounded-3xl border border-[#14171a]/10 bg-[#14171a] shadow-sm"
             >
-              <div className="absolute -right-14 -top-14 size-44 rounded-full bg-emerald-100 blur-3xl" />
+              <div className="absolute -right-14 -top-14 size-44 rounded-full bg-emerald-500/10 blur-3xl" />
 
               <div className="relative z-10 flex min-h-[270px] flex-col justify-between p-6">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+                <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
                   <Building2 className="size-5" aria-hidden="true" />
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-400">
                     {t.securityEyebrow}
                   </p>
 
-                  <h2 className="mt-2 text-2xl font-semibold text-neutral-950">
+                  <h2 className="mt-2 text-2xl font-semibold text-white">
                     {t.securityTitle}
                   </h2>
 
-                  <p className="mt-3 text-sm leading-6 text-neutral-600">
+                  <p className="mt-3 text-sm leading-6 text-white/60">
                     {t.securityDescription}
                   </p>
 
-                  <span className="mt-5 inline-flex items-center text-sm font-semibold text-neutral-950 transition group-hover:text-emerald-700">
+                  <span className="mt-5 inline-flex items-center text-sm font-semibold text-white transition group-hover:text-emerald-400">
                     {t.securityButton}
 
                     <ArrowRight

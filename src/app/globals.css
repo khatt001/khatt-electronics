@@ -57,3 +57,23 @@ h6 {
     padding-block: 8rem;
   }
 }
+@keyframes khatt-zone-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.khatt-zone-dot {
+  animation: khatt-zone-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .khatt-zone-dot {
+    animation: none;
+    opacity: 1;
+  }
+}

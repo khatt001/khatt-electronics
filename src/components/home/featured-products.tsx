@@ -75,7 +75,7 @@ export async function FeaturedProducts({
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visibleProducts.map((product) => (
               <div

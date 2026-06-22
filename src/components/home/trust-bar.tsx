@@ -82,27 +82,27 @@ export function TrustBar({ locale = "az" }: TrustBarProps) {
   const items = translations[locale];
 
   return (
-    <section className="bg-[#f5f6f8] py-4 md:py-5">
+    <section className="bg-[#14171a] py-4 md:py-5">
       <Container>
-        <div className="grid overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item, index) => {
             const Icon = icons[index];
 
             return (
               <div
                 key={item.title}
-                className="flex items-center gap-4 border-b border-r border-neutral-200 p-5 last:border-b-0 lg:border-b-0"
+                className="flex items-center gap-4 border-b border-r border-white/10 p-5 last:border-b-0 lg:border-b-0"
               >
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-red-600/15 text-red-500">
                   <Icon className="size-5" aria-hidden="true" />
                 </div>
 
                 <div>
-                  <h2 className="text-sm font-semibold text-neutral-950">
+                  <h2 className="text-sm font-semibold text-white">
                     {item.title}
                   </h2>
 
-                  <p className="mt-1 text-xs leading-5 text-neutral-500">
+                  <p className="mt-1 text-xs leading-5 text-white/50">
                     {item.description}
                   </p>
                 </div>

@@ -78,13 +78,13 @@ export function QuoteSection({ locale = "az" }: QuoteSectionProps) {
   return (
     <section className="bg-[#f5f6f8] py-10 md:py-16">
       <Container>
-        <div className="relative overflow-hidden rounded-3xl bg-emerald-950 px-6 py-9 text-white shadow-sm md:px-10 md:py-12 lg:px-14">
-          <div className="absolute -right-24 -top-24 size-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="relative overflow-hidden rounded-3xl bg-[#14171a] px-6 py-9 text-white shadow-sm md:px-10 md:py-12 lg:px-14">
+          <div className="absolute -right-24 -top-24 size-72 rounded-full bg-emerald-500/10 blur-3xl" />
           <div className="absolute -bottom-28 left-1/3 size-72 rounded-full bg-red-600/10 blur-3xl" />
 
           <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[1.5fr_0.8fr]">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-400">
                 {t.eyebrow}
               </p>
 
@@ -102,7 +102,7 @@ export function QuoteSection({ locale = "az" }: QuoteSectionProps) {
                     key={benefit}
                     className="flex items-start gap-2 text-sm text-white/80"
                   >
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
 
                     <span>{benefit}</span>
                   </div>
@@ -112,7 +112,7 @@ export function QuoteSection({ locale = "az" }: QuoteSectionProps) {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={localizedPath("/contact", locale)}
-                  className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-emerald-950 transition hover:bg-emerald-100"
+                  className="inline-flex items-center justify-center rounded-xl bg-red-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-red-500"
                 >
                   {t.button}
 
@@ -136,8 +136,8 @@ export function QuoteSection({ locale = "az" }: QuoteSectionProps) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-6 backdrop-blur md:p-7">
-              <div className="flex size-12 items-center justify-center rounded-xl bg-white text-emerald-950">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-6 md:p-7">
+              <div className="flex size-12 items-center justify-center rounded-xl bg-red-600 text-white">
                 <FileText className="size-5" aria-hidden="true" />
               </div>
 
