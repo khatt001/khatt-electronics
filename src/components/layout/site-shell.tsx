@@ -1,6 +1,3 @@
-// NO "use client" here — this is a Server Component.
-// Locale and pathname are resolved on the server from request headers.
-
 import { headers } from "next/headers";
 
 import { CartToast } from "@/components/cart/cart-toast";
@@ -17,12 +14,11 @@ type SiteShellProps = {
 export async function SiteShell({ children }: SiteShellProps) {
   const headersList = await headers();
 
-  const pathname =
-    headersList.get("x-pathname") ?? headersList.get("x-invoke-path") ?? "/";
-
+  const pathname = headersList.get("x-pathname") ?? "/";
   const locale = getLocaleFromPathname(pathname);
 
-  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAdminRoute =
+    pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isAdminRoute) {
     return <>{children}</>;

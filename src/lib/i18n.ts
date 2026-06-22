@@ -9,11 +9,19 @@ export function isLocale(value: string): value is Locale {
 }
 
 export function getLocaleFromPathname(pathname: string): Locale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
+  const normalizedPathname = pathname.split("?")[0].split("#")[0];
+
+  if (
+    normalizedPathname === "/en" ||
+    normalizedPathname.startsWith("/en/")
+  ) {
     return "en";
   }
 
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
+  if (
+    normalizedPathname === "/ru" ||
+    normalizedPathname.startsWith("/ru/")
+  ) {
     return "ru";
   }
 
@@ -39,19 +47,19 @@ export function getLocalePrefix(locale: Locale): string {
 }
 
 export function removeLocaleFromPathname(pathname: string): string {
-  if (pathname === "/en" || pathname === "/ru") {
-    return "/";
+  const [pathnamePart, suffix = ""] = pathname.split(/(?=[?#])/);
+
+  let pathWithoutLocale = pathnamePart;
+
+  if (pathnamePart === "/en" || pathnamePart === "/ru") {
+    pathWithoutLocale = "/";
+  } else if (pathnamePart.startsWith("/en/")) {
+    pathWithoutLocale = pathnamePart.replace(/^\/en/, "") || "/";
+  } else if (pathnamePart.startsWith("/ru/")) {
+    pathWithoutLocale = pathnamePart.replace(/^\/ru/, "") || "/";
   }
 
-  if (pathname.startsWith("/en/")) {
-    return pathname.replace(/^\/en/, "") || "/";
-  }
-
-  if (pathname.startsWith("/ru/")) {
-    return pathname.replace(/^\/ru/, "") || "/";
-  }
-
-  return pathname || "/";
+  return `${pathWithoutLocale}${suffix}`;
 }
 
 export function switchLocalePathname(

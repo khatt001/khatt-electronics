@@ -57,7 +57,7 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
               <div className="flex items-center gap-2">
                 {t.languages.map((language) => (
                   <Link
-                    key={language.label}
+                    key={language.locale}
                     href={switchLocalePathname(pathname, language.locale)}
                     className={cn(
                       "transition hover:text-white",
@@ -112,7 +112,7 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
             <div className="mr-1 flex items-center rounded-lg border border-neutral-200 bg-neutral-50 p-0.5 lg:hidden">
               {t.languages.map((language) => (
                 <Link
-                  key={language.label}
+                  key={language.locale}
                   href={switchLocalePathname(pathname, language.locale)}
                   className={cn(
                     "rounded-md px-2 py-1 text-[11px] font-semibold transition",
