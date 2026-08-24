@@ -213,9 +213,13 @@ async function uploadProductImage(
       is_primary: sortOrder === 0,
     });
 
-  if (imageInsertError) {
-    throw new Error(imageInsertError.message);
-  }
+ if (imageInsertError) {
+  await supabaseAdmin.storage
+    .from("product-images")
+    .remove([filePath]);
+
+  throw new Error(imageInsertError.message);
+}
 
   return publicUrl;
 }
@@ -414,12 +418,14 @@ async function uploadProductImagesFromForm({
   slug,
   currentImageCount = 0,
   errorPath,
+  rollbackProductOnError = false,
 }: {
   formData: FormData;
   productId: string;
   slug: string;
   currentImageCount?: number;
   errorPath: string;
+  rollbackProductOnError?: boolean;
 }) {
   const images = formData
     .getAll("images")
@@ -443,13 +449,47 @@ async function uploadProductImagesFromForm({
 
   if (images.length === 0) return;
 
+  const uploadedUrls: string[] = [];
+
   try {
-    await Promise.all(
-      images.map((image, index) =>
-        uploadProductImage(productId, slug, image, currentImageCount + index),
-      ),
-    );
+    for (const [index, image] of images.entries()) {
+      const uploadedUrl = await uploadProductImage(
+        productId,
+        slug,
+        image,
+        currentImageCount + index,
+      );
+
+      if (uploadedUrl) {
+        uploadedUrls.push(uploadedUrl);
+      }
+    }
   } catch (uploadError) {
+    const storagePaths = uploadedUrls
+      .map(getStoragePathFromPublicUrl)
+      .filter((path): path is string => Boolean(path));
+
+    if (storagePaths.length > 0) {
+      await supabaseAdmin.storage
+        .from("product-images")
+        .remove(storagePaths);
+    }
+
+    if (uploadedUrls.length > 0) {
+      await supabaseAdmin
+        .from("product_images")
+        .delete()
+        .eq("product_id", productId)
+        .in("url", uploadedUrls);
+    }
+
+    if (rollbackProductOnError) {
+      await supabaseAdmin
+        .from("products")
+        .delete()
+        .eq("id", productId);
+    }
+
     const message =
       uploadError instanceof Error
         ? uploadError.message
@@ -481,12 +521,13 @@ export async function createProduct(formData: FormData) {
     redirect(`${errorPath}?error=${message}`);
   }
 
-  await uploadProductImagesFromForm({
-    formData,
-    productId: createdProduct.id,
-    slug: parsedForm.slug,
-    errorPath,
-  });
+await uploadProductImagesFromForm({
+  formData,
+  productId: createdProduct.id,
+  slug: parsedForm.slug,
+  errorPath,
+  rollbackProductOnError: true,
+});
 
   revalidateProductPaths(parsedForm.slug);
 
