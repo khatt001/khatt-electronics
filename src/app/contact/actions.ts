@@ -36,6 +36,20 @@ type TurnstileResponse = {
   "error-codes"?: string[];
 };
 
+function getContactPath(localeValue: FormDataEntryValue | null) {
+  const locale = String(localeValue ?? "az");
+
+  if (locale === "en") {
+    return "/en/contact";
+  }
+
+  if (locale === "ru") {
+    return "/ru/contact";
+  }
+
+  return "/contact";
+}
+
 async function verifyTurnstileToken(token: string) {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
@@ -74,6 +88,8 @@ async function verifyTurnstileToken(token: string) {
 }
 
 export async function createInquiry(formData: FormData) {
+  const contactPath = getContactPath(formData.get("locale"));
+
   const turnstileToken = String(
     formData.get("cf-turnstile-response") ?? "",
   ).trim();
@@ -82,7 +98,7 @@ export async function createInquiry(formData: FormData) {
 
   if (!isHuman) {
     redirect(
-      `/contact?error=${encodeURIComponent(
+      `${contactPath}?error=${encodeURIComponent(
         "Təhlükəsizlik yoxlaması uğursuz oldu. Zəhmət olmasa yenidən cəhd edin.",
       )}`,
     );
@@ -104,7 +120,7 @@ export async function createInquiry(formData: FormData) {
       parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
     );
 
-    redirect(`/contact?error=${message}`);
+    redirect(`${contactPath}?error=${message}`);
   }
 
   const inquiry = parsed.data;
@@ -123,7 +139,7 @@ export async function createInquiry(formData: FormData) {
     .returns<{ id: string } | null>();
 
   if (existingInquiry) {
-    redirect("/contact?success=1");
+    redirect(`${contactPath}?success=1`);
   }
 
   const { error } = await supabase.from("inquiries").insert({
@@ -138,11 +154,11 @@ export async function createInquiry(formData: FormData) {
 
   if (error) {
     redirect(
-      `/contact?error=${encodeURIComponent(
+      `${contactPath}?error=${encodeURIComponent(
         "Sorğu göndərilmədi. Zəhmət olmasa bir az sonra yenidən cəhd edin.",
       )}`,
     );
   }
 
-  redirect("/contact?success=1");
+  redirect(`${contactPath}?success=1`);
 }

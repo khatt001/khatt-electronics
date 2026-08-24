@@ -127,7 +127,7 @@ export function ContactPageView({
                   name="source"
                   value={query.source ?? getDefaultSource(locale)}
                 />
-
+                <input type="hidden" name="locale" value={locale} />
                 <div className="grid gap-5 md:grid-cols-2">
                   <div>
                     <label
