@@ -5,40 +5,64 @@ import { z } from "zod";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-const inquirySchema = z.object({
-  full_name: z
-    .string()
-    .min(2, "Ad minimum 2 simvol olmalıdır.")
-    .max(100, "Ad maksimum 100 simvol ola bilər."),
-  phone: z
-    .string()
-    .min(6, "Telefon nömrəsi düzgün deyil.")
-    .max(30, "Telefon nömrəsi düzgün deyil."),
-  email: z
-    .string()
-    .email("Email düzgün deyil.")
-    .max(254, "Email düzgün deyil.")
-    .optional()
-    .or(z.literal("")),
-  company_name: z
-    .string()
-    .max(150, "Şirkət adı maksimum 150 simvol ola bilər.")
-    .optional(),
-  message: z
-    .string()
-    .max(3000, "Mesaj maksimum 3000 simvol ola bilər.")
-    .optional(),
-  source: z.string().max(100).optional(),
-});
+type ContactLocale = "az" | "en" | "ru";
 
 type TurnstileResponse = {
   success: boolean;
   "error-codes"?: string[];
 };
 
-function getContactPath(localeValue: FormDataEntryValue | null) {
+const messages = {
+  az: {
+    fullNameMin: "Ad minimum 2 simvol olmalıdır.",
+    fullNameMax: "Ad maksimum 100 simvol ola bilər.",
+    phoneInvalid: "Telefon nömrəsi düzgün deyil.",
+    emailInvalid: "Email düzgün deyil.",
+    companyMax: "Şirkət adı maksimum 150 simvol ola bilər.",
+    messageMax: "Mesaj maksimum 3000 simvol ola bilər.",
+    invalidData: "Məlumatlar düzgün deyil.",
+    securityFailed:
+      "Təhlükəsizlik yoxlaması uğursuz oldu. Zəhmət olmasa yenidən cəhd edin.",
+    submitFailed:
+      "Sorğu göndərilmədi. Zəhmət olmasa bir az sonra yenidən cəhd edin.",
+  },
+  en: {
+    fullNameMin: "Full name must be at least 2 characters.",
+    fullNameMax: "Full name cannot exceed 100 characters.",
+    phoneInvalid: "Phone number is invalid.",
+    emailInvalid: "Email is invalid.",
+    companyMax: "Company name cannot exceed 150 characters.",
+    messageMax: "Message cannot exceed 3000 characters.",
+    invalidData: "The submitted information is invalid.",
+    securityFailed: "Security verification failed. Please try again.",
+    submitFailed:
+      "The inquiry could not be sent. Please try again a little later.",
+  },
+  ru: {
+    fullNameMin: "Имя должно содержать минимум 2 символа.",
+    fullNameMax: "Имя не может превышать 100 символов.",
+    phoneInvalid: "Номер телефона указан неверно.",
+    emailInvalid: "Email указан неверно.",
+    companyMax: "Название компании не может превышать 150 символов.",
+    messageMax: "Сообщение не может превышать 3000 символов.",
+    invalidData: "Введенные данные неверны.",
+    securityFailed: "Проверка безопасности не пройдена. Попробуйте снова.",
+    submitFailed:
+      "Не удалось отправить запрос. Пожалуйста, повторите попытку позже.",
+  },
+} as const;
+
+function getLocale(localeValue: FormDataEntryValue | null): ContactLocale {
   const locale = String(localeValue ?? "az");
 
+  if (locale === "en" || locale === "ru") {
+    return locale;
+  }
+
+  return "az";
+}
+
+function getContactPath(locale: ContactLocale) {
   if (locale === "en") {
     return "/en/contact";
   }
@@ -48,6 +72,36 @@ function getContactPath(localeValue: FormDataEntryValue | null) {
   }
 
   return "/contact";
+}
+
+function getInquirySchema(locale: ContactLocale) {
+  const t = messages[locale];
+
+  return z.object({
+    full_name: z
+      .string()
+      .min(2, t.fullNameMin)
+      .max(100, t.fullNameMax),
+    phone: z
+      .string()
+      .min(6, t.phoneInvalid)
+      .max(30, t.phoneInvalid),
+    email: z
+      .string()
+      .email(t.emailInvalid)
+      .max(254, t.emailInvalid)
+      .optional()
+      .or(z.literal("")),
+    company_name: z
+      .string()
+      .max(150, t.companyMax)
+      .optional(),
+    message: z
+      .string()
+      .max(3000, t.messageMax)
+      .optional(),
+    source: z.string().max(100).optional(),
+  });
 }
 
 async function verifyTurnstileToken(token: string) {
@@ -88,7 +142,9 @@ async function verifyTurnstileToken(token: string) {
 }
 
 export async function createInquiry(formData: FormData) {
-  const contactPath = getContactPath(formData.get("locale"));
+  const locale = getLocale(formData.get("locale"));
+  const contactPath = getContactPath(locale);
+  const t = messages[locale];
 
   const turnstileToken = String(
     formData.get("cf-turnstile-response") ?? "",
@@ -98,9 +154,7 @@ export async function createInquiry(formData: FormData) {
 
   if (!isHuman) {
     redirect(
-      `${contactPath}?error=${encodeURIComponent(
-        "Təhlükəsizlik yoxlaması uğursuz oldu. Zəhmət olmasa yenidən cəhd edin.",
-      )}`,
+      `${contactPath}?error=${encodeURIComponent(t.securityFailed)}`,
     );
   }
 
@@ -113,11 +167,11 @@ export async function createInquiry(formData: FormData) {
     source: String(formData.get("source") ?? "contact_page").trim(),
   };
 
-  const parsed = inquirySchema.safeParse(rawData);
+  const parsed = getInquirySchema(locale).safeParse(rawData);
 
   if (!parsed.success) {
     const message = encodeURIComponent(
-      parsed.error.issues[0]?.message ?? "Məlumatlar düzgün deyil.",
+      parsed.error.issues[0]?.message ?? t.invalidData,
     );
 
     redirect(`${contactPath}?error=${message}`);
@@ -154,9 +208,7 @@ export async function createInquiry(formData: FormData) {
 
   if (error) {
     redirect(
-      `${contactPath}?error=${encodeURIComponent(
-        "Sorğu göndərilmədi. Zəhmət olmasa bir az sonra yenidən cəhd edin.",
-      )}`,
+      `${contactPath}?error=${encodeURIComponent(t.submitFailed)}`,
     );
   }
 
