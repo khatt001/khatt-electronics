@@ -1,11 +1,11 @@
 import Link from "next/link";
 import {
+  AirVent,
   ArrowUpRight,
   Camera,
   Flame,
   Network,
   ScanFace,
-  Wind,
   Zap,
 } from "lucide-react";
 
@@ -16,231 +16,273 @@ type CategoryGridProps = {
   locale?: Locale;
 };
 
-const translations = {
+const content = {
   az: {
-    eyebrow: "Fəaliyyət istiqamətləri",
-    title: "Həllərimiz",
+    eyebrow: "Həllərimiz",
+    title: "Obyektin bütün mühəndis sistemləri bir ünvanda",
     description:
-      "Təhlükəsizlik, mühəndis və infrastruktur sistemləri üzrə layihələndirmə, avadanlıq təchizatı, quraşdırma və texniki xidmət.",
-    viewAll: "Bütün həllər",
-    solutions: [
+      "Təhlükəsizlik, enerji, iqlim və zəif axın sistemlərini vahid layihə yanaşması ilə birləşdiririk.",
+    viewAll: "Bütün həlləri nəzərdən keçir",
+    featured: "Əsas istiqamət",
+    items: [
       {
-        title: "Yanğın təhlükəsizliyi sistemləri",
+        title: "Yanğın təhlükəsizliyi",
         description:
-          "Yanğın siqnalizasiyası, tüstü və istilik aşkarlanması, xəbərdarlıq və təxliyə sistemləri.",
+          "Aşkarlama, xəbərdarlıq və təxliyə sistemləri",
         anchor: "fire-safety",
+        icon: Flame,
       },
       {
-        title: "Videomüşahidə sistemləri",
+        title: "Videomüşahidə",
         description:
-          "IP və analoq kameralar, qeydiyyat sistemləri, uzaqdan izləmə və videoanalitika.",
+          "Kamera, qeydiyyat və videoanalitika",
         anchor: "video-surveillance",
+        icon: Camera,
       },
       {
-        title: "Girişə nəzarət sistemləri",
+        title: "Girişə nəzarət",
         description:
-          "Kartlı keçid, biometrik sistemlər, turniket, domofon və elektron kilid həlləri.",
+          "Keçid, domofon və işçi nəzarəti",
         anchor: "access-control",
+        icon: ScanFace,
       },
       {
         title: "Elektrik sistemləri",
         description:
-          "Elektrik layihələri, kabel xətləri, paylayıcı lövhələr, işıqlandırma və torpaqlama.",
+          "Enerji xətləri, panellər və qoruma",
         anchor: "electrical",
+        icon: Zap,
       },
       {
-        title: "İsitmə, soyutma və havalandırma",
+        title: "İsitmə və soyutma",
         description:
-          "İsitmə-soyutma, kondisioner və havalandırma sistemlərinin quraşdırılması və xidməti.",
+          "HVAC, havalandırma və iqlim nəzarəti",
         anchor: "hvac",
+        icon: AirVent,
       },
       {
-        title: "Şəbəkə və zəif axın sistemləri",
+        title: "Şəbəkə sistemləri",
         description:
-          "Strukturlaşdırılmış kabel, şəbəkə avadanlıqları, rack sistemləri və fiber-optik infrastruktur.",
-        anchor: "networking",
+          "Struktur kabel və zəif axın infrastrukturu",
+        anchor: "network",
+        icon: Network,
       },
     ],
   },
 
   en: {
-    eyebrow: "Areas of expertise",
-    title: "Our solutions",
+    eyebrow: "Our solutions",
+    title: "All engineering systems for your facility in one place",
     description:
-      "Design, equipment supply, installation and maintenance across security, engineering and infrastructure systems.",
-    viewAll: "View all solutions",
-    solutions: [
+      "We combine security, power, climate and low-current systems through a unified project approach.",
+    viewAll: "Explore all solutions",
+    featured: "Primary direction",
+    items: [
       {
-        title: "Fire safety systems",
+        title: "Fire safety",
         description:
-          "Fire alarms, smoke and heat detection, notification and evacuation systems.",
+          "Detection, notification and evacuation systems",
         anchor: "fire-safety",
+        icon: Flame,
       },
       {
-        title: "Video surveillance systems",
+        title: "Video surveillance",
         description:
-          "IP and analogue cameras, recording systems, remote monitoring and video analytics.",
+          "Cameras, recording and video analytics",
         anchor: "video-surveillance",
+        icon: Camera,
       },
       {
-        title: "Access control systems",
+        title: "Access control",
         description:
-          "Card access, biometric systems, turnstiles, intercoms and electronic locking solutions.",
+          "Entry, intercom and staff control",
         anchor: "access-control",
+        icon: ScanFace,
       },
       {
         title: "Electrical systems",
         description:
-          "Electrical design, cabling, distribution panels, lighting and grounding systems.",
+          "Power lines, panels and protection",
         anchor: "electrical",
+        icon: Zap,
       },
       {
-        title: "Heating, cooling and ventilation",
+        title: "Heating and cooling",
         description:
-          "Installation and maintenance of heating, cooling, air conditioning and ventilation systems.",
+          "HVAC, ventilation and climate control",
         anchor: "hvac",
+        icon: AirVent,
       },
       {
-        title: "Network and low-current systems",
+        title: "Network systems",
         description:
-          "Structured cabling, network equipment, rack systems and fibre-optic infrastructure.",
-        anchor: "networking",
+          "Structured cabling and low-current infrastructure",
+        anchor: "network",
+        icon: Network,
       },
     ],
   },
 
   ru: {
-    eyebrow: "Направления деятельности",
-    title: "Наши решения",
+    eyebrow: "Наши решения",
+    title: "Все инженерные системы объекта в одном месте",
     description:
-      "Проектирование, поставка, монтаж и обслуживание систем безопасности, инженерии и инфраструктуры.",
-    viewAll: "Все решения",
-    solutions: [
+      "Мы объединяем безопасность, электроснабжение, климат и слаботочные системы в рамках единого проекта.",
+    viewAll: "Посмотреть все решения",
+    featured: "Основное направление",
+    items: [
       {
-        title: "Системы пожарной безопасности",
+        title: "Пожарная безопасность",
         description:
-          "Пожарная сигнализация, обнаружение дыма и тепла, оповещение и эвакуация.",
+          "Обнаружение, оповещение и эвакуация",
         anchor: "fire-safety",
+        icon: Flame,
       },
       {
-        title: "Системы видеонаблюдения",
+        title: "Видеонаблюдение",
         description:
-          "IP и аналоговые камеры, видеорегистраторы, удалённый мониторинг и видеоаналитика.",
+          "Камеры, запись и видеоаналитика",
         anchor: "video-surveillance",
+        icon: Camera,
       },
       {
-        title: "Системы контроля доступа",
+        title: "Контроль доступа",
         description:
-          "Карточный доступ, биометрия, турникеты, домофоны и электронные замки.",
+          "Доступ, домофон и контроль персонала",
         anchor: "access-control",
+        icon: ScanFace,
       },
       {
         title: "Электрические системы",
         description:
-          "Электропроектирование, кабельные линии, щиты, освещение и заземление.",
+          "Силовые линии, щиты и защита",
         anchor: "electrical",
+        icon: Zap,
       },
       {
-        title: "Отопление, охлаждение и вентиляция",
+        title: "Отопление и охлаждение",
         description:
-          "Монтаж и обслуживание систем отопления, кондиционирования и вентиляции.",
+          "HVAC, вентиляция и климат-контроль",
         anchor: "hvac",
+        icon: AirVent,
       },
       {
-        title: "Сетевые и слаботочные системы",
+        title: "Сетевые системы",
         description:
-          "Структурированные кабельные сети, сетевое оборудование, стойки и оптоволокно.",
-        anchor: "networking",
+          "Структурированные кабельные и слаботочные системы",
+        anchor: "network",
+        icon: Network,
       },
     ],
   },
 } as const;
 
-const icons = [
-  Flame,
-  Camera,
-  ScanFace,
-  Zap,
-  Wind,
-  Network,
-];
-
-export function CategoryGrid({ locale = "az" }: CategoryGridProps) {
-  const t = translations[locale];
+export function CategoryGrid({
+  locale = "az",
+}: CategoryGridProps) {
+  const t = content[locale];
+  const solutionsHref = localizedPath("/solutions", locale);
 
   return (
-    <section className="bg-[#f6f7f5] py-14 md:py-20">
+    <section className="border-y border-neutral-200 bg-[#f4f5f2] py-16 md:py-20 lg:py-24">
       <Container>
-        <div className="flex flex-col justify-between gap-6 border-b border-neutral-300 pb-7 md:flex-row md:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
+          <div className="lg:py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700">
               {t.eyebrow}
             </p>
 
-            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.035em] text-neutral-950 md:text-4xl">
+            <h2 className="mt-5 max-w-lg font-serif text-3xl leading-[1.08] tracking-[-0.035em] text-neutral-950 md:text-4xl lg:text-[44px]">
               {t.title}
             </h2>
 
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-neutral-600 md:text-base">
+            <p className="mt-6 max-w-md text-sm leading-7 text-neutral-600 md:text-base">
               {t.description}
             </p>
+
+            <Link
+              href={solutionsHref}
+              className="group mt-8 inline-flex items-center gap-3 border-b border-neutral-950 pb-2 text-sm font-semibold text-neutral-950 transition hover:border-emerald-700 hover:text-emerald-700"
+            >
+              {t.viewAll}
+
+              <ArrowUpRight
+                aria-hidden="true"
+                className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </Link>
           </div>
 
-          <Link
-            href={localizedPath("/solutions", locale)}
-            className="inline-flex w-fit items-center text-sm font-semibold text-neutral-900 transition hover:text-emerald-800"
-          >
-            {t.viewAll}
+          <div className="grid overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-[0_20px_55px_rgba(0,0,0,0.06)] sm:grid-cols-2">
+            {t.items.map((item, index) => {
+              const Icon = item.icon;
+              const isFeatured = index === 0;
 
-            <ArrowUpRight
-              className="ml-2 size-4"
-              aria-hidden="true"
-            />
-          </Link>
-        </div>
+              return (
+                <Link
+                  key={item.anchor}
+                  href={`${solutionsHref}#${item.anchor}`}
+                  className={
+                    isFeatured
+                      ? "group relative min-h-44 overflow-hidden bg-neutral-950 p-6 text-white sm:min-h-52"
+                      : "group relative min-h-40 bg-white p-6 transition-colors hover:bg-emerald-50 sm:min-h-52"
+                  }
+                >
+                  {isFeatured ? (
+                    <Icon
+                      aria-hidden="true"
+                      className="absolute -bottom-8 -right-7 size-40 text-white/[0.045]"
+                    />
+                  ) : null}
 
-        <div className="mt-8 grid overflow-hidden border-l border-t border-neutral-300 sm:grid-cols-2 lg:grid-cols-3">
-          {t.solutions.map((solution, index) => {
-            const Icon = icons[index];
+                  <div className="relative flex h-full flex-col">
+                    <div className="flex items-start justify-between gap-4">
+                      <span
+                        className={
+                          isFeatured
+                            ? "flex size-11 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-400"
+                            : "flex size-11 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-700 transition group-hover:border-emerald-200 group-hover:bg-white group-hover:text-emerald-700"
+                        }
+                      >
+                        <Icon aria-hidden="true" className="size-5" />
+                      </span>
 
-            return (
-              <Link
-                key={solution.anchor}
-                href={`${localizedPath(
-                  "/solutions",
-                  locale,
-                )}#${solution.anchor}`}
-                className="group min-h-[280px] border-b border-r border-neutral-300 bg-white p-6 transition hover:bg-neutral-950 md:p-8"
-              >
-                <div className="flex items-start justify-between gap-5">
-                  <span className="text-xs font-semibold text-emerald-700 transition group-hover:text-emerald-400">
-                    0{index + 1}
-                  </span>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className={
+                          isFeatured
+                            ? "size-4 text-white/40 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-400"
+                            : "size-4 text-neutral-300 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-700"
+                        }
+                      />
+                    </div>
 
-                  <Icon
-                    className="size-6 text-neutral-500 transition group-hover:text-white"
-                    strokeWidth={1.5}
-                    aria-hidden="true"
-                  />
-                </div>
+                    <div className="mt-auto pt-8">
+                      {isFeatured ? (
+                        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-400">
+                          {t.featured}
+                        </p>
+                      ) : null}
 
-                <div className="mt-16">
-                  <h3 className="max-w-sm text-xl font-semibold leading-7 tracking-[-0.02em] text-neutral-950 transition group-hover:text-white">
-                    {solution.title}
-                  </h3>
+                      <h3 className="text-lg font-semibold tracking-tight">
+                        {item.title}
+                      </h3>
 
-                  <p className="mt-4 max-w-sm text-sm leading-7 text-neutral-600 transition group-hover:text-white/60">
-                    {solution.description}
-                  </p>
-
-                  <ArrowUpRight
-                    className="mt-6 size-5 text-neutral-500 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-emerald-400"
-                    aria-hidden="true"
-                  />
-                </div>
-              </Link>
-            );
-          })}
+                      <p
+                        className={
+                          isFeatured
+                            ? "mt-2 text-sm leading-6 text-white/55"
+                            : "mt-2 text-sm leading-6 text-neutral-500"
+                        }
+                      >
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </Container>
     </section>
