@@ -1,371 +1,327 @@
-import {
-  Building2,
-  Factory,
-  Home,
-  Hotel,
-  Landmark,
-  School,
-  Store,
-  Warehouse,
-} from "lucide-react";
-
 export type SolutionsPageLocale = "az" | "en" | "ru";
 
 export const solutionsPageTranslations = {
   az: {
-    metadataTitle: "Həllər",
+    metadataTitle: "Həllər | KHATT Electronics",
     metadataDescription:
-      "KHATT Electronics obyekt tipinə uyğun təhlükəsizlik, videomüşahidə, keçidə nəzarət, domofon və şəbəkə həlləri təqdim edir.",
-    eyebrow: "Həllər",
-    title: "Hər obyekt üçün uyğun təhlükəsizlik və elektronika həlli",
+      "Yanğın təhlükəsizliyi, videomüşahidə, girişə nəzarət, elektrik, isitmə-soyutma, havalandırma və şəbəkə sistemləri.",
+
+    eyebrow: "Həllərimiz",
+    title: "Təhlükəsizlik və mühəndis sistemləri üçün tam yanaşma",
     description:
-      "Ofis, mağaza, anbar, yaşayış binası və istehsalat obyektləri üçün ehtiyaca uyğun kamera, keçidə nəzarət, siqnalizasiya və şəbəkə həlləri hazırlayırıq.",
-    quoteButton: "Layihə üçün qiymət təklifi al",
+      "Obyektin ilkin qiymətləndirilməsindən layihələndirmə, avadanlıq təchizatı, quraşdırma və texniki xidmətə qədər bütün mərhələləri idarə edirik.",
+
+    quoteButton: "Layihə üçün təklif al",
     servicesButton: "Xidmətlərə bax",
-    planningTitle: "Həlləri obyektə görə planlayırıq",
-    planningDescription:
-      "Eyni məhsul hər obyekt üçün doğru seçim olmaya bilər. Buna görə kamera sayı, baxış bucağı, yaddaş müddəti, kabel məsafəsi və şəbəkə yükü ayrıca hesablanmalıdır.",
+    scopeLabel: "İş həcmi",
+
     solutions: [
       {
-        title: "Ofislər və biznes mərkəzləri",
+        anchor: "fire-safety",
+        title: "Yanğın təhlükəsizliyi sistemləri",
         description:
-          "Ofis sahələri üçün kamera sistemi, keçidə nəzarət, işçi giriş-çıxış nəzarəti və stabil şəbəkə infrastrukturu.",
-        icon: Building2,
+          "Obyektin risk səviyyəsinə və texniki tələblərinə uyğun yanğın aşkarlama, xəbərdarlıq və təxliyə sistemləri layihələndiririk və quraşdırırıq.",
         items: [
-          "IP kamera sistemi",
-          "Access control",
-          "Wi-Fi və LAN",
-          "Server/rack avadanlığı",
+          "Ünvanlı və ünvansız yanğın siqnalizasiyası",
+          "Tüstü, istilik və kombinə edilmiş detektorlar",
+          "Əl detektorları, sirena və işıqlı xəbərvericilər",
+          "Panel, modul və enerji təchizatı avadanlıqları",
+          "Kabel xətləri və avadanlıq yerləşmə planı",
+          "Periodik yoxlama və texniki xidmət",
         ],
       },
       {
-        title: "Mağaza və satış nöqtələri",
+        anchor: "video-surveillance",
+        title: "Videomüşahidə sistemləri",
         description:
-          "Satış sahələrində müştəri axını, kassalar, giriş-çıxış və anbar zonalarının izlənməsi üçün həllər.",
-        icon: Store,
+          "Kiçik obyektlərdən böyük kommersiya və sənaye sahələrinə qədər müşahidə, qeydiyyat və uzaqdan nəzarət həlləri təqdim edirik.",
         items: [
-          "Kassa nəzarəti",
-          "Giriş zonası kameraları",
-          "Anbar izləmə",
-          "Uzaqdan baxış",
+          "IP və analoq kamera sistemləri",
+          "NVR və DVR qeydiyyat avadanlıqları",
+          "Uzaqdan və mobil izləmə",
+          "Videoanalitika və ağıllı aşkarlama",
+          "Yaddaş və arxiv müddətinin hesablanması",
+          "PoE və kamera şəbəkəsi infrastrukturu",
         ],
       },
       {
-        title: "Anbar və logistika",
+        anchor: "access-control",
+        title: "Girişə nəzarət sistemləri",
         description:
-          "Böyük sahələr üçün geniş bucaqlı kameralar, PoE switch-lər, NVR yaddaş planlaması və şəbəkə xəritəsi.",
-        icon: Warehouse,
+          "İşçi, qonaq və nəqliyyat girişlərinin idarə olunması üçün təhlükəsiz və mərkəzləşdirilmiş nəzarət sistemləri qururuq.",
         items: [
-          "Perimetr nəzarəti",
-          "Geniş sahə kameraları",
-          "PoE infrastruktur",
-          "Yaddaş hesablanması",
+          "Kartlı və biometrik keçid sistemləri",
+          "Turniket və şlaqbaum həlləri",
+          "Elektron və elektromaqnit kilidlər",
+          "Domofon və video-domofon sistemləri",
+          "İş vaxtının qeydiyyatı",
+          "Mərkəzləşdirilmiş idarəetmə proqramı",
         ],
       },
       {
-        title: "Zavod və istehsalat",
+        anchor: "electrical",
+        title: "Elektrik sistemləri",
         description:
-          "İstehsal xətləri, təhlükəli zonalar, giriş-çıxış nöqtələri və iş təhlükəsizliyi üçün texniki həllər.",
-        icon: Factory,
+          "Yaşayış, kommersiya və sənaye obyektləri üçün elektrik sistemlərinin layihələndirilməsi, çəkilişi və texniki icrasını həyata keçiririk.",
         items: [
-          "İstehsal zonası nəzarəti",
-          "Giriş-çıxış sistemi",
-          "Alarm inteqrasiyası",
-          "Texniki monitorinq",
+          "Elektrik layihələndirilməsi",
+          "Güc və kabel xətlərinin çəkilməsi",
+          "Paylayıcı və idarəetmə lövhələri",
+          "Daxili və xarici işıqlandırma",
+          "Torpaqlama və ildırımdan mühafizə",
+          "Ölçmə, sınaq və texniki yoxlama",
         ],
       },
       {
-        title: "Yaşayış binaları və villalar",
+        anchor: "hvac",
+        title: "İsitmə, soyutma və havalandırma",
         description:
-          "Giriş blokları, həyət, qaraj, domofon, siqnalizasiya və smart təhlükəsizlik həlləri.",
-        icon: Home,
+          "Obyektin sahəsi və istifadə məqsədinə uyğun komfortlu, stabil və enerji səmərəli iqlim sistemləri hazırlayırıq.",
         items: [
-          "Domofon sistemi",
-          "Həyət kameraları",
-          "Siqnalizasiya",
-          "Mobil izləmə",
+          "İsitmə sistemlərinin quraşdırılması",
+          "Kondisioner və soyutma sistemləri",
+          "Havalandırma kanalları və avadanlıqları",
+          "Hava dəyişmə və güc hesablamaları",
+          "Avtomatika və idarəetmə",
+          "Periodik servis və texniki xidmət",
         ],
       },
       {
-        title: "Hotel və obyektlər",
+        anchor: "networking",
+        title: "Şəbəkə və zəif axın sistemləri",
         description:
-          "Qonaq zonaları, reception, koridorlar, giriş-çıxış və servis sahələri üçün təhlükəsizlik planlaması.",
-        icon: Hotel,
+          "Məlumat, rabitə və təhlükəsizlik sistemlərinin stabil işləməsi üçün strukturlaşdırılmış və idarəolunan infrastruktur qururuq.",
         items: [
-          "Reception nəzarəti",
-          "Koridor kameraları",
-          "Access zonalar",
-          "Şəbəkə planlaması",
-        ],
-      },
-      {
-        title: "Təhsil müəssisələri",
-        description:
-          "Məktəb, kurs və tədris mərkəzləri üçün giriş nəzarəti, kamera sistemi və təhlükəsiz şəbəkə həlləri.",
-        icon: School,
-        items: [
-          "Giriş nəzarəti",
-          "Sinif/koridor kameraları",
-          "Wi-Fi coverage",
-          "Uzaqdan monitorinq",
-        ],
-      },
-      {
-        title: "Dövlət və inzibati obyektlər",
-        description:
-          "Daha ciddi təhlükəsizlik tələbləri olan obyektlər üçün strukturlaşdırılmış və etibarlı sistem yanaşması.",
-        icon: Landmark,
-        items: [
-          "Çoxzonallı nəzarət",
-          "Access control",
-          "Perimetr təhlükəsizliyi",
-          "Texniki sənədləşmə",
+          "Strukturlaşdırılmış kabel sistemi",
+          "Switch, router və Wi-Fi infrastrukturu",
+          "Rack və server şkafları",
+          "Fiber-optik kabel və sonlandırma",
+          "UPS və fasiləsiz enerji həlləri",
+          "Test, markalama və texniki sənədləşmə",
         ],
       },
     ],
-    steps: [
-      "Obyekt tipi və risk zonaları analiz edilir",
-      "Kamera, keçid və şəbəkə nöqtələri planlanır",
-      "Uyğun avadanlıq siyahısı və qiymət təklifi hazırlanır",
-      "Quraşdırma və texniki təhvil mərhələsi icra olunur",
-    ],
+
+    ctaEyebrow: "Layihəniz var?",
+    ctaTitle:
+      "Obyektiniz üçün uyğun sistem və iş həcmini birlikdə müəyyən edək",
+    ctaDescription:
+      "Obyekt haqqında qısa məlumat göndərin. Texniki ehtiyacları qiymətləndirib uyğun həll və qiymət təklifi hazırlayaq.",
   },
 
   en: {
-    metadataTitle: "Solutions",
+    metadataTitle: "Solutions | KHATT Electronics",
     metadataDescription:
-      "KHATT Electronics provides security, video surveillance, access control, intercom and network solutions tailored to different facility types.",
-    eyebrow: "Solutions",
-    title: "Security and electronics solutions for every facility",
+      "Fire safety, video surveillance, access control, electrical, HVAC, ventilation and network systems.",
+
+    eyebrow: "Our solutions",
+    title: "A complete approach to security and engineering systems",
     description:
-      "We design camera, access control, alarm and network solutions for offices, stores, warehouses, residential buildings and production facilities.",
+      "We manage every stage from initial site assessment to design, equipment supply, installation and technical maintenance.",
+
     quoteButton: "Request a project quote",
     servicesButton: "View services",
-    planningTitle: "We plan solutions according to the facility",
-    planningDescription:
-      "The same product may not be the right choice for every facility. Camera count, viewing angle, storage duration, cable distance and network load must be calculated separately.",
+    scopeLabel: "Scope of work",
+
     solutions: [
       {
-        title: "Offices and business centers",
+        anchor: "fire-safety",
+        title: "Fire safety systems",
         description:
-          "Camera systems, access control, employee entry-exit control and stable network infrastructure for office spaces.",
-        icon: Building2,
+          "We design and install fire detection, notification and evacuation systems according to the risk level and technical requirements of the property.",
         items: [
-          "IP camera system",
-          "Access control",
-          "Wi-Fi and LAN",
-          "Server/rack equipment",
+          "Addressable and conventional fire alarms",
+          "Smoke, heat and combined detectors",
+          "Manual call points, sounders and visual alarms",
+          "Control panels, modules and power supplies",
+          "Cabling and equipment layout planning",
+          "Periodic inspection and maintenance",
         ],
       },
       {
-        title: "Stores and retail points",
+        anchor: "video-surveillance",
+        title: "Video surveillance systems",
         description:
-          "Solutions for monitoring customer flow, cash desks, entrances and warehouse areas in retail spaces.",
-        icon: Store,
+          "We provide monitoring, recording and remote surveillance solutions for small properties, commercial buildings and industrial facilities.",
         items: [
-          "Cash desk monitoring",
-          "Entrance zone cameras",
-          "Warehouse monitoring",
-          "Remote view",
+          "IP and analogue camera systems",
+          "NVR and DVR recording equipment",
+          "Remote and mobile monitoring",
+          "Video analytics and smart detection",
+          "Storage duration calculation",
+          "PoE and camera network infrastructure",
         ],
       },
       {
-        title: "Warehouses and logistics",
+        anchor: "access-control",
+        title: "Access control systems",
         description:
-          "Wide-angle cameras, PoE switches, NVR storage planning and network mapping for large areas.",
-        icon: Warehouse,
+          "We build secure and centralized systems for managing employee, visitor and vehicle access.",
         items: [
-          "Perimeter monitoring",
-          "Wide-area cameras",
-          "PoE infrastructure",
-          "Storage calculation",
+          "Card and biometric access systems",
+          "Turnstile and barrier solutions",
+          "Electronic and electromagnetic locks",
+          "Intercom and video intercom systems",
+          "Time and attendance management",
+          "Centralized management software",
         ],
       },
       {
-        title: "Factories and production",
+        anchor: "electrical",
+        title: "Electrical systems",
         description:
-          "Technical solutions for production lines, dangerous zones, entry-exit points and workplace safety.",
-        icon: Factory,
+          "We design and implement electrical systems for residential, commercial and industrial properties.",
         items: [
-          "Production zone monitoring",
-          "Entry-exit system",
-          "Alarm integration",
-          "Technical monitoring",
+          "Electrical system design",
+          "Power and cable line installation",
+          "Distribution and control panels",
+          "Interior and exterior lighting",
+          "Grounding and lightning protection",
+          "Measurement, testing and inspection",
         ],
       },
       {
-        title: "Residential buildings and villas",
+        anchor: "hvac",
+        title: "Heating, cooling and ventilation",
         description:
-          "Entrance blocks, yard, garage, intercom, alarm and smart security solutions.",
-        icon: Home,
+          "We develop comfortable, reliable and energy-efficient climate systems based on the size and purpose of the property.",
         items: [
-          "Intercom system",
-          "Yard cameras",
-          "Alarm system",
-          "Mobile monitoring",
+          "Heating system installation",
+          "Air-conditioning and cooling systems",
+          "Ventilation ducts and equipment",
+          "Airflow and capacity calculations",
+          "Automation and control",
+          "Periodic service and maintenance",
         ],
       },
       {
-        title: "Hotels and facilities",
+        anchor: "networking",
+        title: "Network and low-current systems",
         description:
-          "Security planning for guest areas, reception, corridors, entry-exit and service areas.",
-        icon: Hotel,
+          "We build structured and manageable infrastructure for reliable data, communication and security systems.",
         items: [
-          "Reception monitoring",
-          "Corridor cameras",
-          "Access zones",
-          "Network planning",
-        ],
-      },
-      {
-        title: "Educational institutions",
-        description:
-          "Access control, camera systems and secure network solutions for schools, courses and training centers.",
-        icon: School,
-        items: [
-          "Access control",
-          "Classroom/corridor cameras",
-          "Wi-Fi coverage",
-          "Remote monitoring",
-        ],
-      },
-      {
-        title: "Government and administrative facilities",
-        description:
-          "Structured and reliable system approach for facilities with stricter security requirements.",
-        icon: Landmark,
-        items: [
-          "Multi-zone monitoring",
-          "Access control",
-          "Perimeter security",
-          "Technical documentation",
+          "Structured cabling systems",
+          "Switch, router and Wi-Fi infrastructure",
+          "Rack and server cabinets",
+          "Fibre-optic cabling and termination",
+          "UPS and backup power solutions",
+          "Testing, labelling and documentation",
         ],
       },
     ],
-    steps: [
-      "Facility type and risk zones are analyzed",
-      "Camera, access and network points are planned",
-      "Suitable equipment list and quotation are prepared",
-      "Installation and technical handover stage is completed",
-    ],
+
+    ctaEyebrow: "Planning a project?",
+    ctaTitle:
+      "Let us determine the right system and scope of work for your property",
+    ctaDescription:
+      "Send us brief information about the property. We will assess the technical requirements and prepare a suitable solution and quotation.",
   },
 
   ru: {
-    metadataTitle: "Решения",
+    metadataTitle: "Решения | KHATT Electronics",
     metadataDescription:
-      "KHATT Electronics предлагает решения по безопасности, видеонаблюдению, контролю доступа, домофонам и сетям под тип объекта.",
-    eyebrow: "Решения",
-    title: "Решения безопасности и электроники для каждого объекта",
+      "Пожарная безопасность, видеонаблюдение, контроль доступа, электрика, отопление, охлаждение, вентиляция и сети.",
+
+    eyebrow: "Наши решения",
+    title: "Комплексный подход к системам безопасности и инженерии",
     description:
-      "Мы подготавливаем решения по камерам, контролю доступа, сигнализации и сетям для офисов, магазинов, складов, жилых зданий и производственных объектов.",
-    quoteButton: "Получить предложение по проекту",
+      "Мы управляем всеми этапами: от оценки объекта до проектирования, поставки оборудования, монтажа и технического обслуживания.",
+
+    quoteButton: "Получить предложение",
     servicesButton: "Смотреть услуги",
-    planningTitle: "Мы планируем решения под объект",
-    planningDescription:
-      "Один и тот же товар не всегда подходит для каждого объекта. Количество камер, угол обзора, срок хранения, расстояние кабеля и нагрузка сети должны рассчитываться отдельно.",
+    scopeLabel: "Объём работ",
+
     solutions: [
       {
-        title: "Офисы и бизнес-центры",
+        anchor: "fire-safety",
+        title: "Системы пожарной безопасности",
         description:
-          "Камеры, контроль доступа, учет входа-выхода сотрудников и стабильная сетевая инфраструктура для офисов.",
-        icon: Building2,
+          "Проектируем и устанавливаем системы обнаружения пожара, оповещения и эвакуации с учётом рисков и требований объекта.",
         items: [
-          "IP камеры",
-          "Access control",
-          "Wi-Fi и LAN",
-          "Server/rack оборудование",
+          "Адресная и неадресная пожарная сигнализация",
+          "Дымовые, тепловые и комбинированные извещатели",
+          "Ручные извещатели, сирены и световые оповещатели",
+          "Панели, модули и источники питания",
+          "Кабельные линии и план размещения",
+          "Периодическая проверка и обслуживание",
         ],
       },
       {
-        title: "Магазины и точки продаж",
+        anchor: "video-surveillance",
+        title: "Системы видеонаблюдения",
         description:
-          "Решения для контроля потока клиентов, касс, входов-выходов и складских зон.",
-        icon: Store,
+          "Предлагаем решения для наблюдения, записи и удалённого контроля небольших, коммерческих и промышленных объектов.",
         items: [
-          "Контроль кассы",
-          "Камеры входной зоны",
-          "Контроль склада",
-          "Удаленный просмотр",
+          "IP и аналоговые камеры",
+          "Видеорегистраторы NVR и DVR",
+          "Удалённый и мобильный просмотр",
+          "Видеоаналитика и интеллектуальное обнаружение",
+          "Расчёт срока хранения архива",
+          "PoE и сетевая инфраструктура камер",
         ],
       },
       {
-        title: "Склады и логистика",
+        anchor: "access-control",
+        title: "Системы контроля доступа",
         description:
-          "Широкоугольные камеры, PoE switch, планирование NVR хранения и карта сети для больших площадей.",
-        icon: Warehouse,
+          "Создаём безопасные централизованные системы управления доступом сотрудников, посетителей и транспорта.",
         items: [
-          "Контроль периметра",
-          "Камеры для больших зон",
-          "PoE инфраструктура",
-          "Расчет хранения",
+          "Карточные и биометрические системы",
+          "Турникеты и шлагбаумы",
+          "Электронные и электромагнитные замки",
+          "Домофоны и видеодомофоны",
+          "Учёт рабочего времени",
+          "Централизованное программное управление",
         ],
       },
       {
-        title: "Заводы и производство",
+        anchor: "electrical",
+        title: "Электрические системы",
         description:
-          "Технические решения для производственных линий, опасных зон, входов-выходов и безопасности труда.",
-        icon: Factory,
+          "Проектируем и выполняем электрические системы жилых, коммерческих и промышленных объектов.",
         items: [
-          "Контроль производственной зоны",
-          "Система входа-выхода",
-          "Интеграция alarm",
-          "Технический мониторинг",
+          "Проектирование электросистем",
+          "Прокладка силовых и кабельных линий",
+          "Распределительные и управляющие щиты",
+          "Внутреннее и наружное освещение",
+          "Заземление и молниезащита",
+          "Измерение, испытание и проверка",
         ],
       },
       {
-        title: "Жилые здания и виллы",
+        anchor: "hvac",
+        title: "Отопление, охлаждение и вентиляция",
         description:
-          "Подъезды, двор, гараж, домофон, сигнализация и smart решения безопасности.",
-        icon: Home,
+          "Разрабатываем комфортные, надёжные и энергоэффективные климатические системы с учётом площади и назначения объекта.",
         items: [
-          "Домофонная система",
-          "Камеры двора",
-          "Сигнализация",
-          "Мобильный просмотр",
+          "Монтаж систем отопления",
+          "Кондиционирование и охлаждение",
+          "Вентиляционные каналы и оборудование",
+          "Расчёт воздухообмена и мощности",
+          "Автоматика и управление",
+          "Периодический сервис и обслуживание",
         ],
       },
       {
-        title: "Отели и объекты",
+        anchor: "networking",
+        title: "Сетевые и слаботочные системы",
         description:
-          "Планирование безопасности для guest зон, reception, коридоров, входов-выходов и сервисных зон.",
-        icon: Hotel,
+          "Создаём структурированную и управляемую инфраструктуру для стабильной работы данных, связи и систем безопасности.",
         items: [
-          "Контроль reception",
-          "Камеры коридоров",
-          "Access зоны",
-          "Планирование сети",
-        ],
-      },
-      {
-        title: "Учебные заведения",
-        description:
-          "Контроль доступа, камеры и безопасные сетевые решения для школ, курсов и учебных центров.",
-        icon: School,
-        items: [
-          "Контроль доступа",
-          "Камеры классов/коридоров",
-          "Wi-Fi coverage",
-          "Удаленный мониторинг",
-        ],
-      },
-      {
-        title: "Государственные и административные объекты",
-        description:
-          "Структурированный и надежный системный подход для объектов с более строгими требованиями безопасности.",
-        icon: Landmark,
-        items: [
-          "Многозонный контроль",
-          "Access control",
-          "Безопасность периметра",
-          "Техническая документация",
+          "Структурированные кабельные системы",
+          "Switch, router и Wi-Fi инфраструктура",
+          "Rack и серверные шкафы",
+          "Оптоволоконный кабель и оконцевание",
+          "UPS и резервное питание",
+          "Тестирование, маркировка и документация",
         ],
       },
     ],
-    steps: [
-      "Анализируется тип объекта и зоны риска",
-      "Планируются точки камер, доступа и сети",
-      "Готовится список оборудования и предложение",
-      "Выполняется установка и техническая сдача",
-    ],
+
+    ctaEyebrow: "Планируете проект?",
+    ctaTitle:
+      "Определим подходящую систему и объём работ для вашего объекта",
+    ctaDescription:
+      "Отправьте краткую информацию об объекте. Мы оценим технические требования и подготовим решение и ценовое предложение.",
   },
 } as const;
