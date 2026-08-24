@@ -374,16 +374,28 @@ async function parseProductForm({
       shortDescription: autoShortDescription,
     });
 
-  const price =
-    product.price && product.price.trim() !== "" ? Number(product.price) : null;
+ const priceValue = product.price?.trim().replace(",", ".") ?? "";
 
-  if (price !== null && Number.isNaN(price)) {
-    redirect(
-      `${errorPath}?error=${encodeURIComponent(
-        "Qiymət düzgün formatda deyil.",
-      )}`,
-    );
-  }
+const price = priceValue === "" ? null : Number(priceValue);
+
+const hasValidPriceFormat =
+  priceValue === "" || /^\d+(\.\d{1,2})?$/.test(priceValue);
+
+if (
+  price !== null &&
+  (
+    !hasValidPriceFormat ||
+    !Number.isFinite(price) ||
+    price < 0 ||
+    price > 999_999_999.99
+  )
+) {
+  redirect(
+    `${errorPath}?error=${encodeURIComponent(
+      "Qiymət 0 ilə 999 999 999.99 arasında və maksimum 2 onluq rəqəmlə yazılmalıdır.",
+    )}`,
+  );
+}
 
   return {
     product,
