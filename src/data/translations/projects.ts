@@ -1,335 +1,361 @@
 import {
   Building2,
-  Camera,
   Factory,
   Home,
   Hotel,
-  Network,
-  ShieldCheck,
   Store,
   Warehouse,
 } from "lucide-react";
 
 export const projectsTranslations = {
   az: {
-    metadataTitle: "Layihələr",
+    metadataTitle: "Layihə istiqamətləri",
     metadataDescription:
-      "KHATT Electronics tərəfindən həyata keçirilə bilən videomüşahidə, təhlükəsizlik, keçidə nəzarət və şəbəkə infrastrukturu layihə istiqamətləri.",
+      "Ofis, mağaza, anbar, yaşayış, hotel və sənaye obyektləri üçün təhlükəsizlik, elektrik, HVAC və zəif axın layihə həlləri.",
 
-    eyebrow: "Layihələr",
-    title:
-      "Təhlükəsizlik və elektronika layihələri üçün praktik həll nümunələri",
+    eyebrow: "Layihə istiqamətləri",
+    title: "Hər obyekt üçün fərqli texniki yanaşma",
     description:
-      "Real obyekt ehtiyaclarına uyğun kamera, keçidə nəzarət, siqnalizasiya və şəbəkə infrastrukturu üzrə layihə yanaşmalarını burada təqdim edirik.",
-    quoteButton: "Layihə üçün sorğu göndər",
+      "Obyektin təyinatı, sahəsi, riskləri və istifadə intensivliyi fərqli olduğuna görə hər layihə ayrıca qiymətləndirilir və uyğun sistemlər birlikdə planlaşdırılır.",
+
+    quoteButton: "Layihəni müzakirə et",
     servicesButton: "Xidmətlərə bax",
-    cameraPlanning: "CCTV və təhlükəsizlik planlaması",
-    networkPlanning: "Şəbəkə və infrastruktur yanaşması",
+
+    directionsEyebrow: "Obyekt növləri",
+    directionsTitle: "Fərqli sahələr üçün kompleks sistem həlləri",
+    directionsDescription:
+      "Aşağıdakı nümunələr tamamlanmış layihə iddiası deyil, obyekt növləri üzrə təqdim etdiyimiz texniki yanaşmalardır.",
 
     projects: [
       {
-        title: "Ofis təhlükəsizlik sistemi",
-        type: "Biznes obyektləri",
+        title: "Ofis və biznes mərkəzləri",
+        type: "Kommersiya",
         description:
-          "Ofis daxilində giriş-çıxış, işçi zonaları, reception və ümumi sahələrin izlənməsi üçün kamera və access control həlli.",
+          "İşçi və ziyarətçi təhlükəsizliyi, giriş-çıxış nəzarəti və stabil iş infrastrukturu üçün vahid sistem.",
         icon: Building2,
-        items: ["IP kamera", "Access control", "NVR", "Uzaqdan izləmə"],
+        items: [
+          "Yanğın aşkarlama və xəbərdarlıq",
+          "Videomüşahidə və girişə nəzarət",
+          "Şəbəkə və zəif axın infrastrukturu",
+          "Elektrik və iqlim sistemləri",
+        ],
       },
       {
-        title: "Mağaza və kassa nəzarəti",
-        type: "Retail",
+        title: "Mağaza və restoranlar",
+        type: "Retail və HoReCa",
         description:
-          "Satış nöqtələrində kassa zonası, giriş hissəsi, vitrin və anbar sahələrinin izlənməsi üçün sistem planlaması.",
+          "Müştəri zonaları, kassa, anbar və texniki sahələrin təhlükəsiz və rahat idarə olunması.",
         icon: Store,
         items: [
-          "Kassa kamerası",
-          "Giriş nəzarəti",
-          "Anbar kamerası",
-          "Mobil baxış",
+          "Yanğın və təxliyə sistemləri",
+          "Kassa və ümumi sahə videomüşahidəsi",
+          "Elektrik və işıqlandırma infrastrukturu",
+          "Havalandırma və iqlim nəzarəti",
         ],
       },
       {
-        title: "Anbar perimetr nəzarəti",
+        title: "Anbar və logistika obyektləri",
         type: "Logistika",
         description:
-          "Böyük anbar və logistika sahələrində perimetr, yükləmə zonası və giriş nöqtələri üçün təhlükəsizlik planı.",
+          "Böyük sahələr, yükləmə zonaları, perimetr və məhsul saxlama sahələri üçün texniki həllər.",
         icon: Warehouse,
         items: [
-          "Perimetr kamera",
-          "PoE switch",
-          "Geniş bucaq",
-          "Yaddaş hesabı",
+          "Yanğın aşkarlama və xəbərdarlıq",
+          "Perimetr və anbar videomüşahidəsi",
+          "Girişə və nəqliyyata nəzarət",
+          "Elektrik və kabel infrastrukturu",
         ],
       },
       {
-        title: "Villa və fərdi ev sistemi",
-        type: "Yaşayış obyektləri",
+        title: "Villa və yaşayış obyektləri",
+        type: "Yaşayış",
         description:
-          "Həyət, giriş qapısı, qaraj, domofon və siqnalizasiya üçün inteqrasiya olunmuş smart təhlükəsizlik həlli.",
+          "Gündəlik istifadə rahatlığı ilə təhlükəsizliyi birləşdirən kompakt və idarəolunan sistemlər.",
         icon: Home,
-        items: ["Domofon", "Həyət kamerası", "Siqnalizasiya", "Mobil bildiriş"],
+        items: [
+          "Yanğın və qaz xəbərdarlığı",
+          "Kamera və domofon sistemləri",
+          "Giriş və həyət nəzarəti",
+          "İsitmə, soyutma və havalandırma",
+        ],
       },
       {
-        title: "Hotel təhlükəsizlik planlaması",
-        type: "Qonaqlama obyektləri",
+        title: "Hotel və qonaqlama obyektləri",
+        type: "Hospitality",
         description:
-          "Reception, koridorlar, giriş-çıxış və servis sahələri üçün stabil kamera və şəbəkə infrastrukturu.",
+          "Qonaq təhlükəsizliyi, işçi girişləri, ümumi zonalar və fasiləsiz xidmət üçün inteqrasiya edilmiş həll.",
         icon: Hotel,
         items: [
-          "Reception kamera",
-          "Koridor nəzarəti",
-          "Wi-Fi planlama",
-          "NVR",
+          "Yanğın və təxliyə sistemləri",
+          "Ümumi sahələrin videomüşahidəsi",
+          "Girişə nəzarət və şəbəkə",
+          "HVAC və elektrik sistemləri",
         ],
       },
       {
-        title: "İstehsalat zonası monitorinqi",
-        type: "Sənaye obyektləri",
+        title: "İstehsalat və sənaye sahələri",
+        type: "Sənaye",
         description:
-          "Zavod və istehsalat zonalarında təhlükəli sahələr, iş axını və giriş-çıxış üçün texniki nəzarət sistemi.",
+          "Riskli istehsal zonaları və yüksək texniki tələblər üçün dayanıqlı mühəndis infrastrukturu.",
         icon: Factory,
         items: [
-          "İstehsal kamera",
-          "Alarm inteqrasiyası",
-          "Access point",
-          "Texniki nəzarət",
+          "Sənaye yanğın təhlükəsizliyi",
+          "Elektrik və enerji paylanması",
+          "Havalandırma və tüstü idarəetməsi",
+          "Texniki monitorinq və giriş nəzarəti",
         ],
       },
     ],
 
-    processEyebrow: "Layihə yanaşması",
-    processTitle: "Hər layihəni obyektə uyğun planlayırıq",
+    processEyebrow: "Layihə modeli",
+    processTitle: "Sistemlər ayrı deyil, vahid layihə kimi planlanır",
     processDescription:
-      "Kamera sayı, kabel məsafəsi, yaddaş müddəti, şəbəkə yükü və istifadə məqsədi əvvəlcədən analiz olunur.",
+      "Yanğın təhlükəsizliyi, elektrik, HVAC, videomüşahidə və şəbəkə xətləri əvvəlcədən koordinasiya edilir. Bu, montaj zamanı uyğunsuzluqları və əlavə xərcləri azaldır.",
+
     processSteps: [
-      "Obyekt və risk zonaları analiz olunur",
-      "Kamera, şəbəkə və access nöqtələri planlanır",
-      "Avadanlıq siyahısı və qiymət təklifi hazırlanır",
-      "Quraşdırma, sazlama və təhvil mərhələsi icra olunur",
+      "Obyekt və texniki tələblər qiymətləndirilir",
+      "Sistemlər və kabel marşrutları birlikdə planlanır",
+      "Avadanlıq siyahısı və iş həcmi hazırlanır",
+      "Montaj, sazlama, sınaq və təhvil həyata keçirilir",
     ],
 
-    ctaTitle: "Öz layihəniz üçün uyğun həll istəyirsiniz?",
+    ctaTitle: "Obyektiniz üçün layihə yanaşması hazırlayaq",
     ctaDescription:
-      "Obyektiniz haqqında məlumat göndərin, sizə uyğun məhsul siyahısı və ilkin texniki yanaşma hazırlayaq.",
-    ctaButton: "Sorğu göndər",
-    ctaIcon: ShieldCheck,
-    cameraIcon: Camera,
-    networkIcon: Network,
+      "Obyektin növünü, sahəsini və tələb olunan sistemləri qeyd edin. İlkin texniki ehtiyacları birlikdə müəyyənləşdirək.",
+    ctaButton: "Layihə sorğusu göndər",
   },
 
   en: {
-    metadataTitle: "Projects",
+    metadataTitle: "Project directions",
     metadataDescription:
-      "Project directions for video surveillance, security, access control and network infrastructure solutions by KHATT Electronics.",
+      "Security, electrical, HVAC and low-current project solutions for offices, retail, warehouses, residential, hospitality and industrial facilities.",
 
-    eyebrow: "Projects",
-    title: "Practical solution examples for security and electronics projects",
+    eyebrow: "Project directions",
+    title: "A different technical approach for every facility",
     description:
-      "Here we present project approaches for CCTV, access control, alarm and network infrastructure based on real facility needs.",
-    quoteButton: "Send project request",
+      "Each project is assessed individually because the purpose, size, risks and intensity of use vary between facilities.",
+
+    quoteButton: "Discuss your project",
     servicesButton: "View services",
-    cameraPlanning: "CCTV and security planning",
-    networkPlanning: "Network and infrastructure approach",
+
+    directionsEyebrow: "Facility types",
+    directionsTitle: "Integrated system solutions for different sectors",
+    directionsDescription:
+      "The following are technical approaches we provide for different facility types, not claims of completed projects.",
 
     projects: [
       {
-        title: "Office security system",
-        type: "Business facilities",
+        title: "Offices and business centers",
+        type: "Commercial",
         description:
-          "Camera and access control solution for monitoring entrances, employee zones, reception and common office areas.",
+          "A unified system for employee and visitor safety, access management and stable business infrastructure.",
         icon: Building2,
-        items: ["IP camera", "Access control", "NVR", "Remote monitoring"],
+        items: [
+          "Fire detection and notification",
+          "Video surveillance and access control",
+          "Network and low-current infrastructure",
+          "Electrical and climate systems",
+        ],
       },
       {
-        title: "Store and cash desk monitoring",
-        type: "Retail",
+        title: "Retail and restaurants",
+        type: "Retail and HoReCa",
         description:
-          "System planning for monitoring cash desk areas, entrance zones, showcases and warehouse areas in retail points.",
+          "Safe and convenient management of customer areas, cash desks, storage and technical zones.",
         icon: Store,
         items: [
-          "Cash desk camera",
-          "Entrance monitoring",
-          "Warehouse camera",
-          "Mobile viewing",
+          "Fire and evacuation systems",
+          "Cash desk and general surveillance",
+          "Electrical and lighting infrastructure",
+          "Ventilation and climate control",
         ],
       },
       {
-        title: "Warehouse perimeter monitoring",
+        title: "Warehouses and logistics",
         type: "Logistics",
         description:
-          "Security planning for perimeters, loading areas and entrance points in large warehouses and logistics facilities.",
+          "Technical solutions for large areas, loading zones, perimeters and product storage facilities.",
         icon: Warehouse,
         items: [
-          "Perimeter camera",
-          "PoE switch",
-          "Wide angle",
-          "Storage calculation",
+          "Fire detection and notification",
+          "Perimeter and warehouse surveillance",
+          "Access and vehicle control",
+          "Electrical and cable infrastructure",
         ],
       },
       {
-        title: "Villa and private house system",
-        type: "Residential facilities",
+        title: "Villas and residential facilities",
+        type: "Residential",
         description:
-          "Integrated smart security solution for yard, entrance gate, garage, intercom and alarm system.",
+          "Compact and manageable systems combining everyday convenience with safety.",
         icon: Home,
-        items: ["Intercom", "Yard camera", "Alarm system", "Mobile alerts"],
+        items: [
+          "Fire and gas notification",
+          "Camera and intercom systems",
+          "Entrance and perimeter control",
+          "Heating, cooling and ventilation",
+        ],
       },
       {
-        title: "Hotel security planning",
-        type: "Hospitality facilities",
+        title: "Hotels and hospitality",
+        type: "Hospitality",
         description:
-          "Stable camera and network infrastructure for reception, corridors, entrances/exits and service areas.",
+          "Integrated solutions for guest safety, employee access, common areas and uninterrupted service.",
         icon: Hotel,
         items: [
-          "Reception camera",
-          "Corridor monitoring",
-          "Wi-Fi planning",
-          "NVR",
+          "Fire and evacuation systems",
+          "Common-area video surveillance",
+          "Access control and networking",
+          "HVAC and electrical systems",
         ],
       },
       {
-        title: "Production zone monitoring",
-        type: "Industrial facilities",
+        title: "Production and industrial sites",
+        type: "Industrial",
         description:
-          "Technical monitoring system for risk zones, workflow and entrance-exit points in factories and production areas.",
+          "Reliable engineering infrastructure for high-risk production areas and demanding technical environments.",
         icon: Factory,
         items: [
-          "Production camera",
-          "Alarm integration",
-          "Access point",
-          "Technical monitoring",
+          "Industrial fire safety",
+          "Electrical and power distribution",
+          "Ventilation and smoke management",
+          "Technical monitoring and access control",
         ],
       },
     ],
 
-    processEyebrow: "Project approach",
-    processTitle: "We plan every project according to the facility",
+    processEyebrow: "Project model",
+    processTitle: "Systems are planned as one coordinated project",
     processDescription:
-      "Camera quantity, cable distance, storage duration, network load and usage purpose are analyzed in advance.",
+      "Fire safety, electrical, HVAC, surveillance and network routes are coordinated in advance, reducing installation conflicts and additional costs.",
+
     processSteps: [
-      "Facility and risk zones are analyzed",
-      "Camera, network and access points are planned",
-      "Equipment list and quotation are prepared",
-      "Installation, configuration and handover are completed",
+      "Facility and technical requirements are assessed",
+      "Systems and cable routes are planned together",
+      "Equipment list and scope of work are prepared",
+      "Installation, setup, testing and handover are completed",
     ],
 
-    ctaTitle: "Need a suitable solution for your project?",
+    ctaTitle: "Let us prepare a project approach for your facility",
     ctaDescription:
-      "Send us information about your facility and we will prepare a suitable product list and initial technical approach.",
-    ctaButton: "Send request",
-    ctaIcon: ShieldCheck,
-    cameraIcon: Camera,
-    networkIcon: Network,
+      "Specify the type, area and required systems. We will identify the initial technical requirements together.",
+    ctaButton: "Send project request",
   },
 
   ru: {
-    metadataTitle: "Проекты",
+    metadataTitle: "Направления проектов",
     metadataDescription:
-      "Проектные направления KHATT Electronics в сфере видеонаблюдения, безопасности, контроля доступа и сетевой инфраструктуры.",
+      "Решения по безопасности, электрике, HVAC и слаботочным системам для офисов, магазинов, складов, жилья, гостиниц и промышленных объектов.",
 
-    eyebrow: "Проекты",
-    title:
-      "Практические примеры решений для проектов безопасности и электроники",
+    eyebrow: "Направления проектов",
+    title: "Индивидуальный технический подход к каждому объекту",
     description:
-      "Здесь представлены проектные подходы по видеонаблюдению, контролю доступа, сигнализации и сетевой инфраструктуре с учетом реальных потребностей объектов.",
-    quoteButton: "Отправить запрос по проекту",
+      "Каждый проект оценивается отдельно, поскольку назначение, площадь, риски и интенсивность эксплуатации объектов различаются.",
+
+    quoteButton: "Обсудить проект",
     servicesButton: "Смотреть услуги",
-    cameraPlanning: "Планирование CCTV и безопасности",
-    networkPlanning: "Сетевой и инфраструктурный подход",
+
+    directionsEyebrow: "Типы объектов",
+    directionsTitle: "Комплексные системные решения для разных сфер",
+    directionsDescription:
+      "Ниже представлены технические подходы для различных типов объектов, а не заявления о выполненных проектах.",
 
     projects: [
       {
-        title: "Система безопасности офиса",
-        type: "Бизнес-объекты",
+        title: "Офисы и бизнес-центры",
+        type: "Коммерческие",
         description:
-          "Решение с камерами и контролем доступа для входов, рабочих зон, reception и общих офисных помещений.",
+          "Единая система для безопасности сотрудников и посетителей, контроля доступа и стабильной инфраструктуры.",
         icon: Building2,
-        items: ["IP камера", "Access control", "NVR", "Удаленный просмотр"],
+        items: [
+          "Обнаружение и оповещение о пожаре",
+          "Видеонаблюдение и контроль доступа",
+          "Сетевая и слаботочная инфраструктура",
+          "Электрические и климатические системы",
+        ],
       },
       {
-        title: "Контроль магазина и кассы",
-        type: "Retail",
+        title: "Магазины и рестораны",
+        type: "Retail и HoReCa",
         description:
-          "Планирование системы для контроля кассовой зоны, входа, витрин и складских зон в торговых точках.",
+          "Безопасное управление клиентскими зонами, кассами, складами и техническими помещениями.",
         icon: Store,
         items: [
-          "Камера кассы",
-          "Контроль входа",
-          "Камера склада",
-          "Мобильный просмотр",
+          "Пожарные и эвакуационные системы",
+          "Наблюдение за кассой и общими зонами",
+          "Электрическая инфраструктура",
+          "Вентиляция и климат-контроль",
         ],
       },
       {
-        title: "Периметр склада",
+        title: "Склады и логистика",
         type: "Логистика",
         description:
-          "План безопасности для периметра, зоны загрузки и входных точек на больших складах и логистических объектах.",
+          "Технические решения для больших площадей, погрузочных зон, периметра и хранения продукции.",
         icon: Warehouse,
         items: [
-          "Камера периметра",
-          "PoE switch",
-          "Широкий угол",
-          "Расчет хранения",
+          "Пожарное обнаружение и оповещение",
+          "Наблюдение за периметром и складом",
+          "Контроль доступа и транспорта",
+          "Электрическая и кабельная инфраструктура",
         ],
       },
       {
-        title: "Система для виллы и частного дома",
-        type: "Жилые объекты",
+        title: "Виллы и жилые объекты",
+        type: "Жилые",
         description:
-          "Интегрированное smart-решение для двора, входных ворот, гаража, домофона и сигнализации.",
+          "Компактные и управляемые системы, объединяющие безопасность и ежедневный комфорт.",
         icon: Home,
         items: [
-          "Домофон",
-          "Камера двора",
-          "Сигнализация",
-          "Мобильные уведомления",
+          "Пожарное и газовое оповещение",
+          "Камеры и домофонные системы",
+          "Контроль входа и территории",
+          "Отопление, охлаждение и вентиляция",
         ],
       },
       {
-        title: "Планирование безопасности отеля",
-        type: "Гостиничные объекты",
+        title: "Гостиницы",
+        type: "Hospitality",
         description:
-          "Стабильная камера и сетевая инфраструктура для reception, коридоров, входов-выходов и сервисных зон.",
+          "Интегрированные решения для безопасности гостей, доступа персонала и бесперебойного обслуживания.",
         icon: Hotel,
         items: [
-          "Камера reception",
-          "Контроль коридоров",
-          "Wi-Fi планирование",
-          "NVR",
+          "Пожарные и эвакуационные системы",
+          "Видеонаблюдение общих зон",
+          "Контроль доступа и сеть",
+          "HVAC и электрические системы",
         ],
       },
       {
-        title: "Мониторинг производственной зоны",
-        type: "Промышленные объекты",
+        title: "Производственные объекты",
+        type: "Промышленные",
         description:
-          "Техническая система контроля для опасных зон, рабочего процесса и точек входа-выхода на производстве.",
+          "Надёжная инженерная инфраструктура для опасных зон и объектов с высокими техническими требованиями.",
         icon: Factory,
         items: [
-          "Производственная камера",
-          "Интеграция alarm",
-          "Access point",
-          "Технический мониторинг",
+          "Промышленная пожарная безопасность",
+          "Электрика и распределение энергии",
+          "Вентиляция и дымоудаление",
+          "Мониторинг и контроль доступа",
         ],
       },
     ],
 
-    processEyebrow: "Проектный подход",
-    processTitle: "Каждый проект планируется под конкретный объект",
+    processEyebrow: "Модель проекта",
+    processTitle: "Системы планируются как единый проект",
     processDescription:
-      "Количество камер, расстояние кабеля, срок хранения, нагрузка на сеть и цель использования анализируются заранее.",
+      "Пожарная безопасность, электрика, HVAC, видеонаблюдение и сетевые трассы координируются заранее, снижая конфликты и дополнительные расходы.",
+
     processSteps: [
-      "Анализируется объект и зоны риска",
-      "Планируются точки камер, сети и доступа",
-      "Готовится список оборудования и предложение",
-      "Выполняется установка, настройка и сдача",
+      "Оцениваются объект и технические требования",
+      "Системы и кабельные трассы планируются вместе",
+      "Готовятся список оборудования и объём работ",
+      "Выполняются монтаж, настройка, испытания и сдача",
     ],
 
-    ctaTitle: "Нужно подходящее решение для вашего проекта?",
+    ctaTitle: "Подготовим проектный подход для вашего объекта",
     ctaDescription:
-      "Отправьте информацию об объекте, и мы подготовим подходящий список товаров и первичный технический подход.",
+      "Укажите тип, площадь и необходимые системы. Вместе определим первоначальные технические требования.",
     ctaButton: "Отправить запрос",
-    ctaIcon: ShieldCheck,
-    cameraIcon: Camera,
-    networkIcon: Network,
   },
 } as const;
