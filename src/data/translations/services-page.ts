@@ -1,301 +1,312 @@
 import {
   Cable,
-  Camera,
-  DoorOpen,
-  ShieldAlert,
+  ClipboardList,
+  MapPinned,
+  PackageCheck,
+  Settings,
   ShieldCheck,
-  Wifi,
 } from "lucide-react";
 
 export type ServicesPageLocale = "az" | "en" | "ru";
 
 export const servicesPageTranslations = {
   az: {
-    metadataTitle: "Xidmətlər",
+    metadataTitle: "Mühəndislik xidmətləri",
     metadataDescription:
-      "KHATT Electronics təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və şəbəkə infrastrukturu üzrə peşəkar xidmətlər təqdim edir.",
+      "KHATT Electronics obyektə baxış, layihələndirmə, avadanlıq təchizatı, quraşdırma, sazlama və texniki xidmət təqdim edir.",
+
     eyebrow: "Xidmətlər",
-    title: "Təhlükəsizlik və elektronika layihələri üçün tam texniki dəstək",
+    title: "Layihənin bütün texniki mərhələləri bir komandada",
     description:
-      "Məhsul seçimi, sistem planlaması, quraşdırma və texniki dəstək mərhələlərində biznes və fərdi obyektlər üçün peşəkar həllər təqdim edirik.",
-    quoteButton: "Qiymət təklifi al",
-    productsButton: "Məhsullara bax",
-    processEyebrow: "İş prosesi",
-    processTitle: "Layihəni səliqəli və ölçülə bilən mərhələlərlə aparırıq",
-    processDescription:
-      "Məqsəd sadəcə avadanlıq satmaq deyil, obyektə uyğun və stabil işləyən sistem qurmaqdır.",
+      "Yanğın təhlükəsizliyi, videomüşahidə, girişə nəzarət, elektrik, HVAC və şəbəkə sistemləri üzrə layihədən texniki xidmətə qədər vahid yanaşma təqdim edirik.",
+
+    quoteButton: "Layihəni müzakirə et",
+    productsButton: "Həllərə bax",
+
+    servicesLabel: "Xidmət istiqamətləri",
+    servicesTitle: "Ehtiyacdan işlək sistemə qədər",
+    servicesDescription:
+      "Xidmətlər ayrıca deyil, bir-birini tamamlayan vahid layihə prosesi kimi həyata keçirilir.",
+
     services: [
       {
-        title: "Videomüşahidə sistemləri",
+        title: "Obyektə baxış və konsultasiya",
         description:
-          "Obyektin ölçüsünə uyğun IP kamera, analoq kamera, NVR/DVR və yaddaş həllərinin seçimi və quraşdırılması.",
-        icon: Camera,
+          "Obyektin təyinatı, sahəsi, riskləri və mövcud infrastrukturu yerində qiymətləndirilir.",
+        icon: MapPinned,
         items: [
-          "IP və analoq kamera sistemləri",
-          "NVR/DVR seçimi",
-          "Uzaqdan izləmə",
-          "Obyektə uyğun kamera planlaması",
+          "Texniki ehtiyacların müəyyənləşdirilməsi",
+          "Mövcud sistemlərin yoxlanılması",
+          "İlkin həll və tövsiyələrin hazırlanması",
         ],
       },
       {
-        title: "Keçidə nəzarət",
+        title: "Layihələndirmə",
         description:
-          "Ofis, anbar, bina və kommersiya obyektləri üçün kartlı keçid, turniket və giriş nəzarət sistemləri.",
-        icon: DoorOpen,
+          "Sistem sxemi, avadanlıq yerləşməsi, kabel marşrutları və iş həcmi hazırlanır.",
+        icon: ClipboardList,
         items: [
-          "Kartlı giriş sistemləri",
-          "Turniket inteqrasiyası",
-          "İşçi giriş-çıxış nəzarəti",
-          "Access control avadanlığı",
+          "Avadanlıq və sistem sxemləri",
+          "Kabel və yerləşmə planı",
+          "İş həcmi və texniki sənədlər",
         ],
       },
       {
-        title: "Siqnalizasiya sistemləri",
+        title: "Avadanlıq təchizatı",
         description:
-          "Məkanın təhlükəsizliyi üçün hərəkət sensorları, maqnit kontaktlar, sirenalar və alarm panelləri.",
-        icon: ShieldAlert,
+          "Layihəyə və büdcəyə uyğun peşəkar avadanlıqlar seçilir və komplektləşdirilir.",
+        icon: PackageCheck,
         items: [
-          "Hərəkət sensorları",
-          "Alarm panelləri",
-          "Siren və xəbərdarlıq",
-          "Obyekt təhlükəsizliyi",
+          "Uyğun avadanlıq seçimi",
+          "Məhsulların komplektləşdirilməsi",
+          "Çatdırılma və zəmanət dəstəyi",
         ],
       },
       {
-        title: "Şəbəkə infrastrukturu",
+        title: "Quraşdırma və montaj",
         description:
-          "PoE switch, router, access point, rack kabinet və kabel infrastrukturu üzrə stabil şəbəkə qurulması.",
-        icon: Wifi,
-        items: [
-          "PoE switch seçimi",
-          "Wi-Fi coverage planlaması",
-          "LAN kabel infrastrukturu",
-          "Rack və patch panel",
-        ],
-      },
-      {
-        title: "Kabel və quraşdırma",
-        description:
-          "Kabel çəkilişi, montaj, konnektorlaşdırma, test və təhvil mərhələlərini səliqəli şəkildə həyata keçiririk.",
+          "Kabel infrastrukturu və avadanlıqlar texniki standartlara uyğun quraşdırılır.",
         icon: Cable,
         items: [
-          "UTP/FTP kabel çəkilişi",
-          "Konnektorlaşdırma",
-          "Kabel testləri",
-          "Səliqəli montaj",
+          "Kabel xətlərinin çəkilməsi",
+          "Avadanlıqların montajı",
+          "Səliqəli və təhlükəsiz quraşdırma",
         ],
       },
       {
-        title: "Texniki dəstək",
+        title: "Sazlama və inteqrasiya",
         description:
-          "Mövcud sistemlərin yoxlanması, sazlanması, diaqnostikası və ehtiyac olduqda modernləşdirilməsi.",
+          "Sistem proqramlaşdırılır, digər avadanlıqlarla inteqrasiya edilir və sınaqdan keçirilir.",
+        icon: Settings,
+        items: [
+          "Proqramlaşdırma və konfiqurasiya",
+          "Sistemlərarası inteqrasiya",
+          "Test və işə salınma",
+        ],
+      },
+      {
+        title: "Texniki xidmət",
+        description:
+          "Quraşdırılmış və mövcud sistemlərin stabil işləməsi üçün periodik dəstək göstərilir.",
         icon: ShieldCheck,
         items: [
-          "Sistem yoxlanışı",
-          "Diaqnostika",
-          "Parametrlərin sazlanması",
-          "Modernləşdirmə təklifi",
+          "Periodik yoxlama və profilaktika",
+          "Nasazlıqların diaqnostikası",
+          "Təmir və modernləşdirmə",
         ],
       },
     ],
+
+    processEyebrow: "Vahid məsuliyyət",
+    processTitle: "Bir layihə, bir komanda, davamlı texniki dəstək",
+    processDescription:
+      "Müxtəlif podratçılarla ayrıca işləməyə ehtiyac qalmır. Layihə, təchizat, montaj və xidmət vahid komanda tərəfindən idarə olunur.",
+
     processSteps: [
-      "Ehtiyac və obyekt məlumatları toplanır",
-      "Avadanlıq siyahısı və ilkin qiymət təklifi hazırlanır",
-      "Uyğun məhsullar və texniki həll seçilir",
-      "Quraşdırma və təhvil prosesi planlanır",
+      "Ehtiyac və texniki tələblər müəyyənləşdirilir",
+      "Layihə, avadanlıq siyahısı və qiymət hazırlanır",
+      "Quraşdırma, sazlama və bütün sınaqlar aparılır",
+      "Sistem təhvil verilir və texniki dəstək davam edir",
     ],
   },
 
   en: {
-    metadataTitle: "Services",
+    metadataTitle: "Engineering services",
     metadataDescription:
-      "KHATT Electronics provides professional services for security systems, video surveillance, access control, intercom, alarm systems and network infrastructure.",
+      "KHATT Electronics provides site inspection, design, equipment supply, installation, commissioning and maintenance services.",
+
     eyebrow: "Services",
-    title: "Complete technical support for security and electronics projects",
+    title: "Every technical stage of the project under one team",
     description:
-      "We provide professional solutions for businesses and private facilities across product selection, system planning, installation and technical support.",
-    quoteButton: "Request a quote",
-    productsButton: "View products",
-    processEyebrow: "Work process",
-    processTitle: "We manage projects through clear and measurable stages",
-    processDescription:
-      "The goal is not just to sell equipment, but to build a stable system suitable for the facility.",
+      "We provide a unified approach from design to maintenance for fire safety, video surveillance, access control, electrical, HVAC and network systems.",
+
+    quoteButton: "Discuss your project",
+    productsButton: "View solutions",
+
+    servicesLabel: "Service areas",
+    servicesTitle: "From requirement to an operational system",
+    servicesDescription:
+      "Our services work as a single connected project process rather than separate activities.",
+
     services: [
       {
-        title: "Video surveillance systems",
+        title: "Site inspection and consultation",
         description:
-          "Selection and installation of IP cameras, analog cameras, NVR/DVR and storage solutions according to the facility size.",
-        icon: Camera,
+          "The purpose, area, risks and existing infrastructure of the facility are assessed on site.",
+        icon: MapPinned,
         items: [
-          "IP and analog camera systems",
-          "NVR/DVR selection",
-          "Remote monitoring",
-          "Camera planning for the facility",
+          "Identification of technical requirements",
+          "Inspection of existing systems",
+          "Initial solution recommendations",
         ],
       },
       {
-        title: "Access control",
+        title: "System design",
         description:
-          "Card access, turnstile and entrance control systems for offices, warehouses, buildings and commercial facilities.",
-        icon: DoorOpen,
+          "System diagrams, equipment layout, cable routes and scope of work are prepared.",
+        icon: ClipboardList,
         items: [
-          "Card access systems",
-          "Turnstile integration",
-          "Employee entry-exit control",
-          "Access control equipment",
+          "Equipment and system diagrams",
+          "Cable and equipment layout",
+          "Scope and technical documentation",
         ],
       },
       {
-        title: "Alarm systems",
+        title: "Equipment supply",
         description:
-          "Motion sensors, magnetic contacts, sirens and alarm panels for site security.",
-        icon: ShieldAlert,
+          "Professional equipment is selected and supplied according to the project and budget.",
+        icon: PackageCheck,
         items: [
-          "Motion sensors",
-          "Alarm panels",
-          "Siren and notification",
-          "Facility security",
+          "Suitable equipment selection",
+          "Complete product configuration",
+          "Delivery and warranty support",
         ],
       },
       {
-        title: "Network infrastructure",
+        title: "Installation",
         description:
-          "Stable network setup with PoE switches, routers, access points, rack cabinets and cable infrastructure.",
-        icon: Wifi,
-        items: [
-          "PoE switch selection",
-          "Wi-Fi coverage planning",
-          "LAN cable infrastructure",
-          "Rack and patch panel",
-        ],
-      },
-      {
-        title: "Cabling and installation",
-        description:
-          "We handle cabling, mounting, connectorization, testing and handover stages in an organized way.",
+          "Cable infrastructure and equipment are installed according to technical standards.",
         icon: Cable,
         items: [
-          "UTP/FTP cabling",
-          "Connectorization",
-          "Cable tests",
-          "Clean installation",
+          "Cable route installation",
+          "Equipment mounting",
+          "Clean and safe installation",
         ],
       },
       {
-        title: "Technical support",
+        title: "Setup and integration",
         description:
-          "Inspection, configuration, diagnostics and modernization of existing systems when needed.",
+          "The system is programmed, integrated with other equipment and fully tested.",
+        icon: Settings,
+        items: [
+          "Programming and configuration",
+          "System integration",
+          "Testing and commissioning",
+        ],
+      },
+      {
+        title: "Technical maintenance",
+        description:
+          "Periodic support is provided to ensure stable operation of new and existing systems.",
         icon: ShieldCheck,
         items: [
-          "System inspection",
-          "Diagnostics",
-          "Parameter configuration",
-          "Modernization proposal",
+          "Periodic inspection and prevention",
+          "Fault diagnostics",
+          "Repair and modernization",
         ],
       },
     ],
+
+    processEyebrow: "Unified responsibility",
+    processTitle: "One project, one team and ongoing technical support",
+    processDescription:
+      "There is no need to manage several separate contractors. Design, supply, installation and support are managed by one team.",
+
     processSteps: [
-      "Requirements and facility details are collected",
-      "Equipment list and initial quotation are prepared",
-      "Suitable products and technical solution are selected",
-      "Installation and handover process is planned",
+      "Requirements and technical needs are identified",
+      "Design, equipment list and quotation are prepared",
+      "Installation, setup and all tests are completed",
+      "The system is handed over and support continues",
     ],
   },
 
   ru: {
-    metadataTitle: "Услуги",
+    metadataTitle: "Инженерные услуги",
     metadataDescription:
-      "KHATT Electronics предоставляет профессиональные услуги по системам безопасности, видеонаблюдению, контролю доступа, домофонам, сигнализации и сетевой инфраструктуре.",
+      "KHATT Electronics выполняет обследование, проектирование, поставку оборудования, монтаж, настройку и техническое обслуживание.",
+
     eyebrow: "Услуги",
-    title:
-      "Полная техническая поддержка для проектов безопасности и электроники",
+    title: "Все технические этапы проекта выполняет одна команда",
     description:
-      "Мы предлагаем профессиональные решения для бизнеса и частных объектов на этапах подбора товаров, планирования системы, установки и технической поддержки.",
-    quoteButton: "Получить предложение",
-    productsButton: "Смотреть товары",
-    processEyebrow: "Рабочий процесс",
-    processTitle: "Мы ведем проект по понятным и измеримым этапам",
-    processDescription:
-      "Цель — не просто продать оборудование, а построить стабильную систему, подходящую для объекта.",
+      "Мы обеспечиваем единый подход от проекта до обслуживания систем пожарной безопасности, видеонаблюдения, контроля доступа, электрики, HVAC и сетей.",
+
+    quoteButton: "Обсудить проект",
+    productsButton: "Смотреть решения",
+
+    servicesLabel: "Направления услуг",
+    servicesTitle: "От потребности до готовой системы",
+    servicesDescription:
+      "Все услуги выполняются как единый связанный процесс, а не как отдельные работы.",
+
     services: [
       {
-        title: "Системы видеонаблюдения",
+        title: "Осмотр и консультация",
         description:
-          "Подбор и установка IP камер, аналоговых камер, NVR/DVR и решений хранения под размер объекта.",
-        icon: Camera,
+          "На объекте оцениваются назначение, площадь, риски и существующая инфраструктура.",
+        icon: MapPinned,
         items: [
-          "IP и аналоговые камеры",
-          "Подбор NVR/DVR",
-          "Удаленный просмотр",
-          "Планирование камер под объект",
+          "Определение технических требований",
+          "Проверка существующих систем",
+          "Предварительные рекомендации",
         ],
       },
       {
-        title: "Контроль доступа",
+        title: "Проектирование",
         description:
-          "Карточный доступ, турникеты и системы входного контроля для офисов, складов, зданий и коммерческих объектов.",
-        icon: DoorOpen,
+          "Подготавливаются схемы системы, размещение оборудования, кабельные трассы и объём работ.",
+        icon: ClipboardList,
         items: [
-          "Карточные системы доступа",
-          "Интеграция турникетов",
-          "Контроль входа-выхода сотрудников",
-          "Оборудование access control",
+          "Схемы оборудования и системы",
+          "План кабелей и размещения",
+          "Объём работ и документация",
         ],
       },
       {
-        title: "Системы сигнализации",
+        title: "Поставка оборудования",
         description:
-          "Датчики движения, магнитные контакты, сирены и alarm панели для безопасности объекта.",
-        icon: ShieldAlert,
+          "Профессиональное оборудование подбирается и комплектуется под проект и бюджет.",
+        icon: PackageCheck,
         items: [
-          "Датчики движения",
-          "Alarm панели",
-          "Сирена и уведомления",
-          "Безопасность объекта",
+          "Подбор оборудования",
+          "Полная комплектация",
+          "Доставка и гарантия",
         ],
       },
       {
-        title: "Сетевая инфраструктура",
+        title: "Монтаж",
         description:
-          "Стабильная сеть на базе PoE switch, router, access point, rack шкафов и кабельной инфраструктуры.",
-        icon: Wifi,
-        items: [
-          "Подбор PoE switch",
-          "Планирование Wi-Fi coverage",
-          "LAN кабельная инфраструктура",
-          "Rack и patch panel",
-        ],
-      },
-      {
-        title: "Кабель и монтаж",
-        description:
-          "Мы аккуратно выполняем прокладку кабеля, монтаж, коннекторизацию, тестирование и сдачу проекта.",
+          "Кабельная инфраструктура и оборудование устанавливаются по техническим стандартам.",
         icon: Cable,
         items: [
-          "Прокладка UTP/FTP кабеля",
-          "Коннекторизация",
-          "Тесты кабеля",
-          "Аккуратный монтаж",
+          "Прокладка кабельных линий",
+          "Монтаж оборудования",
+          "Аккуратная и безопасная установка",
         ],
       },
       {
-        title: "Техническая поддержка",
+        title: "Настройка и интеграция",
         description:
-          "Проверка, настройка, диагностика и при необходимости модернизация существующих систем.",
+          "Система программируется, интегрируется с другим оборудованием и тестируется.",
+        icon: Settings,
+        items: [
+          "Программирование и настройка",
+          "Интеграция систем",
+          "Тестирование и запуск",
+        ],
+      },
+      {
+        title: "Техническое обслуживание",
+        description:
+          "Проводится периодическая поддержка новых и существующих систем.",
         icon: ShieldCheck,
         items: [
-          "Проверка системы",
-          "Диагностика",
-          "Настройка параметров",
-          "Предложение по модернизации",
+          "Периодическая проверка",
+          "Диагностика неисправностей",
+          "Ремонт и модернизация",
         ],
       },
     ],
+
+    processEyebrow: "Единая ответственность",
+    processTitle: "Один проект, одна команда и постоянная поддержка",
+    processDescription:
+      "Нет необходимости управлять несколькими подрядчиками. Проект, поставка, монтаж и обслуживание выполняются одной командой.",
+
     processSteps: [
-      "Собираются требования и данные объекта",
-      "Готовится список оборудования и первичное предложение",
-      "Подбираются подходящие товары и техническое решение",
-      "Планируется установка и сдача проекта",
+      "Определяются требования и технические задачи",
+      "Готовятся проект, список оборудования и стоимость",
+      "Выполняются монтаж, настройка и испытания",
+      "Система сдаётся и обеспечивается поддержка",
     ],
   },
 } as const;
