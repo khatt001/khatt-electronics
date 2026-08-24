@@ -17,6 +17,22 @@ const updateOrderStatusSchema = z.object({
   payment_status: z.enum(["pending", "paid", "failed"]),
 });
 
+function revalidateOrderAndProductPaths(orderId?: string) {
+  revalidatePath("/");
+  revalidatePath("/en");
+  revalidatePath("/ru");
+  revalidatePath("/products");
+  revalidatePath("/en/products");
+  revalidatePath("/ru/products");
+  revalidatePath("/products/[slug]", "page");
+  revalidatePath("/en/products/[slug]", "page");
+  revalidatePath("/ru/products/[slug]", "page");
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin/products");
+
+  if (orderId) revalidatePath(`/admin/orders/${orderId}`);
+}
+
 export async function updateOrderStatus(orderId: string, formData: FormData) {
   await requireAdmin();
 
@@ -33,56 +49,39 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
     );
   }
 
-  const { error } = await supabaseAdmin
-    .from("orders")
-    .update({
-      order_status: parsed.data.order_status,
-      payment_status: parsed.data.payment_status,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", orderId);
+  const { error } = await supabaseAdmin.rpc(
+    "update_order_status_transactional",
+    {
+      p_order_id: orderId,
+      p_order_status: parsed.data.order_status,
+      p_payment_status: parsed.data.payment_status,
+    },
+  );
 
   if (error) {
-    redirect(
-      `/admin/orders/${orderId}?error=${encodeURIComponent(
-        "Status yenilənmədi.",
-      )}`,
-    );
+    const message = error.message.includes("CANCELLED_ORDER_CANNOT_BE_REOPENED")
+      ? "Ləğv edilmiş sifariş yenidən aktiv edilə bilməz."
+      : "Status yenilənmədi.";
+
+    redirect(`/admin/orders/${orderId}?error=${encodeURIComponent(message)}`);
   }
 
-  revalidatePath("/admin/orders");
-  revalidatePath(`/admin/orders/${orderId}`);
-
+  revalidateOrderAndProductPaths(orderId);
   redirect(`/admin/orders/${orderId}`);
 }
+
 export async function deleteOrder(orderId: string) {
   await requireAdmin();
 
   if (!orderId) {
     redirect(
-      `/admin/orders?error=${encodeURIComponent(
-        "Sifariş ID tapılmadı.",
-      )}`,
+      `/admin/orders?error=${encodeURIComponent("Sifariş ID tapılmadı.")}`,
     );
   }
 
-  const { error: itemsError } = await supabaseAdmin
-    .from("order_items")
-    .delete()
-    .eq("order_id", orderId);
-
-  if (itemsError) {
-    redirect(
-      `/admin/orders/${orderId}?error=${encodeURIComponent(
-        "Sifariş məhsulları silinə bilmədi.",
-      )}`,
-    );
-  }
-
-  const { error } = await supabaseAdmin
-    .from("orders")
-    .delete()
-    .eq("id", orderId);
+  const { error } = await supabaseAdmin.rpc("delete_order_transactional", {
+    p_order_id: orderId,
+  });
 
   if (error) {
     redirect(
@@ -92,7 +91,6 @@ export async function deleteOrder(orderId: string) {
     );
   }
 
-  revalidatePath("/admin/orders");
-
+  revalidateOrderAndProductPaths();
   redirect("/admin/orders");
 }
