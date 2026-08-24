@@ -9,19 +9,15 @@ export function isLocale(value: string): value is Locale {
 }
 
 export function getLocaleFromPathname(pathname: string): Locale {
-  const normalizedPathname = pathname.split("?")[0].split("#")[0];
+  const cleanPathname = pathname.split("?")[0].split("#")[0];
 
-  if (
-    normalizedPathname === "/en" ||
-    normalizedPathname.startsWith("/en/")
-  ) {
+  const firstSegment = cleanPathname.split("/").filter(Boolean)[0];
+
+  if (firstSegment === "en") {
     return "en";
   }
 
-  if (
-    normalizedPathname === "/ru" ||
-    normalizedPathname.startsWith("/ru/")
-  ) {
+  if (firstSegment === "ru") {
     return "ru";
   }
 
@@ -29,7 +25,9 @@ export function getLocaleFromPathname(pathname: string): Locale {
 }
 
 export function localizedPath(path: string, locale: Locale): string {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  let normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  normalizedPath = removeLocaleFromPathname(normalizedPath);
 
   if (locale === defaultLocale) {
     return normalizedPath;
@@ -47,19 +45,26 @@ export function getLocalePrefix(locale: Locale): string {
 }
 
 export function removeLocaleFromPathname(pathname: string): string {
-  const [pathnamePart, suffix = ""] = pathname.split(/(?=[?#])/);
+  const match = pathname.match(/^([^?#]*)(.*)$/);
 
-  let pathWithoutLocale = pathnamePart;
+  const pathnamePart = match?.[1] || "/";
+  const suffix = match?.[2] || "";
+
+  let cleanPath = pathnamePart;
 
   if (pathnamePart === "/en" || pathnamePart === "/ru") {
-    pathWithoutLocale = "/";
+    cleanPath = "/";
   } else if (pathnamePart.startsWith("/en/")) {
-    pathWithoutLocale = pathnamePart.replace(/^\/en/, "") || "/";
+    cleanPath = pathnamePart.slice(3) || "/";
   } else if (pathnamePart.startsWith("/ru/")) {
-    pathWithoutLocale = pathnamePart.replace(/^\/ru/, "") || "/";
+    cleanPath = pathnamePart.slice(3) || "/";
   }
 
-  return `${pathWithoutLocale}${suffix}`;
+  if (!cleanPath.startsWith("/")) {
+    cleanPath = `/${cleanPath}`;
+  }
+
+  return `${cleanPath}${suffix}`;
 }
 
 export function switchLocalePathname(

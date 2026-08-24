@@ -1,4 +1,7 @@
-import { headers } from "next/headers";
+"use client";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 import { CartToast } from "@/components/cart/cart-toast";
 import { Footer } from "@/components/layout/footer";
@@ -11,14 +14,16 @@ type SiteShellProps = {
   children: React.ReactNode;
 };
 
-export async function SiteShell({ children }: SiteShellProps) {
-  const headersList = await headers();
-
-  const pathname = headersList.get("x-pathname") ?? "/";
+export function SiteShell({ children }: SiteShellProps) {
+  const pathname = usePathname() || "/";
   const locale = getLocaleFromPathname(pathname);
 
   const isAdminRoute =
     pathname === "/admin" || pathname.startsWith("/admin/");
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   if (isAdminRoute) {
     return <>{children}</>;
@@ -26,16 +31,32 @@ export async function SiteShell({ children }: SiteShellProps) {
 
   return (
     <>
-      <Navbar locale={locale} pathname={pathname} />
+      <Navbar
+        key={`navbar-${locale}`}
+        locale={locale}
+        pathname={pathname}
+      />
 
       <main className="min-h-screen pt-[8rem] lg:pt-[10rem] xl:pt-[9rem]">
         {children}
       </main>
 
-      <Footer locale={locale} />
+      <Footer
+        key={`footer-${locale}`}
+        locale={locale}
+      />
+
       <FloatingWhatsApp />
-      <CartToast locale={locale} />
-      <MobileBottomNav locale={locale} />
+
+      <CartToast
+        key={`cart-toast-${locale}`}
+        locale={locale}
+      />
+
+      <MobileBottomNav
+        key={`mobile-nav-${locale}`}
+        locale={locale}
+      />
     </>
   );
 }

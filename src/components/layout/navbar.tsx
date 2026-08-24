@@ -55,20 +55,25 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
               <span className="text-white/45">{t.languageLabel}</span>
 
               <div className="flex items-center gap-2">
-                {t.languages.map((language) => (
-                  <Link
-                    key={language.locale}
-                    href={switchLocalePathname(pathname, language.locale)}
-                    className={cn(
-                      "transition hover:text-white",
-                      language.locale === locale
-                        ? "text-white"
-                        : "text-white/50",
-                    )}
-                  >
-                    {language.label}
-                  </Link>
-                ))}
+                {t.languages.map((language) => {
+                  const isActive = language.locale === locale;
+
+                  return (
+                    <Link
+                      key={language.locale}
+                      href={switchLocalePathname(pathname, language.locale)}
+                      aria-current={isActive ? "page" : undefined}
+                      className={cn(
+                        "transition hover:text-white",
+                        isActive
+                          ? "font-semibold text-white"
+                          : "text-white/50",
+                      )}
+                    >
+                      {language.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -110,20 +115,25 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
 
           <div className="ml-auto flex items-center gap-1">
             <div className="mr-1 flex items-center rounded-lg border border-neutral-200 bg-neutral-50 p-0.5 lg:hidden">
-              {t.languages.map((language) => (
-                <Link
-                  key={language.locale}
-                  href={switchLocalePathname(pathname, language.locale)}
-                  className={cn(
-                    "rounded-md px-2 py-1 text-[11px] font-semibold transition",
-                    language.locale === locale
-                      ? "bg-neutral-950 text-white"
-                      : "text-neutral-500 hover:text-emerald-700",
-                  )}
-                >
-                  {language.label}
-                </Link>
-              ))}
+              {t.languages.map((language) => {
+                const isActive = language.locale === locale;
+
+                return (
+                  <Link
+                    key={language.locale}
+                    href={switchLocalePathname(pathname, language.locale)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "rounded-md px-2 py-1 text-[11px] font-semibold transition",
+                      isActive
+                        ? "bg-neutral-950 text-white"
+                        : "text-neutral-500 hover:text-emerald-700",
+                    )}
+                  >
+                    {language.label}
+                  </Link>
+                );
+              })}
             </div>
 
             <CompareNavLink locale={locale} />
