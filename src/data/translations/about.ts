@@ -1,6 +1,5 @@
 import {
   BadgeCheck,
-  Building2,
   ShieldCheck,
   Target,
   Users,
@@ -13,64 +12,71 @@ export const aboutTranslations = {
   az: {
     metadataTitle: "Haqqımızda",
     metadataDescription:
-      "KHATT Electronics təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri üzrə peşəkar xidmət göstərir.",
+      "KHATT Electronics təhlükəsizlik, elektrik, isitmə-soyutma, havalandırma və zəif axın sistemləri üzrə layihə, təchizat və texniki xidmət təqdim edir.",
 
-    eyebrow: "Haqqımızda",
-    title: "Təhlükəsizlik və elektronika həllərində etibarlı texniki tərəfdaş",
+    eyebrow: "KHATT Electronics",
+    title: "Obyektlər üçün peşəkar mühəndis və təhlükəsizlik sistemləri",
     description:
-      "KHATT Electronics olaraq məqsədimiz obyektlər üçün stabil, ölçülə bilən və uzunmüddətli işləyən təhlükəsizlik və elektronika həlləri təqdim etməkdir.",
+      "Biz kommersiya, yaşayış və sənaye obyektləri üçün təhlükəsizlik, elektrik, iqlim və zəif axın sistemlərini layihələndirir, təchiz edir, quraşdırır və texniki xidmət göstəririk.",
+
     contactButton: "Bizimlə əlaqə",
     servicesButton: "Xidmətlərə bax",
 
-    darkCardIcon: Building2,
-    darkCardTitle: "Biz nə edirik?",
+    darkCardTitle: "Sadəcə avadanlıq satmırıq",
     darkCardDescription:
-      "Kamera sistemləri, keçidə nəzarət, siqnalizasiya, domofon, şəbəkə infrastrukturu və texniki dəstək istiqamətində məhsul və layihə əsaslı həllər təqdim edirik.",
+      "Məqsədimiz ayrı-ayrı məhsullar təqdim etmək deyil, obyektin real ehtiyacına uyğun, stabil işləyən və sonradan genişləndirilə bilən sistem qurmaqdır.",
 
-    stats: [
-      { label: "Xidmət istiqaməti", value: "6+" },
-      { label: "Məhsul kateqoriyası", value: "10+" },
-      { label: "Texniki yanaşma", value: "360°" },
+    darkCardItems: [
+      "Layihəyə uyğun texniki seçim",
+      "Vahid quraşdırma və sazlama prosesi",
+      "Satışdan sonrakı texniki dəstək",
     ],
+
+    valuesEyebrow: "Yanaşmamız",
+    valuesTitle: "Texniki qərarlarda əsas prinsiplərimiz",
 
     values: [
       {
-        title: "Düzgün məhsul seçimi",
+        title: "Dəqiq texniki seçim",
         description:
-          "Sadəcə məhsul satmırıq, obyektə və ehtiyaca uyğun texniki həll seçməyə kömək edirik.",
+          "Avadanlıq və sistemlər obyektin ölçüsünə, risklərinə, istifadə məqsədinə və büdcəsinə uyğun seçilir.",
         icon: Target,
       },
       {
-        title: "Peşəkar yanaşma",
+        title: "Vahid məsuliyyət",
         description:
-          "Layihə, qiymət təklifi, avadanlıq siyahısı və quraşdırma mərhələlərində səliqəli yanaşma tətbiq edirik.",
+          "Layihə, təchizat, montaj və sazlama mərhələləri ayrı-ayrı deyil, bir komanda tərəfindən idarə olunur.",
         icon: BadgeCheck,
       },
       {
-        title: "Texniki dəstək",
+        title: "Uzunmüddətli işlək sistem",
         description:
-          "Məhsul seçimi, sazlama, sistem yoxlanışı və modernləşdirmə üzrə dəstək göstəririk.",
+          "Sistemin yalnız quraşdırılmasına deyil, stabil işləməsinə, xidmətinə və gələcək inkişafına diqqət edirik.",
         icon: Wrench,
       },
     ],
 
-    capabilitiesTitle: "Əsas fəaliyyət istiqamətlərimiz",
+    capabilitiesEyebrow: "Fəaliyyət sahələri",
+    capabilitiesTitle: "Kompleks sistem həlləri",
     capabilitiesDescription:
-      "Layihəyə başlamazdan əvvəl ehtiyacları analiz edir, uyğun avadanlıq seçir və daha sonra obyektə uyğun həll təqdim edirik.",
+      "Müxtəlif mühəndis sistemlərini bir layihə çərçivəsində planlaşdıraraq obyekt üçün daha uyğun və idarəolunan infrastruktur yaradırıq.",
+
     capabilities: [
-      "Videomüşahidə və CCTV sistemləri",
-      "Keçidə nəzarət və giriş sistemləri",
-      "Domofon və siqnalizasiya həlləri",
-      "PoE switch, router və şəbəkə avadanlıqları",
-      "Kabel infrastrukturu və montaj",
-      "Texniki məsləhət və qiymət təklifi hazırlığı",
+      "Yanğın aşkarlama və xəbərdarlıq sistemləri",
+      "Videomüşahidə və təhlükəsizlik sistemləri",
+      "Girişə nəzarət və domofon sistemləri",
+      "Elektrik təchizatı və enerji infrastrukturu",
+      "İsitmə, soyutma və havalandırma sistemləri",
+      "Şəbəkə və zəif axın infrastrukturu",
     ],
 
     collaborationEyebrow: "Əməkdaşlıq",
-    collaborationTitle: "Layihəniz üçün uyğun məhsul və texniki həll seçək",
+    collaborationTitle: "Layihənizə texniki baxışdan başlayaq",
     collaborationDescription:
-      "Obyektiniz barədə məlumat göndərin, sizə uyğun avadanlıq siyahısı və ilkin texniki yanaşma hazırlayaq.",
-    quoteButton: "Qiymət təklifi al",
+      "Obyektin növünü və tələb olunan sistemləri qeyd edin. İlkin ehtiyacları birlikdə müəyyənləşdirib uyğun yanaşma hazırlayaq.",
+
+    quoteButton: "Layihə üçün müraciət et",
+
     usersIcon: Users,
     shieldIcon: ShieldCheck,
   },
@@ -78,66 +84,71 @@ export const aboutTranslations = {
   en: {
     metadataTitle: "About us",
     metadataDescription:
-      "KHATT Electronics provides professional solutions for security systems, video surveillance, access control, intercoms, alarm systems and smart technologies.",
+      "KHATT Electronics provides design, supply, installation and maintenance for security, electrical, HVAC and low-current systems.",
 
-    eyebrow: "About us",
-    title:
-      "A reliable technical partner for security and electronics solutions",
+    eyebrow: "KHATT Electronics",
+    title: "Professional engineering and security systems for facilities",
     description:
-      "At KHATT Electronics, our goal is to provide stable, scalable and long-lasting security and electronics solutions for different types of facilities.",
+      "We design, supply, install and maintain security, electrical, climate and low-current systems for commercial, residential and industrial facilities.",
+
     contactButton: "Contact us",
     servicesButton: "View services",
 
-    darkCardIcon: Building2,
-    darkCardTitle: "What do we do?",
+    darkCardTitle: "We provide more than equipment",
     darkCardDescription:
-      "We provide product-based and project-based solutions for CCTV systems, access control, alarm systems, intercoms, network infrastructure and technical support.",
+      "Our goal is not to offer individual products, but to build a reliable and expandable system based on the actual requirements of the facility.",
 
-    stats: [
-      { label: "Service areas", value: "6+" },
-      { label: "Product categories", value: "10+" },
-      { label: "Technical approach", value: "360°" },
+    darkCardItems: [
+      "Project-specific technical selection",
+      "Unified installation and commissioning",
+      "After-sales technical support",
     ],
+
+    valuesEyebrow: "Our approach",
+    valuesTitle: "Our core principles in technical decisions",
 
     values: [
       {
-        title: "Correct product selection",
+        title: "Accurate technical selection",
         description:
-          "We do not simply sell products; we help you choose a technical solution that fits your site and needs.",
+          "Equipment and systems are selected according to the facility size, risks, intended use and budget.",
         icon: Target,
       },
       {
-        title: "Professional approach",
+        title: "Unified responsibility",
         description:
-          "We follow a structured approach across project planning, quotation, equipment lists and installation stages.",
+          "Design, supply, installation and commissioning are managed by one team as a connected process.",
         icon: BadgeCheck,
       },
       {
-        title: "Technical support",
+        title: "Long-term operation",
         description:
-          "We support product selection, configuration, system checks and modernization.",
+          "We focus not only on installation, but also on stable operation, maintenance and future expansion.",
         icon: Wrench,
       },
     ],
 
-    capabilitiesTitle: "Our main areas of activity",
+    capabilitiesEyebrow: "Areas of activity",
+    capabilitiesTitle: "Integrated system solutions",
     capabilitiesDescription:
-      "Before starting a project, we analyze the requirements, select the right equipment and provide a solution suitable for the facility.",
+      "We plan different engineering systems within one project to create a more suitable and manageable infrastructure.",
+
     capabilities: [
-      "Video surveillance and CCTV systems",
-      "Access control and entrance systems",
-      "Intercom and alarm solutions",
-      "PoE switches, routers and network equipment",
-      "Cable infrastructure and installation",
-      "Technical consulting and quotation preparation",
+      "Fire detection and notification systems",
+      "Video surveillance and security systems",
+      "Access control and intercom systems",
+      "Electrical power and energy infrastructure",
+      "Heating, cooling and ventilation systems",
+      "Network and low-current infrastructure",
     ],
 
     collaborationEyebrow: "Cooperation",
-    collaborationTitle:
-      "Let’s choose the right products and technical solution for your project",
+    collaborationTitle: "Let us start with a technical review",
     collaborationDescription:
-      "Send us information about your facility and we will prepare a suitable equipment list and initial technical approach.",
-    quoteButton: "Request a quote",
+      "Specify the type of facility and the systems required. We will identify the initial needs and prepare a suitable approach.",
+
+    quoteButton: "Submit a project request",
+
     usersIcon: Users,
     shieldIcon: ShieldCheck,
   },
@@ -145,65 +156,71 @@ export const aboutTranslations = {
   ru: {
     metadataTitle: "О нас",
     metadataDescription:
-      "KHATT Electronics предоставляет профессиональные решения в сфере систем безопасности, видеонаблюдения, контроля доступа, домофонов, сигнализации и умных технологий.",
+      "KHATT Electronics выполняет проектирование, поставку, монтаж и обслуживание систем безопасности, электрики, HVAC и слаботочных систем.",
 
-    eyebrow: "О нас",
-    title: "Надежный технический партнер в сфере безопасности и электроники",
+    eyebrow: "KHATT Electronics",
+    title: "Профессиональные инженерные системы и системы безопасности",
     description:
-      "Цель KHATT Electronics — предлагать стабильные, масштабируемые и долгосрочные решения в сфере безопасности и электроники для различных объектов.",
+      "Мы проектируем, поставляем, устанавливаем и обслуживаем системы безопасности, электрики, климата и слаботочные системы для коммерческих, жилых и промышленных объектов.",
+
     contactButton: "Связаться с нами",
     servicesButton: "Смотреть услуги",
 
-    darkCardIcon: Building2,
-    darkCardTitle: "Что мы делаем?",
+    darkCardTitle: "Мы предлагаем больше, чем оборудование",
     darkCardDescription:
-      "Мы предлагаем товарные и проектные решения для систем видеонаблюдения, контроля доступа, сигнализации, домофонов, сетевой инфраструктуры и технической поддержки.",
+      "Наша цель — не просто предоставить отдельные товары, а создать надёжную и расширяемую систему под реальные требования объекта.",
 
-    stats: [
-      { label: "Направлений услуг", value: "6+" },
-      { label: "Категорий товаров", value: "10+" },
-      { label: "Технический подход", value: "360°" },
+    darkCardItems: [
+      "Технический подбор под проект",
+      "Единый процесс монтажа и настройки",
+      "Послепродажная техническая поддержка",
     ],
+
+    valuesEyebrow: "Наш подход",
+    valuesTitle: "Основные принципы технических решений",
 
     values: [
       {
-        title: "Правильный подбор товаров",
+        title: "Точный технический подбор",
         description:
-          "Мы не просто продаем товары, а помогаем подобрать техническое решение под объект и потребности.",
+          "Оборудование и системы подбираются с учётом размера объекта, рисков, назначения и бюджета.",
         icon: Target,
       },
       {
-        title: "Профессиональный подход",
+        title: "Единая ответственность",
         description:
-          "Мы применяем структурированный подход на этапах проекта, коммерческого предложения, списка оборудования и монтажа.",
+          "Проект, поставка, монтаж и настройка выполняются одной командой как связанный процесс.",
         icon: BadgeCheck,
       },
       {
-        title: "Техническая поддержка",
+        title: "Долгосрочная работа",
         description:
-          "Мы помогаем с подбором товаров, настройкой, проверкой системы и модернизацией.",
+          "Мы уделяем внимание не только монтажу, но и стабильной работе, обслуживанию и дальнейшему развитию.",
         icon: Wrench,
       },
     ],
 
-    capabilitiesTitle: "Основные направления деятельности",
+    capabilitiesEyebrow: "Направления работы",
+    capabilitiesTitle: "Комплексные системные решения",
     capabilitiesDescription:
-      "Перед началом проекта мы анализируем потребности, подбираем подходящее оборудование и предлагаем решение под конкретный объект.",
+      "Мы планируем различные инженерные системы в рамках одного проекта, создавая удобную и управляемую инфраструктуру.",
+
     capabilities: [
-      "Видеонаблюдение и CCTV системы",
-      "Контроль доступа и входные системы",
-      "Домофонные и охранные решения",
-      "PoE switch, router и сетевое оборудование",
-      "Кабельная инфраструктура и монтаж",
-      "Техническая консультация и подготовка коммерческого предложения",
+      "Системы обнаружения и оповещения о пожаре",
+      "Видеонаблюдение и системы безопасности",
+      "Контроль доступа и домофонные системы",
+      "Электроснабжение и энергетическая инфраструктура",
+      "Отопление, охлаждение и вентиляция",
+      "Сетевые и слаботочные системы",
     ],
 
     collaborationEyebrow: "Сотрудничество",
-    collaborationTitle:
-      "Подберем подходящие товары и техническое решение для вашего проекта",
+    collaborationTitle: "Начнём с технического анализа проекта",
     collaborationDescription:
-      "Отправьте информацию об объекте, и мы подготовим список оборудования и первичный технический подход.",
-    quoteButton: "Получить предложение",
+      "Укажите тип объекта и необходимые системы. Мы определим первоначальные требования и подготовим подходящее решение.",
+
+    quoteButton: "Оставить заявку",
+
     usersIcon: Users,
     shieldIcon: ShieldCheck,
   },
