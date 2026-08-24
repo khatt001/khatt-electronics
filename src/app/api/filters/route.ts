@@ -42,6 +42,7 @@ const filterApiTranslations = {
     stockPreOrder: "Öncədən sifariş",
     stockOut: "Stokda yoxdur",
     localeCode: "az",
+    loadError: "Filtrlər yüklənmədi.",
   },
   en: {
     brandGroup: "Brand",
@@ -50,6 +51,7 @@ const filterApiTranslations = {
     stockPreOrder: "Pre-order",
     stockOut: "Out of stock",
     localeCode: "en",
+    loadError: "Filters could not be loaded.",
   },
   ru: {
     brandGroup: "Бренд",
@@ -58,6 +60,7 @@ const filterApiTranslations = {
     stockPreOrder: "Предзаказ",
     stockOut: "Нет в наличии",
     localeCode: "ru",
+    loadError: "Не удалось загрузить фильтры.",
   },
 } as const;
 
@@ -224,13 +227,16 @@ export async function GET(request: Request) {
 
   const { data, error } = await query.returns<ProductFilterRow[]>();
 
-  if (error || !data) {
-    return NextResponse.json({
+ if (error || !data) {
+  return NextResponse.json(
+    {
       groups: [],
       totalProducts: 0,
-      error: error?.message ?? null,
-    });
-  }
+      error: t.loadError,
+    },
+    { status: 500 },
+  );
+}
 
   const brandMap = new Map<string, number>();
   const stockMap = new Map<string, number>();
