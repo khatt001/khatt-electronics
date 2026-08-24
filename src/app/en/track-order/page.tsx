@@ -3,9 +3,10 @@ import { generateStaticPageMetadata } from "@/lib/page-metadata";
 
 type TrackOrderRouteProps = {
   searchParams: Promise<{
-    order?: string;
-    phone?: string;
-  }>;
+  order?: string;
+  phone?: string;
+  "cf-turnstile-response"?: string;
+}>;
 };
 
 export const metadata = generateStaticPageMetadata({
@@ -23,6 +24,7 @@ export default async function EnglishTrackOrderRoute({
       locale="en"
       orderNumber={query.order ?? ""}
       phone={query.phone ?? ""}
+      turnstileToken={query["cf-turnstile-response"] ?? ""}
     />
   );
 }

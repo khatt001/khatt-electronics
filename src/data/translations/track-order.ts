@@ -15,7 +15,8 @@ export const trackOrderTranslations = {
     orderNumberLabel: "Sifariş nömrəsi",
     phoneLabel: "Telefon nömrəsi",
     submitButton: "Yoxla",
-
+    securityFailed:
+  "Təhlükəsizlik yoxlaması uğursuz oldu. Yenidən cəhd edin.",
     orderFound: "Sifariş tapıldı",
     total: "Cəmi",
     orderStatus: "Sifariş statusu",
@@ -62,7 +63,8 @@ export const trackOrderTranslations = {
     orderNumberLabel: "Order number",
     phoneLabel: "Phone number",
     submitButton: "Check",
-
+    securityFailed:
+  "Security verification failed. Please try again.",
     orderFound: "Order found",
     total: "Total",
     orderStatus: "Order status",
@@ -109,7 +111,8 @@ export const trackOrderTranslations = {
     orderNumberLabel: "Номер заказа",
     phoneLabel: "Номер телефона",
     submitButton: "Проверить",
-
+    securityFailed:
+  "Проверка безопасности не пройдена. Попробуйте снова.",
     orderFound: "Заказ найден",
     total: "Итого",
     orderStatus: "Статус заказа",

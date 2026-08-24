@@ -8,9 +8,11 @@ import {
   PackageSearch,
   Search,
   Truck,
+  ShieldCheck,
 } from "lucide-react";
 
 import { PhoneInput } from "@/components/checkout/phone-input";
+import { TurnstileWidget } from "@/components/contact/turnstile-widget";
 import { Container } from "@/components/layout/container";
 import {
   trackOrderTranslations,
@@ -24,8 +26,49 @@ type TrackOrderPageProps = {
   locale?: TrackOrderLocale;
   orderNumber?: string;
   phone?: string;
+  turnstileToken?: string;
+};
+type TurnstileResponse = {
+  success: boolean;
+  "error-codes"?: string[];
 };
 
+async function verifyTurnstileToken(token: string) {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY;
+
+  if (!secretKey || !token) {
+    return false;
+  }
+
+  try {
+    const body = new URLSearchParams({
+      secret: secretKey,
+      response: token,
+    });
+
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body,
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const result = (await response.json()) as TurnstileResponse;
+
+    return result.success;
+  } catch {
+    return false;
+  }
+}
 function formatDate(value: string, localeCode: string) {
   return new Intl.DateTimeFormat(localeCode, {
     day: "2-digit",
@@ -98,18 +141,24 @@ export async function TrackOrderPage({
   locale = "az",
   orderNumber = "",
   phone = "",
+  turnstileToken = "",
 }: TrackOrderPageProps) {
   const t = trackOrderTranslations[locale];
 
-  const hasSearch = Boolean(orderNumber || phone);
+const hasSearch = Boolean(orderNumber || phone);
 
-  const order =
-    orderNumber && phone
-      ? await trackOrder({
-          orderNumber,
-          phone,
-        })
-      : null;
+const isVerified =
+  orderNumber && phone
+    ? await verifyTurnstileToken(turnstileToken)
+    : false;
+
+const order =
+  orderNumber && phone && isVerified
+    ? await trackOrder({
+        orderNumber,
+        phone,
+      })
+    : null;
 
   const steps = [
     ["new", t.statusNew],
@@ -185,6 +234,7 @@ export async function TrackOrderPage({
                     locale={locale}
                   />
                 </div>
+                <TurnstileWidget />
 
                 <button
                   type="submit"
@@ -355,8 +405,18 @@ export async function TrackOrderPage({
                     </div>
                   </div>
                 </div>
-              ) : hasSearch ? (
-                /* Not found */
+              ) : hasSearch && !isVerified ? (
+  <div className="rounded-2xl border border-red-200 bg-red-50 p-7 text-center md:p-10">
+    <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-white text-red-600">
+      <ShieldCheck className="size-8" aria-hidden="true" />
+    </div>
+
+    <h2 className="mt-5 text-xl font-semibold text-red-800">
+      {t.securityFailed}
+    </h2>
+  </div>
+) : hasSearch ? (
+  /* Not found */
                 <div className="rounded-2xl border border-red-200 bg-red-50 p-7 text-center md:p-10">
                   <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-white text-red-600">
                     <PackageSearch className="size-8" aria-hidden="true" />
