@@ -15,6 +15,7 @@ import { useEffect, useMemo } from "react";
 import { createOrder } from "@/app/checkout/actions";
 import { useCart } from "@/components/cart/cart-provider";
 import { PhoneInput } from "@/components/checkout/phone-input";
+import { TurnstileWidget } from "@/components/contact/turnstile-widget";
 import { Container } from "@/components/layout/container";
 import {
   checkoutTranslations,
@@ -364,7 +365,9 @@ export function CheckoutPageClient({ locale = "az" }: CheckoutPageClientProps) {
                 >
                   {isSyncing ? t.updatingButton : t.confirmButton}
                 </button>
-
+                  <div className="mt-6">
+  <TurnstileWidget />
+</div>
                 <Link
                   href={localizedPath("/cart", locale)}
                   className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-neutral-300 px-5 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"

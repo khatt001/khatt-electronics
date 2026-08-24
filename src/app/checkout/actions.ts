@@ -12,7 +12,10 @@ type CreatedOrder = {
   order_id: string;
   order_number: string;
 };
-
+type TurnstileResponse = {
+  success: boolean;
+  "error-codes"?: string[];
+};
 const translations = {
   az: {
     fullNameMin: "Ad və soyad minimum 2 simvol olmalıdır.",
@@ -22,6 +25,8 @@ const translations = {
     addressMin: "Ünvan minimum 5 simvol olmalıdır.",
     emptyCart: "Səbət boşdur.",
     invalidCart: "Səbət məlumatı düzgün deyil.",
+    securityFailed:
+  "Təhlükəsizlik yoxlaması uğursuz oldu. Yenidən cəhd edin.",
     unavailable:
       "Sifariş yaradıla bilmədi. Stoku yoxlayıb yenidən cəhd edin.",
   },
@@ -33,6 +38,8 @@ const translations = {
     addressMin: "Address must be at least 5 characters.",
     emptyCart: "Cart is empty.",
     invalidCart: "Cart data is invalid.",
+    securityFailed:
+  "Security verification failed. Please try again.",
     unavailable:
       "The order could not be created. Check stock and try again.",
   },
@@ -44,6 +51,8 @@ const translations = {
     addressMin: "Адрес должен содержать минимум 5 символов.",
     emptyCart: "Корзина пуста.",
     invalidCart: "Данные корзины неверны.",
+    securityFailed:
+  "Проверка безопасности не пройдена. Попробуйте снова.",
     unavailable:
       "Не удалось создать заказ. Проверьте наличие и повторите попытку.",
   },
@@ -53,7 +62,42 @@ const itemSchema = z.object({
   id: z.string().uuid(),
   quantity: z.coerce.number().int().min(1).max(999),
 });
+async function verifyTurnstileToken(token: string) {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
+  if (!secretKey || !token) {
+    return false;
+  }
+
+  try {
+    const body = new URLSearchParams({
+      secret: secretKey,
+      response: token,
+    });
+
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body,
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const result = (await response.json()) as TurnstileResponse;
+
+    return result.success;
+  } catch {
+    return false;
+  }
+}
 function getCheckoutSchema(locale: CheckoutLocale) {
   const t = translations[locale];
 
@@ -112,9 +156,19 @@ export async function createOrder(formData: FormData) {
       ? localeValue
       : "az";
 
-  const t = translations[locale];
+const t = translations[locale];
 
-  let items: unknown;
+const turnstileToken = String(
+  formData.get("cf-turnstile-response") ?? "",
+).trim();
+
+const isHuman = await verifyTurnstileToken(turnstileToken);
+
+if (!isHuman) {
+  redirect(errorUrl(locale, t.securityFailed));
+}
+
+let items: unknown;
 
   try {
     items = JSON.parse(String(formData.get("items") ?? "[]"));
