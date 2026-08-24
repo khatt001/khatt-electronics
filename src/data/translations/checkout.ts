@@ -10,7 +10,7 @@ export const checkoutTranslations = {
     title: "Sifarişi tamamla",
     description:
       "Əlaqə və çatdırılma məlumatlarını daxil edin, sifarişinizi tamamlayın.",
-
+    customerInfoEyebrow: "Sifariş məlumatları",
     customerInfoTitle: "Müştəri məlumatları",
     syncingMessage: "Səbət məlumatları yenilənir. Zəhmət olmasa gözləyin...",
 
@@ -32,7 +32,9 @@ export const checkoutTranslations = {
     cashPaymentDescription: "Sifariş təsdiqləndikdən sonra nağd ödəniş.",
     cardPaymentTitle: "Kartla ödəniş",
     cardPaymentDescription: "Tezliklə aktiv olacaq.",
-
+    summaryEyebrow: "Sifariş xülasəsi",
+assuranceMessage:
+  "Sifariş məlumatlarınız təsdiqdən sonra sizinlə əlaqə saxlanılaraq dəqiqləşdiriləcək.",
     summaryTitle: "Sifariş xülasəsi",
     subtotal: "Ara cəm",
     delivery: "Çatdırılma",
@@ -55,7 +57,7 @@ export const checkoutTranslations = {
     title: "Complete order",
     description:
       "Enter your contact and delivery information to complete your order.",
-
+    customerInfoEyebrow: "Order details",
     customerInfoTitle: "Customer information",
     syncingMessage: "Cart data is updating. Please wait...",
 
@@ -77,7 +79,9 @@ export const checkoutTranslations = {
     cashPaymentDescription: "Cash payment after order confirmation.",
     cardPaymentTitle: "Card payment",
     cardPaymentDescription: "Coming soon.",
-
+    summaryEyebrow: "Your order",
+assuranceMessage:
+  "We will contact you after confirmation to verify your order details.",
     summaryTitle: "Order summary",
     subtotal: "Subtotal",
     delivery: "Delivery",
@@ -100,7 +104,7 @@ export const checkoutTranslations = {
     title: "Завершить заказ",
     description:
       "Введите контактные данные и информацию о доставке, чтобы завершить заказ.",
-
+    customerInfoEyebrow: "Данные заказа",
     customerInfoTitle: "Данные клиента",
     syncingMessage: "Данные корзины обновляются. Пожалуйста, подождите...",
 
@@ -122,7 +126,9 @@ export const checkoutTranslations = {
     cashPaymentDescription: "Оплата наличными после подтверждения заказа.",
     cardPaymentTitle: "Оплата картой",
     cardPaymentDescription: "Скоро будет доступно.",
-
+    summaryEyebrow: "Ваш заказ",
+assuranceMessage:
+  "После подтверждения мы свяжемся с вами для уточнения деталей заказа.",
     summaryTitle: "Сводка заказа",
     subtotal: "Промежуточный итог",
     delivery: "Доставка",

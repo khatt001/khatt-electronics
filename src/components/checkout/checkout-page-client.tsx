@@ -108,7 +108,7 @@ export function CheckoutPageClient({ locale = "az" }: CheckoutPageClientProps) {
               <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7 lg:p-8">
                 <div className="border-b border-neutral-100 pb-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                    Sifariş məlumatları
+                    {t.customerInfoEyebrow}
                   </p>
 
                   <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
@@ -287,7 +287,7 @@ export function CheckoutPageClient({ locale = "az" }: CheckoutPageClientProps) {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                      Sifariş xülasəsi
+                      {t.summaryEyebrow}
                     </p>
 
                     <h2 className="mt-2 text-xl font-semibold text-neutral-950">
@@ -352,10 +352,7 @@ export function CheckoutPageClient({ locale = "az" }: CheckoutPageClientProps) {
                     aria-hidden="true"
                   />
 
-                  <span>
-                    Sifariş məlumatlarınız təsdiqdən sonra sizinlə əlaqə
-                    saxlanılaraq dəqiqləşdiriləcək.
-                  </span>
+                 <span>{t.assuranceMessage}</span>
                 </div>
 
                 <button

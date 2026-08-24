@@ -83,7 +83,7 @@ export function ContactPageView({
             <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7 lg:p-8">
               <div className="mb-6 border-b border-neutral-100 pb-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                  Sorğu forması
+                  {t.formEyebrow}
                 </p>
 
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
@@ -238,7 +238,7 @@ export function ContactPageView({
             <aside className="space-y-5">
               <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                  Birbaşa əlaqə
+                  {t.directContactEyebrow}
                 </p>
 
                 <h2 className="mt-2 text-xl font-semibold text-neutral-950">
@@ -291,7 +291,7 @@ export function ContactPageView({
 
                     <span className="min-w-0">
                       <span className="block text-xs text-neutral-500">
-                        Ünvan
+                        {t.addressLabel}
                       </span>
 
                       <span className="mt-1 block font-medium leading-6 text-neutral-950">

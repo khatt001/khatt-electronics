@@ -12,7 +12,7 @@ export const contactTranslations = {
     title: "Layihəniz üçün uyğun texniki həlli birlikdə seçək",
     description:
       "Kamera sistemi, şəbəkə infrastrukturu və elektronika məhsulları üzrə qiymət təklifi, məsləhət və texniki seçim üçün sorğu göndərin.",
-
+    formEyebrow: "Sorğu forması",
     formTitle: "Sorğu göndər",
     formDescription:
       "Məlumatları yazın, admin paneldə sorğunuz görünəcək və sizinlə əlaqə saxlanılacaq.",
@@ -33,7 +33,8 @@ export const contactTranslations = {
 
     submitLabel: "Sorğu göndər",
     submitPendingLabel: "Göndərilir...",
-
+    directContactEyebrow: "Birbaşa əlaqə",
+addressLabel: "Ünvan",
     contactInfoTitle: "Əlaqə məlumatları",
 
     supportTitle: "Texniki seçimdə dəstək",
@@ -61,7 +62,7 @@ export const contactTranslations = {
     title: "Let’s choose the right technical solution for your project",
     description:
       "Send a request for quotation, consulting and technical product selection across camera systems, network infrastructure and electronics products.",
-
+    formEyebrow: "Inquiry form",
     formTitle: "Send inquiry",
     formDescription:
       "Fill in the information and your request will be visible in the admin panel. We will contact you afterwards.",
@@ -82,7 +83,8 @@ export const contactTranslations = {
 
     submitLabel: "Send inquiry",
     submitPendingLabel: "Sending...",
-
+    directContactEyebrow: "Direct contact",
+addressLabel: "Address",
     contactInfoTitle: "Contact information",
 
     supportTitle: "Support with technical selection",
@@ -110,7 +112,7 @@ export const contactTranslations = {
     title: "Подберем подходящее техническое решение для вашего проекта",
     description:
       "Отправьте запрос для коммерческого предложения, консультации и технического подбора товаров по системам камер, сетевой инфраструктуре и электронике.",
-
+    formEyebrow: "Форма запроса",
     formTitle: "Отправить запрос",
     formDescription:
       "Заполните данные, и ваш запрос появится в панели администратора. Мы свяжемся с вами.",
@@ -130,7 +132,8 @@ export const contactTranslations = {
 
     submitLabel: "Отправить запрос",
     submitPendingLabel: "Отправляется...",
-
+    directContactEyebrow: "Прямая связь",
+addressLabel: "Адрес",
     contactInfoTitle: "Контактная информация",
 
     supportTitle: "Поддержка в техническом подборе",
