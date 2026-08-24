@@ -54,10 +54,10 @@ function getSpecsFromQuery(query: ProductsSearchParams) {
 }
 
 function getSpecChipLabel(key: string) {
-  return decodeURIComponent(key)
-    .replace(/^spec_/, "")
-    .replace(/_/g, " ")
-    .trim();
+  return key
+  .replace(/^spec_/, "")
+  .replace(/_/g, " ")
+  .trim();
 }
 
 function buildFilterUrl(

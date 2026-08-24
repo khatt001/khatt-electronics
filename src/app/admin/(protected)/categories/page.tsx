@@ -40,7 +40,7 @@ export default async function AdminCategoriesPage({
 
       {query.error ? (
         <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {decodeURIComponent(query.error)}
+          {query.error}
         </div>
       ) : null}
 
