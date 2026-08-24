@@ -10,7 +10,9 @@ type HomePageContentProps = {
   locale: Locale;
 };
 
-export function HomePageContent({ locale }: HomePageContentProps) {
+export function HomePageContent({
+  locale,
+}: HomePageContentProps) {
   return (
     <div className="min-h-screen bg-white">
       <HomeHero locale={locale} />
