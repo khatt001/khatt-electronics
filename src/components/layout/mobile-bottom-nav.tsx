@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Boxes,
   Heart,
   Home,
-  MenuSquare,
   PackageSearch,
   ShoppingCart,
 } from "lucide-react";
@@ -19,23 +19,60 @@ type MobileBottomNavProps = {
   locale?: Locale;
 };
 
-export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
+const labels = {
+  az: {
+    home: "Ana",
+    products: "Məhsullar",
+    solutions: "Həllər",
+    favorites: "Sevimli",
+    cart: "Səbət",
+    navigation: "Alt naviqasiya",
+  },
+  en: {
+    home: "Home",
+    products: "Products",
+    solutions: "Solutions",
+    favorites: "Favorites",
+    cart: "Cart",
+    navigation: "Bottom navigation",
+  },
+  ru: {
+    home: "Главная",
+    products: "Товары",
+    solutions: "Решения",
+    favorites: "Избр.",
+    cart: "Корз.",
+    navigation: "Нижняя навигация",
+  },
+} as const;
+
+export function MobileBottomNav({
+  locale = "az",
+}: MobileBottomNavProps) {
   const pathname = usePathname();
   const { items: cartItems } = useCart();
   const { count: favoritesCount } = useFavorites();
 
-  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const t = labels[locale];
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   const visibleCartCount = cartCount > 99 ? "99+" : cartCount;
-
-  const visibleFavoritesCount = favoritesCount > 99 ? "99+" : favoritesCount;
+  const visibleFavoritesCount =
+    favoritesCount > 99 ? "99+" : favoritesCount;
 
   const homeHref = localizedPath("/", locale);
   const productsHref = localizedPath("/products", locale);
+  const solutionsHref = localizedPath("/solutions", locale);
+  const favoritesHref = localizedPath("/favorites", locale);
+  const cartHref = localizedPath("/cart", locale);
 
   const items = [
     {
-      label: locale === "az" ? "Ana" : locale === "en" ? "Home" : "Главная",
+      label: t.home,
       href: homeHref,
       route: homeHref,
       icon: Home,
@@ -43,35 +80,33 @@ export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
       accent: "emerald",
     },
     {
-      label:
-        locale === "az" ? "Kataloq" : locale === "en" ? "Catalog" : "Каталог",
+      label: t.products,
       href: productsHref,
       route: productsHref,
-      icon: MenuSquare,
-      count: null,
-      accent: "emerald",
-    },
-    {
-      label: locale === "az" ? "Axtarış" : locale === "en" ? "Search" : "Поиск",
-      href: `${productsHref}?focus=search`,
-      route: "",
       icon: PackageSearch,
       count: null,
       accent: "emerald",
     },
     {
-      label:
-        locale === "az" ? "Sevimli" : locale === "en" ? "Favorites" : "Избр.",
-      href: localizedPath("/favorites", locale),
-      route: localizedPath("/favorites", locale),
+      label: t.solutions,
+      href: solutionsHref,
+      route: solutionsHref,
+      icon: Boxes,
+      count: null,
+      accent: "emerald",
+    },
+    {
+      label: t.favorites,
+      href: favoritesHref,
+      route: favoritesHref,
       icon: Heart,
       count: visibleFavoritesCount,
       accent: "red",
     },
     {
-      label: locale === "az" ? "Səbət" : locale === "en" ? "Cart" : "Корз.",
-      href: localizedPath("/cart", locale),
-      route: localizedPath("/cart", locale),
+      label: t.cart,
+      href: cartHref,
+      route: cartHref,
       icon: ShoppingCart,
       count: visibleCartCount,
       accent: "emerald",
@@ -80,14 +115,8 @@ export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.35rem)] pt-2 shadow-[0_-12px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl lg:hidden"
-      aria-label={
-        locale === "az"
-          ? "Alt naviqasiya"
-          : locale === "en"
-            ? "Bottom navigation"
-            : "Нижняя навигация"
-      }
+      aria-label={t.navigation}
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.35rem)] pt-1.5 shadow-[0_-10px_30px_rgba(0,0,0,0.07)] backdrop-blur-xl lg:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1">
         {items.map((item) => {
@@ -96,17 +125,18 @@ export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
           const active =
             item.route === homeHref
               ? pathname === homeHref
-              : Boolean(item.route && pathname.startsWith(item.route));
+              : pathname === item.route ||
+                pathname.startsWith(`${item.route}/`);
 
           const activeClass =
             item.accent === "red"
-              ? "bg-red-50 text-red-600"
-              : "bg-emerald-50 text-emerald-700";
+              ? "text-red-600"
+              : "text-emerald-700";
 
           const hoverClass =
             item.accent === "red"
-              ? "hover:bg-red-50 hover:text-red-600"
-              : "hover:bg-emerald-50 hover:text-emerald-700";
+              ? "hover:text-red-600"
+              : "hover:text-emerald-700";
 
           return (
             <Link
@@ -115,19 +145,31 @@ export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "relative flex min-h-[48px] touch-manipulation flex-col items-center justify-center rounded-lg px-1 py-2 text-[11px] font-medium transition",
-                active ? activeClass : cn("text-neutral-500", hoverClass),
+                "relative flex min-h-[52px] touch-manipulation flex-col items-center justify-center rounded-xl px-1 py-1.5 text-[10px] font-medium transition",
+                active
+                  ? activeClass
+                  : cn("text-neutral-500", hoverClass),
               )}
             >
-              <span className="relative">
-                <Icon className="size-5" aria-hidden="true" />
+              <span
+                className={cn(
+                  "relative flex h-7 min-w-10 items-center justify-center rounded-full px-2 transition",
+                  active &&
+                    (item.accent === "red"
+                      ? "bg-red-50"
+                      : "bg-emerald-50"),
+                )}
+              >
+                <Icon aria-hidden="true" className="size-[19px]" />
 
                 {item.count ? (
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "absolute -right-2.5 -top-2.5 flex min-h-4 min-w-4 items-center justify-center rounded-md px-1 text-[9px] font-bold leading-none text-white shadow-sm",
-                      item.accent === "red" ? "bg-red-600" : "bg-emerald-600",
+                      "absolute -right-0.5 -top-1 flex min-h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold leading-none text-white shadow-sm",
+                      item.accent === "red"
+                        ? "bg-red-600"
+                        : "bg-emerald-600",
                     )}
                   >
                     {item.count}
@@ -135,7 +177,9 @@ export function MobileBottomNav({ locale = "az" }: MobileBottomNavProps) {
                 ) : null}
               </span>
 
-              <span className="mt-1 max-w-full truncate">{item.label}</span>
+              <span className="mt-0.5 max-w-full truncate">
+                {item.label}
+              </span>
             </Link>
           );
         })}

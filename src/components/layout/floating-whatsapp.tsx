@@ -54,7 +54,7 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noreferrer"
       aria-label={t.ariaLabel}
-      className="fixed bottom-24 right-4 z-40 inline-flex size-14 touch-manipulation items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-2xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200 lg:bottom-6 lg:right-6 lg:z-50"
+     className="fixed bottom-[5.5rem] right-3 z-40 inline-flex size-12 touch-manipulation items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200 lg:bottom-6 lg:right-6 lg:z-50 lg:size-14"
     >
       <MessageCircle className="size-6" aria-hidden="true" />
     </a>

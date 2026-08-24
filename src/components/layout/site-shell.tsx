@@ -37,7 +37,7 @@ export function SiteShell({ children }: SiteShellProps) {
         pathname={pathname}
       />
 
-      <main className="min-h-screen pt-[8rem] lg:pt-[10rem] xl:pt-[9rem]">
+      <main className="min-h-screen pt-[7.25rem] lg:pt-[9.75rem] xl:pt-28">
         {children}
       </main>
 
