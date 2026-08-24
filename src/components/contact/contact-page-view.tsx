@@ -12,6 +12,7 @@ import {
 import { createInquiry } from "@/app/contact/actions";
 import { ContactSubmitButton } from "@/app/contact/submit-button";
 import { Container } from "@/components/layout/container";
+import { TurnstileWidget } from "@/components/contact/turnstile-widget";
 import { siteConfig } from "@/data/site";
 import { contactTranslations } from "@/data/translations/contact";
 import { localizedPath, type Locale } from "@/lib/i18n";
@@ -223,7 +224,9 @@ export function ContactPageView({
                   />
                 </div>
 
-                <div className="border-t border-neutral-100 pt-5">
+                <div className="space-y-4 border-t border-neutral-100 pt-5">
+                  <TurnstileWidget />
+
                   <ContactSubmitButton
                     label={t.submitLabel}
                     pendingLabel={t.submitPendingLabel}
