@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { ProductCard } from "@/components/product/product-card";
@@ -10,20 +10,23 @@ type FeaturedProductsProps = {
   locale?: Locale;
 };
 
-const featuredProductsTranslations = {
+const translations = {
   az: {
-    eyebrow: "Son əlavə edilənlər",
     title: "Yeni məhsullar",
+    description:
+      "Kataloqa son əlavə edilən peşəkar təhlükəsizlik və elektronika məhsulları.",
     viewAll: "Bütün məhsullar",
   },
   en: {
-    eyebrow: "Recently added",
     title: "New products",
+    description:
+      "Recently added professional security and electronics products.",
     viewAll: "View all products",
   },
   ru: {
-    eyebrow: "Недавно добавленные",
     title: "Новые товары",
+    description:
+      "Недавно добавленное профессиональное оборудование для безопасности и электроники.",
     viewAll: "Все товары",
   },
 } as const;
@@ -34,71 +37,56 @@ export async function FeaturedProducts({
   const result = await getCatalogProducts(
     {
       page: 1,
-      pageSize: 10,
+      pageSize: 4,
     },
     locale,
   );
 
-  const visibleProducts = result.products;
-  const t = featuredProductsTranslations[locale];
+  const products = result.products;
+  const t = translations[locale];
 
-  if (visibleProducts.length === 0) {
+  if (products.length === 0) {
     return null;
   }
 
   return (
-    <section className="bg-[#f5f6f8] py-8 md:py-12">
+    <section className="bg-[#f6f7f5] py-14 md:py-20">
       <Container>
-        <div className="mb-5 flex items-end justify-between gap-5">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700">
-              {t.eyebrow}
-            </p>
-
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+            <h2 className="text-3xl font-semibold tracking-[-0.035em] text-neutral-950 md:text-4xl">
               {t.title}
             </h2>
 
-            <div className="mt-4 h-0.5 w-28 bg-emerald-500" />
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-600 md:text-base">
+              {t.description}
+            </p>
           </div>
 
           <Link
             href={localizedPath("/products", locale)}
-            className="group hidden items-center text-sm font-medium text-neutral-600 transition hover:text-emerald-700 sm:inline-flex"
+            className="inline-flex w-fit items-center text-sm font-semibold text-neutral-900 transition hover:text-emerald-800"
           >
             {t.viewAll}
 
-            <ArrowRight
-              className="ml-2 size-4 transition group-hover:translate-x-1"
+            <ArrowUpRight
+              className="ml-2 size-4"
               aria-hidden="true"
             />
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {visibleProducts.map((product) => (
-              <div
-                key={product.id}
-                className="border-b border-r border-neutral-200"
-              >
-                <ProductCard product={product} locale={locale} compact isNew />
-              </div>
-            ))}
-          </div>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              locale={locale}
+              priority={index < 2}
+              isNew
+            />
+          ))}
         </div>
-
-        <Link
-          href={localizedPath("/products", locale)}
-          className="group mt-5 inline-flex items-center text-sm font-medium text-neutral-700 transition hover:text-emerald-700 sm:hidden"
-        >
-          {t.viewAll}
-
-          <ArrowRight
-            className="ml-2 size-4 transition group-hover:translate-x-1"
-            aria-hidden="true"
-          />
-        </Link>
       </Container>
     </section>
   );

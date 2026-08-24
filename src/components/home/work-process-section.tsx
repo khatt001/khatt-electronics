@@ -1,10 +1,3 @@
-import {
-  ClipboardList,
-  FileCheck2,
-  MapPinned,
-  Wrench,
-} from "lucide-react";
-
 import { Container } from "@/components/layout/container";
 import type { Locale } from "@/lib/i18n";
 
@@ -14,114 +7,83 @@ type WorkProcessSectionProps = {
 
 const translations = {
   az: {
-    eyebrow: "İş prosesi",
-    title: "Obyektiniz üçün tam həll",
+    title: "Layihədən texniki xidmətə qədər vahid yanaşma",
     description:
-      "İlkin baxışdan sistemin təhvilinə və sonrakı texniki xidmətə qədər bütün mərhələləri idarə edirik.",
-
-    steps: [
+      "Sistemin yalnız satışını deyil, düzgün layihələndirilməsini, quraşdırılmasını və stabil işləməsini təmin edirik.",
+    services: [
       {
         number: "01",
-        title: "Obyektə baxış",
+        title: "Layihələndirmə və texniki seçim",
         description:
-          "Obyektin sahəsi, təyinatı və texniki tələbləri müəyyənləşdirilir.",
+          "Obyektin təyinatı və texniki tələbləri qiymətləndirilir, uyğun sistem və avadanlıq siyahısı hazırlanır.",
       },
       {
         number: "02",
-        title: "Layihə və təklif",
+        title: "Təchizat və quraşdırma",
         description:
-          "Avadanlıq siyahısı, yerləşmə planı və qiymət təklifi hazırlanır.",
+          "Seçilmiş avadanlıqlar təmin edilir, sistem standartlara uyğun quraşdırılır, proqramlaşdırılır və sınaqdan keçirilir.",
       },
       {
         number: "03",
-        title: "Quraşdırma",
+        title: "Texniki xidmət və dəstək",
         description:
-          "Avadanlıqlar montaj edilir, proqramlaşdırılır və sistem sazlanır.",
-      },
-      {
-        number: "04",
-        title: "Təhvil və xidmət",
-        description:
-          "Sistem test edilir, müştəriyə təhvil verilir və texniki dəstək göstərilir.",
+          "Sistemlərin periodik yoxlanılması, sazlanması, nasazlıqların aradan qaldırılması və yenilənməsi həyata keçirilir.",
       },
     ],
   },
 
   en: {
-    eyebrow: "Our process",
-    title: "A complete solution for your property",
+    title: "One approach from system design to technical maintenance",
     description:
-      "We manage every stage, from the initial site inspection to handover and ongoing maintenance.",
-
-    steps: [
+      "We provide more than equipment supply. We ensure correct design, professional installation and reliable operation.",
+    services: [
       {
         number: "01",
-        title: "Site inspection",
+        title: "System design and technical selection",
         description:
-          "We assess the size, purpose and technical requirements of the site.",
+          "We assess the property and its technical requirements, then prepare the appropriate system and equipment list.",
       },
       {
         number: "02",
-        title: "Design and quotation",
+        title: "Supply and installation",
         description:
-          "We prepare the equipment list, layout and commercial quotation.",
+          "Selected equipment is supplied, professionally installed, configured and tested according to required standards.",
       },
       {
         number: "03",
-        title: "Installation",
+        title: "Maintenance and support",
         description:
-          "Equipment is installed, programmed and commissioned.",
-      },
-      {
-        number: "04",
-        title: "Handover and service",
-        description:
-          "The system is tested, handed over and supported through maintenance.",
+          "We provide periodic inspection, configuration, troubleshooting and system upgrades.",
       },
     ],
   },
 
   ru: {
-    eyebrow: "Процесс работы",
-    title: "Комплексное решение для вашего объекта",
+    title: "Единый подход от проектирования до технического обслуживания",
     description:
-      "Мы управляем всеми этапами: от осмотра объекта до сдачи системы и последующего обслуживания.",
-
-    steps: [
+      "Мы не ограничиваемся поставкой оборудования, а обеспечиваем правильное проектирование, монтаж и стабильную работу системы.",
+    services: [
       {
         number: "01",
-        title: "Осмотр объекта",
+        title: "Проектирование и технический подбор",
         description:
-          "Определяются площадь, назначение и технические требования объекта.",
+          "Оцениваем назначение объекта и технические требования, подготавливаем подходящую систему и перечень оборудования.",
       },
       {
         number: "02",
-        title: "Проект и предложение",
+        title: "Поставка и монтаж",
         description:
-          "Подготавливаются список оборудования, схема размещения и стоимость.",
+          "Поставляем выбранное оборудование, устанавливаем, программируем и тестируем систему согласно требованиям.",
       },
       {
         number: "03",
-        title: "Монтаж",
+        title: "Обслуживание и поддержка",
         description:
-          "Оборудование устанавливается, программируется и настраивается.",
-      },
-      {
-        number: "04",
-        title: "Сдача и обслуживание",
-        description:
-          "Система тестируется, сдаётся заказчику и обслуживается.",
+          "Проводим периодические проверки, настройку, устранение неисправностей и модернизацию систем.",
       },
     ],
   },
 } as const;
-
-const icons = [
-  MapPinned,
-  ClipboardList,
-  Wrench,
-  FileCheck2,
-];
 
 export function WorkProcessSection({
   locale = "az",
@@ -129,53 +91,45 @@ export function WorkProcessSection({
   const t = translations[locale];
 
   return (
-    <section className="bg-[#14171a] py-12 text-white md:py-16">
+    <section className="border-b border-neutral-200 bg-white py-14 md:py-20">
       <Container>
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-500">
-            {t.eyebrow}
-          </p>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">
+              KHATT Electronics
+            </p>
 
-          <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] md:text-4xl">
-            {t.title}
-          </h2>
+            <h2 className="mt-5 max-w-xl text-3xl font-semibold leading-tight tracking-[-0.035em] text-neutral-950 md:text-4xl">
+              {t.title}
+            </h2>
 
-          <p className="mt-4 text-sm leading-7 text-white/60 md:text-base">
-            {t.description}
-          </p>
-        </div>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-neutral-600 md:text-base">
+              {t.description}
+            </p>
+          </div>
 
-        <div className="mt-9 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {t.steps.map((step, index) => {
-            const Icon = icons[index];
-
-            return (
+          <div className="border-t border-neutral-300">
+            {t.services.map((service) => (
               <div
-                key={step.number}
-                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6"
+                key={service.number}
+                className="grid gap-4 border-b border-neutral-300 py-7 sm:grid-cols-[50px_minmax(0,1fr)] md:py-8"
               >
-                <div className="absolute right-5 top-4 text-5xl font-semibold text-white/[0.04]">
-                  {step.number}
+                <span className="text-sm font-semibold text-emerald-800">
+                  {service.number}
+                </span>
+
+                <div>
+                  <h3 className="text-xl font-semibold tracking-[-0.02em] text-neutral-950">
+                    {service.title}
+                  </h3>
+
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-neutral-600">
+                    {service.description}
+                  </p>
                 </div>
-
-                <div className="flex size-11 items-center justify-center rounded-xl bg-red-600 text-white">
-                  <Icon className="size-5" aria-hidden="true" />
-                </div>
-
-                <p className="mt-6 text-xs font-semibold tracking-[0.16em] text-red-500">
-                  {step.number}
-                </p>
-
-                <h3 className="mt-2 text-lg font-semibold">
-                  {step.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-6 text-white/60">
-                  {step.description}
-                </p>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </Container>
     </section>
