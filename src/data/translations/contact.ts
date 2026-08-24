@@ -2,48 +2,54 @@ export const contactTranslations = {
   az: {
     metadataTitle: "Əlaqə | KHATT Electronics",
     metadataDescription:
-      "KHATT Electronics ilə əlaqə saxlayın. Kamera sistemləri, şəbəkə avadanlıqları və təhlükəsizlik həlləri üçün qiymət təklifi və konsultasiya alın.",
+      "Təhlükəsizlik, yanğın, elektrik, HVAC və zəif axın sistemləri üçün KHATT Electronics ilə əlaqə saxlayın.",
 
     sourceEstimate: "Qiymət təklifi",
     sourceConsultation: "Konsultasiya sorğusu",
+    sourceProject: "Layihə sorğusu",
     sourceGeneral: "Ümumi sorğu",
 
     eyebrow: "Əlaqə",
-    title: "Layihəniz üçün uyğun texniki həlli birlikdə seçək",
+    title: "Layihənizin ilkin texniki ehtiyaclarını birlikdə müəyyən edək",
     description:
-      "Kamera sistemi, şəbəkə infrastrukturu və elektronika məhsulları üzrə qiymət təklifi, məsləhət və texniki seçim üçün sorğu göndərin.",
+      "Obyektin növünü, təxmini sahəsini və tələb olunan sistemi qeyd edin. Mütəxəssisimiz məlumatları nəzərdən keçirərək sizinlə əlaqə saxlayacaq.",
+
     formEyebrow: "Sorğu forması",
-    formTitle: "Sorğu göndər",
+    formTitle: "Layihə və ya məhsul sorğusu göndərin",
     formDescription:
-      "Məlumatları yazın, admin paneldə sorğunuz görünəcək və sizinlə əlaqə saxlanılacaq.",
+      "Əsas məlumatları qeyd etməyiniz kifayətdir. Texniki detalları sonrakı mərhələdə birlikdə dəqiqləşdirəcəyik.",
+
     successMessage:
       "Sorğunuz uğurla göndərildi. Tezliklə sizinlə əlaqə saxlanılacaq.",
     productLabel: "Sorğu məhsulu:",
 
     fullNameLabel: "Ad və soyad",
-    fullNamePlaceholder: "Adınız",
+    fullNamePlaceholder: "Adınız və soyadınız",
     phoneLabel: "Telefon",
     phonePlaceholder: "+994...",
     emailLabel: "Email",
     emailPlaceholder: "email@example.com",
     companyLabel: "Şirkət adı",
-    companyPlaceholder: "Şirkət adı",
-    messageLabel: "Mesaj",
-    messagePlaceholder: "Layihə və ya məhsul sorğunuzu yazın...",
+    companyPlaceholder: "Şirkət və ya obyektin adı",
+    messageLabel: "Sorğu haqqında",
+    messagePlaceholder:
+      "Obyektin növünü, təxmini sahəsini və tələb olunan sistemi yazın...",
 
-    submitLabel: "Sorğu göndər",
+    submitLabel: "Sorğunu göndər",
     submitPendingLabel: "Göndərilir...",
-    directContactEyebrow: "Birbaşa əlaqə",
-addressLabel: "Ünvan",
-    contactInfoTitle: "Əlaqə məlumatları",
 
-    supportTitle: "Texniki seçimdə dəstək",
+    directContactLabel: "Birbaşa əlaqə",
+    contactInfoTitle: "Əlaqə məlumatları",
+    addressLabel: "Ünvan",
+
+    supportTitle: "İlkin texniki dəstək",
     supportDescription:
-      "Məhsul seçimi, kamera sayı, NVR/DVR, PoE switch və kabel ehtiyaclarını birlikdə hesablaya bilərik.",
+      "Sorğunuz əsasında obyekt üçün tələb olunan sistemlər və növbəti addımlar ilkin olaraq müəyyənləşdirilir.",
+
     supportItems: [
-      "Obyektə uyğun məhsul seçimi",
-      "Qiymət təklifi və avadanlıq siyahısı",
-      "Quraşdırma üçün texniki məsləhət",
+      "Obyektə uyğun sistem yanaşması",
+      "Avadanlıq və iş həcminin müəyyənləşdirilməsi",
+      "İlkin texniki və qiymət təklifi",
     ],
 
     productsLink: "Məhsullara bax",
@@ -52,48 +58,54 @@ addressLabel: "Ünvan",
   en: {
     metadataTitle: "Contact | KHATT Electronics",
     metadataDescription:
-      "Contact KHATT Electronics. Get a quotation and consultation for camera systems, network equipment and security solutions.",
+      "Contact KHATT Electronics for security, fire safety, electrical, HVAC and low-current systems.",
 
     sourceEstimate: "Quotation request",
     sourceConsultation: "Consultation request",
+    sourceProject: "Project request",
     sourceGeneral: "General inquiry",
 
     eyebrow: "Contact",
-    title: "Let’s choose the right technical solution for your project",
+    title: "Let us identify the initial technical needs of your project",
     description:
-      "Send a request for quotation, consulting and technical product selection across camera systems, network infrastructure and electronics products.",
+      "Specify the facility type, approximate area and required system. Our specialist will review the information and contact you.",
+
     formEyebrow: "Inquiry form",
-    formTitle: "Send inquiry",
+    formTitle: "Send a project or product inquiry",
     formDescription:
-      "Fill in the information and your request will be visible in the admin panel. We will contact you afterwards.",
+      "Basic information is enough. We will clarify the remaining technical details together at the next stage.",
+
     successMessage:
       "Your inquiry has been sent successfully. We will contact you soon.",
     productLabel: "Requested product:",
 
     fullNameLabel: "Full name",
-    fullNamePlaceholder: "Your name",
+    fullNamePlaceholder: "Your full name",
     phoneLabel: "Phone",
     phonePlaceholder: "+994...",
     emailLabel: "Email",
     emailPlaceholder: "email@example.com",
     companyLabel: "Company name",
-    companyPlaceholder: "Company name",
-    messageLabel: "Message",
-    messagePlaceholder: "Write your project or product request...",
+    companyPlaceholder: "Company or facility name",
+    messageLabel: "About the inquiry",
+    messagePlaceholder:
+      "Specify the facility type, approximate area and required system...",
 
     submitLabel: "Send inquiry",
     submitPendingLabel: "Sending...",
-    directContactEyebrow: "Direct contact",
-addressLabel: "Address",
-    contactInfoTitle: "Contact information",
 
-    supportTitle: "Support with technical selection",
+    directContactLabel: "Direct contact",
+    contactInfoTitle: "Contact information",
+    addressLabel: "Address",
+
+    supportTitle: "Initial technical support",
     supportDescription:
-      "We can help calculate product selection, camera quantity, NVR/DVR, PoE switch and cable requirements.",
+      "Based on your inquiry, we identify the required systems and the next steps for the facility.",
+
     supportItems: [
-      "Product selection based on the facility",
-      "Quotation and equipment list",
-      "Technical advice for installation",
+      "System approach suitable for the facility",
+      "Identification of equipment and scope",
+      "Initial technical and commercial proposal",
     ],
 
     productsLink: "View products",
@@ -102,47 +114,54 @@ addressLabel: "Address",
   ru: {
     metadataTitle: "Контакты | KHATT Electronics",
     metadataDescription:
-      "Свяжитесь с KHATT Electronics. Получите предложение и консультацию по системам камер, сетевому оборудованию и решениям безопасности.",
+      "Свяжитесь с KHATT Electronics по вопросам безопасности, пожарных систем, электрики, HVAC и слаботочных систем.",
 
     sourceEstimate: "Запрос предложения",
     sourceConsultation: "Запрос консультации",
+    sourceProject: "Запрос по проекту",
     sourceGeneral: "Общий запрос",
 
     eyebrow: "Контакты",
-    title: "Подберем подходящее техническое решение для вашего проекта",
+    title: "Определим первоначальные технические потребности проекта",
     description:
-      "Отправьте запрос для коммерческого предложения, консультации и технического подбора товаров по системам камер, сетевой инфраструктуре и электронике.",
+      "Укажите тип объекта, примерную площадь и необходимую систему. Наш специалист изучит информацию и свяжется с вами.",
+
     formEyebrow: "Форма запроса",
-    formTitle: "Отправить запрос",
+    formTitle: "Отправьте запрос по проекту или товару",
     formDescription:
-      "Заполните данные, и ваш запрос появится в панели администратора. Мы свяжемся с вами.",
-    successMessage: "Ваш запрос успешно отправлен. Мы скоро свяжемся с вами.",
+      "Достаточно указать основную информацию. Остальные технические детали мы уточним вместе на следующем этапе.",
+
+    successMessage:
+      "Ваш запрос успешно отправлен. Мы скоро свяжемся с вами.",
     productLabel: "Товар запроса:",
 
     fullNameLabel: "Имя и фамилия",
-    fullNamePlaceholder: "Ваше имя",
+    fullNamePlaceholder: "Ваше имя и фамилия",
     phoneLabel: "Телефон",
     phonePlaceholder: "+994...",
     emailLabel: "Email",
     emailPlaceholder: "email@example.com",
     companyLabel: "Название компании",
-    companyPlaceholder: "Название компании",
-    messageLabel: "Сообщение",
-    messagePlaceholder: "Напишите запрос по проекту или товару...",
+    companyPlaceholder: "Компания или название объекта",
+    messageLabel: "О запросе",
+    messagePlaceholder:
+      "Укажите тип объекта, примерную площадь и необходимую систему...",
 
     submitLabel: "Отправить запрос",
     submitPendingLabel: "Отправляется...",
-    directContactEyebrow: "Прямая связь",
-addressLabel: "Адрес",
-    contactInfoTitle: "Контактная информация",
 
-    supportTitle: "Поддержка в техническом подборе",
+    directContactLabel: "Прямая связь",
+    contactInfoTitle: "Контактная информация",
+    addressLabel: "Адрес",
+
+    supportTitle: "Первичная техническая поддержка",
     supportDescription:
-      "Мы можем помочь рассчитать подбор товаров, количество камер, NVR/DVR, PoE switch и потребности в кабеле.",
+      "На основании запроса определяются необходимые системы и дальнейшие этапы работы.",
+
     supportItems: [
-      "Подбор товаров под объект",
-      "Коммерческое предложение и список оборудования",
-      "Техническая консультация по установке",
+      "Подходящая система для объекта",
+      "Определение оборудования и объёма работ",
+      "Первичное техническое и ценовое предложение",
     ],
 
     productsLink: "Смотреть товары",
