@@ -1,30 +1,53 @@
 import type { Metadata } from "next";
-import { getProductBySlug, type ProductLocale } from "@/services/products";
+
+import type { CategorySearchParams } from "@/components/category/category-page-view";
+import type { ProductsSearchParams } from "@/components/product/products-page-view";
+import { aboutTranslations } from "@/data/translations/about";
+import { cartTranslations } from "@/data/translations/cart";
+import { categoryPageTranslations } from "@/data/translations/category-page";
+import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
+import { checkoutTranslations } from "@/data/translations/checkout";
+import { compareTranslations } from "@/data/translations/compare";
+import { contactTranslations } from "@/data/translations/contact";
+import { favoritesTranslations } from "@/data/translations/favorites";
 import { productDetailTranslations } from "@/data/translations/product-detail";
 import { productsTranslations } from "@/data/translations/products";
-import type { ProductsSearchParams } from "@/components/product/products-page-view";
-import { localizedPath } from "@/lib/i18n";
-import { getCategoryBySlug } from "@/services/categories";
-import { categoryPageTranslations } from "@/data/translations/category-page";
-import type { CategorySearchParams } from "@/components/category/category-page-view";
-import type { Locale } from "@/lib/i18n";
-import { aboutTranslations } from "@/data/translations/about";
+import { projectsTranslations } from "@/data/translations/projects";
 import { servicesPageTranslations } from "@/data/translations/services-page";
 import { solutionsPageTranslations } from "@/data/translations/solutions-page";
-import { cartTranslations } from "@/data/translations/cart";
-import { favoritesTranslations } from "@/data/translations/favorites";
-import { contactTranslations } from "@/data/translations/contact";
-import { compareTranslations } from "@/data/translations/compare";
-import { checkoutTranslations } from "@/data/translations/checkout";
-import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
 import { trackOrderTranslations } from "@/data/translations/track-order";
-import { projectsTranslations } from "@/data/translations/projects";
+import { localizedPath, type Locale } from "@/lib/i18n";
+import { getCategoryBySlug } from "@/services/categories";
+import {
+  getProductBySlug,
+  type ProductLocale,
+} from "@/services/products";
 
-function hasSearchQuery(query: Record<string, string | string[] | undefined>) {
+function normalizeMetadataTitle(title: string) {
+  return title
+    .replace(/\s*\|\s*KHATT Electronics\s*$/i, "")
+    .trim();
+}
+
+function hasSearchQuery(
+  query: Record<string, string | string[] | undefined>,
+) {
   return Object.values(query).some((value) => {
-    if (Array.isArray(value)) return value.length > 0;
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
     return Boolean(value);
   });
+}
+
+function createLanguageAlternates(path: string) {
+  return {
+    az: path,
+    en: `/en${path}`,
+    ru: `/ru${path}`,
+    "x-default": path,
+  };
 }
 
 export async function generateProductDetailMetadata({
@@ -47,26 +70,39 @@ export async function generateProductDetailMetadata({
     };
   }
 
-  const title = product.seoTitle ?? product.name;
+  const title = normalizeMetadataTitle(
+    product.seoTitle ?? product.name,
+  );
+
   const description =
     product.seoDescription ??
     product.shortDescription ??
     `${product.name} — ${t.productPageSuffix}`;
 
   const imageUrl = product.images[0]?.url;
-  const productPath = localizedPath(`/products/${product.slug}`, locale);
+  const basePath = `/products/${product.slug}`;
+  const productPath = localizedPath(basePath, locale);
 
   return {
     title,
     description,
+
     alternates: {
       canonical: productPath,
-      languages: {
-        az: `/products/${product.slug}`,
-        en: `/en/products/${product.slug}`,
-        ru: `/ru/products/${product.slug}`,
+      languages: createLanguageAlternates(basePath),
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
+
     openGraph: {
       title,
       description,
@@ -81,6 +117,7 @@ export async function generateProductDetailMetadata({
           ]
         : undefined,
     },
+
     twitter: {
       card: "summary_large_image",
       title,
@@ -98,29 +135,29 @@ export function generateProductsListingMetadata({
   locale: ProductLocale;
 }): Metadata {
   const t = productsTranslations[locale];
-  const productsPath = localizedPath("/products", locale);
+  const title = normalizeMetadataTitle(t.metadataTitle);
+  const basePath = "/products";
+  const productsPath = localizedPath(basePath, locale);
   const queryActive = hasSearchQuery(query);
 
   return {
-    title: t.metadataTitle,
+    title,
     description: t.metadataDescription,
+
     alternates: {
       canonical: productsPath,
-      languages: {
-        az: "/products",
-        en: "/en/products",
-        ru: "/ru/products",
+      languages: createLanguageAlternates(basePath),
+    },
+
+    robots: {
+      index: !queryActive,
+      follow: true,
+      googleBot: {
+        index: !queryActive,
+        follow: true,
       },
     },
-    robots: queryActive
-      ? {
-          index: false,
-          follow: true,
-        }
-      : {
-          index: true,
-          follow: true,
-        },
+
     openGraph: {
       title: t.openGraphTitle,
       description: t.openGraphDescription,
@@ -129,6 +166,7 @@ export function generateProductsListingMetadata({
     },
   };
 }
+
 export async function generateCategoryPageMetadata({
   slug,
   query,
@@ -151,38 +189,48 @@ export async function generateCategoryPageMetadata({
     };
   }
 
-  const queryActive = Object.values(query).some((value) => {
-    if (Array.isArray(value)) return value.length > 0;
-    return Boolean(value);
-  });
+  const queryActive = hasSearchQuery(query);
 
-  const categoryPath = localizedPath(`/category/${category.slug}`, locale);
+  const title = normalizeMetadataTitle(
+    category.seoTitle ??
+      `${category.name} ${t.metadataProductsSuffix}`,
+  );
+
+  const description =
+    category.seoDescription ??
+    category.description ??
+    `${category.name} ${t.metadataFallbackSuffix}`;
+
+  const basePath = `/category/${category.slug}`;
+  const categoryPath = localizedPath(basePath, locale);
 
   return {
-    title: category.seoTitle ?? `${category.name} ${t.metadataProductsSuffix}`,
-    description:
-      category.seoDescription ??
-      category.description ??
-      `${category.name} ${t.metadataFallbackSuffix}`,
+    title,
+    description,
+
     alternates: {
       canonical: categoryPath,
-      languages: {
-        az: `/category/${category.slug}`,
-        en: `/en/category/${category.slug}`,
-        ru: `/ru/category/${category.slug}`,
+      languages: createLanguageAlternates(basePath),
+    },
+
+    robots: {
+      index: !queryActive,
+      follow: true,
+      googleBot: {
+        index: !queryActive,
+        follow: true,
       },
     },
-    robots: queryActive
-      ? {
-          index: false,
-          follow: true,
-        }
-      : {
-          index: true,
-          follow: true,
-        },
+
+    openGraph: {
+      title,
+      description,
+      url: categoryPath,
+      type: "website",
+    },
   };
 }
+
 type StaticPageKey =
   | "about"
   | "services"
@@ -194,6 +242,15 @@ type StaticPageKey =
   | "checkout"
   | "track-order"
   | "projects";
+
+const noIndexStaticPages = new Set<StaticPageKey>([
+  "cart",
+  "favorites",
+  "compare",
+  "checkout",
+  "track-order",
+]);
+
 const staticPageTranslations = {
   about: aboutTranslations,
   services: servicesPageTranslations,
@@ -220,40 +277,66 @@ export function generateStaticPageMetadata({
 }): Metadata {
   const translations = staticPageTranslations[page];
   const t = translations[locale];
+  const title = normalizeMetadataTitle(t.metadataTitle);
   const path = getStaticPagePath(page);
   const canonical = localizedPath(path, locale);
+  const shouldIndex = !noIndexStaticPages.has(page);
 
   return {
-    title: t.metadataTitle,
+    title,
     description: t.metadataDescription,
+
     alternates: {
       canonical,
-      languages: {
-        az: path,
-        en: `/en${path}`,
-        ru: `/ru${path}`,
+      languages: shouldIndex
+        ? createLanguageAlternates(path)
+        : undefined,
+    },
+
+    robots: {
+      index: shouldIndex,
+      follow: shouldIndex,
+      googleBot: {
+        index: shouldIndex,
+        follow: shouldIndex,
       },
     },
+
+    openGraph: shouldIndex
+      ? {
+          title,
+          description: t.metadataDescription,
+          url: canonical,
+          type: "website",
+        }
+      : undefined,
   };
 }
+
 export function generateCheckoutSuccessMetadata({
   locale,
 }: {
   locale: Locale;
 }): Metadata {
   const t = checkoutSuccessTranslations[locale];
+  const title = normalizeMetadataTitle(t.metadataTitle);
   const path = "/checkout/success";
   const canonical = localizedPath(path, locale);
 
   return {
-    title: t.metadataTitle,
+    title,
     description: t.metadataDescription,
+
     alternates: {
       canonical,
-      languages: {
-        az: path,
-        en: `/en${path}`,
-        ru: `/ru${path}`,
+    },
+
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
       },
     },
   };

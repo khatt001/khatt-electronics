@@ -10,7 +10,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type SolutionItem = {
   anchor: string;
@@ -33,50 +33,46 @@ const solutionIcons: Record<string, LucideIcon> = {
   networking: Network,
 };
 
+function subscribeToHashChange(callback: () => void) {
+  window.addEventListener("hashchange", callback);
+  window.addEventListener("popstate", callback);
+
+  return () => {
+    window.removeEventListener("hashchange", callback);
+    window.removeEventListener("popstate", callback);
+  };
+}
+
+function getHashSnapshot() {
+  return window.location.hash.replace(/^#/, "");
+}
+
+function getServerHashSnapshot() {
+  return "";
+}
+
 export function SolutionsExplorer({
   solutions,
   scopeLabel,
 }: SolutionsExplorerProps) {
-  const [activeAnchor, setActiveAnchor] = useState(
-    solutions[0]?.anchor ?? "",
+  const currentHash = useSyncExternalStore(
+    subscribeToHashChange,
+    getHashSnapshot,
+    getServerHashSnapshot,
   );
 
-  useEffect(() => {
-    const hash = window.location.hash.replace("#", "");
-
-    if (solutions.some((solution) => solution.anchor === hash)) {
-      setActiveAnchor(hash);
-    }
-
-    function handleHashChange() {
-      const nextHash = window.location.hash.replace("#", "");
-
-      if (
-        solutions.some(
-          (solution) => solution.anchor === nextHash,
-        )
-      ) {
-        setActiveAnchor(nextHash);
-      }
-    }
-
-    window.addEventListener("hashchange", handleHashChange);
-
-    return () => {
-      window.removeEventListener(
-        "hashchange",
-        handleHashChange,
-      );
-    };
-  }, [solutions]);
-
-  const activeSolution = useMemo(
-    () =>
-      solutions.find(
-        (solution) => solution.anchor === activeAnchor,
-      ) ?? solutions[0],
-    [activeAnchor, solutions],
+  const hashMatchesSolution = solutions.some(
+    (solution) => solution.anchor === currentHash,
   );
+
+  const activeAnchor = hashMatchesSolution
+    ? currentHash
+    : (solutions[0]?.anchor ?? "");
+
+  const activeSolution =
+    solutions.find(
+      (solution) => solution.anchor === activeAnchor,
+    ) ?? solutions[0];
 
   if (!activeSolution) {
     return null;
@@ -86,8 +82,20 @@ export function SolutionsExplorer({
     solutionIcons[activeSolution.anchor] ?? Network;
 
   function selectSolution(anchor: string) {
-    setActiveAnchor(anchor);
-    window.history.replaceState(null, "", `#${anchor}`);
+    if (anchor === activeAnchor) {
+      return;
+    }
+
+    const nextUrl = new URL(window.location.href);
+    nextUrl.hash = anchor;
+
+    window.history.replaceState(
+      null,
+      "",
+      `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`,
+    );
+
+    window.dispatchEvent(new Event("hashchange"));
   }
 
   return (
@@ -106,6 +114,7 @@ export function SolutionsExplorer({
                 key={solution.anchor}
                 id={solution.anchor}
                 type="button"
+                aria-pressed={isActive}
                 onClick={() =>
                   selectSolution(solution.anchor)
                 }
@@ -116,12 +125,12 @@ export function SolutionsExplorer({
                 }`}
               >
                 <span
+                  aria-hidden="true"
                   className={`absolute inset-y-0 left-0 w-1 transition ${
                     isActive
                       ? "bg-emerald-500"
                       : "bg-transparent"
                   }`}
-                  aria-hidden="true"
                 />
 
                 <span
@@ -132,9 +141,9 @@ export function SolutionsExplorer({
                   }`}
                 >
                   <Icon
+                    aria-hidden="true"
                     className="size-[18px]"
                     strokeWidth={1.5}
-                    aria-hidden="true"
                   />
                 </span>
 
@@ -177,17 +186,17 @@ export function SolutionsExplorer({
       <div className="overflow-hidden rounded-2xl border border-neutral-300 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.07)]">
         <div className="relative overflow-hidden bg-neutral-950 px-6 py-9 text-white md:px-10 md:py-11 lg:px-12">
           <ActiveIcon
+            aria-hidden="true"
             className="pointer-events-none absolute -right-7 top-1/2 size-52 -translate-y-1/2 text-white/[0.035]"
             strokeWidth={1}
-            aria-hidden="true"
           />
 
           <div className="relative z-10">
             <div className="flex size-12 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-400">
               <ActiveIcon
+                aria-hidden="true"
                 className="size-6"
                 strokeWidth={1.5}
-                aria-hidden="true"
               />
             </div>
 
@@ -214,9 +223,9 @@ export function SolutionsExplorer({
               >
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-emerald-700 text-emerald-700">
                   <Check
+                    aria-hidden="true"
                     className="size-3"
                     strokeWidth={2}
-                    aria-hidden="true"
                   />
                 </span>
 

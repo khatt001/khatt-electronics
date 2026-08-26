@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+
 import { getBaseUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
@@ -8,27 +9,21 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: [
-          "/",
-          "/products",
-          "/category",
-          "/services",
-          "/solutions",
-          "/projects",
-          "/about",
-          "/contact",
-          "/track-order",
-          "/favorites",
-          "/compare",
-        ],
+        allow: "/",
         disallow: [
           "/admin",
+          "/admin/",
+          "/api",
+          "/api/",
           "/cart",
           "/checkout",
-          "/checkout/success",
-          "/api",
-          "/en",
-          "/ru",
+          "/checkout/",
+          "/en/cart",
+          "/en/checkout",
+          "/en/checkout/",
+          "/ru/cart",
+          "/ru/checkout",
+          "/ru/checkout/",
         ],
       },
     ],

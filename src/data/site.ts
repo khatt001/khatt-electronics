@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "KHATT Electronics",
   legalName: "KHATT Electronics",
   description:
-    "Təhlükəsizlik sistemləri, videomüşahidə, keçidə nəzarət, domofon, siqnalizasiya və ağıllı texnologiya həlləri.",
+  "Yanğın təhlükəsizliyi, videomüşahidə, girişə nəzarət, elektrik, isitmə-soyutma, havalandırma, şəbəkə və zəif axın sistemlərinin layihələndirilməsi, təchizatı və quraşdırılması.",
 
   phone: "+994 00 000 00 00",
   phoneHref: "tel:+994000000000",
