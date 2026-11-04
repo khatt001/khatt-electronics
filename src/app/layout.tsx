@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/manrope";
-import "@fontsource-variable/playfair-display";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SiteShell } from "@/components/layout/site-shell";

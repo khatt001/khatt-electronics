@@ -1,4 +1,4 @@
-import { CheckCircle2, MessageCircle } from "lucide-react";
+import { Check, CheckCircle2, MessageCircle } from "lucide-react";
 
 import { createInquiry } from "@/app/contact/actions";
 import { ContactSubmitButton } from "@/app/contact/submit-button";
@@ -149,7 +149,11 @@ export function ContactPageView({ locale = "az", query }: ContactPageViewProps) 
                 </div>
                 <div>
                   <dt className="text-xs text-muted">{t.addressLabel}</dt>
-                  <dd className="mt-1 text-ink">{siteConfig.address}</dd>
+                  <dd className="mt-1">
+                    <a href={siteConfig.mapUrl} target="_blank" rel="noreferrer" className="text-ink hover:text-signal">
+                      {siteConfig.address}
+                    </a>
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-xs text-muted">{t.hoursLabel}</dt>
@@ -171,9 +175,9 @@ export function ContactPageView({ locale = "az", query }: ContactPageViewProps) 
             <div className="bg-ink p-6 text-white">
               <h2 className="eyebrow text-brass">{t.nextTitle}</h2>
               <ol className="mt-5 grid gap-4">
-                {t.nextSteps.map((step, index) => (
-                  <li key={step} className="flex gap-4 text-sm leading-6 text-white/80">
-                    <span className="font-mono text-xs text-white/45">{String(index + 1).padStart(2, "0")}</span>
+                {t.nextSteps.map((step) => (
+                  <li key={step} className="flex gap-3 text-sm leading-6 text-white/80">
+                    <Check className="mt-1 size-4 shrink-0 text-brass" aria-hidden="true" />
                     {step}
                   </li>
                 ))}

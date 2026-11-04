@@ -25,7 +25,7 @@ export async function FeaturedProducts({ locale = "az" }: { locale?: Locale }) {
   }
 
   return (
-    <section className="bg-surface">
+    <section className="bg-paper">
       <Container className="section-spacing">
         <SectionHeading
           eyebrow={t.productsEyebrow}

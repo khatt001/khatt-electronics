@@ -17,7 +17,6 @@ type ChromeCopy = {
   footerServices: string;
   footerContact: string;
   footerLegal: string;
-  legalAddress: string;
   taxId: string;
   rights: string;
   whatsappMessage: string;
@@ -48,7 +47,6 @@ export const chromeCopy: Record<Locale, ChromeCopy> = {
     footerServices: "Xidmətlər",
     footerContact: "Əlaqə",
     footerLegal: "Rekvizitlər",
-    legalAddress: "Hüquqi ünvan",
     taxId: "VÖEN",
     rights: "Bütün hüquqlar qorunur.",
     whatsappMessage: "Salam, yanğından mühafizə sistemi ilə bağlı məlumat almaq istəyirəm.",
@@ -77,7 +75,6 @@ export const chromeCopy: Record<Locale, ChromeCopy> = {
     footerServices: "Services",
     footerContact: "Contact",
     footerLegal: "Company details",
-    legalAddress: "Registered address",
     taxId: "Tax ID (VÖEN)",
     rights: "All rights reserved.",
     whatsappMessage: "Hello, I would like information about a fire protection system.",
@@ -106,7 +103,6 @@ export const chromeCopy: Record<Locale, ChromeCopy> = {
     footerServices: "Услуги",
     footerContact: "Контакты",
     footerLegal: "Реквизиты",
-    legalAddress: "Юридический адрес",
     taxId: "ВОЕН",
     rights: "Все права защищены.",
     whatsappMessage: "Здравствуйте, хочу получить информацию о системе пожарной защиты.",

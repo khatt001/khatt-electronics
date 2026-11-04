@@ -13,10 +13,10 @@ export function QuoteBand({ locale, source }: { locale: Locale; source?: string 
   return (
     <section className="bg-paper">
       <Container className="py-16 md:py-20">
-        <div className="grid gap-8 border-l-2 border-signal bg-surface p-6 md:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="grid gap-8 rounded-xl bg-ink p-6 text-white md:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="min-w-0">
-            <h2 className="font-display text-3xl leading-tight font-medium text-ink md:text-4xl">{t.ctaTitle}</h2>
-            <p className="mt-4 max-w-[60ch] leading-7 text-muted">{t.ctaText}</p>
+            <h2 className="text-3xl leading-tight font-bold text-white md:text-4xl">{t.ctaTitle}</h2>
+            <p className="mt-4 max-w-[60ch] leading-7 text-white/70">{t.ctaText}</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
@@ -28,7 +28,7 @@ export function QuoteBand({ locale, source }: { locale: Locale; source?: string 
             </Link>
             <a
               href={siteConfig.phoneHref}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-line px-6 text-sm font-semibold text-ink transition hover:border-ink"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/25 px-6 text-sm font-semibold text-white transition hover:border-white/60"
             >
               <Phone className="size-4" aria-hidden="true" />
               <span className="tabular">{siteConfig.phone}</span>

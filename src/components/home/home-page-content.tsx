@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
+import { CatalogCategories } from "@/components/home/catalog-categories";
 import { ConstructionBand } from "@/components/home/construction-band";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { HomeHero } from "@/components/home/home-hero";
@@ -33,21 +34,7 @@ export function HomePageContent({ locale }: { locale: Locale }) {
     <div className="bg-paper">
       <HomeHero locale={locale} />
 
-      <section>
-        <Container className="section-spacing">
-          <SectionHeading
-            eyebrow={t.licensesEyebrow}
-            title={t.licensesTitle}
-            text={t.licensesText}
-            action={<TextLink href={localizedPath("/licenses", locale)}>{t.licensesLink}</TextLink>}
-          />
-          <div className="mt-10">
-            <LicenseRecords locale={locale} />
-          </div>
-        </Container>
-      </section>
-
-      <section className="border-t border-line">
+      <section className="bg-paper">
         <Container className="section-spacing">
           <SectionHeading
             eyebrow={t.servicesEyebrow}
@@ -61,9 +48,25 @@ export function HomePageContent({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
+      <CatalogCategories locale={locale} />
+
+      <section className="bg-paper">
+        <Container className="section-spacing">
+          <SectionHeading
+            eyebrow={t.licensesEyebrow}
+            title={t.licensesTitle}
+            text={t.licensesText}
+            action={<TextLink href={localizedPath("/licenses", locale)}>{t.licensesLink}</TextLink>}
+          />
+          <div className="mt-10">
+            <LicenseRecords locale={locale} />
+          </div>
+        </Container>
+      </section>
+
       <ConstructionBand locale={locale} />
 
-      <section>
+      <section className="bg-surface">
         <Container className="section-spacing">
           <SectionHeading eyebrow={t.processEyebrow} title={t.processTitle} />
           <div className="mt-10">
@@ -72,7 +75,9 @@ export function HomePageContent({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="border-t border-line">
+      <FeaturedProducts locale={locale} />
+
+      <section className="border-t border-line bg-surface">
         <Container className="section-spacing">
           <SectionHeading
             eyebrow={t.objectsEyebrow}
@@ -84,8 +89,6 @@ export function HomePageContent({ locale }: { locale: Locale }) {
           </div>
         </Container>
       </section>
-
-      <FeaturedProducts locale={locale} />
 
       <QuoteBand locale={locale} source="home" />
     </div>

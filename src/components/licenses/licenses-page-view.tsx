@@ -16,7 +16,7 @@ export function LicensesPageView({ locale }: { locale: Locale }) {
       <PageHeader eyebrow={t.eyebrow} title={t.title} text={t.text} />
 
       <Container className="section-spacing grid gap-10">
-        <LicenseRecords locale={locale} linkImages large />
+        <LicenseRecords locale={locale} large />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
           <div className="min-w-0 border border-line bg-surface p-6 md:p-8">
@@ -28,16 +28,16 @@ export function LicensesPageView({ locale }: { locale: Locale }) {
               </div>
               <div>
                 <dt className="text-xs text-muted">{t.holderTax}</dt>
-                <dd className="mt-1 font-mono text-ink">{siteConfig.taxId}</dd>
+                <dd className="mt-1 text-ink">{siteConfig.taxId}</dd>
               </div>
               <div>
                 <dt className="text-xs text-muted">{t.holderAddress}</dt>
-                <dd className="mt-1 text-ink">{siteConfig.legalAddress}</dd>
+                <dd className="mt-1 text-ink">{siteConfig.address}</dd>
               </div>
             </dl>
           </div>
 
-          <div className="flex min-w-0 flex-col justify-between gap-6 border-l-2 border-signal bg-surface p-6 md:p-8">
+          <div className="flex min-w-0 flex-col justify-between gap-6 border border-line bg-surface p-6 md:p-8">
             <p className="leading-7 text-muted">{t.note}</p>
             <Link
               href={`${localizedPath("/contact", locale)}?source=license_copy`}

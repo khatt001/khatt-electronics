@@ -19,7 +19,7 @@ export const aboutTranslations = {
     detailsTitle: "Şirkət məlumatları",
     name: "Adı",
     tax: "VÖEN",
-    address: "Hüquqi ünvan",
+    address: "Ünvan",
     licensesRow: "Lisenziyalar",
   },
   en: {
@@ -40,7 +40,7 @@ export const aboutTranslations = {
     detailsTitle: "Company details",
     name: "Name",
     tax: "Tax ID (VÖEN)",
-    address: "Registered address",
+    address: "Address",
     licensesRow: "Licenses",
   },
   ru: {
@@ -61,7 +61,7 @@ export const aboutTranslations = {
     detailsTitle: "Реквизиты",
     name: "Название",
     tax: "ВОЕН",
-    address: "Юридический адрес",
+    address: "Адрес",
     licensesRow: "Лицензии",
   },
 } satisfies Record<Locale, Record<string, unknown>>;

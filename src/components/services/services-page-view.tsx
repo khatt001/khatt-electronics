@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight, Check } from "lucide-react";
 
+import { serviceIcons } from "@/components/shared/service-icon";
+
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/shared/page-header";
 import { ProcessSteps } from "@/components/shared/process-steps";
@@ -14,12 +16,15 @@ import { localizedPath, type Locale } from "@/lib/i18n";
 function ServiceRow({ service, locale }: { service: FireService; locale: Locale }) {
   const t = servicesPageTranslations[locale];
   const c = service.content[locale];
+  const Icon = serviceIcons[service.id];
 
   return (
-    <article id={service.id} className="scroll-mt-28 grid gap-6 border-b border-line py-10 lg:grid-cols-[120px_1fr_1fr] lg:gap-10">
-      <span className="font-mono text-sm text-signal">{service.zone}</span>
+    <article id={service.id} className="scroll-mt-28 grid gap-6 border-b border-line py-10 lg:grid-cols-[64px_1fr_1fr] lg:gap-10">
+      <span className="flex size-12 items-center justify-center rounded-lg bg-surface text-signal ring-1 ring-line">
+        <Icon className="size-6" aria-hidden="true" />
+      </span>
       <div className="min-w-0">
-        <h3 className="font-display text-2xl font-medium text-ink md:text-3xl">{c.title}</h3>
+        <h3 className="text-2xl font-bold text-ink md:text-3xl">{c.title}</h3>
         <p className="mt-4 max-w-[56ch] leading-7 text-muted">{c.summary}</p>
         <Link
           href={`${localizedPath("/contact", locale)}?service=${service.id}`}
@@ -63,7 +68,7 @@ export function ServicesPageView({ locale = "az" }: { locale?: Locale }) {
             <section key={group.id} className="mb-16 last:mb-0">
               <div className="flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-ink pb-4">
                 <h2 className="font-sans text-sm font-semibold tracking-wide text-ink uppercase">{group.title}</h2>
-                <span className="font-mono text-xs text-muted">
+                <span className="text-xs text-muted">
                   {license.kind[locale]} {license.number}
                 </span>
               </div>

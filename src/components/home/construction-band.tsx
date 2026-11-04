@@ -15,7 +15,7 @@ export function ConstructionBand({ locale }: { locale: Locale }) {
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
           <div className="min-w-0">
             <p className="eyebrow text-brass">{t.constructionEyebrow}</p>
-            <h2 className="mt-4 font-display text-3xl leading-[1.12] font-medium md:text-[2.75rem]">
+            <h2 className="mt-4 text-3xl leading-[1.12] font-bold md:text-[2.75rem]">
               {t.constructionTitle}
             </h2>
             <p className="mt-6 max-w-[60ch] leading-8 text-white/70">{t.constructionText}</p>
@@ -24,7 +24,7 @@ export function ConstructionBand({ locale }: { locale: Locale }) {
           <div className="min-w-0 border border-white/12">
             <div className="flex items-center justify-between gap-4 border-b border-white/12 px-6 py-4">
               <span className="text-sm text-white/60">{license.kind[locale]}</span>
-              <span className="font-mono text-white">{license.number}</span>
+              <span className="text-white">{license.number}</span>
             </div>
             <p className="border-b border-white/12 px-6 py-5 text-sm leading-6 text-white/80">
               {license.scope[locale]}

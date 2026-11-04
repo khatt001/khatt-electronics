@@ -17,7 +17,7 @@ export function AboutPageView({ locale = "az" }: { locale?: Locale }) {
 
       <Container className="section-spacing grid gap-14 lg:grid-cols-[1.2fr_0.8fr]">
         <section className="min-w-0">
-          <h2 className="font-display text-3xl font-medium text-ink">{t.principlesTitle}</h2>
+          <h2 className="text-3xl font-medium text-ink">{t.principlesTitle}</h2>
           <ul className="mt-8 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
             {t.principles.map((item) => (
               <li key={item.title} className="bg-surface p-6">
@@ -37,11 +37,11 @@ export function AboutPageView({ locale = "az" }: { locale?: Locale }) {
             </div>
             <div>
               <dt className="text-xs text-muted">{t.tax}</dt>
-              <dd className="mt-1 font-mono text-ink">{siteConfig.taxId}</dd>
+              <dd className="mt-1 text-ink">{siteConfig.taxId}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted">{t.address}</dt>
-              <dd className="mt-1 text-ink">{siteConfig.legalAddress}</dd>
+              <dd className="mt-1 text-ink">{siteConfig.address}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted">{t.licensesRow}</dt>
@@ -53,7 +53,7 @@ export function AboutPageView({ locale = "az" }: { locale?: Locale }) {
                     className="flex items-center justify-between gap-3 border border-line px-3 py-2 transition hover:border-ink"
                   >
                     <span className="text-ink">{license.short[locale]}</span>
-                    <span className="font-mono text-xs text-muted">{license.number}</span>
+                    <span className="text-xs text-muted">{license.number}</span>
                   </Link>
                 ))}
               </dd>

@@ -19,8 +19,6 @@ type LocalizedService = {
 
 export type FireService = {
   id: ServiceId;
-  /** Zone code shown like on a fire alarm panel */
-  zone: string;
   group: "fire" | "construction";
   content: Record<Locale, LocalizedService>;
 };
@@ -28,7 +26,6 @@ export type FireService = {
 export const fireServices: FireService[] = [
   {
     id: "alarm",
-    zone: "Z-01",
     group: "fire",
     content: {
       az: {
@@ -68,7 +65,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "sprinkler",
-    zone: "Z-02",
     group: "fire",
     content: {
       az: {
@@ -108,7 +104,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "gas",
-    zone: "Z-03",
     group: "fire",
     content: {
       az: {
@@ -148,7 +143,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "evacuation",
-    zone: "Z-04",
     group: "fire",
     content: {
       az: {
@@ -188,7 +182,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "smoke",
-    zone: "Z-05",
     group: "fire",
     content: {
       az: {
@@ -228,7 +221,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "hydrants",
-    zone: "Z-06",
     group: "fire",
     content: {
       az: {
@@ -268,7 +260,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "extinguishers",
-    zone: "Z-07",
     group: "fire",
     content: {
       az: {
@@ -308,7 +299,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "maintenance",
-    zone: "Z-08",
     group: "fire",
     content: {
       az: {
@@ -348,7 +338,6 @@ export const fireServices: FireService[] = [
   },
   {
     id: "construction",
-    zone: "T-01",
     group: "construction",
     content: {
       az: {

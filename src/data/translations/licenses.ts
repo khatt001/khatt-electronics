@@ -8,10 +8,10 @@ export const licensesTranslations = {
     eyebrow: "Lisenziyalar",
     title: "Fəaliyyətimiz dövlət lisenziyaları ilə təsdiqlənib",
     text:
-      "Lisenziyalar Azərbaycan Respublikasının İqtisadiyyat Nazirliyi tərəfindən verilib. Şəklə toxunaraq sənədi tam ölçüdə aça bilərsiniz.",
+      "Lisenziyalar Azərbaycan Respublikasının İqtisadiyyat Nazirliyi tərəfindən verilib. Sənədə toxunaraq onu böyüdə bilərsiniz.",
     holderTitle: "Lisenziya sahibi",
     holderName: "Hüquqi şəxs",
-    holderAddress: "Hüquqi ünvan",
+    holderAddress: "Ünvan",
     holderTax: "VÖEN",
     note:
       "Müqavilə bağlanarkən lisenziyaların əslini və ya notarial surətini təqdim edirik. Tender və ya bank üçün surət lazımdırsa, sorğu göndərin.",
@@ -24,10 +24,10 @@ export const licensesTranslations = {
     eyebrow: "Licenses",
     title: "Our work is backed by state licenses",
     text:
-      "Both licenses were issued by the Ministry of Economy of the Republic of Azerbaijan. Tap an image to open the full-size document.",
+      "Both licenses were issued by the Ministry of Economy of the Republic of Azerbaijan. Tap a document to enlarge it.",
     holderTitle: "License holder",
     holderName: "Legal entity",
-    holderAddress: "Registered address",
+    holderAddress: "Address",
     holderTax: "Tax ID (VÖEN)",
     note:
       "We present originals or notarised copies when the contract is signed. If you need a copy for a tender or a bank, send us a request.",
@@ -40,10 +40,10 @@ export const licensesTranslations = {
     eyebrow: "Лицензии",
     title: "Наша деятельность подтверждена государственными лицензиями",
     text:
-      "Лицензии выданы Министерством экономики Азербайджанской Республики. Нажмите на изображение, чтобы открыть документ в полном размере.",
+      "Лицензии выданы Министерством экономики Азербайджанской Республики. Нажмите на документ, чтобы увеличить его.",
     holderTitle: "Владелец лицензий",
     holderName: "Юридическое лицо",
-    holderAddress: "Юридический адрес",
+    holderAddress: "Адрес",
     holderTax: "ВОЕН",
     note:
       "При заключении договора предоставляем оригиналы или нотариальные копии. Если копия нужна для тендера или банка, отправьте запрос.",

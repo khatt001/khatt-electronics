@@ -29,6 +29,7 @@ export function createOrganizationSchema() {
     address: {
       "@type": "PostalAddress",
       addressLocality: "Bakı",
+      addressRegion: "Nərimanov",
       addressCountry: "AZ",
       streetAddress: siteConfig.address,
     },

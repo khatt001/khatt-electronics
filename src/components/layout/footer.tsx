@@ -40,7 +40,7 @@ export function Footer({ locale = "az" }: FooterProps) {
                   className="flex items-center justify-between gap-3 border border-white/10 px-3 py-2 text-xs transition hover:border-brass/60"
                 >
                   <span className="text-white/70">{license.short[locale]}</span>
-                  <span className="font-mono text-white">{license.number}</span>
+                  <span className="text-white">{license.number}</span>
                 </Link>
               ))}
             </div>
@@ -85,7 +85,9 @@ export function Footer({ locale = "az" }: FooterProps) {
                 <a href={siteConfig.emailHref} className="break-all text-white/70 transition hover:text-white">
                   {siteConfig.email}
                 </a>
-                <p className="text-white/70">{siteConfig.address}</p>
+                <a href={siteConfig.mapUrl} target="_blank" rel="noreferrer" className="text-white/70 transition hover:text-white">
+                  {siteConfig.address}
+                </a>
                 <p className="text-white/45">{t.hours}</p>
               </div>
             </div>
@@ -99,11 +101,7 @@ export function Footer({ locale = "az" }: FooterProps) {
                 </div>
                 <div className="flex gap-2">
                   <dt>{t.taxId}:</dt>
-                  <dd className="font-mono text-white/80">{siteConfig.taxId}</dd>
-                </div>
-                <div>
-                  <dt>{t.legalAddress}:</dt>
-                  <dd>{siteConfig.legalAddress}</dd>
+                  <dd className="text-white/80">{siteConfig.taxId}</dd>
                 </div>
               </dl>
             </div>
@@ -114,7 +112,6 @@ export function Footer({ locale = "az" }: FooterProps) {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. {t.rights}
           </p>
-          <p className="font-mono">VÖEN {siteConfig.taxId}</p>
         </div>
       </Container>
     </footer>

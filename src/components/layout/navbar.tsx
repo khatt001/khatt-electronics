@@ -42,7 +42,7 @@ function LanguageSwitch({
             href={switchLocalePathname(pathname, item)}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "rounded px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider transition",
+              "rounded px-1.5 py-0.5 text-[11px] uppercase tracking-wider transition",
               tone === "dark"
                 ? isActive
                   ? "text-white"
@@ -97,9 +97,6 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
               <span className="inline-flex items-center gap-2 text-white/80">
                 <ShieldCheck className="size-3.5 text-brass" aria-hidden="true" />
                 {t.licensedBadge}
-                <span className="font-mono text-[11px] text-white/50">
-                  EL-775/2026 · EL-840/2026
-                </span>
               </span>
               <span>{t.hours}</span>
             </div>
@@ -227,7 +224,7 @@ export default function Navbar({ locale = "az", pathname = "/" }: NavbarProps) {
                   aria-current={pathname === link.href ? "page" : undefined}
                   className="flex items-center justify-between border-b border-white/10 py-4"
                 >
-                  <span className="font-display text-2xl">{link.name}</span>
+                  <span className="text-2xl">{link.name}</span>
                   <ArrowUpRight className="size-4 text-white/35" aria-hidden="true" />
                 </Link>
               ),
