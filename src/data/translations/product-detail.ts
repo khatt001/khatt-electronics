@@ -5,7 +5,7 @@ export const productDetailTranslations = {
     notFoundTitle: "Məhsul tapılmadı",
 
     backToProducts: "Məhsullara qayıt",
-    viewCart: "Səbətə bax",
+    quoteButton: "Qiymət sorğusu göndər",
     price: "Qiymət",
     priceAdvice:
       "Bu məhsul üçün sifarişdən əvvəl məsləhət almağınız tövsiyə olunur.",
@@ -18,7 +18,7 @@ export const productDetailTranslations = {
     whatsappTextPrefix: "Salam. Bu məhsul haqqında məlumat almaq istəyirəm:",
     whatsappButton: "WhatsApp ilə məsləhət al",
 
-    trustItems: ["Zəmanət", "Quraşdırılma", "Texniki dəstək"],
+    trustItems: ["Sertifikatlı avadanlıq", "Lisenziyalı quraşdırma", "Texniki xidmət"],
 
     aboutProduct: "Məhsul haqqında",
     fallbackDescription:
@@ -40,7 +40,7 @@ export const productDetailTranslations = {
     notFoundTitle: "Product not found",
 
     backToProducts: "Back to products",
-    viewCart: "View cart",
+    quoteButton: "Request a price",
     price: "Price",
     priceAdvice:
       "We recommend getting consultation before ordering this product.",
@@ -54,7 +54,7 @@ export const productDetailTranslations = {
       "Hello. I would like to get information about this product:",
     whatsappButton: "Get consultation via WhatsApp",
 
-    trustItems: ["Warranty", "Installation", "Technical support"],
+    trustItems: ["Certified equipment", "Licensed installation", "Maintenance"],
 
     aboutProduct: "About product",
     fallbackDescription:
@@ -76,7 +76,7 @@ export const productDetailTranslations = {
     notFoundTitle: "Товар не найден",
 
     backToProducts: "Назад к товарам",
-    viewCart: "Смотреть корзину",
+    quoteButton: "Запросить цену",
     price: "Цена",
     priceAdvice:
       "Перед заказом этого товара рекомендуется получить консультацию.",
@@ -90,7 +90,7 @@ export const productDetailTranslations = {
       "Здравствуйте. Я хочу получить информацию об этом товаре:",
     whatsappButton: "Получить консультацию в WhatsApp",
 
-    trustItems: ["Гарантия", "Установка", "Техническая поддержка"],
+    trustItems: ["Сертифицированное оборудование", "Лицензированный монтаж", "Обслуживание"],
 
     aboutProduct: "О товаре",
     fallbackDescription:

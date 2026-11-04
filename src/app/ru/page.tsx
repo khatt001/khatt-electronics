@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { HomePageContent } from "@/components/home/home-page-content";
 
 export const metadata: Metadata = {
-  title: "KHATT Electronics | Безопасность и умная электроника",
+  title: { absolute: "KHATT Electronics | Системы противопожарной защиты" },
   description:
-    "KHATT Electronics предлагает системы видеонаблюдения, контроль доступа, домофоны, сигнализацию и сетевое оборудование в Азербайджане.",
+    "Лицензированная компания в Азербайджане: пожарная сигнализация, автоматическое пожаротушение, оповещение и эвакуация, обслуживание и строительно-монтажные работы.",
   alternates: {
     canonical: "/ru",
     languages: {
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "KHATT Electronics | Безопасность и умная электроника",
+    title: "KHATT Electronics | Системы противопожарной защиты",
     description:
-      "Системы видеонаблюдения, контроль доступа, домофоны, сигнализация и сетевое оборудование.",
+    "Лицензированная компания в Азербайджане: пожарная сигнализация, автоматическое пожаротушение, оповещение и эвакуация, обслуживание и строительно-монтажные работы.",
     url: "/ru",
     type: "website",
   },

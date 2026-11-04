@@ -1,158 +1,100 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
+import { fireServices } from "@/data/fire-services";
+import { licenses } from "@/data/licenses";
+import { homeCopy } from "@/data/translations/home";
 import { localizedPath, type Locale } from "@/lib/i18n";
 
-type HomeHeroProps = {
-  locale?: Locale;
-};
-
-const translations = {
-  az: {
-    eyebrow: "KHATT Electronics",
-    title: "Obyektlər üçün peşəkar təhlükəsizlik və mühəndis sistemləri",
-    description:
-      "Yanğın təhlükəsizliyi, videomüşahidə, girişə nəzarət və şəbəkə sistemlərini layihələndirir, təchiz edir, quraşdırır və texniki xidmət göstəririk.",
-    primaryButton: "Layihə üçün təklif al",
-    secondaryButton: "Məhsullara bax",
-    directions: [
-      "Yanğın təhlükəsizliyi",
-      "Videomüşahidə və girişə nəzarət",
-      "Şəbəkə və mühəndis sistemləri",
-    ],
-    imageEyebrow: "Tam xidmət",
-    imageTitle:
-      "Layihələndirmə, təchizat, quraşdırma və texniki xidmət",
-  },
-
-  en: {
-    eyebrow: "KHATT Electronics",
-    title:
-      "Professional security and engineering systems for commercial properties",
-    description:
-      "We design, supply, install and maintain fire safety, video surveillance, access control and network systems.",
-    primaryButton: "Request a project quote",
-    secondaryButton: "View products",
-    directions: [
-      "Fire safety systems",
-      "Video surveillance and access control",
-      "Network and engineering systems",
-    ],
-    imageEyebrow: "Complete service",
-    imageTitle:
-      "Design, equipment supply, installation and technical maintenance",
-  },
-
-  ru: {
-    eyebrow: "KHATT Electronics",
-    title:
-      "Профессиональные системы безопасности и инженерные решения для объектов",
-    description:
-      "Проектируем, поставляем, устанавливаем и обслуживаем системы пожарной безопасности, видеонаблюдения, контроля доступа и сетевую инфраструктуру.",
-    primaryButton: "Получить предложение",
-    secondaryButton: "Смотреть товары",
-    directions: [
-      "Пожарная безопасность",
-      "Видеонаблюдение и контроль доступа",
-      "Сетевые и инженерные системы",
-    ],
-    imageEyebrow: "Полный комплекс услуг",
-    imageTitle:
-      "Проектирование, поставка, монтаж и техническое обслуживание",
-  },
-} as const;
-
-export function HomeHero({ locale = "az" }: HomeHeroProps) {
-  const t = translations[locale];
+export function HomeHero({ locale }: { locale: Locale }) {
+  const t = homeCopy[locale];
+  const zones = fireServices.filter((service) => service.group === "fire").slice(0, 7);
 
   return (
-    <section className="border-b border-neutral-200 bg-white">
-      <Container className="py-10 md:py-14 lg:py-16">
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.9fr)] lg:gap-14">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3">
-              <span
-                className="h-px w-10 bg-emerald-700"
-                aria-hidden="true"
-              />
+    <section className="relative overflow-hidden bg-ink text-white">
+      <div className="panel-grid absolute inset-0" aria-hidden="true" />
 
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">
-                {t.eyebrow}
-              </p>
-            </div>
+      <Container className="relative py-14 md:py-20 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-16">
+          <div className="min-w-0">
+            <p className="eyebrow text-brass">{t.heroEyebrow}</p>
 
-            <h1 className="mt-6 text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] text-neutral-950 sm:text-5xl md:text-6xl lg:text-[4rem]">
-              {t.title}
+            <h1 className="mt-6 max-w-[16ch] font-display text-[2.4rem] leading-[1.06] font-medium md:text-6xl lg:text-[4.1rem]">
+              {t.heroTitle}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-neutral-600 md:text-lg">
-              {t.description}
+            <p className="mt-6 max-w-[58ch] text-base leading-8 text-white/70 md:text-lg">
+              {t.heroText}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                href={`${localizedPath(
-                  "/contact",
-                  locale,
-                )}?source=estimate`}
-                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800"
+                href={localizedPath("/contact", locale)}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-signal px-6 text-sm font-semibold transition hover:bg-signal-deep"
               >
-                {t.primaryButton}
-
-                <ArrowRight
-                  className="ml-2 size-4"
-                  aria-hidden="true"
-                />
+                {t.heroPrimary}
+                <ArrowUpRight className="size-4" aria-hidden="true" />
               </Link>
-
               <Link
-                href={localizedPath("/products", locale)}
-                className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-950"
+                href={localizedPath("/licenses", locale)}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/20 px-6 text-sm font-semibold transition hover:border-white/50"
               >
-                {t.secondaryButton}
+                {t.heroSecondary}
               </Link>
             </div>
 
-            <div className="mt-10 grid border-y border-neutral-200 sm:grid-cols-3">
-              {t.directions.map((direction, index) => (
-                <div
-                  key={direction}
-                  className="flex items-start gap-3 border-b border-neutral-200 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0 sm:last:border-r-0"
-                >
-                  <span className="pt-0.5 text-xs font-semibold text-emerald-700">
-                    0{index + 1}
-                  </span>
-
-                  <span className="text-sm font-medium leading-6 text-neutral-700">
-                    {direction}
-                  </span>
+            <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/10 pt-6">
+              {licenses.map((license) => (
+                <div key={license.id} className="flex items-baseline gap-3">
+                  <dt className="text-xs text-white/50">{license.short[locale]}</dt>
+                  <dd className="font-mono text-sm text-white">{license.number}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
           </div>
 
-          <div className="relative min-h-[430px] overflow-hidden rounded-2xl bg-neutral-900 sm:min-h-[520px] lg:min-h-[620px]">
-            <Image
-              src="/banners/side-fire.webp"
-              alt={t.title}
-              fill
-              priority
-              sizes="(min-width: 1024px) 42vw, 100vw"
-              className="object-cover"
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/10 to-transparent" />
-
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
-                {t.imageEyebrow}
+          {/* Fire alarm control panel motif: each zone is a service line */}
+          <div
+            className="min-w-0 rounded-lg border border-white/12 bg-ink-2/90 shadow-[0_30px_80px_rgba(0,0,0,0.35)]"
+            aria-label={t.panelTitle}
+          >
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <p className="eyebrow text-white/60">{t.panelTitle}</p>
+              <p className="flex items-center gap-2 font-mono text-[11px] text-ok">
+                <span className="khatt-zone-dot size-2 rounded-full bg-ok" aria-hidden="true" />
+                {t.panelStatus}: {t.panelNormal}
               </p>
+            </div>
 
-              <p className="mt-3 max-w-md text-xl font-semibold leading-8 md:text-2xl">
-                {t.imageTitle}
-              </p>
+            <ul className="divide-y divide-white/[0.07]">
+              {zones.map((zone) => (
+                <li key={zone.id}>
+                  <Link
+                    href={`${localizedPath("/services", locale)}#${zone.id}`}
+                    className="group flex items-center gap-4 px-5 py-3.5 transition hover:bg-white/[0.04]"
+                  >
+                    <span className="w-10 shrink-0 font-mono text-[11px] text-white/40">
+                      {zone.zone}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-sm text-white/85 group-hover:text-white">
+                      {zone.content[locale].title}
+                    </span>
+                    <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-white/40">
+                      <span className="size-1.5 rounded-full bg-ok" aria-hidden="true" />
+                      {t.panelNormal}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex items-center justify-between gap-4 border-t border-white/10 px-5 py-4">
+              <span className="flex items-center gap-2 text-xs text-white/60">
+                <span className="size-2 rounded-full bg-signal" aria-hidden="true" />
+                {t.panelFooter}
+              </span>
+              <span className="font-mono text-[11px] text-white/50">VÖEN 1606085751</span>
             </div>
           </div>
         </div>

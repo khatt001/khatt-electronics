@@ -246,17 +246,17 @@ export async function CategoryPageView({
   ]);
 
   const filterChipClassName =
-    "rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-500 hover:text-emerald-700";
+    "rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:text-signal";
 
   const paginationLinkClassName =
-    "rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-500 hover:text-emerald-700";
+    "rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-muted transition hover:border-ink hover:text-signal";
 
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
       <JsonLd data={breadcrumbSchema} />
 
       {/* Compact category introduction */}
-      <section className="border-b border-neutral-200 bg-white">
+      <section className="border-b border-line bg-surface">
         <Container className="py-6 md:py-8">
           <Breadcrumbs
             items={[
@@ -278,22 +278,22 @@ export async function CategoryPageView({
             <div className="max-w-3xl">
               <Link
                 href={localizedPath("/products", locale)}
-                className="inline-flex items-center text-sm font-medium text-neutral-500 transition hover:text-emerald-700"
+                className="inline-flex items-center text-sm font-medium text-muted transition hover:text-signal"
               >
                 <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
 
                 {t.backToProducts}
               </Link>
 
-              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-signal">
                 {t.eyebrow}
               </p>
 
-              <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-4xl">
+              <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
                 {category.name}
               </h1>
 
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-neutral-600 md:text-base">
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
                 {category.description ??
                   `${category.name} ${t.fallbackDescriptionSuffix}`}
               </p>
@@ -302,7 +302,7 @@ export async function CategoryPageView({
             <div className="flex flex-wrap gap-3">
               <Link
                 href={localizedPath("/products", locale)}
-                className="inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                className="inline-flex items-center justify-center rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink"
               >
                 {t.allProducts}
               </Link>
@@ -310,7 +310,7 @@ export async function CategoryPageView({
               {hasActiveFilters ? (
                 <Link
                   href={categoryPath}
-                  className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950"
+                  className="inline-flex items-center justify-center rounded-lg border border-line bg-surface px-5 py-3 text-sm font-medium text-muted transition hover:border-line hover:text-ink"
                 >
                   {t.clearFilters}
                 </Link>
@@ -343,9 +343,9 @@ export async function CategoryPageView({
 
             <div className="min-w-0">
               {/* Results and active filters */}
-              <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-                <p className="shrink-0 text-sm text-neutral-500">
-                  <span className="font-semibold text-neutral-950">
+              <div className="mb-5 flex flex-col gap-4 rounded-md border border-line bg-surface p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <p className="shrink-0 text-sm text-muted">
+                  <span className="font-semibold text-ink">
                     {totalProducts}
                   </span>{" "}
                   {t.foundSuffix}
@@ -484,7 +484,7 @@ export async function CategoryPageView({
                             }
                             className={
                               pageNumber === currentPage
-                                ? "rounded-lg bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
+                                ? "rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white"
                                 : paginationLinkClassName
                             }
                           >
@@ -510,26 +510,26 @@ export async function CategoryPageView({
                   ) : null}
                 </>
               ) : (
-                <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-white p-7 text-center shadow-sm md:p-10">
-                  <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+                <div className="mx-auto max-w-2xl rounded-md border border-line bg-surface p-7 text-center shadow-sm md:p-10">
+                  <div className="mx-auto flex size-16 items-center justify-center rounded-md bg-paper text-signal">
                     <PackageSearch className="size-8" aria-hidden="true" />
                   </div>
 
-                  <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                  <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-signal">
                     {t.emptyEyebrow}
                   </p>
 
-                  <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-3xl">
+                  <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-ink md:text-3xl">
                     {t.emptyTitle}
                   </h2>
 
-                  <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-neutral-600 md:text-base">
+                  <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-muted md:text-base">
                     {t.emptyDescription}
                   </p>
 
                   <Link
                     href={categoryPath}
-                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink"
                   >
                     <PackageSearch className="mr-2 size-4" aria-hidden="true" />
 

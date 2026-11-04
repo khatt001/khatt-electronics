@@ -3,19 +3,13 @@ import type { Metadata } from "next";
 import type { CategorySearchParams } from "@/components/category/category-page-view";
 import type { ProductsSearchParams } from "@/components/product/products-page-view";
 import { aboutTranslations } from "@/data/translations/about";
-import { cartTranslations } from "@/data/translations/cart";
 import { categoryPageTranslations } from "@/data/translations/category-page";
-import { checkoutSuccessTranslations } from "@/data/translations/checkout-success";
-import { checkoutTranslations } from "@/data/translations/checkout";
-import { compareTranslations } from "@/data/translations/compare";
 import { contactTranslations } from "@/data/translations/contact";
-import { favoritesTranslations } from "@/data/translations/favorites";
 import { productDetailTranslations } from "@/data/translations/product-detail";
 import { productsTranslations } from "@/data/translations/products";
+import { licensesTranslations } from "@/data/translations/licenses";
 import { projectsTranslations } from "@/data/translations/projects";
 import { servicesPageTranslations } from "@/data/translations/services-page";
-import { solutionsPageTranslations } from "@/data/translations/solutions-page";
-import { trackOrderTranslations } from "@/data/translations/track-order";
 import { localizedPath, type Locale } from "@/lib/i18n";
 import { getCategoryBySlug } from "@/services/categories";
 import {
@@ -234,33 +228,17 @@ export async function generateCategoryPageMetadata({
 type StaticPageKey =
   | "about"
   | "services"
-  | "solutions"
-  | "cart"
-  | "favorites"
+  | "licenses"
   | "contact"
-  | "compare"
-  | "checkout"
-  | "track-order"
   | "projects";
 
-const noIndexStaticPages = new Set<StaticPageKey>([
-  "cart",
-  "favorites",
-  "compare",
-  "checkout",
-  "track-order",
-]);
+const noIndexStaticPages = new Set<StaticPageKey>([]);
 
 const staticPageTranslations = {
   about: aboutTranslations,
   services: servicesPageTranslations,
-  solutions: solutionsPageTranslations,
-  cart: cartTranslations,
-  favorites: favoritesTranslations,
+  licenses: licensesTranslations,
   contact: contactTranslations,
-  compare: compareTranslations,
-  checkout: checkoutTranslations,
-  "track-order": trackOrderTranslations,
   projects: projectsTranslations,
 } as const;
 
@@ -310,34 +288,5 @@ export function generateStaticPageMetadata({
           type: "website",
         }
       : undefined,
-  };
-}
-
-export function generateCheckoutSuccessMetadata({
-  locale,
-}: {
-  locale: Locale;
-}): Metadata {
-  const t = checkoutSuccessTranslations[locale];
-  const title = normalizeMetadataTitle(t.metadataTitle);
-  const path = "/checkout/success";
-  const canonical = localizedPath(path, locale);
-
-  return {
-    title,
-    description: t.metadataDescription,
-
-    alternates: {
-      canonical,
-    },
-
-    robots: {
-      index: false,
-      follow: false,
-      googleBot: {
-        index: false,
-        follow: false,
-      },
-    },
   };
 }

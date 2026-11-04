@@ -1,20 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Send,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
 
 import { Container } from "@/components/layout/container";
+import { fireServices } from "@/data/fire-services";
+import { licenses } from "@/data/licenses";
+import { getMainNavigationLinks } from "@/data/navigation";
 import { siteConfig } from "@/data/site";
-import {
-  getFooterCategoryLinks,
-  getFooterNavigationLinks,
-} from "@/data/navigation";
-import { footerTranslations } from "@/data/translations/layout";
+import { chromeCopy } from "@/data/translations/chrome";
 import { localizedPath, type Locale } from "@/lib/i18n";
 
 type FooterProps = {
@@ -22,150 +14,107 @@ type FooterProps = {
 };
 
 export function Footer({ locale = "az" }: FooterProps) {
-  const t = footerTranslations[locale];
-  const footerLinks = getFooterNavigationLinks(t.footerLinks, locale);
-  const categoryLinks = getFooterCategoryLinks(t.categoryLinks, locale);
+  const t = chromeCopy[locale];
+  const links = getMainNavigationLinks(t.nav, locale);
+  const servicesHref = localizedPath("/services", locale);
 
   return (
-    <footer className="border-t border-white/10 bg-[#080b0a] text-white">
-      <Container className="py-12 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_1fr]">
-          <div>
-            <Link
-              href={localizedPath("/", locale)}
-              className="inline-flex text-2xl font-semibold tracking-tight"
-            >
-              {siteConfig.name}
-            </Link>
+    <footer className="bg-ink pb-24 text-white lg:pb-0">
+      <Container className="py-14 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_0.8fr_1fr_1.1fr]">
+          <div className="max-w-sm">
+            <Image
+              src="/logo-khatt-light.png"
+              alt={siteConfig.name}
+              width={1050}
+              height={232}
+              className="h-9 w-auto"
+            />
+            <p className="mt-6 text-sm leading-7 text-white/60">{t.footerAbout}</p>
 
-            <div className="mt-3 h-0.5 w-14 bg-emerald-400" />
-
-            <p className="mt-5 max-w-md text-sm leading-7 text-white/60">
-              {t.description}
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href={localizedPath("/products", locale)}
-                className="inline-flex items-center rounded-lg bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-neutral-950 transition hover:bg-emerald-300"
-              >
-                {t.productsButton}
-                <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-              </Link>
-
-              <Link
-                href={localizedPath("/track-order", locale)}
-                className="inline-flex items-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/10"
-              >
-                {t.trackOrderButton}
-              </Link>
-            </div>
-
-            <div className="mt-7 flex items-center gap-3">
-              <a
-                href="https://instagram.com/khatt.electronics"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="flex size-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition hover:border-emerald-400/40 hover:bg-emerald-400 hover:text-neutral-950"
-              >
-                <Send className="size-4" aria-hidden="true" />
-              </a>
-
-              <a
-                href={siteConfig.phoneHref}
-                aria-label="WhatsApp"
-                className="flex size-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition hover:border-emerald-400/40 hover:bg-emerald-400 hover:text-neutral-950"
-              >
-                <MessageCircle className="size-4" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-white">{t.pagesTitle}</h3>
-
-            <div className="mt-5 space-y-3">
-              {footerLinks.map((link) => (
+            <div className="mt-6 grid gap-2">
+              {licenses.map((license) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block text-sm text-white/55 transition hover:translate-x-1 hover:text-emerald-300"
+                  key={license.id}
+                  href={localizedPath("/licenses", locale)}
+                  className="flex items-center justify-between gap-3 border border-white/10 px-3 py-2 text-xs transition hover:border-brass/60"
                 >
-                  {link.name}
+                  <span className="text-white/70">{license.short[locale]}</span>
+                  <span className="font-mono text-white">{license.number}</span>
                 </Link>
               ))}
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-white">
-              {t.categoriesTitle}
-            </h3>
-
-            <div className="mt-5 space-y-3">
-              {categoryLinks.map((category) => (
-                <Link
-                  key={category.href}
-                  href={category.href}
-                  className="block text-sm text-white/55 transition hover:translate-x-1 hover:text-emerald-300"
-                >
-                  {category.name}
-                </Link>
+            <h2 className="eyebrow text-white/45">{t.footerPages}</h2>
+            <ul className="mt-5 grid gap-3 text-sm">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/70 transition hover:text-white">
+                    {link.name}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-white">
-              {t.contactTitle}
-            </h3>
+            <h2 className="eyebrow text-white/45">{t.footerServices}</h2>
+            <ul className="mt-5 grid gap-3 text-sm">
+              {fireServices.map((service) => (
+                <li key={service.id}>
+                  <Link
+                    href={`${servicesHref}#${service.id}`}
+                    className="text-white/70 transition hover:text-white"
+                  >
+                    {service.content[locale].title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div className="mt-5 space-y-4">
-              <a
-                href={siteConfig.phoneHref}
-                className="flex items-start gap-3 text-sm text-white/60 transition hover:text-white"
-              >
-                <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-emerald-300">
-                  <Phone className="size-4" aria-hidden="true" />
-                </span>
-                <span className="leading-7">{siteConfig.phone}</span>
-              </a>
-
-              <a
-                href={siteConfig.emailHref}
-                className="flex items-start gap-3 text-sm text-white/60 transition hover:text-white"
-              >
-                <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-emerald-300">
-                  <Mail className="size-4" aria-hidden="true" />
-                </span>
-                <span className="break-all leading-7">{siteConfig.email}</span>
-              </a>
-
-              <div className="flex items-start gap-3 text-sm text-white/60">
-                <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-emerald-300">
-                  <MapPin className="size-4" aria-hidden="true" />
-                </span>
-                <span className="leading-7">{siteConfig.address}</span>
+          <div className="grid content-start gap-8">
+            <div>
+              <h2 className="eyebrow text-white/45">{t.footerContact}</h2>
+              <div className="mt-5 grid gap-2 text-sm">
+                <a href={siteConfig.phoneHref} className="tabular text-white transition hover:text-brass">
+                  {siteConfig.phone}
+                </a>
+                <a href={siteConfig.emailHref} className="break-all text-white/70 transition hover:text-white">
+                  {siteConfig.email}
+                </a>
+                <p className="text-white/70">{siteConfig.address}</p>
+                <p className="text-white/45">{t.hours}</p>
               </div>
             </div>
 
-            <Link
-              href={localizedPath("/contact", locale)}
-              className="mt-6 inline-flex items-center rounded-lg border border-white/15 px-4 py-2.5 text-xs font-semibold text-white transition hover:border-emerald-400/40 hover:bg-white/[0.06]"
-            >
-              {t.contactPageButton}
-              <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-            </Link>
+            <div>
+              <h2 className="eyebrow text-white/45">{t.footerLegal}</h2>
+              <dl className="mt-5 grid gap-2 text-xs leading-6 text-white/60">
+                <div>
+                  <dt className="sr-only">Name</dt>
+                  <dd className="text-white/80">{siteConfig.legalName}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt>{t.taxId}:</dt>
+                  <dd className="font-mono text-white/80">{siteConfig.taxId}</dd>
+                </div>
+                <div>
+                  <dt>{t.legalAddress}:</dt>
+                  <dd>{siteConfig.legalAddress}</dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-3 border-t border-white/10 pt-6 text-xs text-white/45 md:grid-cols-2 md:items-center">
+        <div className="mt-14 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. {t.copyrightSuffix}
+            © {new Date().getFullYear()} {siteConfig.name}. {t.rights}
           </p>
-
-          <p className="md:text-right">{t.tagline}</p>
+          <p className="font-mono">VÖEN {siteConfig.taxId}</p>
         </div>
       </Container>
     </footer>

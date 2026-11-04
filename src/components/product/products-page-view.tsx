@@ -242,9 +242,9 @@ export async function ProductsPageView({
             </aside>
 
             <div>
-              <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-neutral-500">
-                  <span className="font-semibold text-neutral-950">
+              <div className="mb-6 flex flex-col gap-4 rounded-md border border-line bg-surface p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-muted">
+                  <span className="font-semibold text-ink">
                     {totalProducts}
                   </span>{" "}
                   {t.foundSuffix}
@@ -255,7 +255,7 @@ export async function ProductsPageView({
                     {search ? (
                       <Link
                         href={buildFilterUrl(locale, query, "search")}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                       >
                         {t.searchLabel}: {search} ×
                       </Link>
@@ -264,7 +264,7 @@ export async function ProductsPageView({
                     {selectedCategory ? (
                       <Link
                         href={buildFilterUrl(locale, query, "category")}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                       >
                         {t.categoryLabel}: {selectedCategory.name} ×
                       </Link>
@@ -279,7 +279,7 @@ export async function ProductsPageView({
                           "brand",
                           brand.slug,
                         )}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                       >
                         {t.brandLabel}: {brand.name} ×
                       </Link>
@@ -289,7 +289,7 @@ export async function ProductsPageView({
                       <Link
                         key={stock}
                         href={buildFilterUrl(locale, query, "stock", stock)}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                       >
                         {getStockLabel(stock, locale)} ×
                       </Link>
@@ -305,7 +305,7 @@ export async function ProductsPageView({
                             `spec_${key}`,
                             value,
                           )}
-                          className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                          className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                         >
                           {getSpecChipLabel(key)}: {value} ×
                         </Link>
@@ -315,7 +315,7 @@ export async function ProductsPageView({
                     {sortLabel ? (
                       <Link
                         href={buildFilterUrl(locale, query, "sort")}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                       >
                         {sortLabel} ×
                       </Link>
@@ -344,7 +344,7 @@ export async function ProductsPageView({
                       {currentPage > 1 ? (
                         <Link
                           href={buildPageUrl(locale, query, currentPage - 1)}
-                          className="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                          className="rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                         >
                           Əvvəlki
                         </Link>
@@ -362,8 +362,8 @@ export async function ProductsPageView({
                             }
                             className={
                               pageNumber === currentPage
-                                ? "rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
-                                : "rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                                ? "rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white"
+                                : "rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                             }
                           >
                             {pageNumber}
@@ -374,7 +374,7 @@ export async function ProductsPageView({
                       {currentPage < totalPages ? (
                         <Link
                           href={buildPageUrl(locale, query, currentPage + 1)}
-                          className="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                          className="rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-muted transition hover:border-ink hover:bg-paper hover:text-signal"
                         >
                           Növbəti
                         </Link>
@@ -383,18 +383,18 @@ export async function ProductsPageView({
                   ) : null}
                 </>
               ) : (
-                <div className="rounded-2xl border border-dashed border-neutral-300 bg-white p-8 text-center shadow-sm md:p-10">
-                  <h2 className="text-xl font-semibold text-neutral-950">
+                <div className="rounded-md border border-dashed border-line bg-surface p-8 text-center shadow-sm md:p-10">
+                  <h2 className="text-xl font-semibold text-ink">
                     {t.emptyTitle}
                   </h2>
 
-                  <p className="mt-2 text-sm text-neutral-500">
+                  <p className="mt-2 text-sm text-muted">
                     {t.emptyDescription}
                   </p>
 
                   <Link
                     href={localizedPath("/products", locale)}
-                    className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                    className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink"
                   >
                     {t.clearAll}
                   </Link>

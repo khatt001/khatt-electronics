@@ -1,60 +1,19 @@
-"use client";
-
 import { MessageCircle } from "lucide-react";
-import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/data/site";
+import { chromeCopy } from "@/data/translations/chrome";
+import type { Locale } from "@/lib/i18n";
 
-type FloatingWhatsAppLocale = "az" | "en" | "ru";
-
-const floatingWhatsAppTranslations = {
-  az: {
-    message:
-      "Salam. KHATT Electronics məhsul və xidmətləri haqqında məlumat almaq istəyirəm.",
-    ariaLabel: "WhatsApp ilə əlaqə",
-  },
-  en: {
-    message:
-      "Hello. I would like to get information about KHATT Electronics products and services.",
-    ariaLabel: "Contact via WhatsApp",
-  },
-  ru: {
-    message:
-      "Здравствуйте. Я хочу получить информацию о товарах и услугах KHATT Electronics.",
-    ariaLabel: "Связаться через WhatsApp",
-  },
-} as const;
-
-function getLocaleFromPathname(pathname: string): FloatingWhatsAppLocale {
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return "en";
-  }
-
-  if (pathname === "/ru" || pathname.startsWith("/ru/")) {
-    return "ru";
-  }
-
-  return "az";
-}
-
-export function FloatingWhatsApp() {
-  const pathname = usePathname();
-
-  if (pathname.startsWith("/admin")) {
-    return null;
-  }
-
-  const locale = getLocaleFromPathname(pathname);
-
-  const t = floatingWhatsAppTranslations[locale];
+export function FloatingWhatsApp({ locale }: { locale: Locale }) {
+  const t = chromeCopy[locale];
 
   return (
     <a
-      href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(t.message)}`}
+      href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(t.whatsappMessage)}`}
       target="_blank"
       rel="noreferrer"
-      aria-label={t.ariaLabel}
-     className="fixed bottom-[5.5rem] right-3 z-40 inline-flex size-12 touch-manipulation items-center justify-center rounded-full border border-emerald-300 bg-emerald-500 text-white shadow-xl shadow-emerald-950/20 transition hover:scale-105 hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-200 lg:bottom-6 lg:right-6 lg:z-50 lg:size-14"
+      aria-label={t.whatsapp}
+      className="fixed right-6 bottom-6 z-40 hidden size-14 items-center justify-center rounded-full bg-[#1f8f4e] text-white shadow-[0_12px_30px_rgba(15,28,23,0.25)] transition hover:scale-105 lg:flex"
     >
       <MessageCircle className="size-6" aria-hidden="true" />
     </a>

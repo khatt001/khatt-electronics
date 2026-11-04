@@ -2,14 +2,14 @@ import { Container } from "@/components/layout/container";
 
 function SkeletonLine({ className = "" }: { className?: string }) {
   return (
-    <div className={`animate-pulse rounded-md bg-neutral-100 ${className}`} />
+    <div className={`animate-pulse rounded-md bg-paper ${className}`} />
   );
 }
 
 function SkeletonCard() {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-      <div className="aspect-square animate-pulse rounded-xl bg-neutral-100" />
+    <div className="rounded-md border border-line bg-surface p-5 shadow-sm">
+      <div className="aspect-square animate-pulse rounded-md bg-paper" />
 
       <SkeletonLine className="mt-5 h-4 w-24" />
       <SkeletonLine className="mt-4 h-5 w-4/5" />
@@ -17,7 +17,7 @@ function SkeletonCard() {
 
       <div className="mt-6 flex items-center justify-between">
         <SkeletonLine className="h-4 w-24" />
-        <div className="size-10 animate-pulse rounded-lg bg-neutral-100" />
+        <div className="size-10 animate-pulse rounded-lg bg-paper" />
       </div>
     </div>
   );
@@ -26,7 +26,7 @@ function SkeletonCard() {
 export default function Loading() {
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
-      <section className="border-b border-neutral-200 bg-white">
+      <section className="border-b border-line bg-surface">
         <Container className="py-8 md:py-10 lg:py-12">
           <SkeletonLine className="h-4 w-32" />
 
@@ -40,14 +40,14 @@ export default function Loading() {
 
       <section className="py-8 md:py-10 lg:py-12">
         <Container>
-          <div className="mb-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="mb-6 rounded-md border border-line bg-surface p-5 shadow-sm">
             <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
               {Array.from({
                 length: 5,
               }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-12 animate-pulse rounded-lg bg-neutral-100"
+                  className="h-12 animate-pulse rounded-lg bg-paper"
                 />
               ))}
             </div>

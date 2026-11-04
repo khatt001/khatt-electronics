@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Eye, ShoppingBag } from "lucide-react";
 
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/format";
 import { getAdminOrders } from "@/services/admin-orders";
 
 type AdminOrdersPageProps = {

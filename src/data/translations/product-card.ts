@@ -14,6 +14,8 @@ export const productCardTranslations = {
     badgePreOrder: "Öncədən sifariş",
     badgeOutOfStock: "Sorğu ilə",
     priceOnRequest: "Qiymət sorğu ilə",
+    quoteButton: "Sorğu",
+    quoteAria: "qiymət sorğusu",
   },
 
   en: {
@@ -28,6 +30,8 @@ export const productCardTranslations = {
     badgeInStock: "In stock",
     badgePreOrder: "Pre-order",
     badgeOutOfStock: "On request",
+    quoteButton: "Request",
+    quoteAria: "request a price",
     priceOnRequest: "Price on request",
   },
 
@@ -44,5 +48,7 @@ export const productCardTranslations = {
     badgePreOrder: "Предзаказ",
     badgeOutOfStock: "По запросу",
     priceOnRequest: "Цена по запросу",
+    quoteButton: "Запрос",
+    quoteAria: "запросить цену",
   },
 } as const;

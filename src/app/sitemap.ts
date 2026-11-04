@@ -88,9 +88,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     },
     {
-      path: "/solutions",
-      changeFrequency: "weekly",
-      priority: 0.85,
+      path: "/licenses",
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       path: "/projects",

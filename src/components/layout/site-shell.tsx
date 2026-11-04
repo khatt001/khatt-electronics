@@ -3,10 +3,9 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import { CartToast } from "@/components/cart/cart-toast";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
-import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
+import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import Navbar from "@/components/layout/navbar";
 import { getLocaleFromPathname } from "@/lib/i18n";
 
@@ -18,8 +17,7 @@ export function SiteShell({ children }: SiteShellProps) {
   const pathname = usePathname() || "/";
   const locale = getLocaleFromPathname(pathname);
 
-  const isAdminRoute =
-    pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -31,32 +29,13 @@ export function SiteShell({ children }: SiteShellProps) {
 
   return (
     <>
-      <Navbar
-        key={`navbar-${locale}`}
-        locale={locale}
-        pathname={pathname}
-      />
+      <Navbar key={`navbar-${locale}`} locale={locale} pathname={pathname} />
 
-      <main className="min-h-screen pt-[7.25rem] lg:pt-[9.75rem] xl:pt-28">
-        {children}
-      </main>
+      <main className="min-h-screen pt-16 lg:pt-[116px]">{children}</main>
 
-      <Footer
-        key={`footer-${locale}`}
-        locale={locale}
-      />
-
-      <FloatingWhatsApp />
-
-      <CartToast
-        key={`cart-toast-${locale}`}
-        locale={locale}
-      />
-
-      <MobileBottomNav
-        key={`mobile-nav-${locale}`}
-        locale={locale}
-      />
+      <Footer locale={locale} />
+      <FloatingWhatsApp locale={locale} />
+      <MobileActionBar locale={locale} />
     </>
   );
 }

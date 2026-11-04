@@ -37,7 +37,7 @@ export function Breadcrumbs({
             >
               {index > 0 ? (
                 <ChevronRight
-                  className="size-4 shrink-0 text-neutral-300"
+                  className="size-4 shrink-0 text-muted"
                   aria-hidden="true"
                 />
               ) : null}
@@ -45,7 +45,7 @@ export function Breadcrumbs({
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 py-1 text-neutral-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                  className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 py-1 text-muted transition hover:bg-paper hover:text-signal"
                 >
                   {isFirst ? (
                     <Home className="size-4 shrink-0" aria-hidden="true" />
@@ -55,7 +55,7 @@ export function Breadcrumbs({
                 </Link>
               ) : (
                 <span
-                  className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 py-1 font-medium text-neutral-950"
+                  className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 py-1 font-medium text-ink"
                   aria-current={isLast ? "page" : undefined}
                 >
                   {isFirst ? (

@@ -1,8 +1,11 @@
+// TODO(owner): replace the phone, WhatsApp and email placeholders with real contacts
+// before going live. Everything else here comes from the company's licenses.
 export const siteConfig = {
   name: "KHATT Electronics",
-  legalName: "KHATT Electronics",
+  legalName: "\"KHATT ELECTRONICS\" MMC",
+  taxId: "1606085751",
   description:
-  "Yanğın təhlükəsizliyi, videomüşahidə, girişə nəzarət, elektrik, isitmə-soyutma, havalandırma, şəbəkə və zəif axın sistemlərinin layihələndirilməsi, təchizatı və quraşdırılması.",
+    "Yanğından mühafizə sistemlərinin və vasitələrinin satışı, quraşdırılması, texniki xidməti və təmiri. Tikintisinə icazə tələb olunan bina və qurğularda tikinti-quraşdırma işləri.",
 
   phone: "+994 00 000 00 00",
   phoneHref: "tel:+994000000000",
@@ -13,7 +16,9 @@ export const siteConfig = {
   email: "info@khatt.electronics",
   emailHref: "mailto:info@khatt.electronics",
 
-  address: "Bakı, Azərbaycan",
+  address: "Bakı şəhəri, Nizami rayonu",
+  legalAddress:
+    "Bakı şəhəri, Nizami rayonu, Elşən Süleymanov küçəsi, ev 2561/67, mənzil 51",
 
   websiteUrl: "https://khatt.electronics",
 

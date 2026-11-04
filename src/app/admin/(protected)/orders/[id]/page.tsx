@@ -14,7 +14,7 @@ import {
     updateOrderStatus,
 } from "@/app/admin/(protected)/orders/actions";
 import { DeleteSubmitButton } from "@/components/admin/delete-submit-button";
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/format";
 import { getAdminOrderById } from "@/services/admin-orders";
 
 type AdminOrderDetailPageProps = {

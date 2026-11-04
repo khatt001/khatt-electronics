@@ -1,16 +1,50 @@
 @import "tailwindcss";
 
+/*
+  KHATT — "control panel & registry".
+  Deep ink-green from the logo, cool paper, a single signal red used only for
+  fire-alarm indicators and the primary call to action, brass for hairlines.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
+  --ink: #0f1c17;
+  --ink-2: #16271f;
+  --ink-3: #213529;
+  --paper: #f4f5f1;
+  --surface: #ffffff;
+  --line: #d9ddd5;
+  --muted: #5d6a62;
+  --signal: #c8202f;
+  --signal-deep: #a3141f;
+  --brass: #a8864f;
+  --ok: #3e9b6a;
 
-  --primary: #111111;
-  --secondary: #1a1a1a;
+  --background: var(--paper);
+  --foreground: var(--ink);
 
-  --muted: #f5f5f5;
-  --border: #e5e5e5;
+  --container: 1320px;
 
-  --container: 1400px;
+  --font-manrope: "Manrope Variable";
+  --font-playfair: "Playfair Display Variable";
+  --font-plex-mono: "IBM Plex Mono";
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-signal: var(--signal);
+  --color-signal-deep: var(--signal-deep);
+  --color-brass: var(--brass);
+  --color-ok: var(--ok);
+
+  --font-display: var(--font-playfair), "Times New Roman", serif;
+  --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: var(--font-playfair), "Times New Roman", serif;
 }
 
 html {
@@ -20,19 +54,27 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-
-  font-family: var(--font-inter);
-
+  font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
 h1,
 h2,
-h3,
+h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
 h4,
 h5,
 h6 {
-  font-family: var(--font-playfair);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
 }
 
 .container-custom {
@@ -49,14 +91,36 @@ h6 {
 }
 
 .section-spacing {
-  padding-block: 5rem;
+  padding-block: 4.5rem;
 }
 
 @media (min-width: 1024px) {
   .section-spacing {
-    padding-block: 8rem;
+    padding-block: 7rem;
   }
 }
+
+/* Small uppercase label used across the site */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint technical grid used on dark panels */
+.panel-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
 @keyframes khatt-zone-pulse {
   0%,
   100% {
@@ -72,6 +136,10 @@ h6 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .khatt-zone-dot {
     animation: none;
     opacity: 1;

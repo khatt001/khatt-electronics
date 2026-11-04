@@ -10,10 +10,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-import { AddToCartButton } from "@/components/cart/add-to-cart-button";
-import { BuyNowButton } from "@/components/cart/buy-now-button";
-import { CompareButton } from "@/components/compare/compare-button";
-import { FavoriteButton } from "@/components/favorites/favorites-button";
 import { Container } from "@/components/layout/container";
 import { Breadcrumbs } from "@/components/navigation/breadcrumbs";
 import { ProductCard } from "@/components/product/product-card";
@@ -181,55 +177,12 @@ export async function ProductDetailPageView({
     ? localizedPath(`/category/${product.categorySlug}`, locale)
     : localizedPath("/products", locale);
 
-  const canBuy =
-    priceAmount !== null &&
-    product.stockStatus === "in_stock" &&
-    product.stockQuantity > 0;
-
-  const cartItem = {
-    id: product.id,
-    name: product.name,
-    slug: product.slug,
-    price: priceAmount ?? 0,
-    priceLabel: localizedPrice,
-    imageUrl: product.images[0]?.url ?? null,
-    category: localizedCategory,
-    brand: product.brand,
-    maxQuantity: product.stockQuantity,
-  };
-
-  const favoriteItem = {
-    id: product.id,
-    name: product.name,
-    slug: product.slug,
-    price: localizedPrice,
-    priceAmount,
-    imageUrl: product.images[0]?.url ?? null,
-    category: localizedCategory,
-    brand: product.brand,
-    stockStatus: product.stockStatus,
-    stockQuantity: product.stockQuantity,
-  };
-
-  const compareItem = {
-    id: product.id,
-    name: product.name,
-    slug: product.slug,
-    price: localizedPrice,
-    priceAmount,
-    imageUrl: product.images[0]?.url ?? null,
-    category: localizedCategory,
-    brand: product.brand,
-    stockStatus: product.stockStatus,
-    stockQuantity: product.stockQuantity,
-  };
-
   return (
-    <div className="min-h-screen bg-[#f5f6f8]">
+    <div className="min-h-screen bg-paper">
       {jsonLd ? <JsonLd data={jsonLd} /> : null}
 
       {/* Breadcrumb and back navigation */}
-      <section className="border-b border-neutral-200 bg-white">
+      <section className="border-b border-line bg-surface">
         <Container className="py-5 md:py-6">
           <Breadcrumbs
             items={[
@@ -260,7 +213,7 @@ export async function ProductDetailPageView({
 
           <Link
             href={backHref}
-            className="mt-4 inline-flex items-center text-sm font-medium text-neutral-500 transition hover:text-emerald-700"
+            className="mt-4 inline-flex items-center text-sm font-medium text-muted transition hover:text-signal"
           >
             <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
 
@@ -278,68 +231,63 @@ export async function ProductDetailPageView({
               productName={product.name}
             />
 
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7 lg:sticky lg:top-[11rem]">
+            <div className="rounded-md border border-line bg-surface p-5  md:p-7 lg:sticky lg:top-[11rem]">
               <div className="mb-5 flex flex-wrap items-center gap-2">
-                <span className="rounded-lg bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-700">
+                <span className="rounded bg-paper px-3 py-1.5 text-xs font-medium text-ink">
                   {localizedCategory}
                 </span>
 
                 {product.brand ? (
-                  <span className="rounded-lg bg-neutral-950 px-3 py-1.5 text-xs font-medium text-white">
+                  <span className="rounded bg-ink px-3 py-1.5 text-xs font-medium text-white">
                     {product.brand}
                   </span>
                 ) : null}
 
                 {product.badge ? (
-                  <span className="rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
+                  <span className="rounded bg-paper px-3 py-1.5 text-xs font-medium text-ok">
                     {product.badge}
                   </span>
                 ) : null}
 
-                <div className="ml-auto flex gap-2">
-                  <FavoriteButton item={favoriteItem} locale={locale} />
-
-                  <CompareButton item={compareItem} locale={locale} />
-                </div>
               </div>
 
-              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-neutral-950 md:text-3xl lg:text-4xl">
+              <h1 className="text-2xl font-semibold leading-tight tracking-tight text-ink md:text-3xl lg:text-4xl">
                 {product.name}
               </h1>
 
               {product.shortDescription ? (
-                <p className="mt-4 text-sm leading-7 text-neutral-600 md:text-base">
+                <p className="mt-4 text-sm leading-7 text-muted md:text-base">
                   {product.shortDescription}
                 </p>
               ) : null}
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 {/* Price */}
-                <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-5">
-                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
+                <div className="rounded-md border border-line bg-paper p-5">
+                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
                     {t.price}
                   </p>
 
-                  <strong className="mt-2 block text-2xl font-semibold text-neutral-950 md:text-3xl">
+                  <strong className="mt-2 block text-2xl font-semibold text-ink md:text-3xl">
                     {localizedPrice}
                   </strong>
 
                   {priceAmount === null ? (
-                    <p className="mt-2 text-xs leading-5 text-neutral-500">
+                    <p className="mt-2 text-xs leading-5 text-muted">
                       {t.priceAdvice}
                     </p>
                   ) : null}
                 </div>
 
                 {/* Stock */}
-                <div className="rounded-xl border border-neutral-200 bg-white p-5">
-                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
+                <div className="rounded-md border border-line bg-surface p-5">
+                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
                     {t.stockStatus}
                   </p>
 
                   {product.stockStatus === "in_stock" &&
                   product.stockQuantity > 0 ? (
-                    <strong className="mt-2 block text-base font-semibold text-emerald-700 md:text-lg">
+                    <strong className="mt-2 block text-base font-semibold text-ok md:text-lg">
                       {t.inStockPrefix} {product.stockQuantity}{" "}
                       {t.inStockSuffix}
                     </strong>
@@ -356,24 +304,14 @@ export async function ProductDetailPageView({
               </div>
 
               {/* Product actions */}
-              <div className="mt-6 grid gap-3 border-t border-neutral-100 pt-6">
-                <AddToCartButton
-                  item={cartItem}
-                  maxQuantity={product.stockQuantity}
-                  disabled={!canBuy}
-                  locale={locale}
-                />
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <BuyNowButton item={cartItem} disabled={!canBuy} />
-
-                  <Link
-                    href={localizedPath("/cart", locale)}
-                    className="inline-flex min-h-12 items-center justify-center rounded-lg border border-neutral-300 bg-white px-5 py-3 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
-                  >
-                    {t.viewCart}
-                  </Link>
-                </div>
+              <div className="mt-6 grid gap-3 border-t border-line pt-6">
+                <Link
+                  href={`${localizedPath("/contact", locale)}?product=${encodeURIComponent(product.name)}`}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-signal px-5 py-3 text-sm font-semibold text-white transition hover:bg-signal-deep"
+                >
+                  {t.quoteButton}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
 
                 <a
                   href={`${siteConfig.whatsappHref}?text=${encodeURIComponent(
@@ -381,7 +319,7 @@ export async function ProductDetailPageView({
                   )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex min-h-12 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-600 hover:bg-emerald-100"
+                  className="inline-flex min-h-12 items-center justify-center rounded border border-line bg-surface px-5 py-3 text-sm font-semibold text-ink transition hover:border-ink"
                 >
                   <MessageCircle className="mr-2 size-4" aria-hidden="true" />
 
@@ -390,14 +328,14 @@ export async function ProductDetailPageView({
               </div>
 
               {/* Trust items */}
-              <div className="mt-6 grid gap-3 border-t border-neutral-100 pt-5 sm:grid-cols-3">
+              <div className="mt-6 grid gap-3 border-t border-line pt-5 sm:grid-cols-3">
                 {t.trustItems.map((item) => (
                   <div
                     key={item}
-                    className="flex items-start gap-2 text-sm leading-6 text-neutral-700"
+                    className="flex items-start gap-2 text-sm leading-6 text-ink"
                   >
                     <CheckCircle2
-                      className="mt-1 size-4 shrink-0 text-emerald-600"
+                      className="mt-1 size-4 shrink-0 text-ok"
                       aria-hidden="true"
                     />
 
@@ -414,49 +352,49 @@ export async function ProductDetailPageView({
       <section className="pb-10 md:pb-14">
         <Container>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
-            <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7 lg:p-8">
-              <div className="mb-5 flex items-center gap-3 border-b border-neutral-100 pb-5">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+            <div className="rounded-md border border-line bg-surface p-5  md:p-7 lg:p-8">
+              <div className="mb-5 flex items-center gap-3 border-b border-line pb-5">
+                <span className="flex size-10 items-center justify-center rounded-md bg-paper text-ok">
                   <FileText className="size-5" aria-hidden="true" />
                 </span>
 
-                <h2 className="text-xl font-semibold text-neutral-950 md:text-2xl">
+                <h2 className="text-xl font-semibold text-ink md:text-2xl">
                   {t.aboutProduct}
                 </h2>
               </div>
 
-              <p className="text-sm leading-7 text-neutral-600 md:text-base">
+              <p className="text-sm leading-7 text-muted md:text-base">
                 {product.description ?? t.fallbackDescription}
               </p>
 
               <div className="mt-8">
-                <h3 className="mb-4 text-lg font-semibold text-neutral-950 md:text-xl">
+                <h3 className="mb-4 text-lg font-semibold text-ink md:text-xl">
                   {t.technicalSpecs}
                 </h3>
 
                 {product.specifications.length > 0 ? (
-                  <div className="overflow-hidden rounded-xl border border-neutral-200">
+                  <div className="overflow-hidden rounded-md border border-line">
                     {product.specifications.map((spec, index) => (
                       <div
                         key={spec.id}
                         className={`grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] ${
                           index < product.specifications.length - 1
-                            ? "border-b border-neutral-200"
+                            ? "border-b border-line"
                             : ""
                         }`}
                       >
-                        <div className="bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-700">
+                        <div className="bg-paper px-4 py-3 text-sm font-medium text-ink">
                           {spec.key}
                         </div>
 
-                        <div className="px-4 py-3 text-sm leading-6 text-neutral-600">
+                        <div className="px-4 py-3 text-sm leading-6 text-muted">
                           {spec.value}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-sm leading-6 text-neutral-600">
+                  <div className="rounded-md border border-dashed border-line bg-paper p-6 text-sm leading-6 text-muted">
                     {t.emptySpecs}
                   </div>
                 )}
@@ -464,13 +402,13 @@ export async function ProductDetailPageView({
             </div>
 
             {/* Documents */}
-            <aside className="h-fit rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:sticky lg:top-[11rem]">
+            <aside className="h-fit rounded-md border border-line bg-surface p-6  lg:sticky lg:top-[11rem]">
               <div className="mb-5 flex items-center gap-3">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <span className="flex size-10 items-center justify-center rounded-md bg-paper text-ok">
                   <ShieldCheck className="size-5" aria-hidden="true" />
                 </span>
 
-                <h2 className="text-xl font-semibold text-neutral-950">
+                <h2 className="text-xl font-semibold text-ink">
                   {t.documents}
                 </h2>
               </div>
@@ -483,7 +421,7 @@ export async function ProductDetailPageView({
                       href={download.fileUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="group flex items-center justify-between gap-4 rounded-xl border border-neutral-200 p-4 text-sm font-medium text-neutral-800 transition hover:border-emerald-500 hover:bg-emerald-50/40 hover:text-emerald-700"
+                      className="group flex items-center justify-between gap-4 rounded-md border border-line p-4 text-sm font-medium text-ink transition hover:border-ink hover:bg-paper/40 hover:text-signal"
                     >
                       <span className="min-w-0 truncate">{download.title}</span>
 
@@ -495,7 +433,7 @@ export async function ProductDetailPageView({
                   ))}
                 </div>
               ) : (
-                <p className="rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-5 text-sm leading-6 text-neutral-600">
+                <p className="rounded-md border border-dashed border-line bg-paper p-5 text-sm leading-6 text-muted">
                   {t.emptyDocuments}
                 </p>
               )}
@@ -506,15 +444,15 @@ export async function ProductDetailPageView({
 
       {/* Related products */}
       {relatedProducts.length > 0 ? (
-        <section className="border-t border-neutral-200 bg-white py-10 md:py-12">
+        <section className="border-t border-line bg-surface py-10 md:py-12">
           <Container>
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ok">
                   Oxşar məhsullar
                 </p>
 
-                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink md:text-3xl">
                   Bu kateqoriyadan digər məhsullar
                 </h2>
               </div>
@@ -525,7 +463,7 @@ export async function ProductDetailPageView({
                     `/category/${product.categorySlug}`,
                     locale,
                   )}
-                  className="group inline-flex items-center text-sm font-semibold text-neutral-700 transition hover:text-emerald-700"
+                  className="group inline-flex items-center text-sm font-semibold text-ink transition hover:text-signal"
                 >
                   Kateqoriyaya bax
                   <ArrowRight

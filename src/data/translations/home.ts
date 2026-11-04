@@ -1,331 +1,172 @@
 import type { Locale } from "@/lib/i18n";
 
-export type HomeTranslation = {
-  heroEyebrow: string;
-  heroTitle: string;
-  heroDescription: string;
-  heroPoints: string[];
-  productsButton: string;
-  consultationButton: string;
-  quickStats: {
-    value: string;
-    label: string;
-  }[];
-
-  catalogTitle: string;
-  catalogAriaLabel: string;
-  catalogCategories: {
-    title: string;
-    href: string;
-    subcategories: string[];
-  }[];
-
-  promoReadMore: string;
-  promoItems: {
-    title: string;
-    description: string;
-    href: string;
-  }[];
-
-  searchPlaceholder: string;
-  searchButton: string;
-
-  featuredEyebrow: string;
-  featuredTitle: string;
-  featuredViewAll: string;
-  featuredEmptyTitle: string;
-  featuredEmptyDescription: string;
-
-  categoriesEyebrow: string;
-  categoriesTitle: string;
-  categoriesDescription: string;
-  categoriesViewAll: string;
-  categoryViewButton: string;
-  categoryFallbackDescription: string;
-
-  servicesEyebrow: string;
-  servicesTitle: string;
-  servicesDescription: string;
-  servicesProductsButton: string;
-  servicesConsultationButton: string;
-  services: string[];
-};
-
-export const homeTranslations: Record<Locale, HomeTranslation> = {
+export const homeCopy = {
   az: {
-    heroEyebrow: "Təhlükəsizlik və smart sistemlər",
-    heroTitle: "Obyektiniz üçün etibarlı təhlükəsizlik həlləri",
-    heroDescription:
-      "Videomüşahidə, yanğın siqnalizasiya, keçidə nəzarət və şəbəkə sistemlərini layihənizə uyğun seçir, təchiz edir və texniki dəstək göstəririk.",
-    heroPoints: ["Rəsmi zəmanət", "Layihəyə uyğun seçim", "Texniki dəstək"],
-    productsButton: "Məhsullara bax",
-    consultationButton: "Layihə üçün təklif al",
-    quickStats: [
-      { value: "24/7", label: "Texniki dəstək" },
-      { value: "100+", label: "Məhsul seçimi" },
-      { value: "AZ", label: "Lokal xidmət" },
+    heroEyebrow: "Yanğından mühafizə · Tikinti-quraşdırma",
+    heroTitle: "Yanğın sistemləri layihədən təhvilə qədər, bir lisenziyalı komandadan",
+    heroText:
+      "Siqnalizasiya, avtomatik söndürmə, xəbərdarlıq və təxliyə sistemlərini təchiz edir, quraşdırır və xidmətini aparırıq. Lazım olan inşaat hissəsini də özümüz icra edirik.",
+    heroPrimary: "Qiymət sorğusu",
+    heroSecondary: "Lisenziyalara bax",
+    panelTitle: "Mühafizə paneli",
+    panelStatus: "Bütün zonalar",
+    panelNormal: "Norma",
+    panelFooter: "Lisenziya aktivdir",
+
+    licensesEyebrow: "Dövlət lisenziyaları",
+    licensesTitle: "İşlərimiz iki lisenziya ilə aparılır",
+    licensesText:
+      "Hər iki lisenziya Azərbaycan Respublikasının İqtisadiyyat Nazirliyi tərəfindən \"KHATT ELECTRONICS\" MMC-yə verilib. Sənədlərin əslini müqavilə zamanı təqdim edirik.",
+    licenseNumber: "Qeydiyyat №",
+    licenseDate: "Verilib",
+    licenseIssuer: "Verən orqan",
+    licenseScope: "Fəaliyyət növü",
+    licensesLink: "Sənədlərə bax",
+
+    servicesEyebrow: "Xidmətlər",
+    servicesTitle: "Obyekt üçün lazım olan bütün yanğın sistemləri",
+    servicesText:
+      "Hər xidmət satış, quraşdırma, sazlama və texniki xidməti əhatə edir. Bir sistem də sifariş edə bilərsiniz, tam kompleks də.",
+    servicesLink: "Bütün xidmətlər",
+
+    constructionEyebrow: "Tikinti-quraşdırma lisenziyası",
+    constructionTitle: "İnşaat hissəsi üçün ayrıca podratçı axtarmağa ehtiyac yoxdur",
+    constructionText:
+      "Nasos otağı, boru və kabel trasları, montaj işləri. Tikintisinə icazə tələb olunan bina və qurğularda tikinti-quraşdırma işlərini öz lisenziyamızla görürük, ona görə yanğın sistemi və inşaat işi bir qrafikdə, bir məsuliyyətlə gedir.",
+    constructionPoints: [
+      "Bir müqavilə, bir məsul tərəf",
+      "Yanğın sistemi ilə uzlaşdırılmış qrafik",
+      "İcra sənədləri bir paketdə",
     ],
 
-    catalogTitle: "Məhsul kataloqu",
-    catalogAriaLabel: "Məhsul kataloqu",
-    catalogCategories: [
-      {
-        title: "Videomüşahidə",
-        href: "/products?category=video-nezaret",
-        subcategories: ["IP kamera", "NVR", "DVR", "PTZ"],
-      },
-      {
-        title: "Keçidə nəzarət",
-        href: "/products?category=girise-nezaret",
-        subcategories: ["Turniket", "Kart oxuyucu", "Biometrik sistem"],
-      },
-      {
-        title: "Domofon",
-        href: "/products?category=domofoniya",
-        subcategories: ["IP domofon", "Monitor", "Panel"],
-      },
-      {
-        title: "Siqnalizasiya",
-        href: "/products?category=siqnalizasiya",
-        subcategories: ["Sensor", "Panel", "Sirena"],
-      },
-      {
-        title: "Şəbəkə",
-        href: "/products?category=sebeke",
-        subcategories: ["Switch", "Router", "Kabel"],
-      },
-    ],
+    processEyebrow: "İş qaydası",
+    processTitle: "Müraciətdən texniki xidmətə qədər altı mərhələ",
 
-    promoReadMore: "Ətraflı",
-    promoItems: [
-      {
-        title: "Layihəyə uyğun seçim",
-        description:
-          "Obyektinizə uyğun kamera, NVR, PoE switch və kabel ehtiyacını birlikdə hesablayaq.",
-        href: "/contact?source=consultation",
-      },
-      {
-        title: "Qiymət təklifi al",
-        description:
-          "Məhsul siyahınızı göndərin, sizə uyğun qiymət təklifi hazırlayaq.",
-        href: "/contact?source=estimate",
-      },
-    ],
+    objectsEyebrow: "Obyektlər",
+    objectsTitle: "Obyektin növü sistemin tərkibini müəyyən edir",
+    objectsLink: "Obyektlər üzrə ətraflı",
 
-    searchPlaceholder: "Məhsul, kateqoriya və ya model axtar...",
-    searchButton: "Axtar",
+    productsEyebrow: "Avadanlıq kataloqu",
+    productsTitle: "Satışda olan avadanlıq",
+    productsText: "Qiyməti öyrənmək üçün məhsulun səhifəsində sorğu göndərin.",
+    productsLink: "Kataloqa keç",
 
-    featuredEyebrow: "Məhsullar",
-    featuredTitle: "Seçilmiş məhsullar",
-    featuredViewAll: "Hamısına bax",
-    featuredEmptyTitle: "Seçilmiş məhsul yoxdur",
-    featuredEmptyDescription:
-      "Admin paneldən məhsul əlavə edildikdən sonra burada görünəcək.",
-
-    categoriesEyebrow: "Kateqoriyalar",
-    categoriesTitle: "Əsas məhsul istiqamətləri",
-    categoriesDescription:
-      "Təhlükəsizlik, videomüşahidə, şəbəkə və ağıllı sistemlər üzrə məhsulları kateqoriyalara görə kəşf edin.",
-    categoriesViewAll: "Bütün məhsullar",
-    categoryViewButton: "Kateqoriyaya bax",
-    categoryFallbackDescription: "Bu kateqoriyaya aid məhsullara baxın.",
-
-    servicesEyebrow: "Dəstək və xidmət",
-    servicesTitle: "Məhsul seçimi və quraşdırılmada yanınızdayıq",
-    servicesDescription:
-      "Məhsulu onlayn sifariş edə, layihənizə uyğun seçim üçün bizimlə əlaqə saxlaya və sifarişinizi sonradan izləyə bilərsiniz.",
-    servicesProductsButton: "Məhsullara bax",
-    servicesConsultationButton: "Məsləhət al",
-    services: [
-      "Obyektə uyğun məhsul seçimi",
-      "Kamera sayı və texniki ehtiyac hesablanması",
-      "Qiymət təklifi və avadanlıq siyahısı",
-      "Quraşdırma üçün texniki məsləhət",
-    ],
+    ctaTitle: "Obyektinizə baxış və qiymət təklifi",
+    ctaText:
+      "Obyekt haqqında qısa məlumat yazın: ünvan, sahə, təyinatı. Mütəxəssisimiz əlaqə saxlayıb baxış vaxtını razılaşdıracaq.",
+    ctaPrimary: "Sorğu göndər",
+    ctaCall: "Zəng edin",
   },
-
   en: {
-    heroEyebrow: "KHATT Electronics",
-    heroTitle: "Security and smart electronics products",
-    heroDescription:
-      "Choose CCTV systems, access control, intercoms, alarm systems and networking equipment online, add products to your cart and complete your order.",
-    heroPoints: ["Stock and pricing", "Fast ordering", "Technical support"],
-    productsButton: "View products",
-    consultationButton: "Get consultation",
-    quickStats: [
-      { value: "24/7", label: "Technical support" },
-      { value: "100+", label: "Product range" },
-      { value: "AZ", label: "Local service" },
+    heroEyebrow: "Fire protection · Construction & installation",
+    heroTitle: "Fire systems from design to handover, by one licensed team",
+    heroText:
+      "We supply, install and maintain fire alarm, automatic extinguishing, warning and evacuation systems, and carry out the related construction work ourselves.",
+    heroPrimary: "Request a quote",
+    heroSecondary: "View licenses",
+    panelTitle: "Protection panel",
+    panelStatus: "All zones",
+    panelNormal: "Normal",
+    panelFooter: "License active",
+
+    licensesEyebrow: "State licenses",
+    licensesTitle: "We work under two state licenses",
+    licensesText:
+      "Both licenses were issued to \"KHATT ELECTRONICS\" LLC by the Ministry of Economy of the Republic of Azerbaijan. Originals are presented when the contract is signed.",
+    licenseNumber: "Registration No.",
+    licenseDate: "Issued",
+    licenseIssuer: "Issued by",
+    licenseScope: "Activity",
+    licensesLink: "View documents",
+
+    servicesEyebrow: "Services",
+    servicesTitle: "Every fire system a building needs",
+    servicesText:
+      "Each service covers supply, installation, commissioning and maintenance. Order a single system or the full package.",
+    servicesLink: "All services",
+
+    constructionEyebrow: "Construction & installation license",
+    constructionTitle: "No separate contractor needed for the construction part",
+    constructionText:
+      "Pump rooms, pipe and cable routes, assembly works. We carry out construction and installation on permitted buildings under our own license, so the fire system and the building work share one schedule and one point of responsibility.",
+    constructionPoints: [
+      "One contract, one responsible party",
+      "Schedule aligned with the fire system",
+      "As-built documents in one package",
     ],
 
-    catalogTitle: "Product catalog",
-    catalogAriaLabel: "Product catalog",
-    catalogCategories: [
-      {
-        title: "Video surveillance",
-        href: "/en/products?category=video-nezaret",
-        subcategories: ["IP camera", "NVR", "DVR", "PTZ"],
-      },
-      {
-        title: "Access control",
-        href: "/en/products?category=girise-nezaret",
-        subcategories: ["Turnstile", "Card reader", "Biometric system"],
-      },
-      {
-        title: "Intercom",
-        href: "/en/products?category=domofoniya",
-        subcategories: ["IP intercom", "Monitor", "Panel"],
-      },
-      {
-        title: "Alarm systems",
-        href: "/en/products?category=siqnalizasiya",
-        subcategories: ["Sensor", "Panel", "Siren"],
-      },
-      {
-        title: "Networking",
-        href: "/en/products?category=sebeke",
-        subcategories: ["Switch", "Router", "Cable"],
-      },
-    ],
+    processEyebrow: "How we work",
+    processTitle: "Six stages from first call to maintenance",
 
-    promoReadMore: "Learn more",
-    promoItems: [
-      {
-        title: "Project-based selection",
-        description:
-          "Let us calculate the camera, NVR, PoE switch and cable requirements for your site.",
-        href: "/en/contact?source=consultation",
-      },
-      {
-        title: "Request a quote",
-        description:
-          "Send your product list and we will prepare a suitable price offer for you.",
-        href: "/en/contact?source=estimate",
-      },
-    ],
+    objectsEyebrow: "Sectors",
+    objectsTitle: "The type of building defines the system",
+    objectsLink: "Sectors in detail",
 
-    searchPlaceholder: "Search by product, category or model...",
-    searchButton: "Search",
+    productsEyebrow: "Equipment catalogue",
+    productsTitle: "Equipment for sale",
+    productsText: "Send a request from the product page to get a price.",
+    productsLink: "Open catalogue",
 
-    featuredEyebrow: "Products",
-    featuredTitle: "Featured products",
-    featuredViewAll: "View all",
-    featuredEmptyTitle: "No featured products yet",
-    featuredEmptyDescription:
-      "Products will appear here after they are added from the admin panel.",
-
-    categoriesEyebrow: "Categories",
-    categoriesTitle: "Main product directions",
-    categoriesDescription:
-      "Discover products by category across security, video surveillance, networking and smart systems.",
-    categoriesViewAll: "All products",
-    categoryViewButton: "View category",
-    categoryFallbackDescription: "Explore products available in this category.",
-
-    servicesEyebrow: "Support and service",
-    servicesTitle: "We help you choose and install the right products",
-    servicesDescription:
-      "You can order products online, contact us for project-based selection support and track your order afterwards.",
-    servicesProductsButton: "View products",
-    servicesConsultationButton: "Get consultation",
-    services: [
-      "Product selection based on your site",
-      "Camera quantity and technical needs calculation",
-      "Quotation and equipment list",
-      "Technical advice for installation",
-    ],
+    ctaTitle: "Site survey and quotation",
+    ctaText:
+      "Tell us briefly about the site: address, area and use. Our specialist will contact you to arrange a visit.",
+    ctaPrimary: "Send a request",
+    ctaCall: "Call us",
   },
-
   ru: {
-    heroEyebrow: "KHATT Electronics",
-    heroTitle: "Товары для безопасности и умной электроники",
-    heroDescription:
-      "Выбирайте системы видеонаблюдения, контроль доступа, домофоны, сигнализацию и сетевое оборудование онлайн, добавляйте товары в корзину и оформляйте заказ.",
-    heroPoints: ["Наличие и цены", "Быстрый заказ", "Техническая поддержка"],
-    productsButton: "Смотреть товары",
-    consultationButton: "Получить консультацию",
-    quickStats: [
-      { value: "24/7", label: "Техническая поддержка" },
-      { value: "100+", label: "Ассортимент товаров" },
-      { value: "AZ", label: "Локальный сервис" },
+    heroEyebrow: "Противопожарная защита · Строительно-монтажные работы",
+    heroTitle: "Пожарные системы от проекта до сдачи — одной лицензированной командой",
+    heroText:
+      "Поставляем, монтируем и обслуживаем пожарную сигнализацию, автоматическое пожаротушение, системы оповещения и эвакуации. Строительную часть выполняем сами.",
+    heroPrimary: "Запросить цену",
+    heroSecondary: "Смотреть лицензии",
+    panelTitle: "Панель защиты",
+    panelStatus: "Все зоны",
+    panelNormal: "Норма",
+    panelFooter: "Лицензия действует",
+
+    licensesEyebrow: "Государственные лицензии",
+    licensesTitle: "Работаем по двум лицензиям",
+    licensesText:
+      "Обе лицензии выданы ООО \"KHATT ELECTRONICS\" Министерством экономики Азербайджанской Республики. Оригиналы предоставляем при заключении договора.",
+    licenseNumber: "Рег. №",
+    licenseDate: "Выдана",
+    licenseIssuer: "Выдал",
+    licenseScope: "Вид деятельности",
+    licensesLink: "Смотреть документы",
+
+    servicesEyebrow: "Услуги",
+    servicesTitle: "Все пожарные системы, которые нужны объекту",
+    servicesText:
+      "Каждая услуга включает поставку, монтаж, наладку и обслуживание. Можно заказать одну систему или весь комплекс.",
+    servicesLink: "Все услуги",
+
+    constructionEyebrow: "Лицензия на строительно-монтажные работы",
+    constructionTitle: "Отдельный подрядчик для строительной части не нужен",
+    constructionText:
+      "Насосные, трассы трубопроводов и кабелей, монтажные работы. Строительно-монтажные работы на зданиях, требующих разрешения, выполняем по собственной лицензии: пожарная система и стройка идут по одному графику и под одну ответственность.",
+    constructionPoints: [
+      "Один договор, одна ответственная сторона",
+      "График, согласованный с пожарной системой",
+      "Исполнительная документация одним пакетом",
     ],
 
-    catalogTitle: "Каталог товаров",
-    catalogAriaLabel: "Каталог товаров",
-    catalogCategories: [
-      {
-        title: "Видеонаблюдение",
-        href: "/ru/products?category=video-nezaret",
-        subcategories: ["IP камера", "NVR", "DVR", "PTZ"],
-      },
-      {
-        title: "Контроль доступа",
-        href: "/ru/products?category=girise-nezaret",
-        subcategories: ["Турникет", "Картридер", "Биометрия"],
-      },
-      {
-        title: "Домофон",
-        href: "/ru/products?category=domofoniya",
-        subcategories: ["IP домофон", "Монитор", "Панель"],
-      },
-      {
-        title: "Сигнализация",
-        href: "/ru/products?category=siqnalizasiya",
-        subcategories: ["Датчик", "Панель", "Сирена"],
-      },
-      {
-        title: "Сеть",
-        href: "/ru/products?category=sebeke",
-        subcategories: ["Switch", "Router", "Кабель"],
-      },
-    ],
+    processEyebrow: "Порядок работы",
+    processTitle: "Шесть этапов от обращения до обслуживания",
 
-    promoReadMore: "Подробнее",
-    promoItems: [
-      {
-        title: "Подбор под проект",
-        description:
-          "Рассчитаем камеры, NVR, PoE switch и кабельные потребности под ваш объект.",
-        href: "/ru/contact?source=consultation",
-      },
-      {
-        title: "Получить предложение",
-        description:
-          "Отправьте список товаров, и мы подготовим для вас подходящее ценовое предложение.",
-        href: "/ru/contact?source=estimate",
-      },
-    ],
+    objectsEyebrow: "Объекты",
+    objectsTitle: "Тип объекта определяет состав системы",
+    objectsLink: "Подробнее по объектам",
 
-    searchPlaceholder: "Поиск по товару, категории или модели...",
-    searchButton: "Поиск",
+    productsEyebrow: "Каталог оборудования",
+    productsTitle: "Оборудование в продаже",
+    productsText: "Чтобы узнать цену, отправьте запрос со страницы товара.",
+    productsLink: "Перейти в каталог",
 
-    featuredEyebrow: "Товары",
-    featuredTitle: "Избранные товары",
-    featuredViewAll: "Смотреть все",
-    featuredEmptyTitle: "Избранных товаров пока нет",
-    featuredEmptyDescription:
-      "Товары появятся здесь после добавления через панель администратора.",
-
-    categoriesEyebrow: "Категории",
-    categoriesTitle: "Основные направления товаров",
-    categoriesDescription:
-      "Откройте товары по категориям: безопасность, видеонаблюдение, сети и умные системы.",
-    categoriesViewAll: "Все товары",
-    categoryViewButton: "Смотреть категорию",
-    categoryFallbackDescription:
-      "Посмотрите товары, доступные в этой категории.",
-
-    servicesEyebrow: "Поддержка и сервис",
-    servicesTitle: "Мы поможем выбрать и установить подходящие товары",
-    servicesDescription:
-      "Вы можете заказать товары онлайн, связаться с нами для подбора под проект и затем отслеживать заказ.",
-    servicesProductsButton: "Смотреть товары",
-    servicesConsultationButton: "Получить консультацию",
-    services: [
-      "Подбор товаров под объект",
-      "Расчет количества камер и технических потребностей",
-      "Коммерческое предложение и список оборудования",
-      "Техническая консультация по установке",
-    ],
+    ctaTitle: "Осмотр объекта и коммерческое предложение",
+    ctaText:
+      "Коротко опишите объект: адрес, площадь, назначение. Специалист свяжется с вами и согласует время осмотра.",
+    ctaPrimary: "Отправить запрос",
+    ctaCall: "Позвоните",
   },
-};
+} satisfies Record<Locale, Record<string, string | string[]>>;

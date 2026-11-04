@@ -1,169 +1,112 @@
+import type { Locale } from "@/lib/i18n";
+
 export const contactTranslations = {
   az: {
-    metadataTitle: "Əlaqə | KHATT Electronics",
+    metadataTitle: "Əlaqə və qiymət sorğusu",
     metadataDescription:
-      "Təhlükəsizlik, yanğın, elektrik, HVAC və zəif axın sistemləri üçün KHATT Electronics ilə əlaqə saxlayın.",
-
-    sourceEstimate: "Qiymət təklifi",
-    sourceConsultation: "Konsultasiya sorğusu",
-    sourceProject: "Layihə sorğusu",
-    sourceGeneral: "Ümumi sorğu",
-
+      "Yanğından mühafizə sistemi və ya tikinti-quraşdırma işləri üçün qiymət sorğusu göndərin. KHATT Electronics, Bakı.",
     eyebrow: "Əlaqə",
-    title: "Layihənizin ilkin texniki ehtiyaclarını birlikdə müəyyən edək",
+    title: "Qiymət sorğusu",
     description:
-      "Obyektin növünü, təxmini sahəsini və tələb olunan sistemi qeyd edin. Mütəxəssisimiz məlumatları nəzərdən keçirərək sizinlə əlaqə saxlayacaq.",
-
-    formEyebrow: "Sorğu forması",
-    formTitle: "Layihə və ya məhsul sorğusu göndərin",
-    formDescription:
-      "Əsas məlumatları qeyd etməyiniz kifayətdir. Texniki detalları sonrakı mərhələdə birlikdə dəqiqləşdirəcəyik.",
-
-    successMessage:
-      "Sorğunuz uğurla göndərildi. Tezliklə sizinlə əlaqə saxlanılacaq.",
-    productLabel: "Sorğu məhsulu:",
-
+      "Obyekt haqqında qısa yazın: ünvan, təxmini sahə, təyinatı və hansı sistem lazımdır. Mütəxəssisimiz zəng edib baxış vaxtını razılaşdıracaq.",
+    successMessage: "Sorğunuz göndərildi. Tezliklə sizinlə əlaqə saxlayacağıq.",
+    productLabel: "Məhsul",
+    serviceLabel: "Xidmət",
+    requestPrefix: "Qiymət sorğusu",
+    licenseCopyMessage: "Lisenziyaların surəti lazımdır. Məqsəd: ",
     fullNameLabel: "Ad və soyad",
-    fullNamePlaceholder: "Adınız və soyadınız",
+    fullNamePlaceholder: "Adınız",
     phoneLabel: "Telefon",
-    phonePlaceholder: "+994...",
-    emailLabel: "Email",
+    phonePlaceholder: "+994 __ ___ __ __",
+    emailLabel: "E-poçt",
     emailPlaceholder: "email@example.com",
-    companyLabel: "Şirkət adı",
-    companyPlaceholder: "Şirkət və ya obyektin adı",
-    messageLabel: "Sorğu haqqında",
-    messagePlaceholder:
-      "Obyektin növünü, təxmini sahəsini və tələb olunan sistemi yazın...",
-
+    companyLabel: "Şirkət və ya obyekt",
+    companyPlaceholder: "Məs.: biznes mərkəzi, Nərimanov",
+    messageLabel: "Obyekt və tələb",
+    messagePlaceholder: "Məs.: 3 mərtəbəli ofis, 1200 m², yanğın siqnalizasiyası və təxliyə sistemi lazımdır.",
+    optional: "istəyə görə",
     submitLabel: "Sorğunu göndər",
     submitPendingLabel: "Göndərilir...",
-
-    directContactLabel: "Birbaşa əlaqə",
-    contactInfoTitle: "Əlaqə məlumatları",
+    directTitle: "Birbaşa əlaqə",
     addressLabel: "Ünvan",
-
-    supportTitle: "İlkin texniki dəstək",
-    supportDescription:
-      "Sorğunuz əsasında obyekt üçün tələb olunan sistemlər və növbəti addımlar ilkin olaraq müəyyənləşdirilir.",
-
-    supportItems: [
-      "Obyektə uyğun sistem yanaşması",
-      "Avadanlıq və iş həcminin müəyyənləşdirilməsi",
-      "İlkin texniki və qiymət təklifi",
+    hoursLabel: "İş saatları",
+    nextTitle: "Sorğudan sonra",
+    nextSteps: [
+      "Mütəxəssis zəng edib detalları dəqiqləşdirir",
+      "Obyektə baxış vaxtı razılaşdırılır",
+      "Yazılı qiymət təklifi göndərilir",
     ],
-
-    productsLink: "Məhsullara bax",
   },
-
   en: {
-    metadataTitle: "Contact | KHATT Electronics",
+    metadataTitle: "Contact and quote request",
     metadataDescription:
-      "Contact KHATT Electronics for security, fire safety, electrical, HVAC and low-current systems.",
-
-    sourceEstimate: "Quotation request",
-    sourceConsultation: "Consultation request",
-    sourceProject: "Project request",
-    sourceGeneral: "General inquiry",
-
+      "Request a quote for a fire protection system or construction-installation works. KHATT Electronics, Baku.",
     eyebrow: "Contact",
-    title: "Let us identify the initial technical needs of your project",
+    title: "Request a quote",
     description:
-      "Specify the facility type, approximate area and required system. Our specialist will review the information and contact you.",
-
-    formEyebrow: "Inquiry form",
-    formTitle: "Send a project or product inquiry",
-    formDescription:
-      "Basic information is enough. We will clarify the remaining technical details together at the next stage.",
-
-    successMessage:
-      "Your inquiry has been sent successfully. We will contact you soon.",
-    productLabel: "Requested product:",
-
+      "Tell us briefly about the site: address, approximate area, use and which system you need. Our specialist will call to arrange a site visit.",
+    successMessage: "Your request has been sent. We will contact you shortly.",
+    productLabel: "Product",
+    serviceLabel: "Service",
+    requestPrefix: "Quote request",
+    licenseCopyMessage: "I need a copy of the licenses. Purpose: ",
     fullNameLabel: "Full name",
-    fullNamePlaceholder: "Your full name",
+    fullNamePlaceholder: "Your name",
     phoneLabel: "Phone",
-    phonePlaceholder: "+994...",
+    phonePlaceholder: "+994 __ ___ __ __",
     emailLabel: "Email",
     emailPlaceholder: "email@example.com",
-    companyLabel: "Company name",
-    companyPlaceholder: "Company or facility name",
-    messageLabel: "About the inquiry",
-    messagePlaceholder:
-      "Specify the facility type, approximate area and required system...",
-
-    submitLabel: "Send inquiry",
+    companyLabel: "Company or site",
+    companyPlaceholder: "E.g. business centre, Narimanov",
+    messageLabel: "Site and requirements",
+    messagePlaceholder: "E.g. 3-storey office, 1,200 m², need a fire alarm and evacuation system.",
+    optional: "optional",
+    submitLabel: "Send request",
     submitPendingLabel: "Sending...",
-
-    directContactLabel: "Direct contact",
-    contactInfoTitle: "Contact information",
+    directTitle: "Direct contact",
     addressLabel: "Address",
-
-    supportTitle: "Initial technical support",
-    supportDescription:
-      "Based on your inquiry, we identify the required systems and the next steps for the facility.",
-
-    supportItems: [
-      "System approach suitable for the facility",
-      "Identification of equipment and scope",
-      "Initial technical and commercial proposal",
+    hoursLabel: "Working hours",
+    nextTitle: "After you send it",
+    nextSteps: [
+      "A specialist calls to clarify the details",
+      "We agree a time for a site visit",
+      "You receive a written quote",
     ],
-
-    productsLink: "View products",
   },
-
   ru: {
-    metadataTitle: "Контакты | KHATT Electronics",
+    metadataTitle: "Контакты и запрос цены",
     metadataDescription:
-      "Свяжитесь с KHATT Electronics по вопросам безопасности, пожарных систем, электрики, HVAC и слаботочных систем.",
-
-    sourceEstimate: "Запрос предложения",
-    sourceConsultation: "Запрос консультации",
-    sourceProject: "Запрос по проекту",
-    sourceGeneral: "Общий запрос",
-
+      "Отправьте запрос на систему противопожарной защиты или строительно-монтажные работы. KHATT Electronics, Баку.",
     eyebrow: "Контакты",
-    title: "Определим первоначальные технические потребности проекта",
+    title: "Запрос цены",
     description:
-      "Укажите тип объекта, примерную площадь и необходимую систему. Наш специалист изучит информацию и свяжется с вами.",
-
-    formEyebrow: "Форма запроса",
-    formTitle: "Отправьте запрос по проекту или товару",
-    formDescription:
-      "Достаточно указать основную информацию. Остальные технические детали мы уточним вместе на следующем этапе.",
-
-    successMessage:
-      "Ваш запрос успешно отправлен. Мы скоро свяжемся с вами.",
-    productLabel: "Товар запроса:",
-
+      "Коротко опишите объект: адрес, примерная площадь, назначение и какая система нужна. Специалист позвонит и согласует время осмотра.",
+    successMessage: "Запрос отправлен. Мы скоро свяжемся с вами.",
+    productLabel: "Товар",
+    serviceLabel: "Услуга",
+    requestPrefix: "Запрос цены",
+    licenseCopyMessage: "Нужна копия лицензий. Цель: ",
     fullNameLabel: "Имя и фамилия",
-    fullNamePlaceholder: "Ваше имя и фамилия",
+    fullNamePlaceholder: "Ваше имя",
     phoneLabel: "Телефон",
-    phonePlaceholder: "+994...",
+    phonePlaceholder: "+994 __ ___ __ __",
     emailLabel: "Email",
     emailPlaceholder: "email@example.com",
-    companyLabel: "Название компании",
-    companyPlaceholder: "Компания или название объекта",
-    messageLabel: "О запросе",
-    messagePlaceholder:
-      "Укажите тип объекта, примерную площадь и необходимую систему...",
-
+    companyLabel: "Компания или объект",
+    companyPlaceholder: "Напр.: бизнес-центр, Нариманов",
+    messageLabel: "Объект и задача",
+    messagePlaceholder: "Напр.: 3-этажный офис, 1200 м², нужна пожарная сигнализация и система эвакуации.",
+    optional: "необязательно",
     submitLabel: "Отправить запрос",
-    submitPendingLabel: "Отправляется...",
-
-    directContactLabel: "Прямая связь",
-    contactInfoTitle: "Контактная информация",
+    submitPendingLabel: "Отправка...",
+    directTitle: "Прямая связь",
     addressLabel: "Адрес",
-
-    supportTitle: "Первичная техническая поддержка",
-    supportDescription:
-      "На основании запроса определяются необходимые системы и дальнейшие этапы работы.",
-
-    supportItems: [
-      "Подходящая система для объекта",
-      "Определение оборудования и объёма работ",
-      "Первичное техническое и ценовое предложение",
+    hoursLabel: "Часы работы",
+    nextTitle: "После отправки",
+    nextSteps: [
+      "Специалист звонит и уточняет детали",
+      "Согласуем время осмотра объекта",
+      "Отправляем письменное предложение",
     ],
-
-    productsLink: "Смотреть товары",
   },
-} as const;
+} satisfies Record<Locale, Record<string, string | string[]>>;

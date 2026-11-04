@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/format";
 import {
   getAdminDashboardStats,
   getRecentAdminInquiries,

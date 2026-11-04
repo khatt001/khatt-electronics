@@ -19,7 +19,13 @@ declare global {
   }
 }
 
-export function TurnstileWidget() {
+const unavailableText = {
+  az: "Təhlükəsizlik yoxlaması hazırda əlçatan deyil. Zəhmət olmasa zəng edin və ya WhatsApp-a yazın.",
+  en: "Security check is unavailable right now. Please call us or write on WhatsApp.",
+  ru: "Проверка безопасности сейчас недоступна. Позвоните нам или напишите в WhatsApp.",
+} as const;
+
+export function TurnstileWidget({ locale = "az" }: { locale?: "az" | "en" | "ru" }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -54,8 +60,8 @@ export function TurnstileWidget() {
 
   if (!siteKey) {
     return (
-      <p className="text-sm text-red-600">
-        Təhlükəsizlik yoxlaması hazırda əlçatan deyil.
+      <p className="text-sm text-signal-deep">
+        {unavailableText[locale]}
       </p>
     );
   }

@@ -105,8 +105,8 @@ function FilterSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-3 text-sm font-semibold text-neutral-950">{title}</h3>
+    <section className="rounded-md border border-line bg-surface p-4 shadow-sm">
+      <h3 className="mb-3 text-sm font-semibold text-ink">{title}</h3>
 
       {children}
     </section>
@@ -129,16 +129,16 @@ function CheckboxRow({
       className={cn(
         "group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition",
         checked
-          ? "bg-emerald-600 text-white"
-          : "text-neutral-700 hover:bg-emerald-50 hover:text-emerald-800",
+          ? "bg-ink text-white"
+          : "text-muted hover:bg-paper hover:text-signal",
       )}
     >
       <span
         className={cn(
           "flex size-4 shrink-0 items-center justify-center rounded border transition",
           checked
-            ? "border-white bg-white"
-            : "border-neutral-300 bg-white group-hover:border-emerald-500",
+            ? "border-white bg-surface"
+            : "border-line bg-surface group-hover:border-ink",
         )}
       >
         <input
@@ -148,7 +148,7 @@ function CheckboxRow({
           className="sr-only"
         />
 
-        {checked ? <span className="size-2 rounded-sm bg-emerald-600" /> : null}
+        {checked ? <span className="size-2 rounded-sm bg-ink" /> : null}
       </span>
 
       <span className="min-w-0 flex-1 truncate">{label}</span>
@@ -157,7 +157,7 @@ function CheckboxRow({
         <span
           className={cn(
             "text-xs",
-            checked ? "text-white/70" : "text-neutral-400",
+            checked ? "text-white/70" : "text-muted",
           )}
         >
           {count}
@@ -394,7 +394,7 @@ export function ProductsFilter({
   ];
 
   const inputClassName =
-    "h-12 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-950 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10";
+    "h-12 w-full rounded-lg border border-line bg-paper px-4 text-sm text-ink outline-none transition focus:border-ink focus:bg-surface focus:ring-2 focus:ring-ink";
 
   const filterPanel = (
     <div className="space-y-4">
@@ -403,7 +403,7 @@ export function ProductsFilter({
           <span className="sr-only">{t.searchSrLabel}</span>
 
           <Search
-            className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
+            className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted"
             aria-hidden="true"
           />
 
@@ -483,7 +483,7 @@ export function ProductsFilter({
       </FilterSection>
 
       {loadingFilters ? (
-        <div className="rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-neutral-500 shadow-sm">
+        <div className="rounded-md border border-line bg-surface p-4 text-sm text-muted shadow-sm">
           {t.loadingFilters}
         </div>
       ) : null}
@@ -524,14 +524,14 @@ export function ProductsFilter({
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
-          className="inline-flex min-h-11 items-center rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
+          className="inline-flex min-h-11 items-center rounded-lg bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ink"
         >
           <SlidersHorizontal className="mr-2 size-4" aria-hidden="true" />
 
           {t.mobileFilterButton}
 
           {activeFilterCount > 0 ? (
-            <span className="ml-2 rounded-md bg-white px-2 py-0.5 text-xs font-semibold text-neutral-950">
+            <span className="ml-2 rounded-md bg-surface px-2 py-0.5 text-xs font-semibold text-ink">
               {activeFilterCount}
             </span>
           ) : null}
@@ -541,7 +541,7 @@ export function ProductsFilter({
           name="sort"
           value={currentSort}
           onChange={(event) => setSingleParam("sort", event.target.value)}
-          className="h-11 min-w-0 flex-1 rounded-lg border border-neutral-300 bg-white px-3 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10"
+          className="h-11 min-w-0 flex-1 rounded-lg border border-line bg-surface px-3 text-sm text-ink outline-none transition focus:border-ink focus:ring-2 focus:ring-ink"
         >
           <option value="">{t.sortNewest}</option>
           <option value="oldest">{t.sortOldest}</option>
@@ -553,18 +553,18 @@ export function ProductsFilter({
 
       {/* Desktop filters */}
       <div className="hidden lg:sticky lg:top-[11rem] lg:block">
-        <div className="mb-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <div className="mb-5 flex items-center gap-3 border-b border-neutral-100 pb-5">
-            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white">
+        <div className="mb-4 rounded-md border border-line bg-surface p-5 shadow-sm">
+          <div className="mb-5 flex items-center gap-3 border-b border-line pb-5">
+            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-ink text-white">
               <Filter className="size-4" aria-hidden="true" />
             </span>
 
             <div>
-              <h2 className="text-lg font-semibold text-neutral-950">
+              <h2 className="text-lg font-semibold text-ink">
                 {t.filtersTitle}
               </h2>
 
-              <p className="text-sm leading-6 text-neutral-500">
+              <p className="text-sm leading-6 text-muted">
                 {t.filtersDescription}
               </p>
             </div>
@@ -575,7 +575,7 @@ export function ProductsFilter({
               name="sort"
               value={currentSort}
               onChange={(event) => setSingleParam("sort", event.target.value)}
-              className="h-11 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10"
+              className="h-11 w-full rounded-lg border border-line bg-paper px-4 text-sm text-ink outline-none transition focus:border-ink focus:bg-surface focus:ring-2 focus:ring-ink"
             >
               <option value="">{t.sortNewest}</option>
               <option value="oldest">{t.sortOldest}</option>
@@ -587,7 +587,7 @@ export function ProductsFilter({
             {hasActiveFilters ? (
               <Link
                 href={clearHref}
-                className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-muted transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
               >
                 {t.clearAll}
               </Link>
@@ -617,13 +617,13 @@ export function ProductsFilter({
           aria-modal="true"
           aria-label={t.filtersTitle}
         >
-          <div className="mb-4 flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+          <div className="mb-4 flex items-center justify-between rounded-md border border-line bg-surface p-4 shadow-sm">
             <div>
-              <h2 className="text-lg font-semibold text-neutral-950">
+              <h2 className="text-lg font-semibold text-ink">
                 {t.filtersTitle}
               </h2>
 
-              <p className="text-sm leading-6 text-neutral-500">
+              <p className="text-sm leading-6 text-muted">
                 {t.filtersDescription}
               </p>
             </div>
@@ -631,7 +631,7 @@ export function ProductsFilter({
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 text-neutral-700 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line text-muted transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             >
               <X className="size-4" aria-hidden="true" />
 
@@ -639,12 +639,12 @@ export function ProductsFilter({
             </button>
           </div>
 
-          <div className="mb-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+          <div className="mb-4 rounded-md border border-line bg-surface p-4 shadow-sm">
             <select
               name="sort"
               value={currentSort}
               onChange={(event) => setSingleParam("sort", event.target.value)}
-              className="h-12 w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 text-sm text-neutral-800 outline-none transition focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-600/10"
+              className="h-12 w-full rounded-lg border border-line bg-paper px-4 text-sm text-ink outline-none transition focus:border-ink focus:bg-surface focus:ring-2 focus:ring-ink"
             >
               <option value="">{t.sortNewest}</option>
               <option value="oldest">{t.sortOldest}</option>
@@ -656,7 +656,7 @@ export function ProductsFilter({
             {hasActiveFilters ? (
               <Link
                 href={clearHref}
-                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-muted transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                 onClick={() => setMobileOpen(false)}
               >
                 {t.clearAll}

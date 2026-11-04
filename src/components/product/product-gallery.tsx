@@ -50,8 +50,8 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   }
 
   return (
-    <div className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm md:p-5">
-      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-neutral-100 to-white">
+    <div className="min-w-0 rounded-md border border-line bg-surface p-4 shadow-sm md:p-5">
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-paper to-white">
         {activeImage?.url ? (
           <Image
             src={activeImage.url}
@@ -62,7 +62,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             className="object-contain p-5 transition duration-300 md:p-8"
           />
         ) : (
-          <div className="flex size-32 items-center justify-center rounded-2xl border border-neutral-200 bg-white text-neutral-400 shadow-sm md:size-40">
+          <div className="flex size-32 items-center justify-center rounded-md border border-line bg-surface text-muted shadow-sm md:size-40">
             <ShoppingBag className="size-12 md:size-16" aria-hidden="true" />
           </div>
         )}
@@ -72,7 +72,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             <button
               type="button"
               onClick={goPrevious}
-              className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-neutral-200 bg-white/95 text-neutral-800 shadow-sm backdrop-blur transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 md:left-4"
+              className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-line bg-white/95 text-ink shadow-sm backdrop-blur transition hover:border-ink hover:bg-paper hover:text-signal md:left-4"
               aria-label="Əvvəlki şəkil"
             >
               <ChevronLeft className="size-5" aria-hidden="true" />
@@ -81,13 +81,13 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             <button
               type="button"
               onClick={goNext}
-              className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-neutral-200 bg-white/95 text-neutral-800 shadow-sm backdrop-blur transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 md:right-4"
+              className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg border border-line bg-white/95 text-ink shadow-sm backdrop-blur transition hover:border-ink hover:bg-paper hover:text-signal md:right-4"
               aria-label="Növbəti şəkil"
             >
               <ChevronRight className="size-5" aria-hidden="true" />
             </button>
 
-            <div className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white/95 px-3 py-2 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur">
+            <div className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg border border-line bg-white/95 px-3 py-2 text-xs font-medium text-muted shadow-sm backdrop-blur">
               <Images className="size-4" aria-hidden="true" />
               {safeActiveIndex + 1}/{images.length}
             </div>
@@ -105,10 +105,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 key={image.id}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                className={`relative size-20 shrink-0 overflow-hidden rounded-xl border bg-neutral-50 transition md:size-24 ${
+                className={`relative size-20 shrink-0 overflow-hidden rounded-md border bg-paper transition md:size-24 ${
                   isActive
-                    ? "border-emerald-600 ring-2 ring-emerald-600/10"
-                    : "border-neutral-200 hover:border-neutral-400"
+                    ? "border-ink ring-2 ring-ink"
+                    : "border-line hover:border-line"
                 }`}
                 aria-label={`${productName} şəkil ${index + 1}`}
                 aria-current={isActive ? "true" : undefined}
@@ -122,7 +122,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 />
 
                 {image.isPrimary ? (
-                  <span className="absolute left-1.5 top-1.5 rounded-md bg-neutral-950 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
+                  <span className="absolute left-1.5 top-1.5 rounded-md bg-ink px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
                     Əsas
                   </span>
                 ) : null}
